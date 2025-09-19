@@ -8,6 +8,7 @@ import { Tektur } from "next/font/google";
 import AttendanceGraph from "@/components/admin/AttendanceGraph";
 import RecentActivity from "@/components/admin/RecentActivity";
 import BottomStrip from "@/components/admin/BottomStrip";
+import styles from '../admin/admin.module.css'
 
 interface Summary {
   totalStudents: number;
@@ -74,7 +75,8 @@ const DashboardStats = () => {
   ];
 
   return (
-    <div>
+
+    <div className={`${styles.scrollbarHide} text-white`}>
       <div
         className={`grid grid-cols-1 md:grid-cols-4 px-4 gap-4 mb-6 mt-16 ${tektur.className}`}
       >

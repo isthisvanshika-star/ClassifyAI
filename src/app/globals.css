@@ -261,7 +261,7 @@ input[type="number"] {
 }
 
 .scrollbar-hide {
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none !important; /* Firefox */
   -ms-overflow-style: none; /* IE/Edge */
 }
 

@@ -83,10 +83,8 @@ export interface BunkStats {
 
 export interface RecentAttendance {
   id: string;
-  student: {
-    name: string;
-  };
-  subject: string;
+  studentName: string;
+  subjectName: string;
   date: string;
   status: string;
 }

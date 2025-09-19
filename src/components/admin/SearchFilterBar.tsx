@@ -13,7 +13,7 @@ const SearchFilterBar = ({
   currentFilter: string;
 }) => {
   return (
-    <motion.div
+   <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
@@ -24,7 +24,7 @@ const SearchFilterBar = ({
         type="text"
         placeholder="Search here.."
         onChange={(e) => onSearch(e.target.value)}
-        className="px-3 py-2 w-full md:w-1/3 rounded bg-orange-500/10 text-orange-100 placeholder-orange-300 outline-none focus:ring-1  focus:ring-orange-500/60 transition-all duration-700"
+        className="px-3 py-2 w-full md:w-1/3 rounded bg-orange-500/10 text-orange-100 placeholder-orange-300 outline-none focus:ring-1 	focus:ring-orange-500/60 transition-all duration-700"
       />
 
       {/* Filter */}

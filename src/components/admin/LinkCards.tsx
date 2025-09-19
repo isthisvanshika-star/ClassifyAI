@@ -1,15 +1,28 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Tektur } from "next/font/google";
 import useSWR from "swr";
-import ModalPortal from "../apps/ModalPortal";
 
-const tektur = Tektur({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
+// --- FONT PLACEHOLDER ---
+// Removed the 'next/font' import. We'll apply the class name directly.
+const tektur = {
+  className: "font-tektur" // Assuming 'font-tektur' is defined in your global CSS
+};
+
+// --- MODAL PORTAL (Self-contained) ---
+// The ModalPortal logic is now included directly in this file to resolve the import error.
+const ModalPortal = ({ children }: { children: React.ReactNode }) => {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
+  return mounted ? createPortal(children, document.body) : null;
+};
+
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -28,7 +41,7 @@ const LinkCards = ({
     branch: "",
     year: "",
     semester: "",
-    section:""
+    section: ""
   });
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState<"form" | "otp">("form");
@@ -146,34 +159,34 @@ const LinkCards = ({
 
   return (
     <>
-      <div className="h-full border rounded-4xl border-orange-400 w-full flex p-5 justify-center bg-orange-700/5">
+      <div className="h-full border rounded-2xl border-orange-400 w-full flex p-5 justify-center bg-orange-700/5 text-white">
         <div>
-          <h5 className="text-xl text-center">
+          <h5 className={`text-xl text-center ${tektur.className}`}>
             Add or Remove {forRole === "student" ? "Student" : "Teacher"}
           </h5>
-          <div className="flex gap-10 mt-10">
+          <div className="flex flex-col md:flex-row gap-6 md:gap-10 mt-6 items-center md:items-start">
             <div className="flex flex-col gap-3">
               <button
-                className="border hover:bg-orange-700/20 cursor-pointer hover:border-orange-500 transition-all duration-500 rounded-2xl p-5"
+                className="border w-48 text-center hover:bg-orange-700/20 cursor-pointer hover:border-orange-500 transition-all duration-300 rounded-xl p-4"
                 onClick={() => setModalOpen("add")}
               >
                 Add {forRole}
               </button>
               <button
-                className="border hover:bg-orange-700/20 cursor-pointer hover:border-orange-500 transition-all duration-500 rounded-2xl p-5"
+                className="border w-48 text-center hover:bg-orange-700/20 cursor-pointer hover:border-orange-500 transition-all duration-300 rounded-xl p-4"
                 onClick={() => setModalOpen("remove")}
               >
                 Remove {forRole}
               </button>
             </div>
-            <div className="mt-7">
-              <h6 className="text-xl mb-4 text-center">Recent Activity</h6>
+            <div className="mt-2 text-center md:text-left">
+              <h6 className="text-lg mb-2">Recent Activity</h6>
               <div>
-                {loadingRecent && <p>Loading...</p>}
+                {loadingRecent && <p className="animate-pulse text-sm text-gray-500">Loading...</p>}
                 {!loadingRecent && recentUser?.name ? (
                   <p>
-                    Recently added:{" "}
-                    <strong className="text-orange-200">
+                    Added:{" "}
+                    <strong className="text-orange-300">
                       {recentUser.name}
                     </strong>{" "}
                     <span className="text-xs text-gray-500">
@@ -182,7 +195,7 @@ const LinkCards = ({
                   </p>
                 ) : (
                   <p className="text-sm text-gray-500 text-center">
-                    No {forRole} found
+                    No recent {forRole} found
                   </p>
                 )}
               </div>
@@ -199,11 +212,11 @@ const LinkCards = ({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-black/85 flex justify-center items-center z-50"
+              className="fixed inset-0 bg-black/85 flex justify-center items-center z-50 p-4"
               onClick={closeModal}
             >
               <div
-                className="from-orange-800/50 via-orange-300/50 to-orange-800/50 bg-gradient-to-bl p-6 rounded-lg shadow-lg text-black w-[400px] relative"
+                className="from-orange-800/50 via-orange-300/50 to-orange-800/50 bg-gradient-to-bl p-6 rounded-lg shadow-lg text-black w-full max-w-md relative"
                 onClick={(e) => e.stopPropagation()}
               >
                 <h2 className={`${tektur.className} text-xl mb-4`}>
@@ -234,7 +247,7 @@ const LinkCards = ({
                 />
 
                 {forRole === "student" && modalOpen === "add" && (
-                  <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
                     <input
                       type="text"
                       placeholder="Branch"
@@ -242,7 +255,7 @@ const LinkCards = ({
                       onChange={(e) =>
                         setFormData({ ...formData, branch: e.target.value })
                       }
-                      className={`${tektur.className} w-full ring ring-orange-400 outline-none p-2 rounded mb-2`}
+                      className={`${tektur.className} w-full ring ring-orange-400 outline-none p-2 rounded`}
                       disabled={loading}
                     />
                     <input
@@ -253,7 +266,7 @@ const LinkCards = ({
                       onChange={(e) =>
                         setFormData({ ...formData, year: e.target.value })
                       }
-                      className={`${tektur.className} w-full ring ring-orange-400 outline-none p-2 rounded mb-2`}
+                      className={`${tektur.className} w-full ring ring-orange-400 outline-none p-2 rounded`}
                       disabled={loading}
                     />
                     <input
@@ -264,24 +277,23 @@ const LinkCards = ({
                       onChange={(e) =>
                         setFormData({ ...formData, semester: e.target.value })
                       }
-                      className={`${tektur.className} w-full ring ring-orange-400 outline-none p-2 rounded mb-2`}
+                      className={`${tektur.className} w-full ring ring-orange-400 outline-none p-2 rounded`}
                       disabled={loading}
                     />
                      <input
                       type="text"
-                      placeholder="Section (e.g., Section A)"
+                      placeholder="Section"
                       value={formData.section}
                       autoComplete="off"
                       onChange={(e) =>
                         setFormData({ ...formData, section: e.target.value })
                       }
-                      className={`${tektur.className} w-full ring ring-orange-400 outline-none p-2 rounded mb-2`}
+                      className={`${tektur.className} w-full ring ring-orange-400 outline-none p-2 rounded`}
                       disabled={loading}
                     />
-                  </>
+                  </div>
                 )}
 
-                {/* ✅ OTP input only when adding and step === 'otp' */}
                 {modalOpen === "add" && step === "otp" && (
                   <input
                     type="text"
@@ -296,17 +308,17 @@ const LinkCards = ({
 
                 {message && (
                   <div
-                    className={`mb-2 ${tektur.className} ${
+                    className={`my-2 text-sm text-center ${tektur.className} ${
                       message.type === "success"
-                        ? "text-green-600"
-                        : "text-red-600"
+                        ? "text-green-800"
+                        : "text-red-800"
                     }`}
                   >
                     {message.text}
                   </div>
                 )}
 
-                <div className="flex flex-col justify-end gap-2">
+                <div className="flex flex-col justify-end gap-2 mt-4">
                   {modalOpen === "add" ? (
                     <>
                       {step === "form" && !emailVerified && (
@@ -333,7 +345,7 @@ const LinkCards = ({
                         <button
                           onClick={handleSubmit}
                           disabled={loading}
-                          className={`px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 ${tektur.className}`}
+                          className={`px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 ${tektur.className}`}
                         >
                           {loading ? "Processing…" : "Add"}
                         </button>
@@ -343,7 +355,7 @@ const LinkCards = ({
                     <button
                       onClick={handleSubmit}
                       disabled={loading}
-                      className={`px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 ${tektur.className}`}
+                      className={`px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 ${tektur.className}`}
                     >
                       {loading ? "Processing…" : "Remove"}
                     </button>
@@ -359,3 +371,4 @@ const LinkCards = ({
 };
 
 export default LinkCards;
+

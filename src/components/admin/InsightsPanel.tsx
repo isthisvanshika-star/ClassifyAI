@@ -35,13 +35,13 @@ const InsightsPanel = () => {
   };
 
   return (
-    <motion.div
+       <motion.div
       initial="hidden"
       animate="visible"
       variants={{
         visible: { transition: { staggerChildren: 0.1 } },
       }}
-      className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10 w-full"
+      className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl"
     >
       {/* Planning Risk Assessment */}
       <motion.div
@@ -49,22 +49,17 @@ const InsightsPanel = () => {
         className="bg-red-50/10 border border-red-500 p-4 rounded-xl text-red-300 w-full"
       >
         <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
-          <FontAwesomeIcon
-            icon={faTriangleExclamation}
-            className="text-red-400"
-          />
+          <FontAwesomeIcon icon={faTriangleExclamation} />
           Planning Risk Assessment
         </h2>
-        <div className="max-h-28 overflow-y-auto pr-2 space-y-1">
+        <div className="max-h-28 overflow-y-auto pr-2 space-y-1 text-sm">
           <AnimatePresence>
             {data.risks.length > 0 ? (
               <ul className="space-y-1">
                 {data.risks.map((r, i) => (
                   <motion.li
                     key={i}
-                    initial="hidden"
-                    animate="visible"
-                    exit="hidden"
+                    initial="hidden" animate="visible" exit="hidden"
                     variants={itemVariants}
                     transition={{ duration: 0.2 }}
                   >
@@ -73,11 +68,7 @@ const InsightsPanel = () => {
                 ))}
               </ul>
             ) : (
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-sm"
-              >
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                 ✅ No significant risks detected
               </motion.p>
             )}
@@ -91,22 +82,17 @@ const InsightsPanel = () => {
         className="bg-blue-50/10 border border-blue-500 p-4 rounded-xl text-blue-300 w-full"
       >
         <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
-          <FontAwesomeIcon
-            icon={faLightbulb}
-            className="text-blue-400"
-          />
+          <FontAwesomeIcon icon ={faLightbulb}/>
           Intelligent Suggestions
         </h2>
-        <div className="max-h-64 overflow-y-auto pr-2 space-y-1">
+        <div className="max-h-28 overflow-y-auto pr-2 space-y-1 text-sm">
           <AnimatePresence>
             {data.insights.length > 0 ? (
               <ul className="space-y-1">
                 {data.insights.map((s, i) => (
                   <motion.li
                     key={i}
-                    initial="hidden"
-                    animate="visible"
-                    exit="hidden"
+                    initial="hidden" animate="visible" exit="hidden"
                     variants={itemVariants}
                     transition={{ duration: 0.2 }}
                   >
@@ -118,12 +104,9 @@ const InsightsPanel = () => {
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-sm flex items-center gap-1"
+                className="flex items-center gap-2"
               >
-                <FontAwesomeIcon
-                  icon={faCheckDouble}
-                  className="text-blue-400"
-                />
+                <FontAwesomeIcon icon={faCheckDouble}/>
                 All good — no suggestions at this time
               </motion.p>
             )}

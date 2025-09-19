@@ -15,10 +15,7 @@
         "title": "ClassifyAI",
         "width": 1200,
         "height": 770,
-        "resizable": false,
-        "fullscreen": false,
-        "maximizable": false,
-        "minimizable": false
+        "fullscreen": false
       }
     ],
     "security": {

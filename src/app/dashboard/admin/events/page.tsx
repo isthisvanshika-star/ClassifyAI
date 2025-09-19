@@ -125,17 +125,16 @@ const Page = () => {
       >
         <InsightsPanel />
       </motion.section>
-
       <motion.button
-        onClick={() => {
-          setSelectedEvent(null);
-          setIsModalOpen(true);
-        }}
+        onClick={() => { setSelectedEvent(null); setIsModalOpen(true); }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="absolute ring hover:ring-2 ring-orange-300 px-5 py-3 rounded-2xl bg-orange-900 text-orange-100 cursor-pointer right-[25rem] top-5 transition-all duration-500"
+        className="absolute z-10 px-5 py-3 rounded-2xl bg-orange-600 hover:bg-orange-700 text-orange-100 cursor-pointer shadow-lg
+                   bottom-6 right-6
+                   lg:top-8 lg:right-90 lg:bottom-auto"
       >
-        Add Event
+        <span className="hidden sm:inline">Add Event</span>
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
       </motion.button>
 
       <AddEventModal

@@ -43,23 +43,16 @@ const StatsRow = ({
   }
 
   return (
-    <div
-      className="grid gap-4 px-6 mx-auto w-full max-w-6xl"
-      style={{
-        gridTemplateColumns: `repeat(auto-fit, minmax(180px, 1fr))`,
-      }}
-    >
-      {cards.map((card, idx) => (
-        <motion.div
-          key={card.title}
-          variants={cardVariants}
-          initial="hidden"
-          animate="visible"
-          custom={idx}
-        >
-          <StatsCard title={card.title} value={card.value} color={card.color} />
-        </motion.div>
-      ))}
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 w-full">
+        {[
+            { title: titleArray[0], value: stats.totalUsers },
+            { title: "Total Premium", value: stats.premiumUsers },
+            { title: titleArray[1], value: stats.proUsers },
+            { title: titleArray[2], value: stats.ultimateUsers },
+            { title: titleArray[3], value: stats.expiredPremiums, color: "border-red-500" },
+        ].map(card => (
+            <StatsCard key={card.title} title={card.title} value={card.value} color={card.color} />
+        ))}
     </div>
   );
 };

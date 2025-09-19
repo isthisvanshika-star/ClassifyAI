@@ -80,66 +80,35 @@ const Page = () => {
 
   return (
     <motion.div
-      className="min-h-screen py-8 px-4 lg:px-10 space-y-10 overflow-y-auto"
+      className="min-h-screen  px-4 lg:px-10 space-y-8 text-white"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      {/* Header */}
-      <motion.div variants={fadeInUp} initial="hidden" animate="visible">
-        <PremiumHeader totalPremiumStudents={totalPremiumUsers} />
-      </motion.div>
+      <PremiumHeader totalPremiumStudents={totalPremiumUsers} />
+      <StatsRow stats={stats} titleArray={titleArrayForPremiumPage} />
+      <SearchFilterBar onSearch={setSearchTerm} onFilter={setFilter} currentFilter={filter} />
 
-      {/* Stats */}
-      <motion.div variants={fadeInUp} initial="hidden" animate="visible">
-        <StatsRow stats={stats} titleArray={titleArrayForPremiumPage} />
-      </motion.div>
-
-      {/* Filter */}
-      <motion.div variants={fadeInUp} initial="hidden" animate="visible">
-        <SearchFilterBar
-          onSearch={setSearchTerm}
-          onFilter={setFilter}
-          currentFilter={filter}
-        />
-      </motion.div>
-
-      {/* Table + Recent Activity */}
-      <motion.div
-        className="overflow-x-auto"
-        variants={fadeInUp}
-        initial="hidden"
-        animate="visible"
-      >
-        <div className="gap-6 min-w-[800px]">
-          {/* Table */}
-          <motion.div className="min-w-[500px]">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={filter + searchTerm}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <PremiumUsersTable
-                  users={filteredUsers}
-                  onRefresh={fetchPremiumUsers}
-                />
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
-
-          {/* Side cards */}
-          <motion.div
-            className="flex gap-10 mt-10 min-w-[250px]"
-            variants={fadeInUp}
-            initial="hidden"
-            animate="visible"
-          >
-            <RecentPremiumActivity />
-            <UpcomingExpirations />
-          </motion.div>
+      {/* --- 🚨 RESPONSIVE LAYOUT FOR TABLE & SIDE CARDS --- */}
+      <div className="flex flex-col lg:flex-row gap-8 mt-6">
+        {/* Table takes up most space on desktop, full width on mobile */}
+        <div className="w-full lg:w-2/3">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={filter + searchTerm}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <PremiumUsersTable users={filteredUsers} onRefresh={() => {}} />
+            </motion.div>
+          </AnimatePresence>
         </div>
-      </motion.div>
+        {/* Side cards stack on mobile and on the right on desktop */}
+        <div className="w-full lg:w-1/3 flex flex-col gap-8">
+          <RecentPremiumActivity />
+          <UpcomingExpirations />
+        </div>
+      </div>
     </motion.div>
   );
 };

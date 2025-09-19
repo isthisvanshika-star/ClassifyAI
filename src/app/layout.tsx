@@ -29,7 +29,7 @@ export default function RootLayout({
       <head>
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
       </head>
-      <body className="font-lora antialiased relative min-h-screen overflow-hidden">
+      <body className={` scrollbar-hide sm:overflow-y-auto md:overflow-hidden overflow-hidden font-lora antialiased relative min-h-screen`}>
         <RootBackground />
 
         <ClientNavBlocker />
