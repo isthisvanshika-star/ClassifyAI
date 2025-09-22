@@ -1,27 +1,43 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    // Fetch all users who have premium features
-    const users = await prisma.user.findMany({
+    // 1. Get the campusId from the URL query parameters.
+    const { searchParams } = new URL(request.url);
+    const campusId = searchParams.get('campusId');
+
+    if (!campusId) {
+      return NextResponse.json(
+        { success: false, error: "Campus ID is required" },
+        { status: 400 }
+      );
+    }
+
+    // 2. Add a comprehensive 'where' clause to filter by campus and premium status in one database call.
+    // This is much more efficient than fetching all users first.
+    const premiumUsers = await prisma.user.findMany({
+      where: {
+        campusId: campusId,
+        OR: [
+          { premiumFeatures: { some: {} } },
+          { premiumExpiresAt: { not: null } },
+        ],
+      },
       include: {
         premiumFeatures: true,
       },
+      orderBy: {
+          premiumExpiresAt: 'asc' // Order by expiration date
+      }
     });
 
-    // Filter users who actually have premium features or active premiumExpiresAt
-    const premiumUsers = users.filter(
-      (user) =>
-        (user.premiumFeatures && user.premiumFeatures.length > 0) ||
-        (user.premiumExpiresAt && user.premiumExpiresAt > new Date())
-    );
-
+    // 3. The data transformation logic remains the same.
     const result = premiumUsers.map((user) => {
       let plan = "PREMIUM";
-      if (user.premiumFeatures.some((f) => f.name === "CALENDAR_SYNC")) {
+      if (user.premiumFeatures.some((f: { name: string }) => f.name === "CALENDAR_SYNC")) {
         plan = "ULTIMATE";
-      } else if (user.premiumFeatures.some((f) => f.name === "STUDY_PLAN")) {
+      } else if (user.premiumFeatures.some((f: { name: string }) => f.name === "STUDY_PLAN")) {
         plan = "PRO";
       }
 
@@ -46,7 +62,7 @@ export async function GET() {
 
     return NextResponse.json({ success: true, users: result }, { status: 200 });
   } catch (err) {
-    console.error(err);
+    console.error("Error fetching premium users:", err);
     return NextResponse.json(
       { success: false, message: "Failed to fetch premium users" },
       { status: 500 }

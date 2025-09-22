@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 export default function RootBackground() {
   const pathname = usePathname();
 
-  const isAdmin = pathname.startsWith("/dashboard/admin");
+  const isAdmin = pathname.startsWith("/dashboard/admin") || pathname.startsWith("/dashboard/assistant");
 
   if (isAdmin) return null;
 

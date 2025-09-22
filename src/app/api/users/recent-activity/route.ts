@@ -1,12 +1,26 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    // 1. Get the campusId from the URL query parameters.
+    const { searchParams } = new URL(request.url);
+    const campusId = searchParams.get('campusId');
+
+    if (!campusId) {
+      return NextResponse.json(
+        { success: false, error: "Campus ID is required" },
+        { status: 400 }
+      );
+    }
+
     const activities = await prisma.recentActivity.findMany({
       where: {
+        user: {
+          campusId: campusId,
+        },
         action: {
-          contains: "bought", // only premium upgrade logs
+          contains: "bought",
         },
       },
       orderBy: { timestamp: "desc" },
@@ -22,7 +36,7 @@ export async function GET() {
 
     return NextResponse.json({ success: true, activities: result });
   } catch (err) {
-    console.error(err);
+    console.error("Error fetching recent premium activity:", err);
     return NextResponse.json(
       { success: false, message: "Failed to fetch recent premium activity" },
       { status: 500 }

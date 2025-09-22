@@ -1,38 +1,53 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const totalUsers = await prisma.user.count();
-    const premiumUsers = await prisma.user.count({
-      where: {
-        OR: [
-          { premiumFeatures: { some: {} } },
-          { premiumExpiresAt: { not: null } },
-        ],
-      },
-    });
-    const proUsers = await prisma.user.count({
-      where: {
-        premiumFeatures: {
-          some: { name: "STUDY_PLAN" },
+    // 1. Get the campusId from the URL query parameters
+    const { searchParams } = new URL(request.url);
+    const campusId = searchParams.get('campusId');
+
+    if (!campusId) {
+      return NextResponse.json({ success: false, error: "Campus ID is required" }, { status: 400 });
+    }
+    
+    // 2. Add campusId to every 'where' clause to scope the counts
+    const [
+      totalUsers,
+      premiumUsers,
+      proUsers,
+      ultimateUsers,
+      expiredPremiums,
+    ] = await Promise.all([
+      prisma.user.count({ where: { campusId } }),
+      prisma.user.count({
+        where: {
+          campusId,
+          OR: [
+            { premiumFeatures: { some: {} } },
+            { premiumExpiresAt: { not: null } },
+          ],
         },
-      },
-    });
-    const ultimateUsers = await prisma.user.count({
-      where: {
-        premiumFeatures: {
-          some: { name: "CALENDAR_SYNC" },
+      }),
+      prisma.user.count({
+        where: {
+          campusId,
+          premiumFeatures: { some: { name: "STUDY_PLAN" } },
         },
-      },
-    });
-    const expiredPremiums = await prisma.user.count({
-      where: {
-        premiumExpiresAt: {
-          lt: new Date(),
+      }),
+      prisma.user.count({
+        where: {
+          campusId,
+          premiumFeatures: { some: { name: "CALENDAR_SYNC" } },
         },
-      },
-    });
+      }),
+      prisma.user.count({
+        where: {
+          campusId,
+          premiumExpiresAt: { lt: new Date() },
+        },
+      }),
+    ]);
 
     return NextResponse.json({
       success: true,
@@ -45,7 +60,7 @@ export async function GET() {
       },
     });
   } catch (err) {
-    console.error(err);
+    console.error("Error fetching user stats:", err);
     return NextResponse.json(
       { success: false, message: "Failed to get stats" },
       { status: 500 }

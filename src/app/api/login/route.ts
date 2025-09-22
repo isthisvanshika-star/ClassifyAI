@@ -1,6 +1,8 @@
 import { logActivity } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { randomBytes } from "node:crypto";
 
 export async function POST(req: Request) {
   const { email, name } = await req.json();
@@ -12,6 +14,18 @@ export async function POST(req: Request) {
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
+    const session = randomBytes(32).toString("hex");
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    await prisma.session.create({
+      data: { sessionToken: session, userId: user.id, expiresAt },
+    })
+    ;(await cookies()).set("session-token",session,{
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      expires: expiresAt,
+      sameSite: "strict",
+      path:"/"
+    })
     await logActivity(
       user.id,
       user.name,

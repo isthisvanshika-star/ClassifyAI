@@ -1,20 +1,36 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    // Fetch only users who have at least one premium feature
+    // 1. Get the campusId from the URL query parameters.
+    const { searchParams } = new URL(request.url);
+    const campusId = searchParams.get('campusId');
+
+    if (!campusId) {
+      return NextResponse.json(
+        { success: false, error: "Campus ID is required" },
+        { status: 400 }
+      );
+    }
+
+    // 2. Fetch only users who are in the specified campus AND have at least one premium feature.
     const users = await prisma.user.findMany({
       where: {
+        campusId: campusId, // This scopes the query to the correct campus
         premiumFeatures: {
-          some: {}, // at least one premium feature
+          some: {},
         },
       },
       include: {
         premiumFeatures: true,
       },
+      orderBy: {
+        createdAt: 'desc'
+      }
     });
 
+    // 3. The data transformation logic remains the same, as it operates on the already-filtered data.
     const result = users.map((user) => {
       let plan = "PREMIUM";
 
@@ -45,7 +61,7 @@ export async function GET() {
 
     return NextResponse.json({ success: true, users: result }, { status: 200 });
   } catch (err) {
-    console.error(err);
+    console.error("Error fetching premium users:", err);
     return NextResponse.json(
       { success: false, message: "Failed to fetch premium users" },
       { status: 500 }

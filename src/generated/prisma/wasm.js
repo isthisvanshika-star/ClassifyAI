@@ -5,13 +5,28 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 
 const {
+  PrismaClientKnownRequestError,
+  PrismaClientUnknownRequestError,
+  PrismaClientRustPanicError,
+  PrismaClientInitializationError,
+  PrismaClientValidationError,
+  getPrismaClient,
+  sqltag,
+  empty,
+  join,
+  raw,
+  skip,
   Decimal,
+  Debug,
   objectEnumValues,
   makeStrictEnum,
+  Extensions,
+  warnOnce,
+  defineDmmfProperty,
   Public,
   getRuntime,
-  skip
-} = require('./runtime/index-browser.js')
+  createParam,
+} = require('./runtime/wasm-engine-edge.js')
 
 
 const Prisma = {}
@@ -20,79 +35,35 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.15.0
- * Query Engine version: 85179d7826409ee107a6ba334b5e305ae3fba9fb
+ * Prisma Client JS version: 6.16.2
+ * Query Engine version: 1c57fdcd7e44b29b9313256c76699e91c3ac3c43
  */
 Prisma.prismaVersion = {
-  client: "6.15.0",
-  engine: "85179d7826409ee107a6ba334b5e305ae3fba9fb"
+  client: "6.16.2",
+  engine: "1c57fdcd7e44b29b9313256c76699e91c3ac3c43"
 }
 
-Prisma.PrismaClientKnownRequestError = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`PrismaClientKnownRequestError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)};
-Prisma.PrismaClientUnknownRequestError = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`PrismaClientUnknownRequestError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.PrismaClientRustPanicError = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`PrismaClientRustPanicError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.PrismaClientInitializationError = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`PrismaClientInitializationError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.PrismaClientValidationError = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`PrismaClientValidationError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
+Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
+Prisma.PrismaClientUnknownRequestError = PrismaClientUnknownRequestError
+Prisma.PrismaClientRustPanicError = PrismaClientRustPanicError
+Prisma.PrismaClientInitializationError = PrismaClientInitializationError
+Prisma.PrismaClientValidationError = PrismaClientValidationError
 Prisma.Decimal = Decimal
 
 /**
  * Re-export of sql-template-tag
  */
-Prisma.sql = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`sqltag is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.empty = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`empty is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.join = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`join is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.raw = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`raw is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
+Prisma.sql = sqltag
+Prisma.empty = empty
+Prisma.join = join
+Prisma.raw = raw
 Prisma.validator = Public.validator
 
 /**
 * Extensions
 */
-Prisma.getExtensionContext = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`Extensions.getExtensionContext is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.defineExtension = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`Extensions.defineExtension is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
+Prisma.getExtensionContext = Extensions.getExtensionContext
+Prisma.defineExtension = Extensions.defineExtension
 
 /**
  * Shorthand utilities for JSON filtering
@@ -109,10 +80,11 @@ Prisma.NullTypes = {
 
 
 
+
+
 /**
  * Enums
  */
-
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   ReadUncommitted: 'ReadUncommitted',
   ReadCommitted: 'ReadCommitted',
@@ -133,7 +105,8 @@ exports.Prisma.UserScalarFieldEnum = {
   branch: 'branch',
   semester: 'semester',
   year: 'year',
-  premiumExpiresAt: 'premiumExpiresAt'
+  premiumExpiresAt: 'premiumExpiresAt',
+  campusId: 'campusId'
 };
 
 exports.Prisma.TeacherScalarFieldEnum = {
@@ -159,13 +132,15 @@ exports.Prisma.SemesterScalarFieldEnum = {
   id: 'id',
   name: 'name',
   number: 'number',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  campusId: 'campusId'
 };
 
 exports.Prisma.SectionScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  campusId: 'campusId'
 };
 
 exports.Prisma.SubjectScalarFieldEnum = {
@@ -174,7 +149,8 @@ exports.Prisma.SubjectScalarFieldEnum = {
   code: 'code',
   description: 'description',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  campusId: 'campusId'
 };
 
 exports.Prisma.TeacherSubjectScalarFieldEnum = {
@@ -185,10 +161,24 @@ exports.Prisma.TeacherSubjectScalarFieldEnum = {
   sectionId: 'sectionId'
 };
 
+exports.Prisma.CampusScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  hindiName: 'hindiName',
+  slug: 'slug',
+  city: 'city',
+  logoUrl: 'logoUrl',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  geofenceRadius: 'geofenceRadius',
+  wifiBssids: 'wifiBssids'
+};
+
 exports.Prisma.ClassSessionScalarFieldEnum = {
   id: 'id',
   subject: 'subject',
   subjectId: 'subjectId',
+  campusId: 'campusId',
   semester: 'semester',
   section: 'section',
   weekday: 'weekday',
@@ -225,7 +215,16 @@ exports.Prisma.AttendanceTokenScalarFieldEnum = {
   professorId: 'professorId',
   issuedAt: 'issuedAt',
   expiresAt: 'expiresAt',
-  used: 'used'
+  used: 'used',
+  latitude: 'latitude',
+  longitude: 'longitude'
+};
+
+exports.Prisma.SessionScalarFieldEnum = {
+  id: 'id',
+  sessionToken: 'sessionToken',
+  userId: 'userId',
+  expiresAt: 'expiresAt'
 };
 
 exports.Prisma.EventScalarFieldEnum = {
@@ -237,7 +236,8 @@ exports.Prisma.EventScalarFieldEnum = {
   active: 'active',
   createdBy: 'createdBy',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  campusId: 'campusId'
 };
 
 exports.Prisma.AssignmentScalarFieldEnum = {
@@ -438,9 +438,11 @@ exports.Prisma.ModelName = {
   Section: 'Section',
   Subject: 'Subject',
   TeacherSubject: 'TeacherSubject',
+  Campus: 'Campus',
   ClassSession: 'ClassSession',
   Attendance: 'Attendance',
   AttendanceToken: 'AttendanceToken',
+  Session: 'Session',
   Event: 'Event',
   Assignment: 'Assignment',
   Submission: 'Submission',
@@ -456,34 +458,86 @@ exports.Prisma.ModelName = {
   SupportRequest: 'SupportRequest',
   PlanConfig: 'PlanConfig'
 };
-
 /**
- * This is a stub Prisma Client that will error at runtime if called.
+ * Create the Client
  */
-class PrismaClient {
-  constructor() {
-    return new Proxy(this, {
-      get(target, prop) {
-        let message
-        const runtime = getRuntime()
-        if (runtime.isEdge) {
-          message = `PrismaClient is not configured to run in ${runtime.prettyName}. In order to run Prisma Client on edge runtime, either:
-- Use Prisma Accelerate: https://pris.ly/d/accelerate
-- Use Driver Adapters: https://pris.ly/d/driver-adapters
-`;
-        } else {
-          message = 'PrismaClient is unable to run in this browser environment, or has been bundled for the browser (running in `' + runtime.prettyName + '`).'
-        }
-
-        message += `
-If this is unexpected, please open an issue: https://pris.ly/prisma-prisma-bug-report`
-
-        throw new Error(message)
+const config = {
+  "generator": {
+    "name": "client",
+    "provider": {
+      "fromEnvVar": null,
+      "value": "prisma-client-js"
+    },
+    "output": {
+      "value": "C:\\Projects\\RUST\\classifyai\\src\\generated\\prisma",
+      "fromEnvVar": null
+    },
+    "config": {
+      "engineType": "library"
+    },
+    "binaryTargets": [
+      {
+        "fromEnvVar": null,
+        "value": "windows",
+        "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "rhel-openssl-3.0.x"
       }
-    })
+    ],
+    "previewFeatures": [],
+    "sourceFilePath": "C:\\Projects\\RUST\\classifyai\\prisma\\schema.prisma",
+    "isCustomOutput": true
+  },
+  "relativeEnvPaths": {
+    "rootEnvPath": null,
+    "schemaEnvPath": "../../../.env"
+  },
+  "relativePath": "../../../prisma",
+  "clientVersion": "6.16.2",
+  "engineVersion": "1c57fdcd7e44b29b9313256c76699e91c3ac3c43",
+  "datasourceNames": [
+    "db"
+  ],
+  "activeProvider": "postgresql",
+  "inlineDatasources": {
+    "db": {
+      "url": {
+        "fromEnvVar": "DATABASE_URL",
+        "value": null
+      }
+    }
+  },
+  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma\"\n  binaryTargets = [\"native\", \"rhel-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\n/// ---------------------\n/// Models\n/// ---------------------\n\nmodel User {\n  id           String   @id @default(cuid())\n  name         String\n  email        String   @unique\n  passwordHash String? // nullable when OAuth-only users\n  role         Role\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @default(now()) @updatedAt\n\n  // Profile fields\n  avatarUrl        String?\n  phone            String?\n  branch           String?\n  semester         Int?\n  year             Int?\n  premiumExpiresAt DateTime?\n\n  // --- ADDED: Link user to a specific campus ---\n  campusId String?\n  campus   Campus? @relation(fields: [campusId], references: [id])\n\n  // relations\n  teacherProfile   Teacher?         @relation(\"UserToTeacher\")\n  studentProfile   Student?         @relation(\"UserToStudent\")\n  attendance       Attendance[]     @relation(\"UserAttendance\")\n  premiumFeatures  PremiumFeature[] @relation(\"UserPremiumFeatures\")\n  googleTokens     GoogleToken[]\n  recentActivities RecentActivity[]\n  supportRequests  SupportRequest[]\n  messagesSent     Message[]        @relation(\"MessageSender\")\n  messagesReceived Message[]        @relation(\"MessageReceiver\")\n  notifications    Notification[]\n  sessions         Session[]\n}\n\nmodel Teacher {\n  id          String   @id @default(cuid())\n  user        User     @relation(\"UserToTeacher\", fields: [userId], references: [id], onDelete: Cascade)\n  userId      String   @unique\n  department  String?\n  designation String?\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n\n  // relations\n  teacherSubjects TeacherSubject[]\n  classSessions   ClassSession[]\n  announcements   Announcement[]   @relation(\"AnnouncementAuthor\")\n  assignments     Assignment[]\n}\n\nmodel Student {\n  id         String   @id @default(cuid())\n  user       User     @relation(\"UserToStudent\", fields: [userId], references: [id], onDelete: Cascade)\n  userId     String   @unique\n  rollNumber String?\n  semesterId String?\n  sectionId  String?\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @updatedAt\n\n  semester Semester? @relation(\"StudentSemester\", fields: [semesterId], references: [id])\n  section  Section?  @relation(\"StudentSection\", fields: [sectionId], references: [id])\n\n  attendances      Attendance[]      @relation(\"StudentAttendance\")\n  submissions      Submission[]\n  grades           Grade[]\n  attendanceTokens AttendanceToken[]\n}\n\nmodel Semester {\n  id        String   @id @default(cuid())\n  name      String   @unique\n  number    Int?\n  createdAt DateTime @default(now())\n  campusId  String\n  campus    Campus   @relation(fields: [campusId], references: [id])\n\n  teacherSubjects TeacherSubject[]\n  classSessions   ClassSession[]   @relation(\"SemesterSessions\")\n  students        Student[]        @relation(\"StudentSemester\")\n\n  @@unique([name, campusId]) // A semester name should be unique within a campus\n}\n\nmodel Section {\n  id        String   @id @default(cuid())\n  name      String   @unique\n  createdAt DateTime @default(now())\n  campusId  String\n  campus    Campus   @relation(fields: [campusId], references: [id])\n\n  teacherSubjects TeacherSubject[]\n  classSessions   ClassSession[]   @relation(\"SectionSessions\")\n  students        Student[]        @relation(\"StudentSection\")\n\n  @@unique([name, campusId])\n}\n\nmodel Subject {\n  id          String   @id @default(cuid())\n  name        String\n  code        String?  @unique\n  description String?\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n  campusId    String\n  campus      Campus   @relation(fields: [campusId], references: [id])\n\n  teacherSubjects  TeacherSubject[]\n  classSessions    ClassSession[]    @relation(\"ClassSessionSubject\")\n  assignments      Assignment[]\n  resources        Resource[]\n  exams            Exam[]\n  attendanceTokens AttendanceToken[]\n\n  @@unique([code, campusId])\n}\n\nmodel TeacherSubject {\n  id String @id @default(cuid())\n\n  teacher   Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade, map: \"fk_teachersubject_teacher\")\n  teacherId String\n\n  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade, map: \"fk_teachersubject_subject\")\n  subjectId String\n\n  semester   Semester @relation(fields: [semesterId], references: [id], map: \"fk_teachersubject_semester\")\n  semesterId String\n\n  section   Section @relation(fields: [sectionId], references: [id], map: \"fk_teachersubject_section\")\n  sectionId String\n\n  @@unique([teacherId, subjectId, semesterId, sectionId], map: \"uq_teachersubject_unique\")\n}\n\nmodel Campus {\n  id             String   @id @default(cuid())\n  name           String   @unique\n  hindiName      String?\n  slug           String   @unique\n  city           String\n  logoUrl        String?\n  latitude       Float\n  longitude      Float\n  geofenceRadius Int      @default(500)\n  wifiBssids     String[]\n\n  users         User[]\n  classSessions ClassSession[] // Back-relation to ClassSession\n  semesters     Semester[]\n  sections      Section[]\n  subjects      Subject[]\n  events        Event[]\n}\n\nmodel ClassSession {\n  id String @id @default(cuid())\n\n  // legacy scalar subject (kept for compatibility)\n  subject String?\n\n  subjectId  String?\n  subjectRel Subject? @relation(\"ClassSessionSubject\", fields: [subjectId], references: [id], map: \"fk_classsession_subject\")\n\n  // --- UPDATED: Link to Campus is the single source of truth for location ---\n  campusId String?\n  campus   Campus? @relation(fields: [campusId], references: [id])\n\n  semester  Int\n  section   String\n  weekday   Weekday\n  room      String?\n  startTime DateTime\n  endTime   DateTime\n\n  teacherId String\n  teacher   Teacher @relation(fields: [teacherId], references: [id], map: \"fk_classsession_teacher\")\n\n  // Add proper relations to Semester and Section\n  semesterId  String?\n  semesterRel Semester? @relation(\"SemesterSessions\", fields: [semesterId], references: [id], map: \"fk_classsession_semester\")\n\n  sectionId  String?\n  sectionRel Section? @relation(\"SectionSessions\", fields: [sectionId], references: [id], map: \"fk_classsession_section\")\n\n  status           SessionStatus @default(UPCOMING)\n  attendanceMarked Boolean       @default(false)\n  createdAt        DateTime      @default(now())\n  updatedAt        DateTime      @updatedAt\n\n  attendances Attendance[] @relation(\"ClassSessionAttendance\")\n\n  @@index([teacherId, weekday, semester], map: \"idx_classsession_teacher_weekday_semester\")\n}\n\nmodel Attendance {\n  id String @id @default(cuid())\n\n  classSessionId String?\n  classSession   ClassSession? @relation(\"ClassSessionAttendance\", fields: [classSessionId], references: [id], map: \"fk_attendance_classsession\")\n\n  studentId String?\n  student   Student? @relation(\"StudentAttendance\", fields: [studentId], references: [id], map: \"fk_attendance_student\")\n\n  userId String?\n  user   User?   @relation(\"UserAttendance\", fields: [userId], references: [id], map: \"fk_attendance_user\")\n\n  status   AttendanceStatus\n  markedBy String?\n  markedAt DateTime?        @default(now())\n  remarks  String?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@unique([classSessionId, studentId], map: \"uq_attendance_session_student\")\n  @@index([classSessionId], map: \"idx_attendance_classsession\")\n}\n\nmodel AttendanceToken {\n  id          String   @id @default(cuid())\n  token       String   @unique\n  studentId   String? // Add this field\n  student     Student? @relation(fields: [studentId], references: [id])\n  subjectId   String?\n  subject     Subject? @relation(fields: [subjectId], references: [id], map: \"fk_attendancetoken_subject\")\n  professorId String\n  issuedAt    DateTime @default(now())\n  expiresAt   DateTime\n  used        Boolean  @default(false)\n\n  // --- FOR geo location of QR genrated ---\n  latitude  Float?\n  longitude Float?\n}\n\nmodel Session {\n  id           String   @id @default(cuid())\n  sessionToken String   @unique\n  userId       String\n  expiresAt    DateTime\n\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n}\n\nmodel Event {\n  id          String   @id @default(cuid())\n  title       String\n  date        DateTime\n  type        String\n  description String?\n  active      Boolean  @default(true)\n  createdBy   String\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n  campusId    String\n  campus      Campus   @relation(fields: [campusId], references: [id])\n}\n\nmodel Assignment {\n  id          String       @id @default(cuid())\n  title       String\n  description String?\n  subjectId   String\n  subject     Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade, map: \"fk_assignment_subject\")\n  teacherId   String\n  teacher     Teacher      @relation(fields: [teacherId], references: [id], map: \"fk_assignment_teacher\")\n  dueDate     DateTime?\n  createdAt   DateTime     @default(now())\n  updatedAt   DateTime     @updatedAt\n  attachments Resource[]\n  submissions Submission[]\n}\n\nmodel Submission {\n  id           String     @id @default(cuid())\n  assignmentId String\n  assignment   Assignment @relation(fields: [assignmentId], references: [id], map: \"fk_submission_assignment\")\n  studentId    String\n  student      Student    @relation(fields: [studentId], references: [id], map: \"fk_submission_student\")\n  submittedAt  DateTime   @default(now())\n  fileUrl      String?\n  text         String?\n  grade        Float?\n  feedback     String?\n  gradedBy     String?\n  gradedAt     DateTime?\n  createdAt    DateTime   @default(now())\n  updatedAt    DateTime   @updatedAt\n\n  @@index([assignmentId], map: \"idx_submission_assignment\")\n}\n\nmodel Announcement {\n  id             String     @id @default(cuid())\n  title          String\n  message        String\n  authorId       String\n  author         Teacher    @relation(\"AnnouncementAuthor\", fields: [authorId], references: [id], map: \"fk_announcement_author\")\n  targetAll      Boolean    @default(false)\n  targetSemester Int?\n  targetSection  String?\n  attachments    Resource[]\n  createdAt      DateTime   @default(now())\n  expiresAt      DateTime?\n  isActive       Boolean    @default(true)\n}\n\nmodel Resource {\n  id             String        @id @default(cuid())\n  title          String\n  description    String?\n  url            String\n  uploadedBy     String?\n  subjectId      String?\n  subject        Subject?      @relation(fields: [subjectId], references: [id], map: \"fk_resource_subject\")\n  assignmentId   String?\n  assignment     Assignment?   @relation(fields: [assignmentId], references: [id], map: \"fk_resource_assignment\")\n  announcementId String?\n  announcement   Announcement? @relation(fields: [announcementId], references: [id], map: \"fk_resource_announcement\")\n  messageId      String?\n  message        Message?      @relation(fields: [messageId], references: [id], map: \"fk_resource_message\")\n  createdAt      DateTime      @default(now())\n  updatedAt      DateTime      @updatedAt\n}\n\nmodel Exam {\n  id          String   @id @default(cuid())\n  title       String\n  subjectId   String\n  subject     Subject  @relation(fields: [subjectId], references: [id], map: \"fk_exam_subject\")\n  date        DateTime\n  durationMin Int?\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n\n  grades Grade[]\n}\n\nmodel Grade {\n  id        String   @id @default(cuid())\n  examId    String\n  exam      Exam     @relation(fields: [examId], references: [id], map: \"fk_grade_exam\")\n  studentId String\n  student   Student  @relation(fields: [studentId], references: [id], map: \"fk_grade_student\")\n  marks     Float\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@unique([examId, studentId], map: \"uq_grade_exam_student\")\n}\n\nmodel Message {\n  id          String     @id @default(cuid())\n  senderId    String\n  sender      User       @relation(\"MessageSender\", fields: [senderId], references: [id], map: \"fk_message_sender\")\n  receiverId  String\n  receiver    User       @relation(\"MessageReceiver\", fields: [receiverId], references: [id], map: \"fk_message_receiver\")\n  content     String\n  attachments Resource[]\n  read        Boolean    @default(false)\n  createdAt   DateTime   @default(now())\n}\n\nmodel Notification {\n  id        String   @id @default(cuid())\n  userId    String\n  user      User     @relation(fields: [userId], references: [id], map: \"fk_notification_user\")\n  title     String\n  body      String\n  meta      Json?\n  read      Boolean  @default(false)\n  createdAt DateTime @default(now())\n}\n\nmodel PremiumFeature {\n  id          String   @id @default(cuid())\n  name        String   @unique\n  description String?\n  users       User[]   @relation(\"UserPremiumFeatures\")\n  createdAt   DateTime @default(now())\n}\n\nmodel GoogleToken {\n  userId       String    @id\n  accessToken  String\n  refreshToken String?\n  scope        String?\n  expiresAt    DateTime?\n  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n  createdAt    DateTime  @default(now())\n  updatedAt    DateTime  @updatedAt\n}\n\nmodel RecentActivity {\n  id        String   @id @default(cuid())\n  userId    String?\n  userName  String?\n  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)\n  action    String\n  metadata  Json?\n  timestamp DateTime @default(now())\n}\n\nmodel SupportRequest {\n  id        String   @id @default(cuid())\n  userId    String?\n  user      User?    @relation(fields: [userId], references: [id], map: \"fk_supportrequest_user\")\n  name      String\n  email     String\n  message   String\n  createdAt DateTime @default(now())\n}\n\nmodel PlanConfig {\n  id        String   @id @default(cuid())\n  name      String   @unique\n  price     Int\n  features  Json?\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\n/// ---------------------\n/// Enums\n/// ---------------------\n\nenum Role {\n  STUDENT\n  TEACHER\n  ADMIN\n  ASSISTANT\n}\n\nenum Weekday {\n  MONDAY\n  TUESDAY\n  WEDNESDAY\n  THURSDAY\n  FRIDAY\n  SATURDAY\n  SUNDAY\n}\n\nenum SessionStatus {\n  UPCOMING\n  COMPLETED\n  CANCELLED\n}\n\nenum AttendanceStatus {\n  PRESENT\n  ABSENT\n  LATE\n  PENDING\n}\n",
+  "inlineSchemaHash": "054edad2bb137d26fdcb2fb5069c9fb436215f7825fcdbcc89da7ee78b6434ab",
+  "copyEngine": true
+}
+config.dirname = '/'
+
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"passwordHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"avatarUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"branch\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"semester\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"year\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"premiumExpiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"campusId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"campus\",\"kind\":\"object\",\"type\":\"Campus\",\"relationName\":\"CampusToUser\"},{\"name\":\"teacherProfile\",\"kind\":\"object\",\"type\":\"Teacher\",\"relationName\":\"UserToTeacher\"},{\"name\":\"studentProfile\",\"kind\":\"object\",\"type\":\"Student\",\"relationName\":\"UserToStudent\"},{\"name\":\"attendance\",\"kind\":\"object\",\"type\":\"Attendance\",\"relationName\":\"UserAttendance\"},{\"name\":\"premiumFeatures\",\"kind\":\"object\",\"type\":\"PremiumFeature\",\"relationName\":\"UserPremiumFeatures\"},{\"name\":\"googleTokens\",\"kind\":\"object\",\"type\":\"GoogleToken\",\"relationName\":\"GoogleTokenToUser\"},{\"name\":\"recentActivities\",\"kind\":\"object\",\"type\":\"RecentActivity\",\"relationName\":\"RecentActivityToUser\"},{\"name\":\"supportRequests\",\"kind\":\"object\",\"type\":\"SupportRequest\",\"relationName\":\"SupportRequestToUser\"},{\"name\":\"messagesSent\",\"kind\":\"object\",\"type\":\"Message\",\"relationName\":\"MessageSender\"},{\"name\":\"messagesReceived\",\"kind\":\"object\",\"type\":\"Message\",\"relationName\":\"MessageReceiver\"},{\"name\":\"notifications\",\"kind\":\"object\",\"type\":\"Notification\",\"relationName\":\"NotificationToUser\"},{\"name\":\"sessions\",\"kind\":\"object\",\"type\":\"Session\",\"relationName\":\"SessionToUser\"}],\"dbName\":null},\"Teacher\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserToTeacher\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"department\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"designation\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"teacherSubjects\",\"kind\":\"object\",\"type\":\"TeacherSubject\",\"relationName\":\"TeacherToTeacherSubject\"},{\"name\":\"classSessions\",\"kind\":\"object\",\"type\":\"ClassSession\",\"relationName\":\"ClassSessionToTeacher\"},{\"name\":\"announcements\",\"kind\":\"object\",\"type\":\"Announcement\",\"relationName\":\"AnnouncementAuthor\"},{\"name\":\"assignments\",\"kind\":\"object\",\"type\":\"Assignment\",\"relationName\":\"AssignmentToTeacher\"}],\"dbName\":null},\"Student\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserToStudent\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"rollNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"semesterId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sectionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"semester\",\"kind\":\"object\",\"type\":\"Semester\",\"relationName\":\"StudentSemester\"},{\"name\":\"section\",\"kind\":\"object\",\"type\":\"Section\",\"relationName\":\"StudentSection\"},{\"name\":\"attendances\",\"kind\":\"object\",\"type\":\"Attendance\",\"relationName\":\"StudentAttendance\"},{\"name\":\"submissions\",\"kind\":\"object\",\"type\":\"Submission\",\"relationName\":\"StudentToSubmission\"},{\"name\":\"grades\",\"kind\":\"object\",\"type\":\"Grade\",\"relationName\":\"GradeToStudent\"},{\"name\":\"attendanceTokens\",\"kind\":\"object\",\"type\":\"AttendanceToken\",\"relationName\":\"AttendanceTokenToStudent\"}],\"dbName\":null},\"Semester\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"number\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"campusId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"campus\",\"kind\":\"object\",\"type\":\"Campus\",\"relationName\":\"CampusToSemester\"},{\"name\":\"teacherSubjects\",\"kind\":\"object\",\"type\":\"TeacherSubject\",\"relationName\":\"SemesterToTeacherSubject\"},{\"name\":\"classSessions\",\"kind\":\"object\",\"type\":\"ClassSession\",\"relationName\":\"SemesterSessions\"},{\"name\":\"students\",\"kind\":\"object\",\"type\":\"Student\",\"relationName\":\"StudentSemester\"}],\"dbName\":null},\"Section\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"campusId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"campus\",\"kind\":\"object\",\"type\":\"Campus\",\"relationName\":\"CampusToSection\"},{\"name\":\"teacherSubjects\",\"kind\":\"object\",\"type\":\"TeacherSubject\",\"relationName\":\"SectionToTeacherSubject\"},{\"name\":\"classSessions\",\"kind\":\"object\",\"type\":\"ClassSession\",\"relationName\":\"SectionSessions\"},{\"name\":\"students\",\"kind\":\"object\",\"type\":\"Student\",\"relationName\":\"StudentSection\"}],\"dbName\":null},\"Subject\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"code\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"campusId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"campus\",\"kind\":\"object\",\"type\":\"Campus\",\"relationName\":\"CampusToSubject\"},{\"name\":\"teacherSubjects\",\"kind\":\"object\",\"type\":\"TeacherSubject\",\"relationName\":\"SubjectToTeacherSubject\"},{\"name\":\"classSessions\",\"kind\":\"object\",\"type\":\"ClassSession\",\"relationName\":\"ClassSessionSubject\"},{\"name\":\"assignments\",\"kind\":\"object\",\"type\":\"Assignment\",\"relationName\":\"AssignmentToSubject\"},{\"name\":\"resources\",\"kind\":\"object\",\"type\":\"Resource\",\"relationName\":\"ResourceToSubject\"},{\"name\":\"exams\",\"kind\":\"object\",\"type\":\"Exam\",\"relationName\":\"ExamToSubject\"},{\"name\":\"attendanceTokens\",\"kind\":\"object\",\"type\":\"AttendanceToken\",\"relationName\":\"AttendanceTokenToSubject\"}],\"dbName\":null},\"TeacherSubject\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"teacher\",\"kind\":\"object\",\"type\":\"Teacher\",\"relationName\":\"TeacherToTeacherSubject\"},{\"name\":\"teacherId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"subject\",\"kind\":\"object\",\"type\":\"Subject\",\"relationName\":\"SubjectToTeacherSubject\"},{\"name\":\"subjectId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"semester\",\"kind\":\"object\",\"type\":\"Semester\",\"relationName\":\"SemesterToTeacherSubject\"},{\"name\":\"semesterId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"section\",\"kind\":\"object\",\"type\":\"Section\",\"relationName\":\"SectionToTeacherSubject\"},{\"name\":\"sectionId\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"Campus\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"hindiName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"city\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"logoUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"latitude\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"longitude\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"geofenceRadius\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"wifiBssids\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"CampusToUser\"},{\"name\":\"classSessions\",\"kind\":\"object\",\"type\":\"ClassSession\",\"relationName\":\"CampusToClassSession\"},{\"name\":\"semesters\",\"kind\":\"object\",\"type\":\"Semester\",\"relationName\":\"CampusToSemester\"},{\"name\":\"sections\",\"kind\":\"object\",\"type\":\"Section\",\"relationName\":\"CampusToSection\"},{\"name\":\"subjects\",\"kind\":\"object\",\"type\":\"Subject\",\"relationName\":\"CampusToSubject\"},{\"name\":\"events\",\"kind\":\"object\",\"type\":\"Event\",\"relationName\":\"CampusToEvent\"}],\"dbName\":null},\"ClassSession\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"subject\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"subjectId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"subjectRel\",\"kind\":\"object\",\"type\":\"Subject\",\"relationName\":\"ClassSessionSubject\"},{\"name\":\"campusId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"campus\",\"kind\":\"object\",\"type\":\"Campus\",\"relationName\":\"CampusToClassSession\"},{\"name\":\"semester\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"section\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"weekday\",\"kind\":\"enum\",\"type\":\"Weekday\"},{\"name\":\"room\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"startTime\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endTime\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"teacherId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"teacher\",\"kind\":\"object\",\"type\":\"Teacher\",\"relationName\":\"ClassSessionToTeacher\"},{\"name\":\"semesterId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"semesterRel\",\"kind\":\"object\",\"type\":\"Semester\",\"relationName\":\"SemesterSessions\"},{\"name\":\"sectionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sectionRel\",\"kind\":\"object\",\"type\":\"Section\",\"relationName\":\"SectionSessions\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"SessionStatus\"},{\"name\":\"attendanceMarked\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"attendances\",\"kind\":\"object\",\"type\":\"Attendance\",\"relationName\":\"ClassSessionAttendance\"}],\"dbName\":null},\"Attendance\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"classSessionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"classSession\",\"kind\":\"object\",\"type\":\"ClassSession\",\"relationName\":\"ClassSessionAttendance\"},{\"name\":\"studentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"student\",\"kind\":\"object\",\"type\":\"Student\",\"relationName\":\"StudentAttendance\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserAttendance\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"AttendanceStatus\"},{\"name\":\"markedBy\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"markedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"remarks\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"AttendanceToken\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"studentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"student\",\"kind\":\"object\",\"type\":\"Student\",\"relationName\":\"AttendanceTokenToStudent\"},{\"name\":\"subjectId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"subject\",\"kind\":\"object\",\"type\":\"Subject\",\"relationName\":\"AttendanceTokenToSubject\"},{\"name\":\"professorId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"issuedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"used\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"latitude\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"longitude\",\"kind\":\"scalar\",\"type\":\"Float\"}],\"dbName\":null},\"Session\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sessionToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"SessionToUser\"}],\"dbName\":null},\"Event\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"date\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"active\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdBy\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"campusId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"campus\",\"kind\":\"object\",\"type\":\"Campus\",\"relationName\":\"CampusToEvent\"}],\"dbName\":null},\"Assignment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"subjectId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"subject\",\"kind\":\"object\",\"type\":\"Subject\",\"relationName\":\"AssignmentToSubject\"},{\"name\":\"teacherId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"teacher\",\"kind\":\"object\",\"type\":\"Teacher\",\"relationName\":\"AssignmentToTeacher\"},{\"name\":\"dueDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"attachments\",\"kind\":\"object\",\"type\":\"Resource\",\"relationName\":\"AssignmentToResource\"},{\"name\":\"submissions\",\"kind\":\"object\",\"type\":\"Submission\",\"relationName\":\"AssignmentToSubmission\"}],\"dbName\":null},\"Submission\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"assignmentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"assignment\",\"kind\":\"object\",\"type\":\"Assignment\",\"relationName\":\"AssignmentToSubmission\"},{\"name\":\"studentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"student\",\"kind\":\"object\",\"type\":\"Student\",\"relationName\":\"StudentToSubmission\"},{\"name\":\"submittedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"fileUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"text\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"grade\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"feedback\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"gradedBy\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"gradedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Announcement\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"message\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"authorId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"author\",\"kind\":\"object\",\"type\":\"Teacher\",\"relationName\":\"AnnouncementAuthor\"},{\"name\":\"targetAll\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"targetSemester\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"targetSection\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"attachments\",\"kind\":\"object\",\"type\":\"Resource\",\"relationName\":\"AnnouncementToResource\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"}],\"dbName\":null},\"Resource\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"uploadedBy\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"subjectId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"subject\",\"kind\":\"object\",\"type\":\"Subject\",\"relationName\":\"ResourceToSubject\"},{\"name\":\"assignmentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"assignment\",\"kind\":\"object\",\"type\":\"Assignment\",\"relationName\":\"AssignmentToResource\"},{\"name\":\"announcementId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"announcement\",\"kind\":\"object\",\"type\":\"Announcement\",\"relationName\":\"AnnouncementToResource\"},{\"name\":\"messageId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"message\",\"kind\":\"object\",\"type\":\"Message\",\"relationName\":\"MessageToResource\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Exam\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"subjectId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"subject\",\"kind\":\"object\",\"type\":\"Subject\",\"relationName\":\"ExamToSubject\"},{\"name\":\"date\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"durationMin\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"grades\",\"kind\":\"object\",\"type\":\"Grade\",\"relationName\":\"ExamToGrade\"}],\"dbName\":null},\"Grade\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"examId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"exam\",\"kind\":\"object\",\"type\":\"Exam\",\"relationName\":\"ExamToGrade\"},{\"name\":\"studentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"student\",\"kind\":\"object\",\"type\":\"Student\",\"relationName\":\"GradeToStudent\"},{\"name\":\"marks\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Message\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"senderId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sender\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"MessageSender\"},{\"name\":\"receiverId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"receiver\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"MessageReceiver\"},{\"name\":\"content\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"attachments\",\"kind\":\"object\",\"type\":\"Resource\",\"relationName\":\"MessageToResource\"},{\"name\":\"read\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Notification\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"NotificationToUser\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"body\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"meta\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"read\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"PremiumFeature\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserPremiumFeatures\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"GoogleToken\":{\"fields\":[{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"accessToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"refreshToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"scope\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"GoogleTokenToUser\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"RecentActivity\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"RecentActivityToUser\"},{\"name\":\"action\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"metadata\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"timestamp\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"SupportRequest\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"SupportRequestToUser\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"message\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"PlanConfig\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"features\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
+config.engineWasm = {
+  getRuntime: async () => require('./query_engine_bg.js'),
+  getQueryEngineWasmModule: async () => {
+    const loader = (await import('#wasm-engine-loader')).default
+    const engine = (await loader).default
+    return engine
   }
 }
+config.compilerWasm = undefined
 
+config.injectableEdgeEnv = () => ({
+  parsed: {
+    DATABASE_URL: typeof globalThis !== 'undefined' && globalThis['DATABASE_URL'] || typeof process !== 'undefined' && process.env && process.env.DATABASE_URL || undefined
+  }
+})
+
+if (typeof globalThis !== 'undefined' && globalThis['DEBUG'] || typeof process !== 'undefined' && process.env && process.env.DEBUG || undefined) {
+  Debug.enable(typeof globalThis !== 'undefined' && globalThis['DEBUG'] || typeof process !== 'undefined' && process.env && process.env.DEBUG || undefined)
+}
+
+const PrismaClient = getPrismaClient(config)
 exports.PrismaClient = PrismaClient
-
 Object.assign(exports, Prisma)
+

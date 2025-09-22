@@ -92,6 +92,21 @@ export function showSuccessMessage(message: string) {
     position: "bottom-right",
   });
 }
+
+export function showLoadingMessage(message: string) {
+  toast.dismiss();
+  toast.loading(message, {
+    style: {
+      background: "rgba(0, 0, 0, 0.5)",
+      color: "#fff",
+      fontWeight: "bold",
+      backdropFilter: "blur(4px)",
+      border: "1px solid rgba(255, 255, 255, 0.2)",
+    },
+    position: "bottom-right",
+  });
+}
+
 export function showErrorMessage(message: string) {
   toast.dismiss();
   toast.error(message, {
@@ -185,42 +200,9 @@ export const SECTIONS = [
 
 export function numberToRoman(num: number): string {
   const thousands = ["", "M", "MM", "MMM"];
-  const hundreds = [
-    "",
-    "C",
-    "CC",
-    "CCC",
-    "CD",
-    "D",
-    "DC",
-    "DCC",
-    "DCCC",
-    "CM",
-  ];
-  const tens = [
-    "",
-    "X",
-    "XX",
-    "XXX",
-    "XL",
-    "L",
-    "LX",
-    "LXX",
-    "LXXX",
-    "XC",
-  ];
-  const ones = [
-    "",
-    "I",
-    "II",
-    "III",
-    "IV",
-    "V",
-    "VI",
-    "VII",
-    "VIII",
-    "IX",
-  ];
+  const hundreds = ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"];
+  const tens = ["", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"];
+  const ones = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"];
 
   const t = thousands[Math.floor(num / 1000)];
   const h = hundreds[Math.floor((num % 1000) / 100)];
@@ -230,6 +212,45 @@ export function numberToRoman(num: number): string {
   return t + h + te + o;
 }
 
+export function haversineDistance(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number
+) {
+  const R = 6371e3; // Earth's radius in metres
+  const φ1 = (lat1 * Math.PI) / 180;
+  const φ2 = (lat2 * Math.PI) / 180;
+  const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+  const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c; // in metres
+}
+
+export function getCurrentWeekday(
+  date: Date
+):
+  | "MONDAY"
+  | "TUESDAY"
+  | "WEDNESDAY"
+  | "THURSDAY"
+  | "FRIDAY"
+  | "SATURDAY"
+  | "SUNDAY" {
+  const days = [
+    "SUNDAY",
+    "MONDAY",
+    "TUESDAY",
+    "WEDNESDAY",
+    "THURSDAY",
+    "FRIDAY",
+    "SATURDAY",
+  ] as const;
+  return days[date.getDay()];
+}
 
 export const verificationEmailHTML = (code: string) => `
   <!DOCTYPE html>

@@ -2,6 +2,14 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+    ],
+  },
   async rewrites() {
     return [
       {
@@ -10,7 +18,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  devIndicators: false
+  devIndicators: false,
 };
 
 export default nextConfig;

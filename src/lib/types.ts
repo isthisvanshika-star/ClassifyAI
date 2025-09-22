@@ -119,7 +119,11 @@ export type Stats = {
 export type Expiration = {
   id: string;
   name: string;
-  date: string;
+  email: string;
+  plan: 'PREMIUM' | 'PRO' | 'ULTIMATE';
+  startDate: string;
+  endDate: string | null;
+  status: 'ACTIVE' | 'EXPIRED';
 };
 
 export type Activity = {

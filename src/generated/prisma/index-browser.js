@@ -20,12 +20,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.15.0
- * Query Engine version: 85179d7826409ee107a6ba334b5e305ae3fba9fb
+ * Prisma Client JS version: 6.16.2
+ * Query Engine version: 1c57fdcd7e44b29b9313256c76699e91c3ac3c43
  */
 Prisma.prismaVersion = {
-  client: "6.15.0",
-  engine: "85179d7826409ee107a6ba334b5e305ae3fba9fb"
+  client: "6.16.2",
+  engine: "1c57fdcd7e44b29b9313256c76699e91c3ac3c43"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -133,7 +133,8 @@ exports.Prisma.UserScalarFieldEnum = {
   branch: 'branch',
   semester: 'semester',
   year: 'year',
-  premiumExpiresAt: 'premiumExpiresAt'
+  premiumExpiresAt: 'premiumExpiresAt',
+  campusId: 'campusId'
 };
 
 exports.Prisma.TeacherScalarFieldEnum = {
@@ -159,13 +160,15 @@ exports.Prisma.SemesterScalarFieldEnum = {
   id: 'id',
   name: 'name',
   number: 'number',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  campusId: 'campusId'
 };
 
 exports.Prisma.SectionScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  campusId: 'campusId'
 };
 
 exports.Prisma.SubjectScalarFieldEnum = {
@@ -174,7 +177,8 @@ exports.Prisma.SubjectScalarFieldEnum = {
   code: 'code',
   description: 'description',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  campusId: 'campusId'
 };
 
 exports.Prisma.TeacherSubjectScalarFieldEnum = {
@@ -185,10 +189,24 @@ exports.Prisma.TeacherSubjectScalarFieldEnum = {
   sectionId: 'sectionId'
 };
 
+exports.Prisma.CampusScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  hindiName: 'hindiName',
+  slug: 'slug',
+  city: 'city',
+  logoUrl: 'logoUrl',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  geofenceRadius: 'geofenceRadius',
+  wifiBssids: 'wifiBssids'
+};
+
 exports.Prisma.ClassSessionScalarFieldEnum = {
   id: 'id',
   subject: 'subject',
   subjectId: 'subjectId',
+  campusId: 'campusId',
   semester: 'semester',
   section: 'section',
   weekday: 'weekday',
@@ -225,7 +243,16 @@ exports.Prisma.AttendanceTokenScalarFieldEnum = {
   professorId: 'professorId',
   issuedAt: 'issuedAt',
   expiresAt: 'expiresAt',
-  used: 'used'
+  used: 'used',
+  latitude: 'latitude',
+  longitude: 'longitude'
+};
+
+exports.Prisma.SessionScalarFieldEnum = {
+  id: 'id',
+  sessionToken: 'sessionToken',
+  userId: 'userId',
+  expiresAt: 'expiresAt'
 };
 
 exports.Prisma.EventScalarFieldEnum = {
@@ -237,7 +264,8 @@ exports.Prisma.EventScalarFieldEnum = {
   active: 'active',
   createdBy: 'createdBy',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  campusId: 'campusId'
 };
 
 exports.Prisma.AssignmentScalarFieldEnum = {
@@ -438,9 +466,11 @@ exports.Prisma.ModelName = {
   Section: 'Section',
   Subject: 'Subject',
   TeacherSubject: 'TeacherSubject',
+  Campus: 'Campus',
   ClassSession: 'ClassSession',
   Attendance: 'Attendance',
   AttendanceToken: 'AttendanceToken',
+  Session: 'Session',
   Event: 'Event',
   Assignment: 'Assignment',
   Submission: 'Submission',

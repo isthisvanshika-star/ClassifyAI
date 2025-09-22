@@ -30,6 +30,10 @@ model User {
   year             Int?
   premiumExpiresAt DateTime?
 
+  // --- ADDED: Link user to a specific campus ---
+  campusId String?
+  campus   Campus? @relation(fields: [campusId], references: [id])
+
   // relations
   teacherProfile   Teacher?         @relation("UserToTeacher")
   studentProfile   Student?         @relation("UserToStudent")
@@ -41,6 +45,7 @@ model User {
   messagesSent     Message[]        @relation("MessageSender")
   messagesReceived Message[]        @relation("MessageReceiver")
   notifications    Notification[]
+  sessions         Session[]
 }
 
 model Teacher {
@@ -83,20 +88,28 @@ model Semester {
   name      String   @unique
   number    Int?
   createdAt DateTime @default(now())
+  campusId  String
+  campus    Campus   @relation(fields: [campusId], references: [id])
 
   teacherSubjects TeacherSubject[]
   classSessions   ClassSession[]   @relation("SemesterSessions")
   students        Student[]        @relation("StudentSemester")
+
+  @@unique([name, campusId]) // A semester name should be unique within a campus
 }
 
 model Section {
   id        String   @id @default(cuid())
-  name      String
+  name      String   @unique
   createdAt DateTime @default(now())
+  campusId  String
+  campus    Campus   @relation(fields: [campusId], references: [id])
 
   teacherSubjects TeacherSubject[]
   classSessions   ClassSession[]   @relation("SectionSessions")
   students        Student[]        @relation("StudentSection")
+
+  @@unique([name, campusId])
 }
 
 model Subject {
@@ -106,6 +119,8 @@ model Subject {
   description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  campusId    String
+  campus      Campus   @relation(fields: [campusId], references: [id])
 
   teacherSubjects  TeacherSubject[]
   classSessions    ClassSession[]    @relation("ClassSessionSubject")
@@ -113,6 +128,8 @@ model Subject {
   resources        Resource[]
   exams            Exam[]
   attendanceTokens AttendanceToken[]
+
+  @@unique([code, campusId])
 }
 
 model TeacherSubject {
@@ -133,6 +150,26 @@ model TeacherSubject {
   @@unique([teacherId, subjectId, semesterId, sectionId], map: "uq_teachersubject_unique")
 }
 
+model Campus {
+  id             String   @id @default(cuid())
+  name           String   @unique
+  hindiName      String?
+  slug           String   @unique
+  city           String
+  logoUrl        String?
+  latitude       Float
+  longitude      Float
+  geofenceRadius Int      @default(500)
+  wifiBssids     String[]
+
+  users         User[]
+  classSessions ClassSession[] // Back-relation to ClassSession
+  semesters     Semester[]
+  sections      Section[]
+  subjects      Subject[]
+  events        Event[]
+}
+
 model ClassSession {
   id String @id @default(cuid())
 
@@ -141,6 +178,10 @@ model ClassSession {
 
   subjectId  String?
   subjectRel Subject? @relation("ClassSessionSubject", fields: [subjectId], references: [id], map: "fk_classsession_subject")
+
+  // --- UPDATED: Link to Campus is the single source of truth for location ---
+  campusId String?
+  campus   Campus? @relation(fields: [campusId], references: [id])
 
   semester  Int
   section   String
@@ -204,6 +245,19 @@ model AttendanceToken {
   issuedAt    DateTime @default(now())
   expiresAt   DateTime
   used        Boolean  @default(false)
+
+  // --- FOR geo location of QR genrated ---
+  latitude  Float?
+  longitude Float?
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expiresAt    DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Event {
@@ -216,6 +270,8 @@ model Event {
   createdBy   String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  campusId    String
+  campus      Campus   @relation(fields: [campusId], references: [id])
 }
 
 model Assignment {

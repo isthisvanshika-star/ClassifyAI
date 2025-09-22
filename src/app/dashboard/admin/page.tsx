@@ -1,117 +1,84 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useState } from "react";
 import { Tektur } from "next/font/google";
-import AttendanceGraph from "@/components/admin/AttendanceGraph";
-import RecentActivity from "@/components/admin/RecentActivity";
-import BottomStrip from "@/components/admin/BottomStrip";
-import styles from '../admin/admin.module.css'
-
-interface Summary {
-  totalStudents: number;
-  totalTeachers: number;
-  totalAttendance: number;
-  tokensToday: number;
-}
+import CreateAssistantDialog from "@/components/admin/CreateAssistantDialog";
+import CampusList from "@/components/admin/CampusList";
+import { mutate } from "swr";
 
 const tektur = Tektur({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["600"],
 });
 
-const DashboardStats = () => {
-  const [summary, setSummary] = useState<Summary | null>(null);
-  const [loading, setLoading] = useState(true);
+export default function SuperAdminDashboardPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchSummary = async () => {
-      try {
-        const res = await fetch(
-          `/api/admin/summary`
-        );
-        const data = await res.json();
-        if (!data.error) {
-          setSummary(data);
-        }
-      } catch (err) {
-        console.error("Failed to fetch admin summary:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchSummary();
-  }, []);
-
-  if (loading || !summary) {
-    return (
-      <p className="text-gray-400 text-2xl text-center mt-80">Loading...</p>
-    );
-  }
-
-  const stats = [
-    {
-      label: "Total Students",
-      value: summary.totalStudents,
-      color: "text-cyan-300",
-    },
-    {
-      label: "Total Teachers",
-      value: summary.totalTeachers,
-      color: "text-green-300",
-    },
-    {
-      label: "Attendance Today",
-      value: summary.totalAttendance,
-      color: "text-yellow-300",
-    },
-    {
-      label: "Tokens Today",
-      value: summary.tokensToday,
-      color: "text-purple-300",
-    },
-  ];
+  const handleActionComplete = () => {
+    mutate("/api/campus");
+  };
 
   return (
+    <>
+      {/* Background Layer */}
+      <main className="absolute inset-0 bg-gradient-to-br from-neutral-950 via-neutral-800 to-neutral-950 bg-cover bg-center z-0" />
 
-    <div className={`${styles.scrollbarHide} text-white`}>
-      <div
-        className={`grid grid-cols-1 md:grid-cols-4 px-4 gap-4 mb-6 mt-16 ${tektur.className}`}
-      >
-        {stats.map((stat, index) => (
-          <motion.div
-            key={stat.label}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: index * 0.1 }}
-            className="bg-white/5 rounded-2xl p-4 text-center"
+      {/* Content Layer */}
+      <main className="relative min-h-screen p-6 md:p-10 text-white backdrop-blur-sm">
+        {/* Header */}
+        <header className="mb-12">
+          <h1
+            className={`text-4xl font-bold bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-500 bg-clip-text text-transparent drop-shadow-xl ${tektur.className}`}
           >
-            <h3 className={`${tektur.className} text-gray-400`}>
-              {stat.label}
-            </h3>
-            <p
-              className={`text-2xl font-bold ${tektur.className} ${stat.color}`}
-            >
-              {stat.value}
-            </p>
-          </motion.div>
-        ))}
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-32 mb-6">
-        <div className="md:col-span-2 bg-white/5 rounded-xl p-8 h-[25rem]">
-          <AttendanceGraph />
-        </div>
-        <div className="bg-white/5 rounded-xl p-4">
-          <RecentActivity />
-        </div>
-      </div>
-      <div className="mt-28">
-        <BottomStrip />
-      </div>
-    </div>
-  );
-};
+             Admin Dashboard
+          </h1>
+          <p className="mt-2 text-gray-400">
+            Manage colleges and platform-wide assistants
+          </p>
+        </header>
 
-export default DashboardStats;
+        {/* Dashboard Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Onboard College Section */}
+          <section className="bg-white/5 border border-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all">
+            <h2 className="text-2xl font-semibold mb-3 text-indigo-300">
+              Onboard a New College
+            </h2>
+            <p className="text-gray-400 mb-5">
+              Create the first administrator account for a new college. This
+              account will be assigned the{" "}
+              <span className="font-semibold text-cyan-400">'ASSISTANT'</span>{" "}
+              role.
+            </p>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-gradient-to-r from-indigo-500 via-violet-500 to-purple-600 hover:from-indigo-600 hover:via-violet-600 hover:to-purple-700 text-white font-bold py-2 px-6 rounded-xl shadow-lg transition-all"
+            >
+              + Create New Assistant
+            </button>
+          </section>
+
+          {/* Manage Campuses Section */}
+          <section className="bg-white/5 border border-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all">
+            <h2 className="text-2xl font-semibold mb-3 text-indigo-300">
+              Manage Campuses
+            </h2>
+            <p className="text-gray-400 mb-5">
+              View, edit, or remove existing campuses linked to the platform.
+            </p>
+            <div className="bg-neutral-900/70 p-4 rounded-xl border border-gray-700/50">
+              <CampusList />
+            </div>
+          </section>
+        </div>
+      </main>
+
+      {/* Modal */}
+      <CreateAssistantDialog
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onActionComplete={handleActionComplete}
+      />
+    </>
+  );
+}

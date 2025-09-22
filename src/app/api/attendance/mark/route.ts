@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { logActivity } from "@/lib/helper";
+import { getCurrentWeekday, haversineDistance, logActivity } from "@/lib/helper";
 
 // --- CONFIGURATION ---
 // Set the maximum number of times a student can mark attendance for one subject in a single day.
@@ -8,7 +8,7 @@ const MAX_ATTENDANCE_PER_DAY = 1;
 
 export async function POST(req: Request) {
   try {
-    const { token, studentId } = await req.json(); // studentId here is the USER ID of the logged-in student
+    const { token, studentId, location   } = await req.json(); // studentId here is the USER ID of the logged-in student
 
     if (!token || !studentId) {
       return NextResponse.json({ message: "Missing token or student ID" }, { status: 400 });
@@ -46,6 +46,27 @@ export async function POST(req: Request) {
     // Ensure the student ID from the token matches the ID of the student scanning.
     if (tokenRecord.studentId !== studentUser.studentProfile.id) {
         return NextResponse.json({ message: "This QR code is not valid for you." }, { status: 403 });
+    }
+
+        // --- DYNAMIC GEOFENCE CHECK (NEW LOGIC) ---
+    // Check if the token has location data stored in it.
+    if (tokenRecord.latitude && tokenRecord.longitude) {
+        if (!location?.latitude || !location?.longitude) {
+            return NextResponse.json({ message: "Location data is missing from your request." }, { status: 400 });
+        }
+
+        const distance = haversineDistance  (
+            tokenRecord.latitude,   // Use location from the token
+            tokenRecord.longitude,  // Use location from the token
+            location.latitude,      // Student's current location
+            location.longitude      // Student's current location
+        );
+
+        const allowedRadius = 50; // The 50-meter radius you wanted
+
+        if (distance > allowedRadius) {
+            return NextResponse.json({ message: `Attendance failed. You are approximately ${Math.round(distance)} meters away from the required location.` }, { status: 403 });
+        }
     }
 
     // --- CUSTOMIZABLE LIMIT CHECK ---
@@ -87,8 +108,6 @@ export async function POST(req: Request) {
               endTime: new Date(now.getTime() + 60 * 60 * 1000), // Default 1-hour session
               weekday: getCurrentWeekday(now),
               status: "COMPLETED",
-              // Populate details from the student's profile
-              // FIX: Use the semester number directly from the User record
               semester: studentUser.semester ?? 0,
               section: studentUser.studentProfile.sectionId || "N/A",
               semesterId: studentUser.studentProfile.semesterId,
@@ -96,6 +115,7 @@ export async function POST(req: Request) {
             },
         });
     }
+
 
     // --- Create Attendance Record ---
     const attendance = await prisma.attendance.create({
@@ -134,7 +154,3 @@ export async function POST(req: Request) {
   }
 }
 
-function getCurrentWeekday(date: Date): "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY" {
-    const days = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"] as const;
-    return days[date.getDay()];
-}
