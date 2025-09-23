@@ -221,28 +221,29 @@ export default function StudentDashboard() {
               </div>
             </div>
             <div className="2xl:flex 2xl:gap-13">
-            <div
-              className="hidden gap-4 items-center justify-center ring hover:ring-2 w-56 p-3 ml-2 rounded-2xl bg-blue-600 ring-blue-300 transition-all duration-300 hover:bg-blue-500 cursor-pointer 2xl:flex"
-              onClick={() => logout()}
-            >
-              <LogOut
-                size={50}
-                className="text-cyan-300 mt-1 text-xl w-5 h-5 sm:w-6 sm:h-6"
-              />
-              <span className="text-xl">Logout</span>
-            </div>
+              <div
+                className="hidden gap-4 items-center justify-center ring hover:ring-2 w-56 p-3 ml-2 rounded-2xl bg-blue-600 ring-blue-300 transition-all duration-300 hover:bg-blue-500 cursor-pointer 2xl:flex"
+                onClick={() => logout()}
+              >
+                <LogOut
+                  size={50}
+                  className="text-cyan-300 mt-1 text-xl w-5 h-5 sm:w-6 sm:h-6"
+                />
+                <span className="text-xl">Logout</span>
+              </div>
 
-            <div
-              className="hidden gap-4 items-center justify-center ring hover:ring-2 w-56 p-3 ml-2 rounded-2xl bg-blue-600/50 ring-blue-300 transition-all duration-300 hover:bg-blue-500 cursor-pointer 2xl:flex"
-              onClick={() => logout()}
-            >
-              <ChatBot />
-              <span className="text-xl">Chat with AI</span>
-            </div>
+              {premiumStatus?.features?.includes("AI_CHATBOT") && (
+                <div
+                  className="hidden gap-4 items-center justify-center ring hover:ring-2 w-56 p-3 ml-2 rounded-2xl bg-blue-600/50 ring-blue-300 transition-all duration-300 hover:bg-blue-500 cursor-pointer 2xl:flex"
+                  onClick={() => logout()}
+                >
+                  <span className="text-xl">Chat with AI</span>
+                </div>
+              )}
             </div>
             {/* ChatBot - Only show on larger screens or make it responsive */}
             {premiumStatus?.features?.includes("AI_CHATBOT") && (
-              <div className="hidden lg:block">
+              <div className="hidden 2xl:hidden lg:block">
                 <ChatBot />
               </div>
             )}
