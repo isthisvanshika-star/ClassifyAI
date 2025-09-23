@@ -16,13 +16,13 @@ const HorizontalBar: React.FC<Props> = ({
 }) => {
   return (
     <div
-      className={`relative group flex w-80 max-w-md mx-auto my-2 p-2 bg-gradient-to-tl from-white/20 to-black/20 border border-cyan-300 rounded-4xl shadow-lg ${
+      className={`relative group 2xl:my-5 flex sm:w-72 2xl:w-[30rem] 2xl:h-[8rem] lg:w-[20rem] md:w-[22rem] w-80 max-w-md mx-auto my-2 p-2 bg-gradient-to-tl from-white/20 to-black/20 border border-cyan-300 rounded-4xl shadow-lg ${
         locked ? "opacity-50 cursor-not-allowed" : ""
       }`}
     >
       <div className="flex w-80 flex-col items-start justify-between p-4 rounded-lg">
-        <p className="text-amber-50 text-base">{title}</p>
-        <span className="text-gray-100 text-sm">{content}</span>
+        <p className="text-amber-50 2xl:text-lg text-base">{title}</p>
+        <span className="text-gray-100 2xl:text-base text-sm">{content}</span>
       </div>
       <div className="flex items-center justify-center w-16 h-full">
         {locked ? (

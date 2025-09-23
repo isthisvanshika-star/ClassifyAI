@@ -41,25 +41,25 @@ const Greeting = () => {
 }
 
   return (
-    <div className="flex flex-col gap-2 p-4  mt-10 w-md">
-      <h1 className="text-2xl"> WELCOME BACK!</h1>
-      <strong className="capitalize text-2xl ">{removeMiddleName(details?.name||"")}</strong>
-      <div className="flex gap-3">
+    <div className="sm:flex 2xl:ml-2 lg:flex lg:pl-5 lg:space-y-2 lg:mt-10 sm:flex-col sm:gap-1 sm:p-1 sm:w-sm">
+      <h1 className="sm:text-lg lg:text-start lg:text-2xl  sm:text-center 2xl:text-4xl"> WELCOME BACK!</h1>
+      <strong className="sm:capitalize lg:text-start sm:text-base sm:text-center 2xl:text-4xl lg:text-2xl ">{removeMiddleName(details?.name||"")}</strong>
+      <div className="sm:flex sm:gap-3 lg:text-base sm:w-sm lg:ml-0 sm:ml-[84px] 2xl:text-2xl">
         {details?.branch && (
-          <span>
-            <strong>Branch: </strong>
+          <span className="sm:text-center">
+            <strong className="sm:text-center">Branch: </strong>
             {details?.branch}
           </span>
         )}
         {details?.year && (
-          <span>
-            <strong>Year: </strong>
+          <span className="sm:text-center">
+            <strong className="sm:text-center">Year: </strong>
             {numberToRoman(details?.year || 0) || details?.year}
           </span>
         )}
         {details?.semester && (
-          <span>
-            <strong>Sem: </strong>
+          <span className="sm:text-center">
+            <strong className="sm:text-center">Sem: </strong>
             {numberToRoman(details?.semester || 0) || details?.semester}
           </span>
         )}

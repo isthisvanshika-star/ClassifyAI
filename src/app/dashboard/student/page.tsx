@@ -21,8 +21,10 @@ export default function StudentDashboard() {
   const [premiumStatus, setPremiumStatus] =
     useState<PremiumStatusResponse | null>(null);
   const router = useRouter();
+
   const logout = () => {
-    localStorage.removeItem("studentId");
+    localStorage.removeItem("studentId"); // Use the correct key for student
+    localStorage.removeItem("lastCampusSlug"); // Also clear the campus slug
     router.push("/auth/login");
   };
 
@@ -73,126 +75,171 @@ export default function StudentDashboard() {
     fetchTodayAttendance();
     fetchPremiumStatus();
   }, []);
-  console.log("STS " + premiumStatus?.isPremium);
   return (
-    <div className="p-6 sm:p-10 md:p-4 flex flex-col gap-6 md:flex-row w-32 h-screen">
-      <div className="w-[15rem] space-y-2">
-        <Logo />
-        <Greeting />
-
-        <Link
-          href="/attendance/scan"
-          className="block text-center text-sm bg-gray-200/15 border border-gray-300 hover:bg-gray-300/10 hover:text-gray-500 font-semibold px-2 py-3 rounded-xl transition duration-300 ease-in-out shadow-md"
-        >
-          Scan QR to Mark Attendance
-        </Link>
-
-        <div className="bg-gray-100/15 p-4 h-110 rounded-xl shadow-sm mt-3 overflow-clip">
-          <h2 className="text-xs font-semibold mb-4">📅 Today's Attendance</h2>
-          {loading ? (
-            <p>Loading...</p>
-          ) : todayAttendance.length > 0 ? (
-            <ul className="space-y-4 overflow-scroll max-h-[27rem] overflow-y-auto">
-              {todayAttendance.map((att, idx) => (
-                <li
-                  key={idx}
-                  className="p-4 bg-gradient-to-br from-[#070a0f]/80 to-[#243B55]/80 rounded-xl"
-                >
-                  <p>
-                    <strong>Subject:</strong> {att.subject}
-                  </p>
-                  <p>
-                    <strong>Status:</strong> {att.status}
-                  </p>
-                  <p>
-                    <strong>Marked By:</strong> {att.markedBy}
-                  </p>
-                  <p className="text-sm text-gray-100 mt-1">
-                    {new Date(att.date).toLocaleDateString()}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-gray-200">No attendance marked today.</p>
-          )}
-        </div>
-      </div>
-
-      <div className="flex pl-[1rem]">
-        <div className="flex flex-col space-y-4 w-80">
-          {premiumStatus?.isPremium ? (
-            <PremiumFeaturesCard
-              studentId={localStorage.getItem("studentId") || ""}
-            />
-          ) : (
-            <UpgradeToPremiumCard />
-          )}
-          <HorizontalBar
-            content="Check your past attendance records"
-            linkRef="/attendance/history"
-            title="Attendance History"
-          />
-          <HorizontalBar
-            content="Track upcoming exams and assignment deadlines"
-            linkRef="/dashboard/student/exams"
-            title="Upcoming Exams"
-          />
-          <HorizontalBar
-            content="See how many classes you can skip safely"
-            linkRef="/attendance/stats"
-            title="Bunk Manager"
-            locked={!premiumStatus?.features.includes("BUNK_MANAGER")}
-          />
-          <HorizontalBar
-            content="Get a smart study plan based on your upcoming exams"
-            linkRef="/study-plan"
-            title="Study Plan"
-            locked={!premiumStatus?.features.includes("STUDY_PLAN")}
-          />
-        </div>
-        <div className="flex-1 flex items-center justify-center px-4 flex-col space-y-6">
-          <div className="w-3xl max-w-6xl mx-auto">
-            <BarGraph />
+    <div className="sm:min-h-screen  sm:p-4">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 h-full">
+        {/* Left Sidebar */}
+        <div className="w-full lg:w-64 xl:w-72 2xl:w-[25rem]">
+          <div className=" lg:block space-y-3  sm:flex">
+            <Logo />
+            <Greeting />
           </div>
-          <div className=" space-x-4 w-full max-w-6xl mx-auto ml-8">
-            <AppCalendar />
-            <div className="flex space-x-[1.4rem] h-34 ">
-              <NumberCard
-                title="Lectures Attended"
-                value={
-                  isNaN(Number.parseInt(stats?.presents))
-                    ? "..."
-                    : Number.parseInt(stats?.presents).toString()
-                }
-              />
-              <NumberCard
-                title="Attendance %"
-                value={
-                  isNaN(Number.parseInt(stats?.presentPercentage))
-                    ? "..."
-                    : Number.parseInt(stats?.presentPercentage).toString() + "%"
-                }
-              />
+          <Link
+            href="/attendance/scan"
+            className="sm:block 2xl:h-17 text-center 2xl:text-xl 2xl:pt-4 lg:mt-5 sm:text-center sm:text-sm bg-gray-200/15 border border-gray-300 hover:bg-gray-300/10 hover:text-gray-500 font-semibold sm:px-3 sm:py-3 rounded-xl transition duration-300 ease-in-out shadow-md"
+          >
+            Scan QR to Mark Attendance
+          </Link>
+
+          <div className="bg-gray-100/15 p-4 rounded-xl lg:mt-10 shadow-sm overflow-hidden">
+            <h2 className="text-xs 2xl:text-lg font-semibold mb-4">
+              📅 Today's Attendance
+            </h2>
+            <div className="max-h-64 2xl:text-base sm:max-h-80 lg:max-h-96">
+              {loading ? (
+                <p className="text-sm">Loading...</p>
+              ) : todayAttendance.length > 0 ? (
+                <ul className="space-y-3 overflow-y-auto max-h-full pr-2">
+                  {todayAttendance.map((att, idx) => (
+                    <li
+                      key={idx}
+                      className="p-3 sm:p-4 bg-gradient-to-br from-[#070a0f]/80 to-[#243B55]/80 rounded-xl"
+                    >
+                      <p className="text-sm">
+                        <strong>Subject:</strong> {att.subject}
+                      </p>
+                      <p className="text-sm">
+                        <strong>Status:</strong> {att.status}
+                      </p>
+                      <p className="text-sm">
+                        <strong>Marked By:</strong> {att.markedBy}
+                      </p>
+                      <p className="text-xs text-gray-100 mt-1">
+                        {new Date(att.date).toLocaleDateString()}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-200 2xl:text-base text-sm">
+                  No attendance marked today.
+                </p>
+              )}
             </div>
           </div>
         </div>
-        <div
-          className="absolute top-[25rem] right-16 group cursor-pointer"
-          onClick={() => logout()}
-        >
-          <div className="relative gap-30 flex flex-col items-center justify-center p-2 rounded-full  transition">
-            <LogOut className="text-cyan-300" />
-            <span className="absolute top-full mb-1 px-2 py-1 text-xs rounded bg-cyan-500 text-white opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100 transition-all duration-200 pointer-events-none">
-              Logout
-            </span>
+
+        {/* Main Content Area */}
+        <div className="flex-1 flex 2xl:ml-10 flex-col lg:flex-row gap-4 lg:gap-6">
+          {/* Middle Section - Navigation Cards */}
+          <div className="w-full lg:w-80 2xl:w-[30rem] xl:w-96 flex flex-col space-y-4">
+            {premiumStatus?.isPremium ? (
+              <PremiumFeaturesCard
+                studentId={localStorage.getItem("studentId") || ""}
+              />
+            ) : (
+              <UpgradeToPremiumCard />
+            )}
+            <div className="sm:grid sm:grid-cols-2 lg:grid lg:grid-cols-1">
+              <HorizontalBar
+                content="Check your past attendance records"
+                linkRef="/attendance/history"
+                title="Attendance History"
+              />
+              <HorizontalBar
+                content="Track upcoming exams and assignment deadlines"
+                linkRef="/dashboard/student/exams"
+                title="Upcoming Exams"
+              />
+              <HorizontalBar
+                content="See how many classes you can skip safely"
+                linkRef="/attendance/stats"
+                title="Bunk Manager"
+                locked={!premiumStatus?.features.includes("BUNK_MANAGER")}
+              />
+              <HorizontalBar
+                content="Get a smart study plan based on your upcoming exams"
+                linkRef="/study-plan"
+                title="Study Plan"
+                locked={!premiumStatus?.features.includes("STUDY_PLAN")}
+              />
+            </div>
+          </div>
+
+          {/* Right Section - Charts and Stats */}
+          <div className="flex-1 sm:flex-0 2xl:ml-10 flex flex-col space-y-6 relative">
+            {/* Bar Graph */}
+            <div className="w-full">
+              <BarGraph />
+            </div>
+
+            {/* Calendar and Number Cards */}
+            <div className="flex flex-col xl:flex-row gap-4 xl:gap-6">
+              <div className="flex-1">
+                <AppCalendar />
+              </div>
+              <div className="flex sm:ml-9 flex-row xl:flex-col gap-4 xl:gap-6 xl:w-48">
+                <div className="flex-1">
+                  <NumberCard
+                    title="Lectures Attended"
+                    value={
+                      isNaN(Number.parseInt(stats?.presents))
+                        ? "..."
+                        : Number.parseInt(stats?.presents).toString()
+                    }
+                  />
+                </div>
+                <div className="flex-1">
+                  <NumberCard
+                    title="Attendance %"
+                    value={
+                      isNaN(Number.parseInt(stats?.presentPercentage))
+                        ? "..."
+                        : Number.parseInt(stats?.presentPercentage).toString() +
+                          "%"
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Logout Button */}
+            <div
+              className="fixed 2xl:hidden top-4 right-4 sm:top-6 sm:right-6 lg:absolute lg:top-0 lg:right-[48rem] group cursor-pointer z-10"
+              onClick={() => logout()}
+            >
+              <div className="relative flex flex-col items-center justify-center p-2 rounded-full transition">
+                <LogOut className="text-cyan-300 w-5 h-5 sm:w-6 sm:h-6" />
+                <span className="absolute top-full mt-1 px-2 py-1 text-xs rounded bg-cyan-500 text-white opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100 transition-all duration-200 pointer-events-none whitespace-nowrap">
+                  Logout
+                </span>
+              </div>
+            </div>
+            <div
+              className="hidden gap-4 items-center justify-center ring hover:ring-2 w-56 p-3 ml-2 rounded-2xl bg-blue-600 ring-blue-300 transition-all duration-300 hover:bg-blue-500 cursor-pointer 2xl:flex"
+              onClick={() => logout()}
+            >
+                <LogOut size={50} className="text-cyan-300 mt-1 text-xl w-5 h-5 sm:w-6 sm:h-6" />
+                <span className="text-xl">
+                  Logout
+                </span>
+            </div>
+            {/* ChatBot - Only show on larger screens or make it responsive */}
+            {premiumStatus?.features?.includes("AI_CHATBOT") && (
+              <div className="hidden lg:block">
+                <ChatBot />
+              </div>
+            )}
           </div>
         </div>
-        {premiumStatus?.features?.includes("AI_CHATBOT") && <ChatBot />}
-
-       
-        
       </div>
+
+      {/* Mobile ChatBot - Show at bottom on smaller screens */}
+      {premiumStatus?.features?.includes("AI_CHATBOT") && (
+        <div className="lg:hidden fixed bottom-4 right-4 z-20">
+          <ChatBot />
+        </div>
+      )}
     </div>
   );
 }

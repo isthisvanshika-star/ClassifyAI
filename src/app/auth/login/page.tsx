@@ -15,6 +15,8 @@ const Page = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [campusData, setCampusData] = useState(defaultCampus);
+
+  const [progress, setProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
@@ -46,6 +48,15 @@ const Page = () => {
 
   useEffect(() => {
     const loadCampusBranding = async () => {
+      const interval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 95) {
+            clearInterval(interval);
+            return prev;
+          }
+          return prev + Math.floor(Math.random() * 5) + 2;
+        });
+      }, 150);
       const campusID = localStorage.getItem("CampusID");
 
       if (campusID) {
@@ -78,19 +89,70 @@ const Page = () => {
 
   // Show a blank screen while checking localStorage to prevent content flickering
   if (isLoading) {
-    return <div className="min-h-screen bg-black"></div>;
+    const radius = 60;
+    const stroke = 8;
+    const normalizedRadius = radius - stroke * 0.5;
+    const circumference = 2 * Math.PI * normalizedRadius;
+    const strokeDashoffset = circumference - (progress / 100) * circumference;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-black/5 text-cyan-400">
+        <div className="relative w-36 h-36">
+          {/* Circular progress */}
+          <svg
+            className="w-full h-full transform -rotate-90"
+            viewBox="0 0 36 36"
+          >
+            <circle
+              cx="18"
+              cy="18"
+              r="16"
+              stroke="#1e293b"
+              strokeWidth="3"
+              fill="none"
+            />
+            <circle
+              cx="18"
+              cy="18"
+              r="16"
+              stroke="#06b6d4"
+              strokeWidth="3"
+              strokeLinecap="round"
+              fill="none"
+              strokeDasharray="100"
+              strokeDashoffset={`${100 - progress}`}
+            />
+          </svg>
+
+          {/* Logo centered absolutely */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <img
+              src="/only-logo.png"
+              alt="ClassifyAI"
+              className="w-16 h-16 object-contain"
+            />
+          </div>
+        </div>
+
+        <p className="mt-6 text-xl font-semibold">
+          Loading...
+        </p>
+        <p className="text-sm text-cyan-300">{progress}%</p>
+      </div>
+    );
   }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 text-center">
-      {campusData.logoUrl && <Image
-        src={campusData.logoUrl}
-        alt={`${campusData.name} Logo`}
-        width={150}
-        height={150}
-        className="invert"
-        priority
-      />}
+      {campusData.logoUrl && (
+        <Image
+          src={campusData.logoUrl}
+          alt={`${campusData.name} Logo`}
+          width={150}
+          height={150}
+          className="invert"
+          priority
+        />
+      )}
       <h1 className="text-white text-xl sm:text-2xl md:text-3xl font-semibold py-3 leading-tight">
         {campusData.name.toUpperCase()}
       </h1>

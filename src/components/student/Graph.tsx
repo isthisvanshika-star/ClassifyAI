@@ -44,23 +44,23 @@ const BarGraph: React.FC = () => {
   };
 
   return (
-    <div className="mx-7 bg-gradient-to-tl from-white/20 to-black/20 rounded-4xl shadow-xl border border-cyan-200 overflow-hidden w-100 ">
+    <div className="mx-7 bg-gradient-to-tl from-white/20 to-black/20 rounded-4xl 2xl:w-[40rem] 2xl:h-[30rem] lg:-ml-0 lg:w-[24rem] md:w-[42rem] sm:w-[35rem] shadow-xl border border-cyan-200 overflow-hidden w-100 ">
       {/* Header */}
       <div className="bg-black/40 text-white p-2">
         <div className="flex items-center gap-6">
-          <div className="p-1 bg-white/10 rounded-lg">
+          <div className="p-1 sm:ml-3 lg:ml-3 bg-white/5 2xl:text-2xl rounded-lg">
             <BarChart3 size={18} />
           </div>
           <div>
-            <h2 className="text-sm font-semibold">Attendance Percentage by Subject</h2>
-            <p className="text-slate-200 text-xs">Track your consistency per subject</p>
+            <h2 className="text-sm font-semibold 2xl:text-xl ">Attendance Percentage by Subject</h2>
+            <p className="text-slate-200 text-xs 2xl:text-base">Track your consistency per subject</p>
           </div>
         </div>
       </div>
 
       {/* Graph */}
-      <div className=" px-3 h-[160px] w-92">
-        <div className="bg-gray-50/5 rounded-lg p-1 w-92">
+      <div className=" px-3 h-[160px] md:h-[15rem] lg:w-[22.7rem]  sm:h-[12rem]  w-92">
+        <div className="bg-gray-50/5 rounded-lg p-1 md:w-[40.5rem] 2xl:w-[38.4rem] 2xl:h-[22.5rem] lg:w-[22.5rem] md:h-[12rem] sm:w-[33.5rem] sm:h-[9rem] w-92">
           <div className="flex items-end justify-between gap-1 h-26 rounded-md p-2 shadow-inner overflow-x-auto">
             {attendanceData.map((item, index) => {
               const value = item.percentage;
@@ -74,7 +74,7 @@ const BarGraph: React.FC = () => {
                   onClick={() => handleClick(index)}
                 >
                   {/* Tooltip */}
-                  <div className=" opacity-0 group-hover:opacity-100     transition-opacity bg-gray-200 text-black text-[8px] p-1 rounded whitespace-nowrap">
+                  <div className=" opacity-0 group-hover:opacity-100 transition-opacity bg-gray-200 text-black text-[8px] p-1 rounded whitespace-nowrap">
                     {value}%
                   </div>
 
@@ -118,7 +118,7 @@ const BarGraph: React.FC = () => {
 
         {/* Details Panel */}
         {selectedBar !== null && attendanceData[selectedBar] !== undefined ? (
-          <div className="mt-2 w-92 p-1 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-lg border border-blue-200 text-[10px] text-gray-200">
+          <div className="mt-2 w-92  p-1 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-lg border border-blue-200 text-[10px] text-gray-200">
             <div className="flex justify-between items-center">
               <div className="flex gap-2">
                 <h3 className="font-semibold">{attendanceData[selectedBar].subject} Details:</h3>
@@ -140,7 +140,7 @@ const BarGraph: React.FC = () => {
             </div>
           </div>
         ) : (
-          <div className="flex mt-2 gap-2 w-92 p-1 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-lg border border-blue-200 text-xs text-gray-200">
+          <div className="flex mt-2 gap-2 sm:w-[33rem] 2xl:w-[38rem] 2xl:text-sm md:w-[40.5rem] lg:w-[22rem] w-92 p-1 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-lg border border-blue-200 text-xs text-gray-200">
             <h4 className="font-semibold">Instructions:</h4>
             <p>Click on any bar to watch detailed information.</p>
           </div>

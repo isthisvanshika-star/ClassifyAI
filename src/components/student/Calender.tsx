@@ -17,7 +17,7 @@ const AppCalendar = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await fetch(`/api/admin/event`);
+        const res = await fetch(`/api/assistant/event`);
         const data = await res.json();
         console.log({data})
         console.log(data.events)
@@ -162,7 +162,7 @@ const AppCalendar = () => {
   };
 
   return (
-    <div className="w-100 h-80 bg-gradient-to-tl from-white/20 to-black/20 rounded-4xl shadow-2xl border border-gray-100  overflow-hidden transition-all duration-300">
+    <div className="w-100 sm:w-[33rem] md:w-[40rem] 2xl:w-[28rem] 2xl:h-[22rem] lg:w-[24rem] lg:ml-0 sm:h-[20rem] sm:ml-10 h-80 bg-gradient-to-tl from-white/20 to-black/20 rounded-4xl shadow-2xl border border-gray-100  overflow-hidden transition-all duration-300">
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600/40 to-purple-600/40 text-white px-6 pt-3 pb-1">
         <div className="flex items-center justify-between ">
@@ -214,21 +214,21 @@ const AppCalendar = () => {
       </div>
 
       {/* Calendar Grid */}
-      <div className="px-2 overflow-clip">
-        <div className="grid grid-cols-7 gap-1 ">
+      <div className="px-2 overflow-clip 2xl:mt-3">
+        <div className="grid grid-cols-7 md:place-items-center gap-1 ">
           {daysOfWeek.map((day) => (
-            <div key={day} className="text-center text-xs font-medium text-cyan-200 py-2">
+            <div key={day} className="text-center 2xl:text-sm text-xs font-medium text-cyan-200 py-2">
               {day}
             </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-7 gap-1">
+        <div className="grid grid-cols-7 md:place-items-center gap-1">
           {/* Previous month days */}
           {prevMonthDays.map((day, index) => (
             <button
               key={`prev-${index}`}
-              className="h-8 w-8 text-gray-300 text-sm hover:bg-gray-50 hover:text-gray-800 rounded-lg transition-colors duration-150"
+              className="h-8 w-8 2xl:text-base text-gray-300 text-sm hover:bg-gray-50 hover:text-gray-800 rounded-lg transition-colors duration-150"
               disabled
             >
               {day}
@@ -247,7 +247,7 @@ const AppCalendar = () => {
               <button
                 key={`current-${day}`}
                 onClick={() => handleDateClick(day, "current")}
-                className={`h-8 w-8 text-sm rounded-lg transition-all duration-200 transform hover:scale-105 relative ${
+                className={`h-8 w-8 2xl:text-base text-sm rounded-lg transition-all duration-200 transform hover:scale-105 relative ${
                   isToday(day)
                     ? "bg-blue-500 text-white font-semibold shadow-md"
                     : isSelected(day)
@@ -264,7 +264,7 @@ const AppCalendar = () => {
           {nextMonthDays.map((day, index) => (
             <button
               key={`next-${index}`}
-              className="h-8 w-8 text-gray-300 text-sm hover:bg-gray-50 hover:text-gray-800 rounded-lg transition-colors duration-150"
+              className="h-8 w-8 2xl:text-base text-gray-300 text-sm hover:bg-gray-50 hover:text-gray-800 rounded-lg transition-colors duration-150"
               disabled
             >
               {day}
