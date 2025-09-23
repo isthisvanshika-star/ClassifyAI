@@ -11,13 +11,13 @@ type PremiumStatusResponse = {
   features: string[];
 };
 
-const PremiumFeaturesCard = ({ studentId }: { studentId: string }) => {
+const PremiumFeaturesCard = ({ studentId, CampusId }: { studentId: string, CampusId:string }) => {
   const router = useRouter();
   const [premiumStatus, setPremiumStatus] = useState<PremiumStatusResponse | null>(null);
 
   const fetchPremiumStatus = async () => {
     try {
-      const res = await fetch(`/api/student/status?studentId=${studentId}`);
+      const res = await fetch(`/api/student/status?studentId=${studentId}&campusId=${CampusId}`);
       const data: PremiumStatusResponse = await res.json();
       setPremiumStatus(data);
     } catch (error) {

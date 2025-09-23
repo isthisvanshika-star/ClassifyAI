@@ -13,6 +13,7 @@ import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ChatBot from "@/components/student/ChatBot";
 import PremiumFeaturesCard from "@/components/student/PremiumFeaturesCard";
+import { showErrorMessage } from "@/lib/helper";
 
 export default function StudentDashboard() {
   const [todayAttendance, setTodayAttendance] = useState<Attendance[]>([]);
@@ -30,15 +31,18 @@ export default function StudentDashboard() {
 
   useEffect(() => {
     const studentId = localStorage.getItem("studentId");
+    const campusId = localStorage.getItem("CampusID");
     setLoading(true);
     if (!studentId) {
-      console.error("No student ID found in local storage.");
+      showErrorMessage("No student ID found, Login Again.");
       return;
     }
 
     const fetchTodayAttendance = async () => {
       try {
-        const res = await fetch(`/api/attendance/today?studentId=${studentId}`);
+        const res = await fetch(
+          `/api/attendance/today?studentId=${studentId}&campusId=${campusId}`
+        );
         const data = await res.json();
         setTodayAttendance(data || []);
         console.log({ data });
@@ -52,21 +56,21 @@ export default function StudentDashboard() {
     const fetchStats = async () => {
       try {
         const res = await fetch(
-          `/api/attendance/statistics?studentId=${studentId}`
+          `/api/attendance/statistics?studentId=${studentId}&campusId=${campusId}`
         );
         const data = await res.json();
         setStats(data);
-        console.log({ stats: data });
       } catch (error) {
         console.error("Error fetching attendance statistics:", error);
       }
     };
     const fetchPremiumStatus = async () => {
       try {
-        const res = await fetch(`/api/student/status?studentId=${studentId}`);
+        const res = await fetch(
+          `/api/student/status?studentId=${studentId}&campusId=${campusId}`
+        );
         const data = await res.json();
         setPremiumStatus(data);
-        console.log({ premium: data });
       } catch (error) {
         console.error("Error fetching attendance statistics:", error);
       }
@@ -136,6 +140,7 @@ export default function StudentDashboard() {
             {premiumStatus?.isPremium ? (
               <PremiumFeaturesCard
                 studentId={localStorage.getItem("studentId") || ""}
+                CampusId={localStorage.getItem("CampusID") || ""}
               />
             ) : (
               <UpgradeToPremiumCard />
@@ -219,10 +224,11 @@ export default function StudentDashboard() {
               className="hidden gap-4 items-center justify-center ring hover:ring-2 w-56 p-3 ml-2 rounded-2xl bg-blue-600 ring-blue-300 transition-all duration-300 hover:bg-blue-500 cursor-pointer 2xl:flex"
               onClick={() => logout()}
             >
-                <LogOut size={50} className="text-cyan-300 mt-1 text-xl w-5 h-5 sm:w-6 sm:h-6" />
-                <span className="text-xl">
-                  Logout
-                </span>
+              <LogOut
+                size={50}
+                className="text-cyan-300 mt-1 text-xl w-5 h-5 sm:w-6 sm:h-6"
+              />
+              <span className="text-xl">Logout</span>
             </div>
             {/* ChatBot - Only show on larger screens or make it responsive */}
             {premiumStatus?.features?.includes("AI_CHATBOT") && (

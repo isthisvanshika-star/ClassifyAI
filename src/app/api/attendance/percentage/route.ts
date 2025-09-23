@@ -2,30 +2,36 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  // This is the USER ID from the frontend
-  const studentId = searchParams.get("studentId");
-
-  if (!studentId) {
-    return NextResponse.json({ error: "Missing student ID" }, { status: 400 });
-  }
-
   try {
+    const { searchParams } = new URL(request.url);
+
+    // 1. Get both studentId and campusId from the URL
+    const studentId = searchParams.get("studentId");
+    const campusId = searchParams.get("campusId");
+
+    if (!studentId || !campusId) {
+      return NextResponse.json(
+        { error: "Student ID and Campus ID are required" },
+        { status: 400 }
+      );
+    }
+
     const attendances = await prisma.attendance.findMany({
       where: {
-        // --- CORRECTION ---
-        // Query using the 'userId' field to match the User ID from the request.
+        // 2. The 'where' clause now securely filters by both studentId AND campusId.
         userId: studentId,
+        user: {
+          campusId: campusId,
+        },
         classSession: {
-          isNot: null, // Only include attendance records with valid class sessions
+          isNot: null,
         },
       },
       include: {
         classSession: {
           select: {
-            subject: true, // Legacy field as a fallback
+            subject: true,
             subjectRel: {
-              // Proper relation for the subject name
               select: {
                 name: true,
               },
@@ -42,10 +48,8 @@ export async function GET(request: NextRequest) {
     const subjectMap: Record<string, { present: number; total: number }> = {};
 
     for (const att of attendances) {
-      // Prioritize the proper subject name from the relation, fallback to the legacy field
       const subject =
         att.classSession?.subjectRel?.name || att.classSession?.subject;
-
       if (!subject) continue;
 
       if (!subjectMap[subject]) {
@@ -53,18 +57,12 @@ export async function GET(request: NextRequest) {
       }
 
       subjectMap[subject].total++;
-
-      // --- IMPROVEMENT ---
-      // Count both "PRESENT" and "LATE" towards the present percentage.
       if (att.status === "PRESENT" || att.status === "LATE") {
         subjectMap[subject].present++;
       }
     }
 
     const result = Object.entries(subjectMap).map(([subject, stats]) => {
-      // --- FIX ---
-      // Calculate the percentage and convert it to a number before sending.
-      // The frontend will handle formatting (e.g., adding the '%' sign).
       const percentage = parseFloat(
         ((stats.present / stats.total) * 100).toFixed(1)
       );
@@ -80,4 +78,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-

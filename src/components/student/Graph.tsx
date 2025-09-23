@@ -9,15 +9,20 @@ interface AttendancePercentage {
 
 const BarGraph: React.FC = () => {
   const [selectedBar, setSelectedBar] = useState<number | null>(null);
-  const [attendanceData, setAttendanceData] = useState<AttendancePercentage[]>([]);
+  const [attendanceData, setAttendanceData] = useState<AttendancePercentage[]>(
+    []
+  );
 
   useEffect(() => {
     const studentId = localStorage.getItem("studentId");
-    if (!studentId) return;
+    const campusID = localStorage.getItem("CampusID");
+    if (!studentId || !campusID) return;
 
     const fetchData = async () => {
       try {
-        const res = await fetch(`/api/attendance/percentage?studentId=${studentId}`);
+        const res = await fetch(
+          `/api/attendance/percentage?studentId=${studentId}&campusId=${campusID}`
+        );
         const result: AttendancePercentage[] = await res.json();
 
         // Ensure percentage is a rounded number
@@ -35,9 +40,14 @@ const BarGraph: React.FC = () => {
     fetchData();
   }, []);
 
-  const maxValue = Math.max(...attendanceData.map((item) => item.percentage), 0);
+  const maxValue = Math.max(
+    ...attendanceData.map((item) => item.percentage),
+    0
+  );
   const total = attendanceData.reduce((acc, item) => acc + item.percentage, 0);
-  const average = attendanceData.length ? Math.round(total / attendanceData.length) : 0;
+  const average = attendanceData.length
+    ? Math.round(total / attendanceData.length)
+    : 0;
 
   const handleClick = (index: number) => {
     setSelectedBar(selectedBar === index ? null : index);
@@ -52,8 +62,12 @@ const BarGraph: React.FC = () => {
             <BarChart3 size={18} />
           </div>
           <div>
-            <h2 className="text-sm font-semibold 2xl:text-xl ">Attendance Percentage by Subject</h2>
-            <p className="text-slate-200 text-xs 2xl:text-base">Track your consistency per subject</p>
+            <h2 className="text-sm font-semibold 2xl:text-xl ">
+              Attendance Percentage by Subject
+            </h2>
+            <p className="text-slate-200 text-xs 2xl:text-base">
+              Track your consistency per subject
+            </p>
           </div>
         </div>
       </div>
@@ -102,9 +116,7 @@ const BarGraph: React.FC = () => {
                   {/* Label */}
                   <div
                     className={` text-[9px] font-medium ${
-                      isSelected
-                        ? "text-cyan-300 font-bold"
-                        : "text-gray-200"
+                      isSelected ? "text-cyan-300 font-bold" : "text-gray-200"
                     }`}
                   >
                     {item.subject}
@@ -113,7 +125,6 @@ const BarGraph: React.FC = () => {
               );
             })}
           </div>
-
         </div>
 
         {/* Details Panel */}
@@ -121,7 +132,9 @@ const BarGraph: React.FC = () => {
           <div className="mt-2 w-92  p-1 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-lg border border-blue-200 text-[10px] text-gray-200">
             <div className="flex justify-between items-center">
               <div className="flex gap-2">
-                <h3 className="font-semibold">{attendanceData[selectedBar].subject} Details:</h3>
+                <h3 className="font-semibold">
+                  {attendanceData[selectedBar].subject} Details:
+                </h3>
                 <p>
                   Attendance:{" "}
                   <span className="font-bold text-cyan-300">

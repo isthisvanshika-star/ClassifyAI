@@ -40,7 +40,7 @@ export default function RootLayout({
 
         <div className="relative z-10">{children}</div>
 
-        <div className="absolute bottom-4 right-4 text-xs text-gray-400">
+        <div className="absolute bottom-4 right-4 text-xs uppercase text-gray-400">
           <p>© 2025 ClassifyAI</p>
         </div>
       </body>

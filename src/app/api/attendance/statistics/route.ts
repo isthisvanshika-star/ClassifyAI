@@ -2,25 +2,29 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  // This studentId parameter is the USER ID from the frontend
-  const studentId = req.nextUrl.searchParams.get("studentId");
-
-  if (!studentId) {
-    return NextResponse.json(
-      { error: "Student ID is required" },
-      { status: 400 }
-    );
-  }
-
   try {
-    // --- OPTIMIZATION ---
-    // Use a single groupBy query to get all counts in one database call.
+    const { searchParams } = new URL(req.url);
+
+    // 1. Get both studentId and campusId from the URL
+    const studentId = searchParams.get("studentId");
+    const campusId = searchParams.get("campusId");
+
+    if (!studentId || !campusId) {
+      return NextResponse.json(
+        { error: "Student ID and Campus ID are required" },
+        { status: 400 }
+      );
+    }
+
+    // Use a single groupBy query for efficiency
     const attendanceGroups = await prisma.attendance.groupBy({
       by: ["status"],
+      // 2. Add campusId to the 'where' clause to securely scope the query
       where: {
-        // --- CORRECTION ---
-        // Query using the 'userId' field, which matches the User ID.
         userId: studentId,
+        user: {
+          campusId: campusId,
+        },
       },
       _count: {
         status: true,
@@ -49,9 +53,11 @@ export async function GET(req: NextRequest) {
     }
 
     const totalClasses = presents + absents + late;
+    // 'Late' is often counted as present for percentage calculations
+    const presentAndLate = presents + late; 
     const percentage =
       totalClasses > 0
-        ? (((presents + late) / totalClasses) * 100).toFixed(2) // Often 'late' is counted as present for percentage
+        ? ((presentAndLate / totalClasses) * 100).toFixed(2)
         : "0.00";
 
     return NextResponse.json({

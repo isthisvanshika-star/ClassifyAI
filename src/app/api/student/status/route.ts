@@ -1,19 +1,23 @@
-// /api/student/status/route.ts
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const userId = req.nextUrl.searchParams.get("studentId");
-  if (!userId) {
-    return NextResponse.json({ error: "Missing Student ID" }, { status: 400 });
+  const campusId = req.nextUrl.searchParams.get("campusId");
+
+  if (!userId || !campusId) {
+    return NextResponse.json({ error: "Student ID and Campus ID are required" }, { status: 400 });
   }
   
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
+    const user = await prisma.user.findFirst({
+      where: { 
+        id: userId,
+        campusId: campusId,
+      },
       select: {
-        premiumExpiresAt: true, // Use actual field instead of isPremium
-        premiumFeatures: { // This needs to be included, not selected
+        premiumExpiresAt: true,
+        premiumFeatures: {
           select: {
             name: true,
           },
@@ -22,35 +26,36 @@ export async function GET(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: "User not found on this campus" }, { status: 404 });
     }
 
-    // Calculate isPremium from premiumExpiresAt
     const isPremium = user.premiumExpiresAt && user.premiumExpiresAt > new Date();
-
     const featureSet = new Set(user.premiumFeatures.map((f) => f.name));
     
-    let planName = "Starter";
-    if (
-      featureSet.has("AI_CHATBOT") &&
-      featureSet.has("STUDY_PLAN") &&
-      featureSet.has("CALENDAR_SYNC") &&
-      featureSet.has("BUNK_MANAGER")
-    ) {
-      planName = "Ultimate";
-    } else if (
-      featureSet.has("AI_CHATBOT") && 
-      featureSet.has("STUDY_PLAN") && 
-      featureSet.has("BUNK_MANAGER")
-    ) {
-      planName = "Pro";
+    // --- CORRECTED PLAN CALCULATION LOGIC ---
+    let planName = "Free"; // Start with the default plan
+
+    if (isPremium) {
+        // Check for the highest tier feature first
+        if (featureSet.has("CALENDAR_SYNC")) {
+            planName = "Ultimate";
+        } 
+        // If not Ultimate, check for a Pro feature
+        else if (featureSet.has("STUDY_PLAN") || featureSet.has("BUNK_MANAGER")) {
+            planName = "Pro";
+        }
+        // If they are premium but have no specific Pro/Ultimate features, they are on a basic Premium plan
+        else if (featureSet.size > 0) {
+            planName = "Premium"
+        }
     }
+    // --- END OF CORRECTED LOGIC ---
 
     return NextResponse.json({
-      isPremium: !!isPremium, // Convert to boolean
+      isPremium: !!isPremium,
       plan: planName,
       features: Array.from(featureSet),
-      premiumExpiresAt: user.premiumExpiresAt, // Optional: include expiry date
+      premiumExpiresAt: user.premiumExpiresAt,
     });
   } catch (err) {
     console.error("Failed to fetch premium status: ", err);

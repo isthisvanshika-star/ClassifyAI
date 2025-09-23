@@ -15,9 +15,10 @@ const AppCalendar = () => {
   const currentYear = currentDate.getFullYear();
 
   useEffect(() => {
+    const campusId = localStorage.getItem("CampusID");
     const fetchEvents = async () => {
       try {
-        const res = await fetch(`/api/assistant/event`);
+        const res = await fetch(`/api/assistant/event?campusId=${campusId}`);
         const data = await res.json();
         console.log({data})
         console.log(data.events)

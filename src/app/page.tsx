@@ -17,7 +17,7 @@ export default function Home() {
   useEffect(() => {
     const loadCampusBranding = async () => {
       // 1. Check localStorage for a saved campus slug.
-      const savedSlug = localStorage.getItem('lastCampusSlug');
+      const savedSlug = localStorage.getItem("lastCampusSlug");
 
       if (savedSlug) {
         try {
@@ -36,7 +36,7 @@ export default function Home() {
           // If fetch fails, we'll just show the default.
         }
       }
-      
+
       setIsLoading(false);
     };
 
@@ -59,9 +59,15 @@ export default function Home() {
       />
 
       <h1 className="text-white text-xl sm:text-2xl md:text-3xl font-semibold leading-tight">
-        {campusData.name.toUpperCase()}
+        {campusData.name.toUpperCase() === "CLASSIFY AI" ? (
+          <span>
+            CLASSIFY <span className="text-cyan-500">AI</span>
+          </span>
+        ) : (
+          campusData.name.toUpperCase()
+        )}
       </h1>
-      
+
       <h6 className="text-white text-sm sm:text-base leading-tight">
         {campusData.hindiName}
       </h6>
