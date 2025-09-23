@@ -38,7 +38,7 @@ export default function ManagePlansSection() {
       setLoading(true);
       try {
         // 3. SEND the assistantId with the API request
-        const res = await fetch(`/api/assistant/settings/plans?assistantId=${assistantId}`);
+        const res = await fetch(`/api/assistant/settings/plans`);
         const data = await res.json();
         if (res.ok) {
           setPlans(data.plans);

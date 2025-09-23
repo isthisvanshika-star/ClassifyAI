@@ -125,7 +125,7 @@ const StudyPlanPage = () => {
         </button>
       </div>
       {!planData && (
-        <div className="max-w-6xl h-[40rem] mx-auto bg-white/5 border-4 border-cyan-100/20 rounded-3xl shadow-xl p-4 backdrop-blur-md ">
+        <div className="max-w-6xl 2xl:h-[55rem] h-[40rem] mx-auto bg-white/5 border-4 border-cyan-100/20 rounded-3xl shadow-xl p-4 backdrop-blur-md ">
           <h1 className="text-2xl font-bold text-cyan-300 mb-2 text-center">
              Make Study Plan
           </h1>
@@ -140,8 +140,8 @@ const StudyPlanPage = () => {
               placeholder="📄 Paste your syllabus"
               value={syllabus}
               onChange={(e) => setSyllabus(e.target.value)}
-              rows={6}
-className="peer w-full placeholder:text-cyan-50 p-4 border h-[25rem] border-cyan-300/30 rounded-xl bg-gray-900/5 text-cyan-100 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-500 transition resize-none"
+              rows={10}
+className="peer w-full placeholder:text-cyan-50 p-4 border 2xl:h-[35rem] h-[25rem] border-cyan-300/30 rounded-xl bg-gray-900/5 text-cyan-100 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-500 transition resize-none"
             />
             <p className="text-xs text-cyan-300 mt-1">
               We recommend copying your syllabus exactly as provided by your

@@ -43,17 +43,18 @@ const pColor = premiumStatus?.plan === "Ultimate"
       : "";
   return (
     <div
-      className={`w-[20rem] h-66 grid-cols-2 rounded-4xl grid items-center justify-center border border-cyan-500 ${planColor}`}
+      className={`w-[20rem] 2xl:w-[29rem] h-66 grid-cols-2 rounded-4xl grid items-center justify-center border border-cyan-500 ${planColor}`}
     >
       {/* Left Side */}
       <div className="text-center px-2">
-        <Logo/>
-        <h2 className="text-xs font-bold mt-4">
+              <Image src={"/logo-nobg.png"} alt="logo" className="sm:w-35 2xl:w-[22rem] 2xl:h-[3.5rem] lg:w-[12rem] lg:ml-[1rem] lg:h-[3.5rem] sm:h-10" width={70} height={70} />
+           
+        <h2 className="text-xs font-bold mt-4 2xl:text-lg">
           {premiumStatus?.isPremium
             ? `You're on ${premiumStatus.plan} Plan`
             : "Go Premium"}
         </h2>
-        <p className={`mt-1 text-xs ${pColor}`}>
+        <p className={`mt-1 text-xs 2xl:text-base ${pColor}`}>
           {premiumStatus?.isPremium
             ? "Exclusive premium features enabled"
             : "Unlock exclusive features and perks"}
@@ -73,7 +74,7 @@ const pColor = premiumStatus?.plan === "Ultimate"
         {premiumStatus?.isPremium ? (
           <ul className="list-disc pl-4 max-h-40 overflow-y-auto">
             {premiumStatus.features.map((feature) => (
-              <li className="text-xs ml-2.5 mb-3" key={feature}>{feature.replaceAll("_", " ")}</li>
+              <li className="text-xs 2xl:text-base ml-2.5 mb-3" key={feature}>{feature.replaceAll("_", " ")}</li>
             ))}
           </ul>
         ) : (

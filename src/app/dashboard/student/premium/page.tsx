@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  monthlyPlans,
-  showErrorMessage,
-} from "@/lib/helper";
+import { monthlyPlans, showErrorMessage } from "@/lib/helper";
 import { Plan } from "@/lib/types";
 import { Check, ChevronLeft, X } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -24,7 +21,7 @@ const Page = () => {
   const fetchPlans = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/admin/settings/plans");
+      const res = await fetch("/api/assistant/settings/plans");
       const data = await res.json();
       if (res.ok) {
         setFetchedPlan(data.plans);
@@ -80,16 +77,17 @@ const Page = () => {
     fetchPlans();
   }, []);
 
-  console.log({fetchedPlan})
+  const mergedPlans = (isYearly ? yearlyPlans : monthlyPlans).map((plan) => {
+    const key = `${
+      isYearly ? "YEARLY" : "MONTHLY"
+    }_${plan.title.toUpperCase()}`;
+    const dbPlan = fetchedPlan.find((p) => p.name === key);
 
-const mergedPlans = (isYearly ? yearlyPlans : monthlyPlans).map((plan) => {
-  const key = `${plan.title.toUpperCase()}_${isYearly ? "YEARLY" : "MONTHLY"}`;
-  const dbPlan = fetchedPlan.find((p) => p.name === key);
-  return {
-    ...plan,
-    price: dbPlan ? dbPlan.price : plan.price,
-  };
-});
+    return {
+      ...plan,
+      price: dbPlan ? dbPlan.price : plan.price, // fallback to default price, not 0
+    };
+  });
 
   if (loading) {
     return (
@@ -102,7 +100,7 @@ const mergedPlans = (isYearly ? yearlyPlans : monthlyPlans).map((plan) => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-full px-4 py-10 text-white">
       <h1 className="text-4xl md:text-6xl font-bold uppercase mb-4">
-        ClassifyAI Plans
+        Classify<span className="text-cyan-500">AI</span> Plans
       </h1>
       <p className="text-center max-w-xl text-white/80 mb-6">
         Choose a plan that fits your academic journey. Upgrade anytime as you
@@ -199,12 +197,12 @@ const mergedPlans = (isYearly ? yearlyPlans : monthlyPlans).map((plan) => {
           </div>
         ))}
       </div>
-            <div className="absolute top-4 left-4 z-10">
+      <div className="absolute top-4 left-4 z-10">
         <button
           onClick={() => router.push("/dashboard/student")}
           className="flex items-center justify-center gap-2 rounded-full  text-white hover:text-cyan-300 transition-colors"
         >
-          <ChevronLeft size={40}/>
+          <ChevronLeft size={40} />
         </button>
       </div>
     </div>

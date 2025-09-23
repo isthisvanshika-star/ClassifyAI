@@ -36,12 +36,12 @@ export const monthlyPlans = [
     bg: "from-cyan-500 to-cyan-700",
     features: [
       "QR Code Attendance",
-      "Manual Attendance",
       "Exam & Assignment Tracker",
     ],
     extra: [
       "Bunk Manager",
       "Smart Study Plan Generator",
+      "Monthly Attendance Reports",
       "AI Doubt Solver",
       "Calendar Sync",
     ],
@@ -53,12 +53,11 @@ export const monthlyPlans = [
     bg: "from-emerald-400 to-emerald-600",
     features: [
       "QR Code Attendance",
-      "Manual Attendance",
       "Exam & Assignment Tracker",
       "Bunk Manager",
       "Smart Study Plan Generator",
     ],
-    extra: ["AI Doubt Solver", "Calendar Sync"],
+    extra: ["AI Doubt Solver","Monthly Attendance Reports", "Calendar Sync"],
     popular: true,
   },
   {
@@ -67,11 +66,11 @@ export const monthlyPlans = [
     bg: "from-orange-500 to-rose-500",
     features: [
       "QR Code Attendance",
-      "Manual Attendance",
       "Exam & Assignment Tracker",
       "Bunk Manager",
       "Smart Study Plan Generator",
       "AI Doubt Solver",
+      "Monthly Attendance Reports",
       "Calendar Sync",
     ],
     extra: [],

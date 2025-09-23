@@ -2,21 +2,26 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  // This is the USER ID from the frontend
-  const studentId = req.nextUrl.searchParams.get("studentId");
-  if (!studentId) {
-    return NextResponse.json({ error: "Missing studentId" }, { status: 400 });
-  }
-
-  // The minimum attendance percentage required
-  const MIN_PERCENTAGE = 75;
-
   try {
+    const { searchParams } = new URL(req.url);
+    
+    // 1. Get both studentId and campusId from the URL
+    const studentId = searchParams.get("studentId");
+    const campusId = searchParams.get("campusId");
+
+    if (!studentId || !campusId) {
+      return NextResponse.json({ error: "Student ID and Campus ID are required" }, { status: 400 });
+    }
+
+    const MIN_PERCENTAGE = 75;
+
     const allAttendance = await prisma.attendance.findMany({
       where: {
-        // --- CORRECTION ---
-        // Query using the 'userId' field to match the User ID from the request.
+        // 2. The 'where' clause now securely filters by both studentId AND campusId.
         userId: studentId,
+        user: {
+          campusId: campusId,
+        },
         classSession: {
           isNot: null,
         },
@@ -24,9 +29,8 @@ export async function GET(req: NextRequest) {
       include: {
         classSession: {
           select: {
-            subject: true, // Legacy field as a fallback
+            subject: true,
             subjectRel: {
-              // Proper relation for the subject name
               select: {
                 name: true,
               },
@@ -38,9 +42,7 @@ export async function GET(req: NextRequest) {
 
     // Group the attendance records by subject
     const subjectStats = allAttendance.reduce((acc, record) => {
-      // Prioritize the proper subject name from the relation
-      const subject =
-        record.classSession?.subjectRel?.name || record.classSession?.subject;
+      const subject = record.classSession?.subjectRel?.name || record.classSession?.subject;
       if (!subject) return acc;
 
       if (!acc[subject]) {
@@ -48,8 +50,6 @@ export async function GET(req: NextRequest) {
       }
 
       acc[subject].total += 1;
-      // --- IMPROVEMENT ---
-      // Count both "PRESENT" and "LATE" as present for calculation.
       if (record.status === "PRESENT" || record.status === "LATE") {
         acc[subject].present += 1;
       }

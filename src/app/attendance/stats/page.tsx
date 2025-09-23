@@ -24,8 +24,9 @@ const Page = () => {
 
   useEffect(() => {
     const studentId = localStorage.getItem("studentId");
-    if (!studentId) {
-      setError("Student ID not found.");
+    const campusId = localStorage.getItem("CampusID");
+    if (!studentId || !campusId) {
+      setError("Student or Campus ID not found.");
       setLoading(false);
       return;
     }
@@ -33,10 +34,10 @@ const Page = () => {
     const fetchStats = async () => {
       try {
         const res = await fetch(
-          `/api/attendance/bunk-manager?studentId=${studentId}`
+          `/api/attendance/bunk-manager?studentId=${studentId}&campusId=${campusId}`
         );
         const data = await res.json();
-        if (data.status) {
+        if (data.success) {
           setStats(data.data);
         } else {
           setError("Failed to fetch bunk manager stats.");
@@ -68,7 +69,7 @@ const Page = () => {
       const pageWidth = pdf.internal.pageSize.getWidth();
       const img = new Image();
       img.src = dataUrl;
-      await img.decode(); 
+      await img.decode();
       const ratio = img.height / img.width;
       pdf.addImage(dataUrl, "PNG", 0, 0, pageWidth, pageWidth * ratio);
 
@@ -102,7 +103,29 @@ const Page = () => {
       )}
       {error && <p className="text-red-400 text-center font-medium">{error}</p>}
 
-      <div className="flex h-[calc(100vh-10rem)] px-6 gap-6">
+      {!loading && !error && stats.length === 0 && (
+        <div className="flex flex-col items-center justify-center w-full h-[calc(100vh-10rem)] gap-4">
+          <div className="w-32 h-32 rounded-full bg-white/5 flex items-center justify-center border border-cyan-500/30">
+            <span className="text-5xl">📊</span>
+          </div>
+          <h2 className="text-2xl font-bold text-cyan-200">
+            No Statistics Available
+          </h2>
+          <p className="text-gray-400 text-center max-w-md">
+            We couldn’t find any attendance records for you yet. Once your
+            classes and attendance data are updated, your bunk stats will appear
+            here.
+          </p>
+          <button
+            onClick={() => router.push("/dashboard/student")}
+            className="px-6 py-2 mt-4 cursor-pointer outline-none bg-cyan-500 hover:bg-cyan-600 text-white rounded-full shadow transition"
+          >
+            Go Back
+          </button>
+        </div>
+      )}
+
+      { !loading && !error && stats.length > 0  && <div className="flex h-[calc(100vh-10rem)] px-6 gap-6">
         {/* Left: Scrollable Cards */}
         <div className="w-md overflow-y-auto pr-2 space-y-4">
           {stats.map((item, idx) => (
@@ -146,7 +169,6 @@ const Page = () => {
               </h2>
               <ResponsiveContainer width="101%" height={285}>
                 <LineChart data={chartData}>
-            
                   <XAxis dataKey="subject" stroke="#94a3b8" strokeWidth={2} />
                   <YAxis stroke="#94a3b8" />
                   <Tooltip
@@ -182,7 +204,7 @@ const Page = () => {
               const maxAllowed = Math.floor(item.total * 0.25);
               const remaining = maxAllowed - (item.total - item.present);
               return (
-                <div key={idx} className="mb-3" >
+                <div key={idx} className="mb-3">
                   <h3 className="text-lg text-cyan-100 font-semibold">
                     {item.subject}
                   </h3>
@@ -206,7 +228,7 @@ const Page = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>}
     </div>
   );
 };

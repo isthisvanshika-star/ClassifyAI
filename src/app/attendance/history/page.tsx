@@ -23,8 +23,10 @@ const AttendanceHistoryPage = () => {
   const studentId =
     typeof window !== "undefined" ? localStorage.getItem("studentId") : null;
 
+  const campusId = typeof window !== "undefined" ? localStorage.getItem("CampusID") : null;
+
   useEffect(() => {
-    if (!studentId) {
+    if (!studentId || !campusId) {
       setError("Student ID not found in localStorage.");
       setLoading(false);
       return;
@@ -33,7 +35,7 @@ const AttendanceHistoryPage = () => {
     const fetchHistory = async () => {
       try {
         const res = await fetch(
-          `/api/attendance/history?studentId=${studentId}&page=${page}&limit=${limit}`
+          `/api/attendance/history?studentId=${studentId}&campusId=${campusId}&page=${page}&limit=${limit}`
         );
         const data = await res.json();
         if (data.success) {
@@ -58,13 +60,13 @@ const AttendanceHistoryPage = () => {
       </h1>
 
       {loading && (
-        <p className="text-gray-200">Loading attendance records...</p>
+        <p className="text-gray-200 text-center animate-pulse">Loading attendance records...</p>
       )}
 
       {error && <p className="text-red-400">{error}</p>}
 
       {!loading && history.length === 0 && (
-        <p className="text-gray-400">No attendance records found.</p>
+        <p className="text-gray-400 text-center">No attendance records found.</p>
       )}
       <div className="mb-6 relative bg-white/10  rounded-4xl  ">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-cyan-400 w-4 h-4" />

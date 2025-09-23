@@ -220,6 +220,7 @@ export default function StudentDashboard() {
                 </span>
               </div>
             </div>
+            <div className="2xl:flex 2xl:gap-13">
             <div
               className="hidden gap-4 items-center justify-center ring hover:ring-2 w-56 p-3 ml-2 rounded-2xl bg-blue-600 ring-blue-300 transition-all duration-300 hover:bg-blue-500 cursor-pointer 2xl:flex"
               onClick={() => logout()}
@@ -229,6 +230,15 @@ export default function StudentDashboard() {
                 className="text-cyan-300 mt-1 text-xl w-5 h-5 sm:w-6 sm:h-6"
               />
               <span className="text-xl">Logout</span>
+            </div>
+
+            <div
+              className="hidden gap-4 items-center justify-center ring hover:ring-2 w-56 p-3 ml-2 rounded-2xl bg-blue-600/50 ring-blue-300 transition-all duration-300 hover:bg-blue-500 cursor-pointer 2xl:flex"
+              onClick={() => logout()}
+            >
+              <ChatBot />
+              <span className="text-xl">Chat with AI</span>
+            </div>
             </div>
             {/* ChatBot - Only show on larger screens or make it responsive */}
             {premiumStatus?.features?.includes("AI_CHATBOT") && (
@@ -242,7 +252,7 @@ export default function StudentDashboard() {
 
       {/* Mobile ChatBot - Show at bottom on smaller screens */}
       {premiumStatus?.features?.includes("AI_CHATBOT") && (
-        <div className="lg:hidden fixed bottom-4 right-4 z-20">
+        <div className="lg:hidden 2xl:hidden fixed bottom-4 right-4 z-20">
           <ChatBot />
         </div>
       )}

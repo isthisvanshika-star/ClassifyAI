@@ -4,36 +4,14 @@ import { z } from "zod";
 
 /**
  * GET: Fetches all plan configurations.
- * Accessible by both Super Admins and Campus Admins.
+ * This is now a PUBLIC endpoint, accessible by anyone (students, admins, etc.).
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    // Authorization check
-    const { searchParams } = new URL(request.url);
-    const adminId = searchParams.get("assistantId");
-    if (!adminId) {
-      return NextResponse.json(
-        { success: false, error: "Admin ID is required." },
-        { status: 400 }
-      );
-    }
-
-    const adminUser = await prisma.user.findUnique({
-      where: { id: adminId },
-      select: { role: true },
-    });
-    if (
-      !adminUser ||
-      (adminUser.role !== "ADMIN" && adminUser.role !== "ASSISTANT")
-    ) {
-      return NextResponse.json(
-        { success: false, error: "Forbidden: Admin access required." },
-        { status: 403 }
-      );
-    }
-
+    // REMOVED: All authorization checks have been removed from the GET request.
+    // Now any user can fetch the list of plans for the pricing page.
     const plans = await prisma.planConfig.findMany({
-      orderBy: { price: "asc" },
+      orderBy: { price: "asc" }, // Order plans by price (e.g., Free, Pro, Ultimate)
     });
 
     return NextResponse.json({ success: true, plans });
@@ -48,7 +26,7 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST: Updates a specific plan's price.
- * Accessible by both Super Admins and Campus Admins.
+ * This remains a PROTECTED endpoint, accessible only by admins.
  */
 const updatePlanSchema = z.object({
   adminId: z.string().cuid("A valid admin ID is required"),
@@ -68,7 +46,7 @@ export async function POST(req: NextRequest) {
     }
     const { adminId, name, price } = validation.data;
 
-    // UPDATED: Now allows both ADMIN and ASSISTANT to change prices
+    // Authorization check remains here to protect this action.
     const adminUser = await prisma.user.findUnique({
       where: { id: adminId },
       select: { role: true },

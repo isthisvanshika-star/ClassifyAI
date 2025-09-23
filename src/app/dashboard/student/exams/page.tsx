@@ -9,9 +9,10 @@ const Page = () => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   useEffect(() => {
+    const campusId = localStorage.getItem("CampusID");
     const fetchExams = async () => {
       try {
-        const res = await fetch(`/api/exam`);
+        const res = await fetch(`/api/exam?campusId=${campusId}`);
         const data = await res.json();
         if (data.success) setExams(data.exams);
       } catch (err) {
@@ -58,7 +59,7 @@ const Page = () => {
       {/* Back Button */}
       <div className="absolute top-4 left-4 z-10">
         <button
-          onClick={() => router.back()}
+          onClick={() => router.push("/dashboard/student")}
           className="flex items-center justify-center gap-2 rounded-full  text-white hover:text-cyan-300 transition-colors"
         >
           <ChevronLeft size={40} />
