@@ -11,6 +11,7 @@
     "export": "next export"
   },
   "dependencies": {
+    "@aws-sdk/client-rekognition": "^3.895.0",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
@@ -22,9 +23,11 @@
     "@tailwindcss/typography": "^0.5.16",
     "@tauri-apps/plugin-store": "^2.4.0",
     "anthropic": "^0.0.0",
+    "axios": "^1.12.2",
     "cloudinary": "^2.7.0",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
+    "face-api.js": "^0.22.2",
     "framer-motion": "^12.23.0",
     "googleapis": "^150.0.1",
     "highlight.js": "^11.11.1",
@@ -48,6 +51,7 @@
     "react-hot-toast": "^2.5.2",
     "react-markdown": "^10.1.0",
     "react-qr-reader": "^3.0.0-beta-1",
+    "react-webcam": "^7.2.0",
     "recharts": "^3.0.2",
     "rehype-highlight": "^7.0.2",
     "remark-gfm": "^4.0.1",

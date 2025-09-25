@@ -134,7 +134,7 @@ const Page = () => {
         </div>
 
         <p className="mt-6 text-xl font-semibold">
-          Loading...
+          Loading Campus Details...
         </p>
         <p className="text-sm text-cyan-300">{progress}%</p>
       </div>
