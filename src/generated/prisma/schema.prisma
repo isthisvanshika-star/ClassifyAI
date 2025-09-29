@@ -58,10 +58,12 @@ model Teacher {
   updatedAt   DateTime @updatedAt
 
   // relations
-  teacherSubjects TeacherSubject[]
-  classSessions   ClassSession[]
-  announcements   Announcement[]   @relation("AnnouncementAuthor")
-  assignments     Assignment[]
+  teacherSubjects  TeacherSubject[]
+  classSessions    ClassSession[]
+  attendanceTokens AttendanceToken[]
+  announcements    Announcement[]    @relation("AnnouncementAuthor")
+  assignments      Assignment[]
+  TimetableEntry   TimetableEntry[]
 }
 
 model Student {
@@ -94,6 +96,7 @@ model Semester {
   teacherSubjects TeacherSubject[]
   classSessions   ClassSession[]   @relation("SemesterSessions")
   students        Student[]        @relation("StudentSemester")
+  TimetableEntry  TimetableEntry[]
 
   @@unique([name, campusId]) // A semester name should be unique within a campus
 }
@@ -108,6 +111,7 @@ model Section {
   teacherSubjects TeacherSubject[]
   classSessions   ClassSession[]   @relation("SectionSessions")
   students        Student[]        @relation("StudentSection")
+  TimetableEntry  TimetableEntry[]
 
   @@unique([name, campusId])
 }
@@ -128,6 +132,7 @@ model Subject {
   resources        Resource[]
   exams            Exam[]
   attendanceTokens AttendanceToken[]
+  TimetableEntry   TimetableEntry[]
 
   @@unique([code, campusId])
 }
@@ -162,52 +167,68 @@ model Campus {
   geofenceRadius Int      @default(500)
   wifiBssids     String[]
 
-  users         User[]
-  classSessions ClassSession[] // Back-relation to ClassSession
-  semesters     Semester[]
-  sections      Section[]
-  subjects      Subject[]
-  events        Event[]
+  users          User[]
+  classSessions  ClassSession[] // Back-relation to ClassSession
+  semesters      Semester[]
+  sections       Section[]
+  subjects       Subject[]
+  events         Event[]
+  TimetableEntry TimetableEntry[]
 }
 
 model ClassSession {
-  id String @id @default(cuid())
+  id                     String        @id @default(cuid())
+  date                   DateTime
+  startTime              DateTime
+  endTime                DateTime
+  weekday                Weekday
+  room                   String?
+  status                 SessionStatus @default(UPCOMING)
+  attendanceWindowEndsAt DateTime?
+  attendanceMarked       Boolean       @default(false)
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
 
-  // legacy scalar subject (kept for compatibility)
-  subject String?
-
-  subjectId  String?
-  subjectRel Subject? @relation("ClassSessionSubject", fields: [subjectId], references: [id], map: "fk_classsession_subject")
-
-  // --- UPDATED: Link to Campus is the single source of truth for location ---
-  campusId String?
-  campus   Campus? @relation(fields: [campusId], references: [id])
-
-  semester  Int
-  section   String
-  weekday   Weekday
-  room      String?
-  startTime DateTime
-  endTime   DateTime
-
-  teacherId String
-  teacher   Teacher @relation(fields: [teacherId], references: [id], map: "fk_classsession_teacher")
-
-  // Add proper relations to Semester and Section
+  // Relations
+  subjectId   String?
+  subjectRel  Subject?     @relation("ClassSessionSubject", fields: [subjectId], references: [id], map: "fk_classsession_subject")
+  subject     String?
+  campusId    String?
+  campus      Campus?      @relation(fields: [campusId], references: [id])
+  semester    Int
+  section     String
+  teacherId   String
+  teacher     Teacher      @relation(fields: [teacherId], references: [id], map: "fk_classsession_teacher")
   semesterId  String?
-  semesterRel Semester? @relation("SemesterSessions", fields: [semesterId], references: [id], map: "fk_classsession_semester")
-
-  sectionId  String?
-  sectionRel Section? @relation("SectionSessions", fields: [sectionId], references: [id], map: "fk_classsession_section")
-
-  status           SessionStatus @default(UPCOMING)
-  attendanceMarked Boolean       @default(false)
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
-
+  semesterRel Semester?    @relation("SemesterSessions", fields: [semesterId], references: [id], map: "fk_classsession_semester")
+  sectionId   String?
+  sectionRel  Section?     @relation("SectionSessions", fields: [sectionId], references: [id], map: "fk_classsession_section")
   attendances Attendance[] @relation("ClassSessionAttendance")
 
+  @@unique([teacherId, subjectId, sectionId, date])
   @@index([teacherId, weekday, semester], map: "idx_classsession_teacher_weekday_semester")
+}
+
+model TimetableEntry {
+  id        String   @id @default(cuid())
+  weekday   Weekday
+  startTime DateTime // Stores the time, e.g., 10:00 AM
+  endTime   DateTime
+  room      String?
+
+  // Relations
+  campusId   String
+  campus     Campus   @relation(fields: [campusId], references: [id])
+  teacherId  String
+  teacher    Teacher  @relation(fields: [teacherId], references: [id])
+  subjectId  String
+  subject    Subject  @relation(fields: [subjectId], references: [id])
+  semesterId String
+  semester   Semester @relation(fields: [semesterId], references: [id])
+  sectionId  String
+  section    Section  @relation(fields: [sectionId], references: [id])
+
+  @@unique([teacherId, weekday, startTime])
 }
 
 model Attendance {
@@ -235,20 +256,20 @@ model Attendance {
 }
 
 model AttendanceToken {
-  id          String   @id @default(cuid())
-  token       String   @unique
+  id          String         @id @default(cuid())
+  token       String         @unique
   studentId   String? // Add this field
-  student     Student? @relation(fields: [studentId], references: [id])
+  student     Student?       @relation(fields: [studentId], references: [id])
   subjectId   String?
-  subject     Subject? @relation(fields: [subjectId], references: [id], map: "fk_attendancetoken_subject")
+  subject     Subject?       @relation(fields: [subjectId], references: [id], map: "fk_attendancetoken_subject")
   professorId String
-  issuedAt    DateTime @default(now())
+  teacher     Teacher        @relation(fields: [professorId], references: [id])
+  issuedAt    DateTime       @default(now())
   expiresAt   DateTime
-  used        Boolean  @default(false)
-
-  // --- FOR geo location of QR genrated ---
-  latitude  Float?
-  longitude Float?
+  used        Boolean        @default(false)
+  latitude    Float? // To store the teacher's latitude at time of creation
+  longitude   Float? // To store the teacher's longitude at time of creation
+  mode        AttendanceMode @default(OFFLINE)
 }
 
 model Session {
@@ -461,6 +482,7 @@ enum Weekday {
 
 enum SessionStatus {
   UPCOMING
+  LIVE
   COMPLETED
   CANCELLED
 }
@@ -470,4 +492,9 @@ enum AttendanceStatus {
   ABSENT
   LATE
   PENDING
+}
+
+enum AttendanceMode {
+  ONLINE
+  OFFLINE
 }

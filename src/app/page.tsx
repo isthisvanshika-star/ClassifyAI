@@ -5,9 +5,9 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 
 const defaultCampus = {
-  name: "CLASSIFY AI",
+  name: "CLASSIFYAI",
   logoUrl: "/only-logo.png",
-  hindiName: "Smart Attendance System and Campus Management",
+  hindiName: "AI Smart Attendance & Analytics System and Campus Community App",
 };
 
 export default function Home() {
@@ -59,9 +59,9 @@ export default function Home() {
       />
 
       <h1 className="text-white text-xl sm:text-2xl md:text-3xl font-semibold leading-tight">
-        {campusData.name.toUpperCase() === "CLASSIFY AI" ? (
+        {campusData.name.toUpperCase() === "CLASSIFYAI" ? (
           <span>
-            CLASSIFY <span className="text-cyan-500">AI</span>
+            CLASSIFY<span className="text-cyan-500">AI</span>
           </span>
         ) : (
           campusData.name.toUpperCase()

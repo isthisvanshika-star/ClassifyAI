@@ -234,3 +234,17 @@ export type ClassSession = {
   endTime: string;
   room?: string | null;
 };
+export type AttendanceSessionType = {
+  id: string;
+  subject: {
+    id: string;
+    name: string;
+    code?: string;
+  };
+  section: string;
+  semester: number;
+  weekday: string;
+  startTime: string;
+  endTime: string;
+  room?: string | null;
+};

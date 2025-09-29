@@ -1,74 +1,82 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import toast from "react-hot-toast";
+import {
+  showErrorMessage,
+  showLoadingMessage,
+  showSuccessMessage,
+} from "@/lib/helper";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-export default function AttendanceFinalizer({ token, onClose }: { token: string; onClose: () => void; }) {
-  const [timeLeft, setTimeLeft] = useState(600); // 10 minutes in seconds
+export default function AttendanceFinalizer({
+  token,
+  onClose,
+}: {
+  token: string;
+  onClose: () => void;
+}) {
   const [isLoading, setIsLoading] = useState(false);
-
-  // Countdown Timer Logic
-  useEffect(() => {
-    if (timeLeft === 0) return;
-    const intervalId = setInterval(() => {
-      setTimeLeft(timeLeft - 1);
-    }, 1000);
-    return () => clearInterval(intervalId);
-  }, [timeLeft]);
 
   const handleFinalize = async () => {
     setIsLoading(true);
-    toast.loading("Finalizing attendance...");
+    showLoadingMessage("Finalizing attendance...");
     try {
-        const response = await fetch('/api/attendance/finalize', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token }),
-        });
-        const data = await response.json();
-        toast.dismiss();
-        if (!response.ok) throw new Error(data.message);
-        toast.success(data.message);
-        setTimeout(onClose, 2000);
+      const response = await fetch("/api/attendance/finalize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message);
+      showSuccessMessage(data.message);
+      setTimeout(onClose, 2000);
     } catch (err: any) {
-        toast.dismiss();
-        toast.error(err.message || "An error occurred.");
-        setIsLoading(false);
+      showErrorMessage(err.message || "An error occurred.");
+      setIsLoading(false);
     }
   };
 
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
-  const isTimeUp = timeLeft === 0;
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 p-4">
-      <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md text-center">
-        <h2 className="text-2xl font-bold mb-4 text-gray-800">Attendance Session Live</h2>
-        <p className="text-gray-600 mb-6">
-          QR codes sent. Students have 10 minutes to scan.
-        </p>
-        <div className="my-8">
-            {isTimeUp ? (
-                <p className="text-3xl font-bold text-green-600">Time's Up!</p>
-            ) : (
-                <p className="text-5xl font-mono font-bold text-indigo-600">
-                    {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
-                </p>
-            )}
-            <p className="text-gray-500 mt-2">Time remaining</p>
-        </div>
-        <button
-            onClick={handleFinalize}
-            disabled={!isTimeUp || isLoading}
-            className="w-full py-3 px-4 bg-indigo-600 text-white font-semibold rounded-md disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-indigo-700"
+    <AnimatePresence>
+      <motion.div
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50 p-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <motion.div
+          className="relative from-gray-950 via-gray-800 to-gray-950 bg-gradient-to-br border border-cyan-500/30 rounded-2xl shadow-2xl w-full max-w-md p-6 text-center text-white"
+          initial={{ opacity: 0, scale: 0.85, y: 50 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.85, y: 50 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
         >
-            {isLoading ? 'Processing...' : "Mark Remaining Students as Absent"}
-        </button>
-        <button onClick={onClose} className="mt-2 text-sm text-gray-500 hover:underline">
-            Close
-        </button>
-      </div>
-    </div>
+
+          <h2 className="text-3xl font-bold mb-3 text-cyan-400">
+            Finalize Session
+          </h2>
+          <p className="text-gray-300 mb-6">
+            The attendance window has closed. Mark all remaining
+            students as <span className="text-red-400 font-semibold">absent</span>.
+          </p>
+
+          <motion.p
+            className="text-3xl font-bold my-6"
+          >
+            Time’s Up!
+          </motion.p>
+
+          <div className="space-y-3">
+            <button
+              onClick={handleFinalize}
+              disabled={isLoading}
+              className="w-full py-3 px-4 cursor-pointer bg-cyan-600 hover:bg-cyan-700 text-white font-semibold rounded-lg transition disabled:bg-gray-600"
+            >
+              {isLoading ? "Processing..." : "Yes, Mark Absentees"}
+            </button>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 }

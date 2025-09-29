@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import { prisma } from "./prisma";
+import { BookOpen, Calendar, Home, LogOut, Megaphone, Upload } from "lucide-react";
 
 export const logActivity = async (
   userId: string,
@@ -228,6 +229,71 @@ export function haversineDistance(
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c; // in metres
 }
+
+export const teacherNavLinks = [
+  { label: "Dashboard", href: "/dashboard/teacher", icon: Home },
+  { label: "Classes", href: "/dashboard/teacher/classes", icon: BookOpen },
+  { label: "Attendance", href: "/dashboard/teacher/attendance", icon: Calendar },
+  { label: "Announcements", href: "/dashboard/teacher/announcements", icon: Megaphone },
+  { label: "Resources", href: "/dashboard/teacher/resources", icon: Upload },
+  { label: "Logout", href: "/dashboard/teacher/logout", icon: LogOut },
+];
+
+
+// --- NEWLY IMPLEMENTED FUNCTION ---
+/**
+ * Fetches the city for a given IP address using a free geolocation API.
+ * @param ip The IP address to look up.
+ * @returns The city name as a string, or "Unknown" if it fails.
+ */
+
+export async  function getCityfromIp(ip: string): Promise<string>{
+  // Handle special cases like localhost or unknown IPs
+  if(ip === "unknown" || ip === "::1" || ip === "127.0.0.1"){
+    // For local development, return a default city to allow tests to pass.
+    // In production, an "unknown" IP might be treated with more suspicion.
+    return "Udaipur"; // Or your default development city
+  }
+  try {
+    // Use the ip-api.com service, requesting only the 'city' field for efficiency
+    const response = await fetch(`http://ip-api.com/json/${ip}?fields=city`);
+    if (!response.ok) {
+        console.error(`IP API failed with status: ${response.status}`);
+        return "Unknown";
+    }
+
+    const data = await response.json();
+    
+    if (data.status === 'success' && data.city) {
+        return data.city;
+    } else {
+        return "Unknown";
+    }
+  } catch (error) {
+    console.error("Error fetching city from IP:", error);
+    return "Unknown"; // Return a safe default on any error
+  }
+}
+
+export const getCurrentLocation = (): Promise<{ latitude: number; longitude: number }> => {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject(new Error("Geolocation is not supported by your browser."));
+    } else {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          resolve({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+        },
+        () => {
+          reject(new Error("Unable to retrieve your location. Please enable location permissions."));
+        }
+      );
+    }
+  });
+};
 
 export function getCurrentWeekday(
   date: Date

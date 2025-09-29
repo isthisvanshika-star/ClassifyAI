@@ -59,6 +59,11 @@ export type Campus = $Result.DefaultSelection<Prisma.$CampusPayload>
  */
 export type ClassSession = $Result.DefaultSelection<Prisma.$ClassSessionPayload>
 /**
+ * Model TimetableEntry
+ * 
+ */
+export type TimetableEntry = $Result.DefaultSelection<Prisma.$TimetableEntryPayload>
+/**
  * Model Attendance
  * 
  */
@@ -173,6 +178,7 @@ export type Weekday = (typeof Weekday)[keyof typeof Weekday]
 
 export const SessionStatus: {
   UPCOMING: 'UPCOMING',
+  LIVE: 'LIVE',
   COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED'
 };
@@ -188,6 +194,14 @@ export const AttendanceStatus: {
 };
 
 export type AttendanceStatus = (typeof AttendanceStatus)[keyof typeof AttendanceStatus]
+
+
+export const AttendanceMode: {
+  ONLINE: 'ONLINE',
+  OFFLINE: 'OFFLINE'
+};
+
+export type AttendanceMode = (typeof AttendanceMode)[keyof typeof AttendanceMode]
 
 }
 
@@ -206,6 +220,10 @@ export const SessionStatus: typeof $Enums.SessionStatus
 export type AttendanceStatus = $Enums.AttendanceStatus
 
 export const AttendanceStatus: typeof $Enums.AttendanceStatus
+
+export type AttendanceMode = $Enums.AttendanceMode
+
+export const AttendanceMode: typeof $Enums.AttendanceMode
 
 /**
  * ##  Prisma Client ʲˢ
@@ -414,6 +432,16 @@ export class PrismaClient<
     * ```
     */
   get classSession(): Prisma.ClassSessionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.timetableEntry`: Exposes CRUD operations for the **TimetableEntry** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TimetableEntries
+    * const timetableEntries = await prisma.timetableEntry.findMany()
+    * ```
+    */
+  get timetableEntry(): Prisma.TimetableEntryDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.attendance`: Exposes CRUD operations for the **Attendance** model.
@@ -1033,6 +1061,7 @@ export namespace Prisma {
     TeacherSubject: 'TeacherSubject',
     Campus: 'Campus',
     ClassSession: 'ClassSession',
+    TimetableEntry: 'TimetableEntry',
     Attendance: 'Attendance',
     AttendanceToken: 'AttendanceToken',
     Session: 'Session',
@@ -1068,7 +1097,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "teacher" | "student" | "semester" | "section" | "subject" | "teacherSubject" | "campus" | "classSession" | "attendance" | "attendanceToken" | "session" | "event" | "assignment" | "submission" | "announcement" | "resource" | "exam" | "grade" | "message" | "notification" | "premiumFeature" | "googleToken" | "recentActivity" | "supportRequest" | "planConfig"
+      modelProps: "user" | "teacher" | "student" | "semester" | "section" | "subject" | "teacherSubject" | "campus" | "classSession" | "timetableEntry" | "attendance" | "attendanceToken" | "session" | "event" | "assignment" | "submission" | "announcement" | "resource" | "exam" | "grade" | "message" | "notification" | "premiumFeature" | "googleToken" | "recentActivity" | "supportRequest" | "planConfig"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1735,6 +1764,80 @@ export namespace Prisma {
           count: {
             args: Prisma.ClassSessionCountArgs<ExtArgs>
             result: $Utils.Optional<ClassSessionCountAggregateOutputType> | number
+          }
+        }
+      }
+      TimetableEntry: {
+        payload: Prisma.$TimetableEntryPayload<ExtArgs>
+        fields: Prisma.TimetableEntryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TimetableEntryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TimetableEntryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TimetableEntryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TimetableEntryPayload>
+          }
+          findFirst: {
+            args: Prisma.TimetableEntryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TimetableEntryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TimetableEntryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TimetableEntryPayload>
+          }
+          findMany: {
+            args: Prisma.TimetableEntryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TimetableEntryPayload>[]
+          }
+          create: {
+            args: Prisma.TimetableEntryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TimetableEntryPayload>
+          }
+          createMany: {
+            args: Prisma.TimetableEntryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TimetableEntryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TimetableEntryPayload>[]
+          }
+          delete: {
+            args: Prisma.TimetableEntryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TimetableEntryPayload>
+          }
+          update: {
+            args: Prisma.TimetableEntryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TimetableEntryPayload>
+          }
+          deleteMany: {
+            args: Prisma.TimetableEntryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TimetableEntryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TimetableEntryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TimetableEntryPayload>[]
+          }
+          upsert: {
+            args: Prisma.TimetableEntryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TimetableEntryPayload>
+          }
+          aggregate: {
+            args: Prisma.TimetableEntryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTimetableEntry>
+          }
+          groupBy: {
+            args: Prisma.TimetableEntryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TimetableEntryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TimetableEntryCountArgs<ExtArgs>
+            result: $Utils.Optional<TimetableEntryCountAggregateOutputType> | number
           }
         }
       }
@@ -3101,6 +3204,7 @@ export namespace Prisma {
     teacherSubject?: TeacherSubjectOmit
     campus?: CampusOmit
     classSession?: ClassSessionOmit
+    timetableEntry?: TimetableEntryOmit
     attendance?: AttendanceOmit
     attendanceToken?: AttendanceTokenOmit
     session?: SessionOmit
@@ -3303,15 +3407,19 @@ export namespace Prisma {
   export type TeacherCountOutputType = {
     teacherSubjects: number
     classSessions: number
+    attendanceTokens: number
     announcements: number
     assignments: number
+    TimetableEntry: number
   }
 
   export type TeacherCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     teacherSubjects?: boolean | TeacherCountOutputTypeCountTeacherSubjectsArgs
     classSessions?: boolean | TeacherCountOutputTypeCountClassSessionsArgs
+    attendanceTokens?: boolean | TeacherCountOutputTypeCountAttendanceTokensArgs
     announcements?: boolean | TeacherCountOutputTypeCountAnnouncementsArgs
     assignments?: boolean | TeacherCountOutputTypeCountAssignmentsArgs
+    TimetableEntry?: boolean | TeacherCountOutputTypeCountTimetableEntryArgs
   }
 
   // Custom InputTypes
@@ -3342,6 +3450,13 @@ export namespace Prisma {
   /**
    * TeacherCountOutputType without action
    */
+  export type TeacherCountOutputTypeCountAttendanceTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AttendanceTokenWhereInput
+  }
+
+  /**
+   * TeacherCountOutputType without action
+   */
   export type TeacherCountOutputTypeCountAnnouncementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AnnouncementWhereInput
   }
@@ -3351,6 +3466,13 @@ export namespace Prisma {
    */
   export type TeacherCountOutputTypeCountAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AssignmentWhereInput
+  }
+
+  /**
+   * TeacherCountOutputType without action
+   */
+  export type TeacherCountOutputTypeCountTimetableEntryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TimetableEntryWhereInput
   }
 
 
@@ -3420,12 +3542,14 @@ export namespace Prisma {
     teacherSubjects: number
     classSessions: number
     students: number
+    TimetableEntry: number
   }
 
   export type SemesterCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     teacherSubjects?: boolean | SemesterCountOutputTypeCountTeacherSubjectsArgs
     classSessions?: boolean | SemesterCountOutputTypeCountClassSessionsArgs
     students?: boolean | SemesterCountOutputTypeCountStudentsArgs
+    TimetableEntry?: boolean | SemesterCountOutputTypeCountTimetableEntryArgs
   }
 
   // Custom InputTypes
@@ -3460,6 +3584,13 @@ export namespace Prisma {
     where?: StudentWhereInput
   }
 
+  /**
+   * SemesterCountOutputType without action
+   */
+  export type SemesterCountOutputTypeCountTimetableEntryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TimetableEntryWhereInput
+  }
+
 
   /**
    * Count Type SectionCountOutputType
@@ -3469,12 +3600,14 @@ export namespace Prisma {
     teacherSubjects: number
     classSessions: number
     students: number
+    TimetableEntry: number
   }
 
   export type SectionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     teacherSubjects?: boolean | SectionCountOutputTypeCountTeacherSubjectsArgs
     classSessions?: boolean | SectionCountOutputTypeCountClassSessionsArgs
     students?: boolean | SectionCountOutputTypeCountStudentsArgs
+    TimetableEntry?: boolean | SectionCountOutputTypeCountTimetableEntryArgs
   }
 
   // Custom InputTypes
@@ -3509,6 +3642,13 @@ export namespace Prisma {
     where?: StudentWhereInput
   }
 
+  /**
+   * SectionCountOutputType without action
+   */
+  export type SectionCountOutputTypeCountTimetableEntryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TimetableEntryWhereInput
+  }
+
 
   /**
    * Count Type SubjectCountOutputType
@@ -3521,6 +3661,7 @@ export namespace Prisma {
     resources: number
     exams: number
     attendanceTokens: number
+    TimetableEntry: number
   }
 
   export type SubjectCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3530,6 +3671,7 @@ export namespace Prisma {
     resources?: boolean | SubjectCountOutputTypeCountResourcesArgs
     exams?: boolean | SubjectCountOutputTypeCountExamsArgs
     attendanceTokens?: boolean | SubjectCountOutputTypeCountAttendanceTokensArgs
+    TimetableEntry?: boolean | SubjectCountOutputTypeCountTimetableEntryArgs
   }
 
   // Custom InputTypes
@@ -3585,6 +3727,13 @@ export namespace Prisma {
     where?: AttendanceTokenWhereInput
   }
 
+  /**
+   * SubjectCountOutputType without action
+   */
+  export type SubjectCountOutputTypeCountTimetableEntryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TimetableEntryWhereInput
+  }
+
 
   /**
    * Count Type CampusCountOutputType
@@ -3597,6 +3746,7 @@ export namespace Prisma {
     sections: number
     subjects: number
     events: number
+    TimetableEntry: number
   }
 
   export type CampusCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3606,6 +3756,7 @@ export namespace Prisma {
     sections?: boolean | CampusCountOutputTypeCountSectionsArgs
     subjects?: boolean | CampusCountOutputTypeCountSubjectsArgs
     events?: boolean | CampusCountOutputTypeCountEventsArgs
+    TimetableEntry?: boolean | CampusCountOutputTypeCountTimetableEntryArgs
   }
 
   // Custom InputTypes
@@ -3659,6 +3810,13 @@ export namespace Prisma {
    */
   export type CampusCountOutputTypeCountEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EventWhereInput
+  }
+
+  /**
+   * CampusCountOutputType without action
+   */
+  export type CampusCountOutputTypeCountTimetableEntryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TimetableEntryWhereInput
   }
 
 
@@ -5568,8 +5726,10 @@ export namespace Prisma {
     user?: boolean | UserDefaultArgs<ExtArgs>
     teacherSubjects?: boolean | Teacher$teacherSubjectsArgs<ExtArgs>
     classSessions?: boolean | Teacher$classSessionsArgs<ExtArgs>
+    attendanceTokens?: boolean | Teacher$attendanceTokensArgs<ExtArgs>
     announcements?: boolean | Teacher$announcementsArgs<ExtArgs>
     assignments?: boolean | Teacher$assignmentsArgs<ExtArgs>
+    TimetableEntry?: boolean | Teacher$TimetableEntryArgs<ExtArgs>
     _count?: boolean | TeacherCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["teacher"]>
 
@@ -5607,8 +5767,10 @@ export namespace Prisma {
     user?: boolean | UserDefaultArgs<ExtArgs>
     teacherSubjects?: boolean | Teacher$teacherSubjectsArgs<ExtArgs>
     classSessions?: boolean | Teacher$classSessionsArgs<ExtArgs>
+    attendanceTokens?: boolean | Teacher$attendanceTokensArgs<ExtArgs>
     announcements?: boolean | Teacher$announcementsArgs<ExtArgs>
     assignments?: boolean | Teacher$assignmentsArgs<ExtArgs>
+    TimetableEntry?: boolean | Teacher$TimetableEntryArgs<ExtArgs>
     _count?: boolean | TeacherCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TeacherIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5624,8 +5786,10 @@ export namespace Prisma {
       user: Prisma.$UserPayload<ExtArgs>
       teacherSubjects: Prisma.$TeacherSubjectPayload<ExtArgs>[]
       classSessions: Prisma.$ClassSessionPayload<ExtArgs>[]
+      attendanceTokens: Prisma.$AttendanceTokenPayload<ExtArgs>[]
       announcements: Prisma.$AnnouncementPayload<ExtArgs>[]
       assignments: Prisma.$AssignmentPayload<ExtArgs>[]
+      TimetableEntry: Prisma.$TimetableEntryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6031,8 +6195,10 @@ export namespace Prisma {
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     teacherSubjects<T extends Teacher$teacherSubjectsArgs<ExtArgs> = {}>(args?: Subset<T, Teacher$teacherSubjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeacherSubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     classSessions<T extends Teacher$classSessionsArgs<ExtArgs> = {}>(args?: Subset<T, Teacher$classSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    attendanceTokens<T extends Teacher$attendanceTokensArgs<ExtArgs> = {}>(args?: Subset<T, Teacher$attendanceTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendanceTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     announcements<T extends Teacher$announcementsArgs<ExtArgs> = {}>(args?: Subset<T, Teacher$announcementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     assignments<T extends Teacher$assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, Teacher$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    TimetableEntry<T extends Teacher$TimetableEntryArgs<ExtArgs> = {}>(args?: Subset<T, Teacher$TimetableEntryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TimetableEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6512,6 +6678,30 @@ export namespace Prisma {
   }
 
   /**
+   * Teacher.attendanceTokens
+   */
+  export type Teacher$attendanceTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AttendanceToken
+     */
+    select?: AttendanceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AttendanceToken
+     */
+    omit?: AttendanceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceTokenInclude<ExtArgs> | null
+    where?: AttendanceTokenWhereInput
+    orderBy?: AttendanceTokenOrderByWithRelationInput | AttendanceTokenOrderByWithRelationInput[]
+    cursor?: AttendanceTokenWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AttendanceTokenScalarFieldEnum | AttendanceTokenScalarFieldEnum[]
+  }
+
+  /**
    * Teacher.announcements
    */
   export type Teacher$announcementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6557,6 +6747,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AssignmentScalarFieldEnum | AssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * Teacher.TimetableEntry
+   */
+  export type Teacher$TimetableEntryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TimetableEntry
+     */
+    select?: TimetableEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TimetableEntry
+     */
+    omit?: TimetableEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TimetableEntryInclude<ExtArgs> | null
+    where?: TimetableEntryWhereInput
+    orderBy?: TimetableEntryOrderByWithRelationInput | TimetableEntryOrderByWithRelationInput[]
+    cursor?: TimetableEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TimetableEntryScalarFieldEnum | TimetableEntryScalarFieldEnum[]
   }
 
   /**
@@ -8032,6 +8246,7 @@ export namespace Prisma {
     teacherSubjects?: boolean | Semester$teacherSubjectsArgs<ExtArgs>
     classSessions?: boolean | Semester$classSessionsArgs<ExtArgs>
     students?: boolean | Semester$studentsArgs<ExtArgs>
+    TimetableEntry?: boolean | Semester$TimetableEntryArgs<ExtArgs>
     _count?: boolean | SemesterCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["semester"]>
 
@@ -8067,6 +8282,7 @@ export namespace Prisma {
     teacherSubjects?: boolean | Semester$teacherSubjectsArgs<ExtArgs>
     classSessions?: boolean | Semester$classSessionsArgs<ExtArgs>
     students?: boolean | Semester$studentsArgs<ExtArgs>
+    TimetableEntry?: boolean | Semester$TimetableEntryArgs<ExtArgs>
     _count?: boolean | SemesterCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SemesterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8083,6 +8299,7 @@ export namespace Prisma {
       teacherSubjects: Prisma.$TeacherSubjectPayload<ExtArgs>[]
       classSessions: Prisma.$ClassSessionPayload<ExtArgs>[]
       students: Prisma.$StudentPayload<ExtArgs>[]
+      TimetableEntry: Prisma.$TimetableEntryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8488,6 +8705,7 @@ export namespace Prisma {
     teacherSubjects<T extends Semester$teacherSubjectsArgs<ExtArgs> = {}>(args?: Subset<T, Semester$teacherSubjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeacherSubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     classSessions<T extends Semester$classSessionsArgs<ExtArgs> = {}>(args?: Subset<T, Semester$classSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     students<T extends Semester$studentsArgs<ExtArgs> = {}>(args?: Subset<T, Semester$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    TimetableEntry<T extends Semester$TimetableEntryArgs<ExtArgs> = {}>(args?: Subset<T, Semester$TimetableEntryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TimetableEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8990,6 +9208,30 @@ export namespace Prisma {
   }
 
   /**
+   * Semester.TimetableEntry
+   */
+  export type Semester$TimetableEntryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TimetableEntry
+     */
+    select?: TimetableEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TimetableEntry
+     */
+    omit?: TimetableEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TimetableEntryInclude<ExtArgs> | null
+    where?: TimetableEntryWhereInput
+    orderBy?: TimetableEntryOrderByWithRelationInput | TimetableEntryOrderByWithRelationInput[]
+    cursor?: TimetableEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TimetableEntryScalarFieldEnum | TimetableEntryScalarFieldEnum[]
+  }
+
+  /**
    * Semester without action
    */
   export type SemesterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9168,6 +9410,7 @@ export namespace Prisma {
     teacherSubjects?: boolean | Section$teacherSubjectsArgs<ExtArgs>
     classSessions?: boolean | Section$classSessionsArgs<ExtArgs>
     students?: boolean | Section$studentsArgs<ExtArgs>
+    TimetableEntry?: boolean | Section$TimetableEntryArgs<ExtArgs>
     _count?: boolean | SectionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["section"]>
 
@@ -9200,6 +9443,7 @@ export namespace Prisma {
     teacherSubjects?: boolean | Section$teacherSubjectsArgs<ExtArgs>
     classSessions?: boolean | Section$classSessionsArgs<ExtArgs>
     students?: boolean | Section$studentsArgs<ExtArgs>
+    TimetableEntry?: boolean | Section$TimetableEntryArgs<ExtArgs>
     _count?: boolean | SectionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SectionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9216,6 +9460,7 @@ export namespace Prisma {
       teacherSubjects: Prisma.$TeacherSubjectPayload<ExtArgs>[]
       classSessions: Prisma.$ClassSessionPayload<ExtArgs>[]
       students: Prisma.$StudentPayload<ExtArgs>[]
+      TimetableEntry: Prisma.$TimetableEntryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9620,6 +9865,7 @@ export namespace Prisma {
     teacherSubjects<T extends Section$teacherSubjectsArgs<ExtArgs> = {}>(args?: Subset<T, Section$teacherSubjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeacherSubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     classSessions<T extends Section$classSessionsArgs<ExtArgs> = {}>(args?: Subset<T, Section$classSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     students<T extends Section$studentsArgs<ExtArgs> = {}>(args?: Subset<T, Section$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    TimetableEntry<T extends Section$TimetableEntryArgs<ExtArgs> = {}>(args?: Subset<T, Section$TimetableEntryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TimetableEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10121,6 +10367,30 @@ export namespace Prisma {
   }
 
   /**
+   * Section.TimetableEntry
+   */
+  export type Section$TimetableEntryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TimetableEntry
+     */
+    select?: TimetableEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TimetableEntry
+     */
+    omit?: TimetableEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TimetableEntryInclude<ExtArgs> | null
+    where?: TimetableEntryWhereInput
+    orderBy?: TimetableEntryOrderByWithRelationInput | TimetableEntryOrderByWithRelationInput[]
+    cursor?: TimetableEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TimetableEntryScalarFieldEnum | TimetableEntryScalarFieldEnum[]
+  }
+
+  /**
    * Section without action
    */
   export type SectionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10326,6 +10596,7 @@ export namespace Prisma {
     resources?: boolean | Subject$resourcesArgs<ExtArgs>
     exams?: boolean | Subject$examsArgs<ExtArgs>
     attendanceTokens?: boolean | Subject$attendanceTokensArgs<ExtArgs>
+    TimetableEntry?: boolean | Subject$TimetableEntryArgs<ExtArgs>
     _count?: boolean | SubjectCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["subject"]>
 
@@ -10370,6 +10641,7 @@ export namespace Prisma {
     resources?: boolean | Subject$resourcesArgs<ExtArgs>
     exams?: boolean | Subject$examsArgs<ExtArgs>
     attendanceTokens?: boolean | Subject$attendanceTokensArgs<ExtArgs>
+    TimetableEntry?: boolean | Subject$TimetableEntryArgs<ExtArgs>
     _count?: boolean | SubjectCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SubjectIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10389,6 +10661,7 @@ export namespace Prisma {
       resources: Prisma.$ResourcePayload<ExtArgs>[]
       exams: Prisma.$ExamPayload<ExtArgs>[]
       attendanceTokens: Prisma.$AttendanceTokenPayload<ExtArgs>[]
+      TimetableEntry: Prisma.$TimetableEntryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -10799,6 +11072,7 @@ export namespace Prisma {
     resources<T extends Subject$resourcesArgs<ExtArgs> = {}>(args?: Subset<T, Subject$resourcesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     exams<T extends Subject$examsArgs<ExtArgs> = {}>(args?: Subset<T, Subject$examsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     attendanceTokens<T extends Subject$attendanceTokensArgs<ExtArgs> = {}>(args?: Subset<T, Subject$attendanceTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendanceTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    TimetableEntry<T extends Subject$TimetableEntryArgs<ExtArgs> = {}>(args?: Subset<T, Subject$TimetableEntryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TimetableEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11372,6 +11646,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AttendanceTokenScalarFieldEnum | AttendanceTokenScalarFieldEnum[]
+  }
+
+  /**
+   * Subject.TimetableEntry
+   */
+  export type Subject$TimetableEntryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TimetableEntry
+     */
+    select?: TimetableEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TimetableEntry
+     */
+    omit?: TimetableEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TimetableEntryInclude<ExtArgs> | null
+    where?: TimetableEntryWhereInput
+    orderBy?: TimetableEntryOrderByWithRelationInput | TimetableEntryOrderByWithRelationInput[]
+    cursor?: TimetableEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TimetableEntryScalarFieldEnum | TimetableEntryScalarFieldEnum[]
   }
 
   /**
@@ -12723,6 +13021,7 @@ export namespace Prisma {
     sections?: boolean | Campus$sectionsArgs<ExtArgs>
     subjects?: boolean | Campus$subjectsArgs<ExtArgs>
     events?: boolean | Campus$eventsArgs<ExtArgs>
+    TimetableEntry?: boolean | Campus$TimetableEntryArgs<ExtArgs>
     _count?: boolean | CampusCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["campus"]>
 
@@ -12773,6 +13072,7 @@ export namespace Prisma {
     sections?: boolean | Campus$sectionsArgs<ExtArgs>
     subjects?: boolean | Campus$subjectsArgs<ExtArgs>
     events?: boolean | Campus$eventsArgs<ExtArgs>
+    TimetableEntry?: boolean | Campus$TimetableEntryArgs<ExtArgs>
     _count?: boolean | CampusCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CampusIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -12787,6 +13087,7 @@ export namespace Prisma {
       sections: Prisma.$SectionPayload<ExtArgs>[]
       subjects: Prisma.$SubjectPayload<ExtArgs>[]
       events: Prisma.$EventPayload<ExtArgs>[]
+      TimetableEntry: Prisma.$TimetableEntryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -13199,6 +13500,7 @@ export namespace Prisma {
     sections<T extends Campus$sectionsArgs<ExtArgs> = {}>(args?: Subset<T, Campus$sectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     subjects<T extends Campus$subjectsArgs<ExtArgs> = {}>(args?: Subset<T, Campus$subjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     events<T extends Campus$eventsArgs<ExtArgs> = {}>(args?: Subset<T, Campus$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    TimetableEntry<T extends Campus$TimetableEntryArgs<ExtArgs> = {}>(args?: Subset<T, Campus$TimetableEntryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TimetableEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13770,6 +14072,30 @@ export namespace Prisma {
   }
 
   /**
+   * Campus.TimetableEntry
+   */
+  export type Campus$TimetableEntryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TimetableEntry
+     */
+    select?: TimetableEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TimetableEntry
+     */
+    omit?: TimetableEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TimetableEntryInclude<ExtArgs> | null
+    where?: TimetableEntryWhereInput
+    orderBy?: TimetableEntryOrderByWithRelationInput | TimetableEntryOrderByWithRelationInput[]
+    cursor?: TimetableEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TimetableEntryScalarFieldEnum | TimetableEntryScalarFieldEnum[]
+  }
+
+  /**
    * Campus without action
    */
   export type CampusDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13810,62 +14136,68 @@ export namespace Prisma {
 
   export type ClassSessionMinAggregateOutputType = {
     id: string | null
-    subject: string | null
-    subjectId: string | null
-    campusId: string | null
-    semester: number | null
-    section: string | null
-    weekday: $Enums.Weekday | null
-    room: string | null
+    date: Date | null
     startTime: Date | null
     endTime: Date | null
-    teacherId: string | null
-    semesterId: string | null
-    sectionId: string | null
+    weekday: $Enums.Weekday | null
+    room: string | null
     status: $Enums.SessionStatus | null
+    attendanceWindowEndsAt: Date | null
     attendanceMarked: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
+    subjectId: string | null
+    subject: string | null
+    campusId: string | null
+    semester: number | null
+    section: string | null
+    teacherId: string | null
+    semesterId: string | null
+    sectionId: string | null
   }
 
   export type ClassSessionMaxAggregateOutputType = {
     id: string | null
-    subject: string | null
-    subjectId: string | null
-    campusId: string | null
-    semester: number | null
-    section: string | null
-    weekday: $Enums.Weekday | null
-    room: string | null
+    date: Date | null
     startTime: Date | null
     endTime: Date | null
-    teacherId: string | null
-    semesterId: string | null
-    sectionId: string | null
+    weekday: $Enums.Weekday | null
+    room: string | null
     status: $Enums.SessionStatus | null
+    attendanceWindowEndsAt: Date | null
     attendanceMarked: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
+    subjectId: string | null
+    subject: string | null
+    campusId: string | null
+    semester: number | null
+    section: string | null
+    teacherId: string | null
+    semesterId: string | null
+    sectionId: string | null
   }
 
   export type ClassSessionCountAggregateOutputType = {
     id: number
-    subject: number
-    subjectId: number
-    campusId: number
-    semester: number
-    section: number
-    weekday: number
-    room: number
+    date: number
     startTime: number
     endTime: number
-    teacherId: number
-    semesterId: number
-    sectionId: number
+    weekday: number
+    room: number
     status: number
+    attendanceWindowEndsAt: number
     attendanceMarked: number
     createdAt: number
     updatedAt: number
+    subjectId: number
+    subject: number
+    campusId: number
+    semester: number
+    section: number
+    teacherId: number
+    semesterId: number
+    sectionId: number
     _all: number
   }
 
@@ -13880,62 +14212,68 @@ export namespace Prisma {
 
   export type ClassSessionMinAggregateInputType = {
     id?: true
-    subject?: true
-    subjectId?: true
-    campusId?: true
-    semester?: true
-    section?: true
-    weekday?: true
-    room?: true
+    date?: true
     startTime?: true
     endTime?: true
-    teacherId?: true
-    semesterId?: true
-    sectionId?: true
+    weekday?: true
+    room?: true
     status?: true
+    attendanceWindowEndsAt?: true
     attendanceMarked?: true
     createdAt?: true
     updatedAt?: true
+    subjectId?: true
+    subject?: true
+    campusId?: true
+    semester?: true
+    section?: true
+    teacherId?: true
+    semesterId?: true
+    sectionId?: true
   }
 
   export type ClassSessionMaxAggregateInputType = {
     id?: true
-    subject?: true
-    subjectId?: true
-    campusId?: true
-    semester?: true
-    section?: true
-    weekday?: true
-    room?: true
+    date?: true
     startTime?: true
     endTime?: true
-    teacherId?: true
-    semesterId?: true
-    sectionId?: true
+    weekday?: true
+    room?: true
     status?: true
+    attendanceWindowEndsAt?: true
     attendanceMarked?: true
     createdAt?: true
     updatedAt?: true
+    subjectId?: true
+    subject?: true
+    campusId?: true
+    semester?: true
+    section?: true
+    teacherId?: true
+    semesterId?: true
+    sectionId?: true
   }
 
   export type ClassSessionCountAggregateInputType = {
     id?: true
-    subject?: true
-    subjectId?: true
-    campusId?: true
-    semester?: true
-    section?: true
-    weekday?: true
-    room?: true
+    date?: true
     startTime?: true
     endTime?: true
-    teacherId?: true
-    semesterId?: true
-    sectionId?: true
+    weekday?: true
+    room?: true
     status?: true
+    attendanceWindowEndsAt?: true
     attendanceMarked?: true
     createdAt?: true
     updatedAt?: true
+    subjectId?: true
+    subject?: true
+    campusId?: true
+    semester?: true
+    section?: true
+    teacherId?: true
+    semesterId?: true
+    sectionId?: true
     _all?: true
   }
 
@@ -14027,22 +14365,24 @@ export namespace Prisma {
 
   export type ClassSessionGroupByOutputType = {
     id: string
-    subject: string | null
-    subjectId: string | null
-    campusId: string | null
-    semester: number
-    section: string
-    weekday: $Enums.Weekday
-    room: string | null
+    date: Date
     startTime: Date
     endTime: Date
-    teacherId: string
-    semesterId: string | null
-    sectionId: string | null
+    weekday: $Enums.Weekday
+    room: string | null
     status: $Enums.SessionStatus
+    attendanceWindowEndsAt: Date | null
     attendanceMarked: boolean
     createdAt: Date
     updatedAt: Date
+    subjectId: string | null
+    subject: string | null
+    campusId: string | null
+    semester: number
+    section: string
+    teacherId: string
+    semesterId: string | null
+    sectionId: string | null
     _count: ClassSessionCountAggregateOutputType | null
     _avg: ClassSessionAvgAggregateOutputType | null
     _sum: ClassSessionSumAggregateOutputType | null
@@ -14066,22 +14406,24 @@ export namespace Prisma {
 
   export type ClassSessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    subject?: boolean
-    subjectId?: boolean
-    campusId?: boolean
-    semester?: boolean
-    section?: boolean
-    weekday?: boolean
-    room?: boolean
+    date?: boolean
     startTime?: boolean
     endTime?: boolean
-    teacherId?: boolean
-    semesterId?: boolean
-    sectionId?: boolean
+    weekday?: boolean
+    room?: boolean
     status?: boolean
+    attendanceWindowEndsAt?: boolean
     attendanceMarked?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    subjectId?: boolean
+    subject?: boolean
+    campusId?: boolean
+    semester?: boolean
+    section?: boolean
+    teacherId?: boolean
+    semesterId?: boolean
+    sectionId?: boolean
     subjectRel?: boolean | ClassSession$subjectRelArgs<ExtArgs>
     campus?: boolean | ClassSession$campusArgs<ExtArgs>
     teacher?: boolean | TeacherDefaultArgs<ExtArgs>
@@ -14093,22 +14435,24 @@ export namespace Prisma {
 
   export type ClassSessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    subject?: boolean
-    subjectId?: boolean
-    campusId?: boolean
-    semester?: boolean
-    section?: boolean
-    weekday?: boolean
-    room?: boolean
+    date?: boolean
     startTime?: boolean
     endTime?: boolean
-    teacherId?: boolean
-    semesterId?: boolean
-    sectionId?: boolean
+    weekday?: boolean
+    room?: boolean
     status?: boolean
+    attendanceWindowEndsAt?: boolean
     attendanceMarked?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    subjectId?: boolean
+    subject?: boolean
+    campusId?: boolean
+    semester?: boolean
+    section?: boolean
+    teacherId?: boolean
+    semesterId?: boolean
+    sectionId?: boolean
     subjectRel?: boolean | ClassSession$subjectRelArgs<ExtArgs>
     campus?: boolean | ClassSession$campusArgs<ExtArgs>
     teacher?: boolean | TeacherDefaultArgs<ExtArgs>
@@ -14118,22 +14462,24 @@ export namespace Prisma {
 
   export type ClassSessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    subject?: boolean
-    subjectId?: boolean
-    campusId?: boolean
-    semester?: boolean
-    section?: boolean
-    weekday?: boolean
-    room?: boolean
+    date?: boolean
     startTime?: boolean
     endTime?: boolean
-    teacherId?: boolean
-    semesterId?: boolean
-    sectionId?: boolean
+    weekday?: boolean
+    room?: boolean
     status?: boolean
+    attendanceWindowEndsAt?: boolean
     attendanceMarked?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    subjectId?: boolean
+    subject?: boolean
+    campusId?: boolean
+    semester?: boolean
+    section?: boolean
+    teacherId?: boolean
+    semesterId?: boolean
+    sectionId?: boolean
     subjectRel?: boolean | ClassSession$subjectRelArgs<ExtArgs>
     campus?: boolean | ClassSession$campusArgs<ExtArgs>
     teacher?: boolean | TeacherDefaultArgs<ExtArgs>
@@ -14143,25 +14489,27 @@ export namespace Prisma {
 
   export type ClassSessionSelectScalar = {
     id?: boolean
-    subject?: boolean
-    subjectId?: boolean
-    campusId?: boolean
-    semester?: boolean
-    section?: boolean
-    weekday?: boolean
-    room?: boolean
+    date?: boolean
     startTime?: boolean
     endTime?: boolean
-    teacherId?: boolean
-    semesterId?: boolean
-    sectionId?: boolean
+    weekday?: boolean
+    room?: boolean
     status?: boolean
+    attendanceWindowEndsAt?: boolean
     attendanceMarked?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    subjectId?: boolean
+    subject?: boolean
+    campusId?: boolean
+    semester?: boolean
+    section?: boolean
+    teacherId?: boolean
+    semesterId?: boolean
+    sectionId?: boolean
   }
 
-  export type ClassSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "subject" | "subjectId" | "campusId" | "semester" | "section" | "weekday" | "room" | "startTime" | "endTime" | "teacherId" | "semesterId" | "sectionId" | "status" | "attendanceMarked" | "createdAt" | "updatedAt", ExtArgs["result"]["classSession"]>
+  export type ClassSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "date" | "startTime" | "endTime" | "weekday" | "room" | "status" | "attendanceWindowEndsAt" | "attendanceMarked" | "createdAt" | "updatedAt" | "subjectId" | "subject" | "campusId" | "semester" | "section" | "teacherId" | "semesterId" | "sectionId", ExtArgs["result"]["classSession"]>
   export type ClassSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subjectRel?: boolean | ClassSession$subjectRelArgs<ExtArgs>
     campus?: boolean | ClassSession$campusArgs<ExtArgs>
@@ -14198,22 +14546,24 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      subject: string | null
-      subjectId: string | null
-      campusId: string | null
-      semester: number
-      section: string
-      weekday: $Enums.Weekday
-      room: string | null
+      date: Date
       startTime: Date
       endTime: Date
-      teacherId: string
-      semesterId: string | null
-      sectionId: string | null
+      weekday: $Enums.Weekday
+      room: string | null
       status: $Enums.SessionStatus
+      attendanceWindowEndsAt: Date | null
       attendanceMarked: boolean
       createdAt: Date
       updatedAt: Date
+      subjectId: string | null
+      subject: string | null
+      campusId: string | null
+      semester: number
+      section: string
+      teacherId: string
+      semesterId: string | null
+      sectionId: string | null
     }, ExtArgs["result"]["classSession"]>
     composites: {}
   }
@@ -14644,22 +14994,24 @@ export namespace Prisma {
    */
   interface ClassSessionFieldRefs {
     readonly id: FieldRef<"ClassSession", 'String'>
-    readonly subject: FieldRef<"ClassSession", 'String'>
-    readonly subjectId: FieldRef<"ClassSession", 'String'>
-    readonly campusId: FieldRef<"ClassSession", 'String'>
-    readonly semester: FieldRef<"ClassSession", 'Int'>
-    readonly section: FieldRef<"ClassSession", 'String'>
-    readonly weekday: FieldRef<"ClassSession", 'Weekday'>
-    readonly room: FieldRef<"ClassSession", 'String'>
+    readonly date: FieldRef<"ClassSession", 'DateTime'>
     readonly startTime: FieldRef<"ClassSession", 'DateTime'>
     readonly endTime: FieldRef<"ClassSession", 'DateTime'>
-    readonly teacherId: FieldRef<"ClassSession", 'String'>
-    readonly semesterId: FieldRef<"ClassSession", 'String'>
-    readonly sectionId: FieldRef<"ClassSession", 'String'>
+    readonly weekday: FieldRef<"ClassSession", 'Weekday'>
+    readonly room: FieldRef<"ClassSession", 'String'>
     readonly status: FieldRef<"ClassSession", 'SessionStatus'>
+    readonly attendanceWindowEndsAt: FieldRef<"ClassSession", 'DateTime'>
     readonly attendanceMarked: FieldRef<"ClassSession", 'Boolean'>
     readonly createdAt: FieldRef<"ClassSession", 'DateTime'>
     readonly updatedAt: FieldRef<"ClassSession", 'DateTime'>
+    readonly subjectId: FieldRef<"ClassSession", 'String'>
+    readonly subject: FieldRef<"ClassSession", 'String'>
+    readonly campusId: FieldRef<"ClassSession", 'String'>
+    readonly semester: FieldRef<"ClassSession", 'Int'>
+    readonly section: FieldRef<"ClassSession", 'String'>
+    readonly teacherId: FieldRef<"ClassSession", 'String'>
+    readonly semesterId: FieldRef<"ClassSession", 'String'>
+    readonly sectionId: FieldRef<"ClassSession", 'String'>
   }
     
 
@@ -15171,6 +15523,1161 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ClassSessionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TimetableEntry
+   */
+
+  export type AggregateTimetableEntry = {
+    _count: TimetableEntryCountAggregateOutputType | null
+    _min: TimetableEntryMinAggregateOutputType | null
+    _max: TimetableEntryMaxAggregateOutputType | null
+  }
+
+  export type TimetableEntryMinAggregateOutputType = {
+    id: string | null
+    weekday: $Enums.Weekday | null
+    startTime: Date | null
+    endTime: Date | null
+    room: string | null
+    campusId: string | null
+    teacherId: string | null
+    subjectId: string | null
+    semesterId: string | null
+    sectionId: string | null
+  }
+
+  export type TimetableEntryMaxAggregateOutputType = {
+    id: string | null
+    weekday: $Enums.Weekday | null
+    startTime: Date | null
+    endTime: Date | null
+    room: string | null
+    campusId: string | null
+    teacherId: string | null
+    subjectId: string | null
+    semesterId: string | null
+    sectionId: string | null
+  }
+
+  export type TimetableEntryCountAggregateOutputType = {
+    id: number
+    weekday: number
+    startTime: number
+    endTime: number
+    room: number
+    campusId: number
+    teacherId: number
+    subjectId: number
+    semesterId: number
+    sectionId: number
+    _all: number
+  }
+
+
+  export type TimetableEntryMinAggregateInputType = {
+    id?: true
+    weekday?: true
+    startTime?: true
+    endTime?: true
+    room?: true
+    campusId?: true
+    teacherId?: true
+    subjectId?: true
+    semesterId?: true
+    sectionId?: true
+  }
+
+  export type TimetableEntryMaxAggregateInputType = {
+    id?: true
+    weekday?: true
+    startTime?: true
+    endTime?: true
+    room?: true
+    campusId?: true
+    teacherId?: true
+    subjectId?: true
+    semesterId?: true
+    sectionId?: true
+  }
+
+  export type TimetableEntryCountAggregateInputType = {
+    id?: true
+    weekday?: true
+    startTime?: true
+    endTime?: true
+    room?: true
+    campusId?: true
+    teacherId?: true
+    subjectId?: true
+    semesterId?: true
+    sectionId?: true
+    _all?: true
+  }
+
+  export type TimetableEntryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TimetableEntry to aggregate.
+     */
+    where?: TimetableEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TimetableEntries to fetch.
+     */
+    orderBy?: TimetableEntryOrderByWithRelationInput | TimetableEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TimetableEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TimetableEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TimetableEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TimetableEntries
+    **/
+    _count?: true | TimetableEntryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TimetableEntryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TimetableEntryMaxAggregateInputType
+  }
+
+  export type GetTimetableEntryAggregateType<T extends TimetableEntryAggregateArgs> = {
+        [P in keyof T & keyof AggregateTimetableEntry]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTimetableEntry[P]>
+      : GetScalarType<T[P], AggregateTimetableEntry[P]>
+  }
+
+
+
+
+  export type TimetableEntryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TimetableEntryWhereInput
+    orderBy?: TimetableEntryOrderByWithAggregationInput | TimetableEntryOrderByWithAggregationInput[]
+    by: TimetableEntryScalarFieldEnum[] | TimetableEntryScalarFieldEnum
+    having?: TimetableEntryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TimetableEntryCountAggregateInputType | true
+    _min?: TimetableEntryMinAggregateInputType
+    _max?: TimetableEntryMaxAggregateInputType
+  }
+
+  export type TimetableEntryGroupByOutputType = {
+    id: string
+    weekday: $Enums.Weekday
+    startTime: Date
+    endTime: Date
+    room: string | null
+    campusId: string
+    teacherId: string
+    subjectId: string
+    semesterId: string
+    sectionId: string
+    _count: TimetableEntryCountAggregateOutputType | null
+    _min: TimetableEntryMinAggregateOutputType | null
+    _max: TimetableEntryMaxAggregateOutputType | null
+  }
+
+  type GetTimetableEntryGroupByPayload<T extends TimetableEntryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TimetableEntryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TimetableEntryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TimetableEntryGroupByOutputType[P]>
+            : GetScalarType<T[P], TimetableEntryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TimetableEntrySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    weekday?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    room?: boolean
+    campusId?: boolean
+    teacherId?: boolean
+    subjectId?: boolean
+    semesterId?: boolean
+    sectionId?: boolean
+    campus?: boolean | CampusDefaultArgs<ExtArgs>
+    teacher?: boolean | TeacherDefaultArgs<ExtArgs>
+    subject?: boolean | SubjectDefaultArgs<ExtArgs>
+    semester?: boolean | SemesterDefaultArgs<ExtArgs>
+    section?: boolean | SectionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["timetableEntry"]>
+
+  export type TimetableEntrySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    weekday?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    room?: boolean
+    campusId?: boolean
+    teacherId?: boolean
+    subjectId?: boolean
+    semesterId?: boolean
+    sectionId?: boolean
+    campus?: boolean | CampusDefaultArgs<ExtArgs>
+    teacher?: boolean | TeacherDefaultArgs<ExtArgs>
+    subject?: boolean | SubjectDefaultArgs<ExtArgs>
+    semester?: boolean | SemesterDefaultArgs<ExtArgs>
+    section?: boolean | SectionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["timetableEntry"]>
+
+  export type TimetableEntrySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    weekday?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    room?: boolean
+    campusId?: boolean
+    teacherId?: boolean
+    subjectId?: boolean
+    semesterId?: boolean
+    sectionId?: boolean
+    campus?: boolean | CampusDefaultArgs<ExtArgs>
+    teacher?: boolean | TeacherDefaultArgs<ExtArgs>
+    subject?: boolean | SubjectDefaultArgs<ExtArgs>
+    semester?: boolean | SemesterDefaultArgs<ExtArgs>
+    section?: boolean | SectionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["timetableEntry"]>
+
+  export type TimetableEntrySelectScalar = {
+    id?: boolean
+    weekday?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    room?: boolean
+    campusId?: boolean
+    teacherId?: boolean
+    subjectId?: boolean
+    semesterId?: boolean
+    sectionId?: boolean
+  }
+
+  export type TimetableEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "weekday" | "startTime" | "endTime" | "room" | "campusId" | "teacherId" | "subjectId" | "semesterId" | "sectionId", ExtArgs["result"]["timetableEntry"]>
+  export type TimetableEntryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campus?: boolean | CampusDefaultArgs<ExtArgs>
+    teacher?: boolean | TeacherDefaultArgs<ExtArgs>
+    subject?: boolean | SubjectDefaultArgs<ExtArgs>
+    semester?: boolean | SemesterDefaultArgs<ExtArgs>
+    section?: boolean | SectionDefaultArgs<ExtArgs>
+  }
+  export type TimetableEntryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campus?: boolean | CampusDefaultArgs<ExtArgs>
+    teacher?: boolean | TeacherDefaultArgs<ExtArgs>
+    subject?: boolean | SubjectDefaultArgs<ExtArgs>
+    semester?: boolean | SemesterDefaultArgs<ExtArgs>
+    section?: boolean | SectionDefaultArgs<ExtArgs>
+  }
+  export type TimetableEntryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campus?: boolean | CampusDefaultArgs<ExtArgs>
+    teacher?: boolean | TeacherDefaultArgs<ExtArgs>
+    subject?: boolean | SubjectDefaultArgs<ExtArgs>
+    semester?: boolean | SemesterDefaultArgs<ExtArgs>
+    section?: boolean | SectionDefaultArgs<ExtArgs>
+  }
+
+  export type $TimetableEntryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TimetableEntry"
+    objects: {
+      campus: Prisma.$CampusPayload<ExtArgs>
+      teacher: Prisma.$TeacherPayload<ExtArgs>
+      subject: Prisma.$SubjectPayload<ExtArgs>
+      semester: Prisma.$SemesterPayload<ExtArgs>
+      section: Prisma.$SectionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      weekday: $Enums.Weekday
+      startTime: Date
+      endTime: Date
+      room: string | null
+      campusId: string
+      teacherId: string
+      subjectId: string
+      semesterId: string
+      sectionId: string
+    }, ExtArgs["result"]["timetableEntry"]>
+    composites: {}
+  }
+
+  type TimetableEntryGetPayload<S extends boolean | null | undefined | TimetableEntryDefaultArgs> = $Result.GetResult<Prisma.$TimetableEntryPayload, S>
+
+  type TimetableEntryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TimetableEntryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TimetableEntryCountAggregateInputType | true
+    }
+
+  export interface TimetableEntryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TimetableEntry'], meta: { name: 'TimetableEntry' } }
+    /**
+     * Find zero or one TimetableEntry that matches the filter.
+     * @param {TimetableEntryFindUniqueArgs} args - Arguments to find a TimetableEntry
+     * @example
+     * // Get one TimetableEntry
+     * const timetableEntry = await prisma.timetableEntry.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TimetableEntryFindUniqueArgs>(args: SelectSubset<T, TimetableEntryFindUniqueArgs<ExtArgs>>): Prisma__TimetableEntryClient<$Result.GetResult<Prisma.$TimetableEntryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TimetableEntry that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TimetableEntryFindUniqueOrThrowArgs} args - Arguments to find a TimetableEntry
+     * @example
+     * // Get one TimetableEntry
+     * const timetableEntry = await prisma.timetableEntry.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TimetableEntryFindUniqueOrThrowArgs>(args: SelectSubset<T, TimetableEntryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TimetableEntryClient<$Result.GetResult<Prisma.$TimetableEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TimetableEntry that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TimetableEntryFindFirstArgs} args - Arguments to find a TimetableEntry
+     * @example
+     * // Get one TimetableEntry
+     * const timetableEntry = await prisma.timetableEntry.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TimetableEntryFindFirstArgs>(args?: SelectSubset<T, TimetableEntryFindFirstArgs<ExtArgs>>): Prisma__TimetableEntryClient<$Result.GetResult<Prisma.$TimetableEntryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TimetableEntry that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TimetableEntryFindFirstOrThrowArgs} args - Arguments to find a TimetableEntry
+     * @example
+     * // Get one TimetableEntry
+     * const timetableEntry = await prisma.timetableEntry.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TimetableEntryFindFirstOrThrowArgs>(args?: SelectSubset<T, TimetableEntryFindFirstOrThrowArgs<ExtArgs>>): Prisma__TimetableEntryClient<$Result.GetResult<Prisma.$TimetableEntryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TimetableEntries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TimetableEntryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TimetableEntries
+     * const timetableEntries = await prisma.timetableEntry.findMany()
+     * 
+     * // Get first 10 TimetableEntries
+     * const timetableEntries = await prisma.timetableEntry.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const timetableEntryWithIdOnly = await prisma.timetableEntry.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TimetableEntryFindManyArgs>(args?: SelectSubset<T, TimetableEntryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TimetableEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TimetableEntry.
+     * @param {TimetableEntryCreateArgs} args - Arguments to create a TimetableEntry.
+     * @example
+     * // Create one TimetableEntry
+     * const TimetableEntry = await prisma.timetableEntry.create({
+     *   data: {
+     *     // ... data to create a TimetableEntry
+     *   }
+     * })
+     * 
+     */
+    create<T extends TimetableEntryCreateArgs>(args: SelectSubset<T, TimetableEntryCreateArgs<ExtArgs>>): Prisma__TimetableEntryClient<$Result.GetResult<Prisma.$TimetableEntryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TimetableEntries.
+     * @param {TimetableEntryCreateManyArgs} args - Arguments to create many TimetableEntries.
+     * @example
+     * // Create many TimetableEntries
+     * const timetableEntry = await prisma.timetableEntry.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TimetableEntryCreateManyArgs>(args?: SelectSubset<T, TimetableEntryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TimetableEntries and returns the data saved in the database.
+     * @param {TimetableEntryCreateManyAndReturnArgs} args - Arguments to create many TimetableEntries.
+     * @example
+     * // Create many TimetableEntries
+     * const timetableEntry = await prisma.timetableEntry.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TimetableEntries and only return the `id`
+     * const timetableEntryWithIdOnly = await prisma.timetableEntry.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TimetableEntryCreateManyAndReturnArgs>(args?: SelectSubset<T, TimetableEntryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TimetableEntryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TimetableEntry.
+     * @param {TimetableEntryDeleteArgs} args - Arguments to delete one TimetableEntry.
+     * @example
+     * // Delete one TimetableEntry
+     * const TimetableEntry = await prisma.timetableEntry.delete({
+     *   where: {
+     *     // ... filter to delete one TimetableEntry
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TimetableEntryDeleteArgs>(args: SelectSubset<T, TimetableEntryDeleteArgs<ExtArgs>>): Prisma__TimetableEntryClient<$Result.GetResult<Prisma.$TimetableEntryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TimetableEntry.
+     * @param {TimetableEntryUpdateArgs} args - Arguments to update one TimetableEntry.
+     * @example
+     * // Update one TimetableEntry
+     * const timetableEntry = await prisma.timetableEntry.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TimetableEntryUpdateArgs>(args: SelectSubset<T, TimetableEntryUpdateArgs<ExtArgs>>): Prisma__TimetableEntryClient<$Result.GetResult<Prisma.$TimetableEntryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TimetableEntries.
+     * @param {TimetableEntryDeleteManyArgs} args - Arguments to filter TimetableEntries to delete.
+     * @example
+     * // Delete a few TimetableEntries
+     * const { count } = await prisma.timetableEntry.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TimetableEntryDeleteManyArgs>(args?: SelectSubset<T, TimetableEntryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TimetableEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TimetableEntryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TimetableEntries
+     * const timetableEntry = await prisma.timetableEntry.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TimetableEntryUpdateManyArgs>(args: SelectSubset<T, TimetableEntryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TimetableEntries and returns the data updated in the database.
+     * @param {TimetableEntryUpdateManyAndReturnArgs} args - Arguments to update many TimetableEntries.
+     * @example
+     * // Update many TimetableEntries
+     * const timetableEntry = await prisma.timetableEntry.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TimetableEntries and only return the `id`
+     * const timetableEntryWithIdOnly = await prisma.timetableEntry.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TimetableEntryUpdateManyAndReturnArgs>(args: SelectSubset<T, TimetableEntryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TimetableEntryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TimetableEntry.
+     * @param {TimetableEntryUpsertArgs} args - Arguments to update or create a TimetableEntry.
+     * @example
+     * // Update or create a TimetableEntry
+     * const timetableEntry = await prisma.timetableEntry.upsert({
+     *   create: {
+     *     // ... data to create a TimetableEntry
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TimetableEntry we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TimetableEntryUpsertArgs>(args: SelectSubset<T, TimetableEntryUpsertArgs<ExtArgs>>): Prisma__TimetableEntryClient<$Result.GetResult<Prisma.$TimetableEntryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TimetableEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TimetableEntryCountArgs} args - Arguments to filter TimetableEntries to count.
+     * @example
+     * // Count the number of TimetableEntries
+     * const count = await prisma.timetableEntry.count({
+     *   where: {
+     *     // ... the filter for the TimetableEntries we want to count
+     *   }
+     * })
+    **/
+    count<T extends TimetableEntryCountArgs>(
+      args?: Subset<T, TimetableEntryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TimetableEntryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TimetableEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TimetableEntryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TimetableEntryAggregateArgs>(args: Subset<T, TimetableEntryAggregateArgs>): Prisma.PrismaPromise<GetTimetableEntryAggregateType<T>>
+
+    /**
+     * Group by TimetableEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TimetableEntryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TimetableEntryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TimetableEntryGroupByArgs['orderBy'] }
+        : { orderBy?: TimetableEntryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TimetableEntryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTimetableEntryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TimetableEntry model
+   */
+  readonly fields: TimetableEntryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TimetableEntry.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TimetableEntryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    campus<T extends CampusDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CampusDefaultArgs<ExtArgs>>): Prisma__CampusClient<$Result.GetResult<Prisma.$CampusPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    teacher<T extends TeacherDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TeacherDefaultArgs<ExtArgs>>): Prisma__TeacherClient<$Result.GetResult<Prisma.$TeacherPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    subject<T extends SubjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubjectDefaultArgs<ExtArgs>>): Prisma__SubjectClient<$Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    semester<T extends SemesterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SemesterDefaultArgs<ExtArgs>>): Prisma__SemesterClient<$Result.GetResult<Prisma.$SemesterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    section<T extends SectionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SectionDefaultArgs<ExtArgs>>): Prisma__SectionClient<$Result.GetResult<Prisma.$SectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TimetableEntry model
+   */
+  interface TimetableEntryFieldRefs {
+    readonly id: FieldRef<"TimetableEntry", 'String'>
+    readonly weekday: FieldRef<"TimetableEntry", 'Weekday'>
+    readonly startTime: FieldRef<"TimetableEntry", 'DateTime'>
+    readonly endTime: FieldRef<"TimetableEntry", 'DateTime'>
+    readonly room: FieldRef<"TimetableEntry", 'String'>
+    readonly campusId: FieldRef<"TimetableEntry", 'String'>
+    readonly teacherId: FieldRef<"TimetableEntry", 'String'>
+    readonly subjectId: FieldRef<"TimetableEntry", 'String'>
+    readonly semesterId: FieldRef<"TimetableEntry", 'String'>
+    readonly sectionId: FieldRef<"TimetableEntry", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TimetableEntry findUnique
+   */
+  export type TimetableEntryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TimetableEntry
+     */
+    select?: TimetableEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TimetableEntry
+     */
+    omit?: TimetableEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TimetableEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which TimetableEntry to fetch.
+     */
+    where: TimetableEntryWhereUniqueInput
+  }
+
+  /**
+   * TimetableEntry findUniqueOrThrow
+   */
+  export type TimetableEntryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TimetableEntry
+     */
+    select?: TimetableEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TimetableEntry
+     */
+    omit?: TimetableEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TimetableEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which TimetableEntry to fetch.
+     */
+    where: TimetableEntryWhereUniqueInput
+  }
+
+  /**
+   * TimetableEntry findFirst
+   */
+  export type TimetableEntryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TimetableEntry
+     */
+    select?: TimetableEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TimetableEntry
+     */
+    omit?: TimetableEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TimetableEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which TimetableEntry to fetch.
+     */
+    where?: TimetableEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TimetableEntries to fetch.
+     */
+    orderBy?: TimetableEntryOrderByWithRelationInput | TimetableEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TimetableEntries.
+     */
+    cursor?: TimetableEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TimetableEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TimetableEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TimetableEntries.
+     */
+    distinct?: TimetableEntryScalarFieldEnum | TimetableEntryScalarFieldEnum[]
+  }
+
+  /**
+   * TimetableEntry findFirstOrThrow
+   */
+  export type TimetableEntryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TimetableEntry
+     */
+    select?: TimetableEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TimetableEntry
+     */
+    omit?: TimetableEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TimetableEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which TimetableEntry to fetch.
+     */
+    where?: TimetableEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TimetableEntries to fetch.
+     */
+    orderBy?: TimetableEntryOrderByWithRelationInput | TimetableEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TimetableEntries.
+     */
+    cursor?: TimetableEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TimetableEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TimetableEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TimetableEntries.
+     */
+    distinct?: TimetableEntryScalarFieldEnum | TimetableEntryScalarFieldEnum[]
+  }
+
+  /**
+   * TimetableEntry findMany
+   */
+  export type TimetableEntryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TimetableEntry
+     */
+    select?: TimetableEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TimetableEntry
+     */
+    omit?: TimetableEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TimetableEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which TimetableEntries to fetch.
+     */
+    where?: TimetableEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TimetableEntries to fetch.
+     */
+    orderBy?: TimetableEntryOrderByWithRelationInput | TimetableEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TimetableEntries.
+     */
+    cursor?: TimetableEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TimetableEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TimetableEntries.
+     */
+    skip?: number
+    distinct?: TimetableEntryScalarFieldEnum | TimetableEntryScalarFieldEnum[]
+  }
+
+  /**
+   * TimetableEntry create
+   */
+  export type TimetableEntryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TimetableEntry
+     */
+    select?: TimetableEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TimetableEntry
+     */
+    omit?: TimetableEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TimetableEntryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TimetableEntry.
+     */
+    data: XOR<TimetableEntryCreateInput, TimetableEntryUncheckedCreateInput>
+  }
+
+  /**
+   * TimetableEntry createMany
+   */
+  export type TimetableEntryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TimetableEntries.
+     */
+    data: TimetableEntryCreateManyInput | TimetableEntryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TimetableEntry createManyAndReturn
+   */
+  export type TimetableEntryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TimetableEntry
+     */
+    select?: TimetableEntrySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TimetableEntry
+     */
+    omit?: TimetableEntryOmit<ExtArgs> | null
+    /**
+     * The data used to create many TimetableEntries.
+     */
+    data: TimetableEntryCreateManyInput | TimetableEntryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TimetableEntryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TimetableEntry update
+   */
+  export type TimetableEntryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TimetableEntry
+     */
+    select?: TimetableEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TimetableEntry
+     */
+    omit?: TimetableEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TimetableEntryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TimetableEntry.
+     */
+    data: XOR<TimetableEntryUpdateInput, TimetableEntryUncheckedUpdateInput>
+    /**
+     * Choose, which TimetableEntry to update.
+     */
+    where: TimetableEntryWhereUniqueInput
+  }
+
+  /**
+   * TimetableEntry updateMany
+   */
+  export type TimetableEntryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TimetableEntries.
+     */
+    data: XOR<TimetableEntryUpdateManyMutationInput, TimetableEntryUncheckedUpdateManyInput>
+    /**
+     * Filter which TimetableEntries to update
+     */
+    where?: TimetableEntryWhereInput
+    /**
+     * Limit how many TimetableEntries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TimetableEntry updateManyAndReturn
+   */
+  export type TimetableEntryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TimetableEntry
+     */
+    select?: TimetableEntrySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TimetableEntry
+     */
+    omit?: TimetableEntryOmit<ExtArgs> | null
+    /**
+     * The data used to update TimetableEntries.
+     */
+    data: XOR<TimetableEntryUpdateManyMutationInput, TimetableEntryUncheckedUpdateManyInput>
+    /**
+     * Filter which TimetableEntries to update
+     */
+    where?: TimetableEntryWhereInput
+    /**
+     * Limit how many TimetableEntries to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TimetableEntryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TimetableEntry upsert
+   */
+  export type TimetableEntryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TimetableEntry
+     */
+    select?: TimetableEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TimetableEntry
+     */
+    omit?: TimetableEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TimetableEntryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TimetableEntry to update in case it exists.
+     */
+    where: TimetableEntryWhereUniqueInput
+    /**
+     * In case the TimetableEntry found by the `where` argument doesn't exist, create a new TimetableEntry with this data.
+     */
+    create: XOR<TimetableEntryCreateInput, TimetableEntryUncheckedCreateInput>
+    /**
+     * In case the TimetableEntry was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TimetableEntryUpdateInput, TimetableEntryUncheckedUpdateInput>
+  }
+
+  /**
+   * TimetableEntry delete
+   */
+  export type TimetableEntryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TimetableEntry
+     */
+    select?: TimetableEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TimetableEntry
+     */
+    omit?: TimetableEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TimetableEntryInclude<ExtArgs> | null
+    /**
+     * Filter which TimetableEntry to delete.
+     */
+    where: TimetableEntryWhereUniqueInput
+  }
+
+  /**
+   * TimetableEntry deleteMany
+   */
+  export type TimetableEntryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TimetableEntries to delete
+     */
+    where?: TimetableEntryWhereInput
+    /**
+     * Limit how many TimetableEntries to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TimetableEntry without action
+   */
+  export type TimetableEntryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TimetableEntry
+     */
+    select?: TimetableEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TimetableEntry
+     */
+    omit?: TimetableEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TimetableEntryInclude<ExtArgs> | null
   }
 
 
@@ -16403,6 +17910,7 @@ export namespace Prisma {
     used: boolean | null
     latitude: number | null
     longitude: number | null
+    mode: $Enums.AttendanceMode | null
   }
 
   export type AttendanceTokenMaxAggregateOutputType = {
@@ -16416,6 +17924,7 @@ export namespace Prisma {
     used: boolean | null
     latitude: number | null
     longitude: number | null
+    mode: $Enums.AttendanceMode | null
   }
 
   export type AttendanceTokenCountAggregateOutputType = {
@@ -16429,6 +17938,7 @@ export namespace Prisma {
     used: number
     latitude: number
     longitude: number
+    mode: number
     _all: number
   }
 
@@ -16454,6 +17964,7 @@ export namespace Prisma {
     used?: true
     latitude?: true
     longitude?: true
+    mode?: true
   }
 
   export type AttendanceTokenMaxAggregateInputType = {
@@ -16467,6 +17978,7 @@ export namespace Prisma {
     used?: true
     latitude?: true
     longitude?: true
+    mode?: true
   }
 
   export type AttendanceTokenCountAggregateInputType = {
@@ -16480,6 +17992,7 @@ export namespace Prisma {
     used?: true
     latitude?: true
     longitude?: true
+    mode?: true
     _all?: true
   }
 
@@ -16580,6 +18093,7 @@ export namespace Prisma {
     used: boolean
     latitude: number | null
     longitude: number | null
+    mode: $Enums.AttendanceMode
     _count: AttendanceTokenCountAggregateOutputType | null
     _avg: AttendanceTokenAvgAggregateOutputType | null
     _sum: AttendanceTokenSumAggregateOutputType | null
@@ -16612,8 +18126,10 @@ export namespace Prisma {
     used?: boolean
     latitude?: boolean
     longitude?: boolean
+    mode?: boolean
     student?: boolean | AttendanceToken$studentArgs<ExtArgs>
     subject?: boolean | AttendanceToken$subjectArgs<ExtArgs>
+    teacher?: boolean | TeacherDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["attendanceToken"]>
 
   export type AttendanceTokenSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -16627,8 +18143,10 @@ export namespace Prisma {
     used?: boolean
     latitude?: boolean
     longitude?: boolean
+    mode?: boolean
     student?: boolean | AttendanceToken$studentArgs<ExtArgs>
     subject?: boolean | AttendanceToken$subjectArgs<ExtArgs>
+    teacher?: boolean | TeacherDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["attendanceToken"]>
 
   export type AttendanceTokenSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -16642,8 +18160,10 @@ export namespace Prisma {
     used?: boolean
     latitude?: boolean
     longitude?: boolean
+    mode?: boolean
     student?: boolean | AttendanceToken$studentArgs<ExtArgs>
     subject?: boolean | AttendanceToken$subjectArgs<ExtArgs>
+    teacher?: boolean | TeacherDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["attendanceToken"]>
 
   export type AttendanceTokenSelectScalar = {
@@ -16657,20 +18177,24 @@ export namespace Prisma {
     used?: boolean
     latitude?: boolean
     longitude?: boolean
+    mode?: boolean
   }
 
-  export type AttendanceTokenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "token" | "studentId" | "subjectId" | "professorId" | "issuedAt" | "expiresAt" | "used" | "latitude" | "longitude", ExtArgs["result"]["attendanceToken"]>
+  export type AttendanceTokenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "token" | "studentId" | "subjectId" | "professorId" | "issuedAt" | "expiresAt" | "used" | "latitude" | "longitude" | "mode", ExtArgs["result"]["attendanceToken"]>
   export type AttendanceTokenInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | AttendanceToken$studentArgs<ExtArgs>
     subject?: boolean | AttendanceToken$subjectArgs<ExtArgs>
+    teacher?: boolean | TeacherDefaultArgs<ExtArgs>
   }
   export type AttendanceTokenIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | AttendanceToken$studentArgs<ExtArgs>
     subject?: boolean | AttendanceToken$subjectArgs<ExtArgs>
+    teacher?: boolean | TeacherDefaultArgs<ExtArgs>
   }
   export type AttendanceTokenIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | AttendanceToken$studentArgs<ExtArgs>
     subject?: boolean | AttendanceToken$subjectArgs<ExtArgs>
+    teacher?: boolean | TeacherDefaultArgs<ExtArgs>
   }
 
   export type $AttendanceTokenPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16678,6 +18202,7 @@ export namespace Prisma {
     objects: {
       student: Prisma.$StudentPayload<ExtArgs> | null
       subject: Prisma.$SubjectPayload<ExtArgs> | null
+      teacher: Prisma.$TeacherPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -16690,6 +18215,7 @@ export namespace Prisma {
       used: boolean
       latitude: number | null
       longitude: number | null
+      mode: $Enums.AttendanceMode
     }, ExtArgs["result"]["attendanceToken"]>
     composites: {}
   }
@@ -17086,6 +18612,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     student<T extends AttendanceToken$studentArgs<ExtArgs> = {}>(args?: Subset<T, AttendanceToken$studentArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     subject<T extends AttendanceToken$subjectArgs<ExtArgs> = {}>(args?: Subset<T, AttendanceToken$subjectArgs<ExtArgs>>): Prisma__SubjectClient<$Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    teacher<T extends TeacherDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TeacherDefaultArgs<ExtArgs>>): Prisma__TeacherClient<$Result.GetResult<Prisma.$TeacherPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -17125,6 +18652,7 @@ export namespace Prisma {
     readonly used: FieldRef<"AttendanceToken", 'Boolean'>
     readonly latitude: FieldRef<"AttendanceToken", 'Float'>
     readonly longitude: FieldRef<"AttendanceToken", 'Float'>
+    readonly mode: FieldRef<"AttendanceToken", 'AttendanceMode'>
   }
     
 
@@ -34449,25 +35977,43 @@ export namespace Prisma {
 
   export const ClassSessionScalarFieldEnum: {
     id: 'id',
-    subject: 'subject',
+    date: 'date',
+    startTime: 'startTime',
+    endTime: 'endTime',
+    weekday: 'weekday',
+    room: 'room',
+    status: 'status',
+    attendanceWindowEndsAt: 'attendanceWindowEndsAt',
+    attendanceMarked: 'attendanceMarked',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
     subjectId: 'subjectId',
+    subject: 'subject',
     campusId: 'campusId',
     semester: 'semester',
     section: 'section',
-    weekday: 'weekday',
-    room: 'room',
-    startTime: 'startTime',
-    endTime: 'endTime',
     teacherId: 'teacherId',
     semesterId: 'semesterId',
-    sectionId: 'sectionId',
-    status: 'status',
-    attendanceMarked: 'attendanceMarked',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    sectionId: 'sectionId'
   };
 
   export type ClassSessionScalarFieldEnum = (typeof ClassSessionScalarFieldEnum)[keyof typeof ClassSessionScalarFieldEnum]
+
+
+  export const TimetableEntryScalarFieldEnum: {
+    id: 'id',
+    weekday: 'weekday',
+    startTime: 'startTime',
+    endTime: 'endTime',
+    room: 'room',
+    campusId: 'campusId',
+    teacherId: 'teacherId',
+    subjectId: 'subjectId',
+    semesterId: 'semesterId',
+    sectionId: 'sectionId'
+  };
+
+  export type TimetableEntryScalarFieldEnum = (typeof TimetableEntryScalarFieldEnum)[keyof typeof TimetableEntryScalarFieldEnum]
 
 
   export const AttendanceScalarFieldEnum: {
@@ -34496,7 +36042,8 @@ export namespace Prisma {
     expiresAt: 'expiresAt',
     used: 'used',
     latitude: 'latitude',
-    longitude: 'longitude'
+    longitude: 'longitude',
+    mode: 'mode'
   };
 
   export type AttendanceTokenScalarFieldEnum = (typeof AttendanceTokenScalarFieldEnum)[keyof typeof AttendanceTokenScalarFieldEnum]
@@ -34868,6 +36415,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'AttendanceMode'
+   */
+  export type EnumAttendanceModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AttendanceMode'>
+    
+
+
+  /**
+   * Reference to a field of type 'AttendanceMode[]'
+   */
+  export type ListEnumAttendanceModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AttendanceMode[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Json'
    */
   export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -35032,8 +36593,10 @@ export namespace Prisma {
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     teacherSubjects?: TeacherSubjectListRelationFilter
     classSessions?: ClassSessionListRelationFilter
+    attendanceTokens?: AttendanceTokenListRelationFilter
     announcements?: AnnouncementListRelationFilter
     assignments?: AssignmentListRelationFilter
+    TimetableEntry?: TimetableEntryListRelationFilter
   }
 
   export type TeacherOrderByWithRelationInput = {
@@ -35046,8 +36609,10 @@ export namespace Prisma {
     user?: UserOrderByWithRelationInput
     teacherSubjects?: TeacherSubjectOrderByRelationAggregateInput
     classSessions?: ClassSessionOrderByRelationAggregateInput
+    attendanceTokens?: AttendanceTokenOrderByRelationAggregateInput
     announcements?: AnnouncementOrderByRelationAggregateInput
     assignments?: AssignmentOrderByRelationAggregateInput
+    TimetableEntry?: TimetableEntryOrderByRelationAggregateInput
   }
 
   export type TeacherWhereUniqueInput = Prisma.AtLeast<{
@@ -35063,8 +36628,10 @@ export namespace Prisma {
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     teacherSubjects?: TeacherSubjectListRelationFilter
     classSessions?: ClassSessionListRelationFilter
+    attendanceTokens?: AttendanceTokenListRelationFilter
     announcements?: AnnouncementListRelationFilter
     assignments?: AssignmentListRelationFilter
+    TimetableEntry?: TimetableEntryListRelationFilter
   }, "id" | "userId">
 
   export type TeacherOrderByWithAggregationInput = {
@@ -35187,6 +36754,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectListRelationFilter
     classSessions?: ClassSessionListRelationFilter
     students?: StudentListRelationFilter
+    TimetableEntry?: TimetableEntryListRelationFilter
   }
 
   export type SemesterOrderByWithRelationInput = {
@@ -35199,6 +36767,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectOrderByRelationAggregateInput
     classSessions?: ClassSessionOrderByRelationAggregateInput
     students?: StudentOrderByRelationAggregateInput
+    TimetableEntry?: TimetableEntryOrderByRelationAggregateInput
   }
 
   export type SemesterWhereUniqueInput = Prisma.AtLeast<{
@@ -35215,6 +36784,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectListRelationFilter
     classSessions?: ClassSessionListRelationFilter
     students?: StudentListRelationFilter
+    TimetableEntry?: TimetableEntryListRelationFilter
   }, "id" | "name" | "name_campusId">
 
   export type SemesterOrderByWithAggregationInput = {
@@ -35253,6 +36823,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectListRelationFilter
     classSessions?: ClassSessionListRelationFilter
     students?: StudentListRelationFilter
+    TimetableEntry?: TimetableEntryListRelationFilter
   }
 
   export type SectionOrderByWithRelationInput = {
@@ -35264,6 +36835,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectOrderByRelationAggregateInput
     classSessions?: ClassSessionOrderByRelationAggregateInput
     students?: StudentOrderByRelationAggregateInput
+    TimetableEntry?: TimetableEntryOrderByRelationAggregateInput
   }
 
   export type SectionWhereUniqueInput = Prisma.AtLeast<{
@@ -35279,6 +36851,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectListRelationFilter
     classSessions?: ClassSessionListRelationFilter
     students?: StudentListRelationFilter
+    TimetableEntry?: TimetableEntryListRelationFilter
   }, "id" | "name" | "name_campusId">
 
   export type SectionOrderByWithAggregationInput = {
@@ -35319,6 +36892,7 @@ export namespace Prisma {
     resources?: ResourceListRelationFilter
     exams?: ExamListRelationFilter
     attendanceTokens?: AttendanceTokenListRelationFilter
+    TimetableEntry?: TimetableEntryListRelationFilter
   }
 
   export type SubjectOrderByWithRelationInput = {
@@ -35336,6 +36910,7 @@ export namespace Prisma {
     resources?: ResourceOrderByRelationAggregateInput
     exams?: ExamOrderByRelationAggregateInput
     attendanceTokens?: AttendanceTokenOrderByRelationAggregateInput
+    TimetableEntry?: TimetableEntryOrderByRelationAggregateInput
   }
 
   export type SubjectWhereUniqueInput = Prisma.AtLeast<{
@@ -35357,6 +36932,7 @@ export namespace Prisma {
     resources?: ResourceListRelationFilter
     exams?: ExamListRelationFilter
     attendanceTokens?: AttendanceTokenListRelationFilter
+    TimetableEntry?: TimetableEntryListRelationFilter
   }, "id" | "code" | "code_campusId">
 
   export type SubjectOrderByWithAggregationInput = {
@@ -35470,6 +37046,7 @@ export namespace Prisma {
     sections?: SectionListRelationFilter
     subjects?: SubjectListRelationFilter
     events?: EventListRelationFilter
+    TimetableEntry?: TimetableEntryListRelationFilter
   }
 
   export type CampusOrderByWithRelationInput = {
@@ -35489,6 +37066,7 @@ export namespace Prisma {
     sections?: SectionOrderByRelationAggregateInput
     subjects?: SubjectOrderByRelationAggregateInput
     events?: EventOrderByRelationAggregateInput
+    TimetableEntry?: TimetableEntryOrderByRelationAggregateInput
   }
 
   export type CampusWhereUniqueInput = Prisma.AtLeast<{
@@ -35511,6 +37089,7 @@ export namespace Prisma {
     sections?: SectionListRelationFilter
     subjects?: SubjectListRelationFilter
     events?: EventListRelationFilter
+    TimetableEntry?: TimetableEntryListRelationFilter
   }, "id" | "name" | "slug">
 
   export type CampusOrderByWithAggregationInput = {
@@ -35552,22 +37131,24 @@ export namespace Prisma {
     OR?: ClassSessionWhereInput[]
     NOT?: ClassSessionWhereInput | ClassSessionWhereInput[]
     id?: StringFilter<"ClassSession"> | string
-    subject?: StringNullableFilter<"ClassSession"> | string | null
-    subjectId?: StringNullableFilter<"ClassSession"> | string | null
-    campusId?: StringNullableFilter<"ClassSession"> | string | null
-    semester?: IntFilter<"ClassSession"> | number
-    section?: StringFilter<"ClassSession"> | string
-    weekday?: EnumWeekdayFilter<"ClassSession"> | $Enums.Weekday
-    room?: StringNullableFilter<"ClassSession"> | string | null
+    date?: DateTimeFilter<"ClassSession"> | Date | string
     startTime?: DateTimeFilter<"ClassSession"> | Date | string
     endTime?: DateTimeFilter<"ClassSession"> | Date | string
-    teacherId?: StringFilter<"ClassSession"> | string
-    semesterId?: StringNullableFilter<"ClassSession"> | string | null
-    sectionId?: StringNullableFilter<"ClassSession"> | string | null
+    weekday?: EnumWeekdayFilter<"ClassSession"> | $Enums.Weekday
+    room?: StringNullableFilter<"ClassSession"> | string | null
     status?: EnumSessionStatusFilter<"ClassSession"> | $Enums.SessionStatus
+    attendanceWindowEndsAt?: DateTimeNullableFilter<"ClassSession"> | Date | string | null
     attendanceMarked?: BoolFilter<"ClassSession"> | boolean
     createdAt?: DateTimeFilter<"ClassSession"> | Date | string
     updatedAt?: DateTimeFilter<"ClassSession"> | Date | string
+    subjectId?: StringNullableFilter<"ClassSession"> | string | null
+    subject?: StringNullableFilter<"ClassSession"> | string | null
+    campusId?: StringNullableFilter<"ClassSession"> | string | null
+    semester?: IntFilter<"ClassSession"> | number
+    section?: StringFilter<"ClassSession"> | string
+    teacherId?: StringFilter<"ClassSession"> | string
+    semesterId?: StringNullableFilter<"ClassSession"> | string | null
+    sectionId?: StringNullableFilter<"ClassSession"> | string | null
     subjectRel?: XOR<SubjectNullableScalarRelationFilter, SubjectWhereInput> | null
     campus?: XOR<CampusNullableScalarRelationFilter, CampusWhereInput> | null
     teacher?: XOR<TeacherScalarRelationFilter, TeacherWhereInput>
@@ -35578,22 +37159,24 @@ export namespace Prisma {
 
   export type ClassSessionOrderByWithRelationInput = {
     id?: SortOrder
-    subject?: SortOrderInput | SortOrder
-    subjectId?: SortOrderInput | SortOrder
-    campusId?: SortOrderInput | SortOrder
-    semester?: SortOrder
-    section?: SortOrder
-    weekday?: SortOrder
-    room?: SortOrderInput | SortOrder
+    date?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
-    teacherId?: SortOrder
-    semesterId?: SortOrderInput | SortOrder
-    sectionId?: SortOrderInput | SortOrder
+    weekday?: SortOrder
+    room?: SortOrderInput | SortOrder
     status?: SortOrder
+    attendanceWindowEndsAt?: SortOrderInput | SortOrder
     attendanceMarked?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    subjectId?: SortOrderInput | SortOrder
+    subject?: SortOrderInput | SortOrder
+    campusId?: SortOrderInput | SortOrder
+    semester?: SortOrder
+    section?: SortOrder
+    teacherId?: SortOrder
+    semesterId?: SortOrderInput | SortOrder
+    sectionId?: SortOrderInput | SortOrder
     subjectRel?: SubjectOrderByWithRelationInput
     campus?: CampusOrderByWithRelationInput
     teacher?: TeacherOrderByWithRelationInput
@@ -35604,51 +37187,56 @@ export namespace Prisma {
 
   export type ClassSessionWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    teacherId_subjectId_sectionId_date?: ClassSessionTeacherIdSubjectIdSectionIdDateCompoundUniqueInput
     AND?: ClassSessionWhereInput | ClassSessionWhereInput[]
     OR?: ClassSessionWhereInput[]
     NOT?: ClassSessionWhereInput | ClassSessionWhereInput[]
-    subject?: StringNullableFilter<"ClassSession"> | string | null
-    subjectId?: StringNullableFilter<"ClassSession"> | string | null
-    campusId?: StringNullableFilter<"ClassSession"> | string | null
-    semester?: IntFilter<"ClassSession"> | number
-    section?: StringFilter<"ClassSession"> | string
-    weekday?: EnumWeekdayFilter<"ClassSession"> | $Enums.Weekday
-    room?: StringNullableFilter<"ClassSession"> | string | null
+    date?: DateTimeFilter<"ClassSession"> | Date | string
     startTime?: DateTimeFilter<"ClassSession"> | Date | string
     endTime?: DateTimeFilter<"ClassSession"> | Date | string
-    teacherId?: StringFilter<"ClassSession"> | string
-    semesterId?: StringNullableFilter<"ClassSession"> | string | null
-    sectionId?: StringNullableFilter<"ClassSession"> | string | null
+    weekday?: EnumWeekdayFilter<"ClassSession"> | $Enums.Weekday
+    room?: StringNullableFilter<"ClassSession"> | string | null
     status?: EnumSessionStatusFilter<"ClassSession"> | $Enums.SessionStatus
+    attendanceWindowEndsAt?: DateTimeNullableFilter<"ClassSession"> | Date | string | null
     attendanceMarked?: BoolFilter<"ClassSession"> | boolean
     createdAt?: DateTimeFilter<"ClassSession"> | Date | string
     updatedAt?: DateTimeFilter<"ClassSession"> | Date | string
+    subjectId?: StringNullableFilter<"ClassSession"> | string | null
+    subject?: StringNullableFilter<"ClassSession"> | string | null
+    campusId?: StringNullableFilter<"ClassSession"> | string | null
+    semester?: IntFilter<"ClassSession"> | number
+    section?: StringFilter<"ClassSession"> | string
+    teacherId?: StringFilter<"ClassSession"> | string
+    semesterId?: StringNullableFilter<"ClassSession"> | string | null
+    sectionId?: StringNullableFilter<"ClassSession"> | string | null
     subjectRel?: XOR<SubjectNullableScalarRelationFilter, SubjectWhereInput> | null
     campus?: XOR<CampusNullableScalarRelationFilter, CampusWhereInput> | null
     teacher?: XOR<TeacherScalarRelationFilter, TeacherWhereInput>
     semesterRel?: XOR<SemesterNullableScalarRelationFilter, SemesterWhereInput> | null
     sectionRel?: XOR<SectionNullableScalarRelationFilter, SectionWhereInput> | null
     attendances?: AttendanceListRelationFilter
-  }, "id">
+  }, "id" | "teacherId_subjectId_sectionId_date">
 
   export type ClassSessionOrderByWithAggregationInput = {
     id?: SortOrder
-    subject?: SortOrderInput | SortOrder
-    subjectId?: SortOrderInput | SortOrder
-    campusId?: SortOrderInput | SortOrder
-    semester?: SortOrder
-    section?: SortOrder
-    weekday?: SortOrder
-    room?: SortOrderInput | SortOrder
+    date?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
-    teacherId?: SortOrder
-    semesterId?: SortOrderInput | SortOrder
-    sectionId?: SortOrderInput | SortOrder
+    weekday?: SortOrder
+    room?: SortOrderInput | SortOrder
     status?: SortOrder
+    attendanceWindowEndsAt?: SortOrderInput | SortOrder
     attendanceMarked?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    subjectId?: SortOrderInput | SortOrder
+    subject?: SortOrderInput | SortOrder
+    campusId?: SortOrderInput | SortOrder
+    semester?: SortOrder
+    section?: SortOrder
+    teacherId?: SortOrder
+    semesterId?: SortOrderInput | SortOrder
+    sectionId?: SortOrderInput | SortOrder
     _count?: ClassSessionCountOrderByAggregateInput
     _avg?: ClassSessionAvgOrderByAggregateInput
     _max?: ClassSessionMaxOrderByAggregateInput
@@ -35661,22 +37249,117 @@ export namespace Prisma {
     OR?: ClassSessionScalarWhereWithAggregatesInput[]
     NOT?: ClassSessionScalarWhereWithAggregatesInput | ClassSessionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"ClassSession"> | string
-    subject?: StringNullableWithAggregatesFilter<"ClassSession"> | string | null
-    subjectId?: StringNullableWithAggregatesFilter<"ClassSession"> | string | null
-    campusId?: StringNullableWithAggregatesFilter<"ClassSession"> | string | null
-    semester?: IntWithAggregatesFilter<"ClassSession"> | number
-    section?: StringWithAggregatesFilter<"ClassSession"> | string
-    weekday?: EnumWeekdayWithAggregatesFilter<"ClassSession"> | $Enums.Weekday
-    room?: StringNullableWithAggregatesFilter<"ClassSession"> | string | null
+    date?: DateTimeWithAggregatesFilter<"ClassSession"> | Date | string
     startTime?: DateTimeWithAggregatesFilter<"ClassSession"> | Date | string
     endTime?: DateTimeWithAggregatesFilter<"ClassSession"> | Date | string
-    teacherId?: StringWithAggregatesFilter<"ClassSession"> | string
-    semesterId?: StringNullableWithAggregatesFilter<"ClassSession"> | string | null
-    sectionId?: StringNullableWithAggregatesFilter<"ClassSession"> | string | null
+    weekday?: EnumWeekdayWithAggregatesFilter<"ClassSession"> | $Enums.Weekday
+    room?: StringNullableWithAggregatesFilter<"ClassSession"> | string | null
     status?: EnumSessionStatusWithAggregatesFilter<"ClassSession"> | $Enums.SessionStatus
+    attendanceWindowEndsAt?: DateTimeNullableWithAggregatesFilter<"ClassSession"> | Date | string | null
     attendanceMarked?: BoolWithAggregatesFilter<"ClassSession"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"ClassSession"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ClassSession"> | Date | string
+    subjectId?: StringNullableWithAggregatesFilter<"ClassSession"> | string | null
+    subject?: StringNullableWithAggregatesFilter<"ClassSession"> | string | null
+    campusId?: StringNullableWithAggregatesFilter<"ClassSession"> | string | null
+    semester?: IntWithAggregatesFilter<"ClassSession"> | number
+    section?: StringWithAggregatesFilter<"ClassSession"> | string
+    teacherId?: StringWithAggregatesFilter<"ClassSession"> | string
+    semesterId?: StringNullableWithAggregatesFilter<"ClassSession"> | string | null
+    sectionId?: StringNullableWithAggregatesFilter<"ClassSession"> | string | null
+  }
+
+  export type TimetableEntryWhereInput = {
+    AND?: TimetableEntryWhereInput | TimetableEntryWhereInput[]
+    OR?: TimetableEntryWhereInput[]
+    NOT?: TimetableEntryWhereInput | TimetableEntryWhereInput[]
+    id?: StringFilter<"TimetableEntry"> | string
+    weekday?: EnumWeekdayFilter<"TimetableEntry"> | $Enums.Weekday
+    startTime?: DateTimeFilter<"TimetableEntry"> | Date | string
+    endTime?: DateTimeFilter<"TimetableEntry"> | Date | string
+    room?: StringNullableFilter<"TimetableEntry"> | string | null
+    campusId?: StringFilter<"TimetableEntry"> | string
+    teacherId?: StringFilter<"TimetableEntry"> | string
+    subjectId?: StringFilter<"TimetableEntry"> | string
+    semesterId?: StringFilter<"TimetableEntry"> | string
+    sectionId?: StringFilter<"TimetableEntry"> | string
+    campus?: XOR<CampusScalarRelationFilter, CampusWhereInput>
+    teacher?: XOR<TeacherScalarRelationFilter, TeacherWhereInput>
+    subject?: XOR<SubjectScalarRelationFilter, SubjectWhereInput>
+    semester?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
+    section?: XOR<SectionScalarRelationFilter, SectionWhereInput>
+  }
+
+  export type TimetableEntryOrderByWithRelationInput = {
+    id?: SortOrder
+    weekday?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    room?: SortOrderInput | SortOrder
+    campusId?: SortOrder
+    teacherId?: SortOrder
+    subjectId?: SortOrder
+    semesterId?: SortOrder
+    sectionId?: SortOrder
+    campus?: CampusOrderByWithRelationInput
+    teacher?: TeacherOrderByWithRelationInput
+    subject?: SubjectOrderByWithRelationInput
+    semester?: SemesterOrderByWithRelationInput
+    section?: SectionOrderByWithRelationInput
+  }
+
+  export type TimetableEntryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    teacherId_weekday_startTime?: TimetableEntryTeacherIdWeekdayStartTimeCompoundUniqueInput
+    AND?: TimetableEntryWhereInput | TimetableEntryWhereInput[]
+    OR?: TimetableEntryWhereInput[]
+    NOT?: TimetableEntryWhereInput | TimetableEntryWhereInput[]
+    weekday?: EnumWeekdayFilter<"TimetableEntry"> | $Enums.Weekday
+    startTime?: DateTimeFilter<"TimetableEntry"> | Date | string
+    endTime?: DateTimeFilter<"TimetableEntry"> | Date | string
+    room?: StringNullableFilter<"TimetableEntry"> | string | null
+    campusId?: StringFilter<"TimetableEntry"> | string
+    teacherId?: StringFilter<"TimetableEntry"> | string
+    subjectId?: StringFilter<"TimetableEntry"> | string
+    semesterId?: StringFilter<"TimetableEntry"> | string
+    sectionId?: StringFilter<"TimetableEntry"> | string
+    campus?: XOR<CampusScalarRelationFilter, CampusWhereInput>
+    teacher?: XOR<TeacherScalarRelationFilter, TeacherWhereInput>
+    subject?: XOR<SubjectScalarRelationFilter, SubjectWhereInput>
+    semester?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
+    section?: XOR<SectionScalarRelationFilter, SectionWhereInput>
+  }, "id" | "teacherId_weekday_startTime">
+
+  export type TimetableEntryOrderByWithAggregationInput = {
+    id?: SortOrder
+    weekday?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    room?: SortOrderInput | SortOrder
+    campusId?: SortOrder
+    teacherId?: SortOrder
+    subjectId?: SortOrder
+    semesterId?: SortOrder
+    sectionId?: SortOrder
+    _count?: TimetableEntryCountOrderByAggregateInput
+    _max?: TimetableEntryMaxOrderByAggregateInput
+    _min?: TimetableEntryMinOrderByAggregateInput
+  }
+
+  export type TimetableEntryScalarWhereWithAggregatesInput = {
+    AND?: TimetableEntryScalarWhereWithAggregatesInput | TimetableEntryScalarWhereWithAggregatesInput[]
+    OR?: TimetableEntryScalarWhereWithAggregatesInput[]
+    NOT?: TimetableEntryScalarWhereWithAggregatesInput | TimetableEntryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TimetableEntry"> | string
+    weekday?: EnumWeekdayWithAggregatesFilter<"TimetableEntry"> | $Enums.Weekday
+    startTime?: DateTimeWithAggregatesFilter<"TimetableEntry"> | Date | string
+    endTime?: DateTimeWithAggregatesFilter<"TimetableEntry"> | Date | string
+    room?: StringNullableWithAggregatesFilter<"TimetableEntry"> | string | null
+    campusId?: StringWithAggregatesFilter<"TimetableEntry"> | string
+    teacherId?: StringWithAggregatesFilter<"TimetableEntry"> | string
+    subjectId?: StringWithAggregatesFilter<"TimetableEntry"> | string
+    semesterId?: StringWithAggregatesFilter<"TimetableEntry"> | string
+    sectionId?: StringWithAggregatesFilter<"TimetableEntry"> | string
   }
 
   export type AttendanceWhereInput = {
@@ -35780,8 +37463,10 @@ export namespace Prisma {
     used?: BoolFilter<"AttendanceToken"> | boolean
     latitude?: FloatNullableFilter<"AttendanceToken"> | number | null
     longitude?: FloatNullableFilter<"AttendanceToken"> | number | null
+    mode?: EnumAttendanceModeFilter<"AttendanceToken"> | $Enums.AttendanceMode
     student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
     subject?: XOR<SubjectNullableScalarRelationFilter, SubjectWhereInput> | null
+    teacher?: XOR<TeacherScalarRelationFilter, TeacherWhereInput>
   }
 
   export type AttendanceTokenOrderByWithRelationInput = {
@@ -35795,8 +37480,10 @@ export namespace Prisma {
     used?: SortOrder
     latitude?: SortOrderInput | SortOrder
     longitude?: SortOrderInput | SortOrder
+    mode?: SortOrder
     student?: StudentOrderByWithRelationInput
     subject?: SubjectOrderByWithRelationInput
+    teacher?: TeacherOrderByWithRelationInput
   }
 
   export type AttendanceTokenWhereUniqueInput = Prisma.AtLeast<{
@@ -35813,8 +37500,10 @@ export namespace Prisma {
     used?: BoolFilter<"AttendanceToken"> | boolean
     latitude?: FloatNullableFilter<"AttendanceToken"> | number | null
     longitude?: FloatNullableFilter<"AttendanceToken"> | number | null
+    mode?: EnumAttendanceModeFilter<"AttendanceToken"> | $Enums.AttendanceMode
     student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
     subject?: XOR<SubjectNullableScalarRelationFilter, SubjectWhereInput> | null
+    teacher?: XOR<TeacherScalarRelationFilter, TeacherWhereInput>
   }, "id" | "token">
 
   export type AttendanceTokenOrderByWithAggregationInput = {
@@ -35828,6 +37517,7 @@ export namespace Prisma {
     used?: SortOrder
     latitude?: SortOrderInput | SortOrder
     longitude?: SortOrderInput | SortOrder
+    mode?: SortOrder
     _count?: AttendanceTokenCountOrderByAggregateInput
     _avg?: AttendanceTokenAvgOrderByAggregateInput
     _max?: AttendanceTokenMaxOrderByAggregateInput
@@ -35849,6 +37539,7 @@ export namespace Prisma {
     used?: BoolWithAggregatesFilter<"AttendanceToken"> | boolean
     latitude?: FloatNullableWithAggregatesFilter<"AttendanceToken"> | number | null
     longitude?: FloatNullableWithAggregatesFilter<"AttendanceToken"> | number | null
+    mode?: EnumAttendanceModeWithAggregatesFilter<"AttendanceToken"> | $Enums.AttendanceMode
   }
 
   export type SessionWhereInput = {
@@ -37066,8 +38757,10 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutTeacherProfileInput
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutTeacherInput
     classSessions?: ClassSessionCreateNestedManyWithoutTeacherInput
+    attendanceTokens?: AttendanceTokenCreateNestedManyWithoutTeacherInput
     announcements?: AnnouncementCreateNestedManyWithoutAuthorInput
     assignments?: AssignmentCreateNestedManyWithoutTeacherInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherUncheckedCreateInput = {
@@ -37079,8 +38772,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutTeacherInput
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutTeacherInput
+    attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutTeacherInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutTeacherInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherUpdateInput = {
@@ -37092,8 +38787,10 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutTeacherProfileNestedInput
     teacherSubjects?: TeacherSubjectUpdateManyWithoutTeacherNestedInput
     classSessions?: ClassSessionUpdateManyWithoutTeacherNestedInput
+    attendanceTokens?: AttendanceTokenUpdateManyWithoutTeacherNestedInput
     announcements?: AnnouncementUpdateManyWithoutAuthorNestedInput
     assignments?: AssignmentUpdateManyWithoutTeacherNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutTeacherNestedInput
   }
 
   export type TeacherUncheckedUpdateInput = {
@@ -37105,8 +38802,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutTeacherNestedInput
     classSessions?: ClassSessionUncheckedUpdateManyWithoutTeacherNestedInput
+    attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutTeacherNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutTeacherNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutTeacherNestedInput
   }
 
   export type TeacherCreateManyInput = {
@@ -37227,6 +38926,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutSemesterInput
     classSessions?: ClassSessionCreateNestedManyWithoutSemesterRelInput
     students?: StudentCreateNestedManyWithoutSemesterInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateInput = {
@@ -37238,6 +38938,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutSemesterInput
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSemesterRelInput
     students?: StudentUncheckedCreateNestedManyWithoutSemesterInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUpdateInput = {
@@ -37249,6 +38950,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUpdateManyWithoutSemesterNestedInput
     classSessions?: ClassSessionUpdateManyWithoutSemesterRelNestedInput
     students?: StudentUpdateManyWithoutSemesterNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateInput = {
@@ -37260,6 +38962,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutSemesterNestedInput
     classSessions?: ClassSessionUncheckedUpdateManyWithoutSemesterRelNestedInput
     students?: StudentUncheckedUpdateManyWithoutSemesterNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterCreateManyInput = {
@@ -37293,6 +38996,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutSectionInput
     classSessions?: ClassSessionCreateNestedManyWithoutSectionRelInput
     students?: StudentCreateNestedManyWithoutSectionInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSectionInput
   }
 
   export type SectionUncheckedCreateInput = {
@@ -37303,6 +39007,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutSectionInput
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSectionRelInput
     students?: StudentUncheckedCreateNestedManyWithoutSectionInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSectionInput
   }
 
   export type SectionUpdateInput = {
@@ -37313,6 +39018,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUpdateManyWithoutSectionNestedInput
     classSessions?: ClassSessionUpdateManyWithoutSectionRelNestedInput
     students?: StudentUpdateManyWithoutSectionNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSectionNestedInput
   }
 
   export type SectionUncheckedUpdateInput = {
@@ -37323,6 +39029,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutSectionNestedInput
     classSessions?: ClassSessionUncheckedUpdateManyWithoutSectionRelNestedInput
     students?: StudentUncheckedUpdateManyWithoutSectionNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSectionNestedInput
   }
 
   export type SectionCreateManyInput = {
@@ -37359,6 +39066,7 @@ export namespace Prisma {
     resources?: ResourceCreateNestedManyWithoutSubjectInput
     exams?: ExamCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutSubjectInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectUncheckedCreateInput = {
@@ -37375,6 +39083,7 @@ export namespace Prisma {
     resources?: ResourceUncheckedCreateNestedManyWithoutSubjectInput
     exams?: ExamUncheckedCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutSubjectInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectUpdateInput = {
@@ -37391,6 +39100,7 @@ export namespace Prisma {
     resources?: ResourceUpdateManyWithoutSubjectNestedInput
     exams?: ExamUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUpdateManyWithoutSubjectNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectUncheckedUpdateInput = {
@@ -37407,6 +39117,7 @@ export namespace Prisma {
     resources?: ResourceUncheckedUpdateManyWithoutSubjectNestedInput
     exams?: ExamUncheckedUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutSubjectNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectCreateManyInput = {
@@ -37507,6 +39218,7 @@ export namespace Prisma {
     sections?: SectionCreateNestedManyWithoutCampusInput
     subjects?: SubjectCreateNestedManyWithoutCampusInput
     events?: EventCreateNestedManyWithoutCampusInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutCampusInput
   }
 
   export type CampusUncheckedCreateInput = {
@@ -37526,6 +39238,7 @@ export namespace Prisma {
     sections?: SectionUncheckedCreateNestedManyWithoutCampusInput
     subjects?: SubjectUncheckedCreateNestedManyWithoutCampusInput
     events?: EventUncheckedCreateNestedManyWithoutCampusInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutCampusInput
   }
 
   export type CampusUpdateInput = {
@@ -37545,6 +39258,7 @@ export namespace Prisma {
     sections?: SectionUpdateManyWithoutCampusNestedInput
     subjects?: SubjectUpdateManyWithoutCampusNestedInput
     events?: EventUpdateManyWithoutCampusNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutCampusNestedInput
   }
 
   export type CampusUncheckedUpdateInput = {
@@ -37564,6 +39278,7 @@ export namespace Prisma {
     sections?: SectionUncheckedUpdateManyWithoutCampusNestedInput
     subjects?: SubjectUncheckedUpdateManyWithoutCampusNestedInput
     events?: EventUncheckedUpdateManyWithoutCampusNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutCampusNestedInput
   }
 
   export type CampusCreateManyInput = {
@@ -37607,17 +39322,19 @@ export namespace Prisma {
 
   export type ClassSessionCreateInput = {
     id?: string
-    subject?: string | null
-    semester: number
-    section: string
-    weekday: $Enums.Weekday
-    room?: string | null
+    date: Date | string
     startTime: Date | string
     endTime: Date | string
+    weekday: $Enums.Weekday
+    room?: string | null
     status?: $Enums.SessionStatus
+    attendanceWindowEndsAt?: Date | string | null
     attendanceMarked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    subject?: string | null
+    semester: number
+    section: string
     subjectRel?: SubjectCreateNestedOneWithoutClassSessionsInput
     campus?: CampusCreateNestedOneWithoutClassSessionsInput
     teacher: TeacherCreateNestedOneWithoutClassSessionsInput
@@ -37628,38 +39345,42 @@ export namespace Prisma {
 
   export type ClassSessionUncheckedCreateInput = {
     id?: string
-    subject?: string | null
-    subjectId?: string | null
-    campusId?: string | null
-    semester: number
-    section: string
-    weekday: $Enums.Weekday
-    room?: string | null
+    date: Date | string
     startTime: Date | string
     endTime: Date | string
-    teacherId: string
-    semesterId?: string | null
-    sectionId?: string | null
+    weekday: $Enums.Weekday
+    room?: string | null
     status?: $Enums.SessionStatus
+    attendanceWindowEndsAt?: Date | string | null
     attendanceMarked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    subjectId?: string | null
+    subject?: string | null
+    campusId?: string | null
+    semester: number
+    section: string
+    teacherId: string
+    semesterId?: string | null
+    sectionId?: string | null
     attendances?: AttendanceUncheckedCreateNestedManyWithoutClassSessionInput
   }
 
   export type ClassSessionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: IntFieldUpdateOperationsInput | number
-    section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: IntFieldUpdateOperationsInput | number
+    section?: StringFieldUpdateOperationsInput | string
     subjectRel?: SubjectUpdateOneWithoutClassSessionsNestedInput
     campus?: CampusUpdateOneWithoutClassSessionsNestedInput
     teacher?: TeacherUpdateOneRequiredWithoutClassSessionsNestedInput
@@ -37670,78 +39391,172 @@ export namespace Prisma {
 
   export type ClassSessionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
-    campusId?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: IntFieldUpdateOperationsInput | number
-    section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    teacherId?: StringFieldUpdateOperationsInput | string
-    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
-    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: IntFieldUpdateOperationsInput | number
+    section?: StringFieldUpdateOperationsInput | string
+    teacherId?: StringFieldUpdateOperationsInput | string
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
     attendances?: AttendanceUncheckedUpdateManyWithoutClassSessionNestedInput
   }
 
   export type ClassSessionCreateManyInput = {
     id?: string
-    subject?: string | null
-    subjectId?: string | null
-    campusId?: string | null
-    semester: number
-    section: string
-    weekday: $Enums.Weekday
-    room?: string | null
+    date: Date | string
     startTime: Date | string
     endTime: Date | string
-    teacherId: string
-    semesterId?: string | null
-    sectionId?: string | null
+    weekday: $Enums.Weekday
+    room?: string | null
     status?: $Enums.SessionStatus
+    attendanceWindowEndsAt?: Date | string | null
     attendanceMarked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    subjectId?: string | null
+    subject?: string | null
+    campusId?: string | null
+    semester: number
+    section: string
+    teacherId: string
+    semesterId?: string | null
+    sectionId?: string | null
   }
 
   export type ClassSessionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: IntFieldUpdateOperationsInput | number
-    section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: IntFieldUpdateOperationsInput | number
+    section?: StringFieldUpdateOperationsInput | string
   }
 
   export type ClassSessionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
-    campusId?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: IntFieldUpdateOperationsInput | number
-    section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    teacherId?: StringFieldUpdateOperationsInput | string
-    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
-    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: IntFieldUpdateOperationsInput | number
+    section?: StringFieldUpdateOperationsInput | string
+    teacherId?: StringFieldUpdateOperationsInput | string
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TimetableEntryCreateInput = {
+    id?: string
+    weekday: $Enums.Weekday
+    startTime: Date | string
+    endTime: Date | string
+    room?: string | null
+    campus: CampusCreateNestedOneWithoutTimetableEntryInput
+    teacher: TeacherCreateNestedOneWithoutTimetableEntryInput
+    subject: SubjectCreateNestedOneWithoutTimetableEntryInput
+    semester: SemesterCreateNestedOneWithoutTimetableEntryInput
+    section: SectionCreateNestedOneWithoutTimetableEntryInput
+  }
+
+  export type TimetableEntryUncheckedCreateInput = {
+    id?: string
+    weekday: $Enums.Weekday
+    startTime: Date | string
+    endTime: Date | string
+    room?: string | null
+    campusId: string
+    teacherId: string
+    subjectId: string
+    semesterId: string
+    sectionId: string
+  }
+
+  export type TimetableEntryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+    campus?: CampusUpdateOneRequiredWithoutTimetableEntryNestedInput
+    teacher?: TeacherUpdateOneRequiredWithoutTimetableEntryNestedInput
+    subject?: SubjectUpdateOneRequiredWithoutTimetableEntryNestedInput
+    semester?: SemesterUpdateOneRequiredWithoutTimetableEntryNestedInput
+    section?: SectionUpdateOneRequiredWithoutTimetableEntryNestedInput
+  }
+
+  export type TimetableEntryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    teacherId?: StringFieldUpdateOperationsInput | string
+    subjectId?: StringFieldUpdateOperationsInput | string
+    semesterId?: StringFieldUpdateOperationsInput | string
+    sectionId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TimetableEntryCreateManyInput = {
+    id?: string
+    weekday: $Enums.Weekday
+    startTime: Date | string
+    endTime: Date | string
+    room?: string | null
+    campusId: string
+    teacherId: string
+    subjectId: string
+    semesterId: string
+    sectionId: string
+  }
+
+  export type TimetableEntryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TimetableEntryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    teacherId?: StringFieldUpdateOperationsInput | string
+    subjectId?: StringFieldUpdateOperationsInput | string
+    semesterId?: StringFieldUpdateOperationsInput | string
+    sectionId?: StringFieldUpdateOperationsInput | string
   }
 
   export type AttendanceCreateInput = {
@@ -37835,14 +39650,15 @@ export namespace Prisma {
   export type AttendanceTokenCreateInput = {
     id?: string
     token: string
-    professorId: string
     issuedAt?: Date | string
     expiresAt: Date | string
     used?: boolean
     latitude?: number | null
     longitude?: number | null
+    mode?: $Enums.AttendanceMode
     student?: StudentCreateNestedOneWithoutAttendanceTokensInput
     subject?: SubjectCreateNestedOneWithoutAttendanceTokensInput
+    teacher: TeacherCreateNestedOneWithoutAttendanceTokensInput
   }
 
   export type AttendanceTokenUncheckedCreateInput = {
@@ -37856,19 +39672,21 @@ export namespace Prisma {
     used?: boolean
     latitude?: number | null
     longitude?: number | null
+    mode?: $Enums.AttendanceMode
   }
 
   export type AttendanceTokenUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
-    professorId?: StringFieldUpdateOperationsInput | string
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    mode?: EnumAttendanceModeFieldUpdateOperationsInput | $Enums.AttendanceMode
     student?: StudentUpdateOneWithoutAttendanceTokensNestedInput
     subject?: SubjectUpdateOneWithoutAttendanceTokensNestedInput
+    teacher?: TeacherUpdateOneRequiredWithoutAttendanceTokensNestedInput
   }
 
   export type AttendanceTokenUncheckedUpdateInput = {
@@ -37882,6 +39700,7 @@ export namespace Prisma {
     used?: BoolFieldUpdateOperationsInput | boolean
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    mode?: EnumAttendanceModeFieldUpdateOperationsInput | $Enums.AttendanceMode
   }
 
   export type AttendanceTokenCreateManyInput = {
@@ -37895,17 +39714,18 @@ export namespace Prisma {
     used?: boolean
     latitude?: number | null
     longitude?: number | null
+    mode?: $Enums.AttendanceMode
   }
 
   export type AttendanceTokenUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
-    professorId?: StringFieldUpdateOperationsInput | string
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    mode?: EnumAttendanceModeFieldUpdateOperationsInput | $Enums.AttendanceMode
   }
 
   export type AttendanceTokenUncheckedUpdateManyInput = {
@@ -37919,6 +39739,7 @@ export namespace Prisma {
     used?: BoolFieldUpdateOperationsInput | boolean
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    mode?: EnumAttendanceModeFieldUpdateOperationsInput | $Enums.AttendanceMode
   }
 
   export type SessionCreateInput = {
@@ -39348,6 +41169,12 @@ export namespace Prisma {
     none?: ClassSessionWhereInput
   }
 
+  export type AttendanceTokenListRelationFilter = {
+    every?: AttendanceTokenWhereInput
+    some?: AttendanceTokenWhereInput
+    none?: AttendanceTokenWhereInput
+  }
+
   export type AnnouncementListRelationFilter = {
     every?: AnnouncementWhereInput
     some?: AnnouncementWhereInput
@@ -39360,6 +41187,12 @@ export namespace Prisma {
     none?: AssignmentWhereInput
   }
 
+  export type TimetableEntryListRelationFilter = {
+    every?: TimetableEntryWhereInput
+    some?: TimetableEntryWhereInput
+    none?: TimetableEntryWhereInput
+  }
+
   export type TeacherSubjectOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -39368,11 +41201,19 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type AttendanceTokenOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type AnnouncementOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type AssignmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TimetableEntryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -39425,21 +41266,11 @@ export namespace Prisma {
     none?: GradeWhereInput
   }
 
-  export type AttendanceTokenListRelationFilter = {
-    every?: AttendanceTokenWhereInput
-    some?: AttendanceTokenWhereInput
-    none?: AttendanceTokenWhereInput
-  }
-
   export type SubmissionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type GradeOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type AttendanceTokenOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -39842,24 +41673,33 @@ export namespace Prisma {
     isNot?: SubjectWhereInput | null
   }
 
+  export type ClassSessionTeacherIdSubjectIdSectionIdDateCompoundUniqueInput = {
+    teacherId: string
+    subjectId: string
+    sectionId: string
+    date: Date | string
+  }
+
   export type ClassSessionCountOrderByAggregateInput = {
     id?: SortOrder
-    subject?: SortOrder
-    subjectId?: SortOrder
-    campusId?: SortOrder
-    semester?: SortOrder
-    section?: SortOrder
-    weekday?: SortOrder
-    room?: SortOrder
+    date?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
-    teacherId?: SortOrder
-    semesterId?: SortOrder
-    sectionId?: SortOrder
+    weekday?: SortOrder
+    room?: SortOrder
     status?: SortOrder
+    attendanceWindowEndsAt?: SortOrder
     attendanceMarked?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    subjectId?: SortOrder
+    subject?: SortOrder
+    campusId?: SortOrder
+    semester?: SortOrder
+    section?: SortOrder
+    teacherId?: SortOrder
+    semesterId?: SortOrder
+    sectionId?: SortOrder
   }
 
   export type ClassSessionAvgOrderByAggregateInput = {
@@ -39868,42 +41708,46 @@ export namespace Prisma {
 
   export type ClassSessionMaxOrderByAggregateInput = {
     id?: SortOrder
-    subject?: SortOrder
-    subjectId?: SortOrder
-    campusId?: SortOrder
-    semester?: SortOrder
-    section?: SortOrder
-    weekday?: SortOrder
-    room?: SortOrder
+    date?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
-    teacherId?: SortOrder
-    semesterId?: SortOrder
-    sectionId?: SortOrder
+    weekday?: SortOrder
+    room?: SortOrder
     status?: SortOrder
+    attendanceWindowEndsAt?: SortOrder
     attendanceMarked?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    subjectId?: SortOrder
+    subject?: SortOrder
+    campusId?: SortOrder
+    semester?: SortOrder
+    section?: SortOrder
+    teacherId?: SortOrder
+    semesterId?: SortOrder
+    sectionId?: SortOrder
   }
 
   export type ClassSessionMinOrderByAggregateInput = {
     id?: SortOrder
-    subject?: SortOrder
-    subjectId?: SortOrder
-    campusId?: SortOrder
-    semester?: SortOrder
-    section?: SortOrder
-    weekday?: SortOrder
-    room?: SortOrder
+    date?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
-    teacherId?: SortOrder
-    semesterId?: SortOrder
-    sectionId?: SortOrder
+    weekday?: SortOrder
+    room?: SortOrder
     status?: SortOrder
+    attendanceWindowEndsAt?: SortOrder
     attendanceMarked?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    subjectId?: SortOrder
+    subject?: SortOrder
+    campusId?: SortOrder
+    semester?: SortOrder
+    section?: SortOrder
+    teacherId?: SortOrder
+    semesterId?: SortOrder
+    sectionId?: SortOrder
   }
 
   export type ClassSessionSumOrderByAggregateInput = {
@@ -39936,6 +41780,51 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type TimetableEntryTeacherIdWeekdayStartTimeCompoundUniqueInput = {
+    teacherId: string
+    weekday: $Enums.Weekday
+    startTime: Date | string
+  }
+
+  export type TimetableEntryCountOrderByAggregateInput = {
+    id?: SortOrder
+    weekday?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    room?: SortOrder
+    campusId?: SortOrder
+    teacherId?: SortOrder
+    subjectId?: SortOrder
+    semesterId?: SortOrder
+    sectionId?: SortOrder
+  }
+
+  export type TimetableEntryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    weekday?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    room?: SortOrder
+    campusId?: SortOrder
+    teacherId?: SortOrder
+    subjectId?: SortOrder
+    semesterId?: SortOrder
+    sectionId?: SortOrder
+  }
+
+  export type TimetableEntryMinOrderByAggregateInput = {
+    id?: SortOrder
+    weekday?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    room?: SortOrder
+    campusId?: SortOrder
+    teacherId?: SortOrder
+    subjectId?: SortOrder
+    semesterId?: SortOrder
+    sectionId?: SortOrder
   }
 
   export type EnumAttendanceStatusFilter<$PrismaModel = never> = {
@@ -40020,6 +41909,13 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type EnumAttendanceModeFilter<$PrismaModel = never> = {
+    equals?: $Enums.AttendanceMode | EnumAttendanceModeFieldRefInput<$PrismaModel>
+    in?: $Enums.AttendanceMode[] | ListEnumAttendanceModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AttendanceMode[] | ListEnumAttendanceModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumAttendanceModeFilter<$PrismaModel> | $Enums.AttendanceMode
+  }
+
   export type AttendanceTokenCountOrderByAggregateInput = {
     id?: SortOrder
     token?: SortOrder
@@ -40031,6 +41927,7 @@ export namespace Prisma {
     used?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
+    mode?: SortOrder
   }
 
   export type AttendanceTokenAvgOrderByAggregateInput = {
@@ -40049,6 +41946,7 @@ export namespace Prisma {
     used?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
+    mode?: SortOrder
   }
 
   export type AttendanceTokenMinOrderByAggregateInput = {
@@ -40062,6 +41960,7 @@ export namespace Prisma {
     used?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
+    mode?: SortOrder
   }
 
   export type AttendanceTokenSumOrderByAggregateInput = {
@@ -40083,6 +41982,16 @@ export namespace Prisma {
     _sum?: NestedFloatNullableFilter<$PrismaModel>
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type EnumAttendanceModeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AttendanceMode | EnumAttendanceModeFieldRefInput<$PrismaModel>
+    in?: $Enums.AttendanceMode[] | ListEnumAttendanceModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AttendanceMode[] | ListEnumAttendanceModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumAttendanceModeWithAggregatesFilter<$PrismaModel> | $Enums.AttendanceMode
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAttendanceModeFilter<$PrismaModel>
+    _max?: NestedEnumAttendanceModeFilter<$PrismaModel>
   }
 
   export type SessionCountOrderByAggregateInput = {
@@ -41170,6 +43079,13 @@ export namespace Prisma {
     connect?: ClassSessionWhereUniqueInput | ClassSessionWhereUniqueInput[]
   }
 
+  export type AttendanceTokenCreateNestedManyWithoutTeacherInput = {
+    create?: XOR<AttendanceTokenCreateWithoutTeacherInput, AttendanceTokenUncheckedCreateWithoutTeacherInput> | AttendanceTokenCreateWithoutTeacherInput[] | AttendanceTokenUncheckedCreateWithoutTeacherInput[]
+    connectOrCreate?: AttendanceTokenCreateOrConnectWithoutTeacherInput | AttendanceTokenCreateOrConnectWithoutTeacherInput[]
+    createMany?: AttendanceTokenCreateManyTeacherInputEnvelope
+    connect?: AttendanceTokenWhereUniqueInput | AttendanceTokenWhereUniqueInput[]
+  }
+
   export type AnnouncementCreateNestedManyWithoutAuthorInput = {
     create?: XOR<AnnouncementCreateWithoutAuthorInput, AnnouncementUncheckedCreateWithoutAuthorInput> | AnnouncementCreateWithoutAuthorInput[] | AnnouncementUncheckedCreateWithoutAuthorInput[]
     connectOrCreate?: AnnouncementCreateOrConnectWithoutAuthorInput | AnnouncementCreateOrConnectWithoutAuthorInput[]
@@ -41182,6 +43098,13 @@ export namespace Prisma {
     connectOrCreate?: AssignmentCreateOrConnectWithoutTeacherInput | AssignmentCreateOrConnectWithoutTeacherInput[]
     createMany?: AssignmentCreateManyTeacherInputEnvelope
     connect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+  }
+
+  export type TimetableEntryCreateNestedManyWithoutTeacherInput = {
+    create?: XOR<TimetableEntryCreateWithoutTeacherInput, TimetableEntryUncheckedCreateWithoutTeacherInput> | TimetableEntryCreateWithoutTeacherInput[] | TimetableEntryUncheckedCreateWithoutTeacherInput[]
+    connectOrCreate?: TimetableEntryCreateOrConnectWithoutTeacherInput | TimetableEntryCreateOrConnectWithoutTeacherInput[]
+    createMany?: TimetableEntryCreateManyTeacherInputEnvelope
+    connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
   }
 
   export type TeacherSubjectUncheckedCreateNestedManyWithoutTeacherInput = {
@@ -41198,6 +43121,13 @@ export namespace Prisma {
     connect?: ClassSessionWhereUniqueInput | ClassSessionWhereUniqueInput[]
   }
 
+  export type AttendanceTokenUncheckedCreateNestedManyWithoutTeacherInput = {
+    create?: XOR<AttendanceTokenCreateWithoutTeacherInput, AttendanceTokenUncheckedCreateWithoutTeacherInput> | AttendanceTokenCreateWithoutTeacherInput[] | AttendanceTokenUncheckedCreateWithoutTeacherInput[]
+    connectOrCreate?: AttendanceTokenCreateOrConnectWithoutTeacherInput | AttendanceTokenCreateOrConnectWithoutTeacherInput[]
+    createMany?: AttendanceTokenCreateManyTeacherInputEnvelope
+    connect?: AttendanceTokenWhereUniqueInput | AttendanceTokenWhereUniqueInput[]
+  }
+
   export type AnnouncementUncheckedCreateNestedManyWithoutAuthorInput = {
     create?: XOR<AnnouncementCreateWithoutAuthorInput, AnnouncementUncheckedCreateWithoutAuthorInput> | AnnouncementCreateWithoutAuthorInput[] | AnnouncementUncheckedCreateWithoutAuthorInput[]
     connectOrCreate?: AnnouncementCreateOrConnectWithoutAuthorInput | AnnouncementCreateOrConnectWithoutAuthorInput[]
@@ -41210,6 +43140,13 @@ export namespace Prisma {
     connectOrCreate?: AssignmentCreateOrConnectWithoutTeacherInput | AssignmentCreateOrConnectWithoutTeacherInput[]
     createMany?: AssignmentCreateManyTeacherInputEnvelope
     connect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+  }
+
+  export type TimetableEntryUncheckedCreateNestedManyWithoutTeacherInput = {
+    create?: XOR<TimetableEntryCreateWithoutTeacherInput, TimetableEntryUncheckedCreateWithoutTeacherInput> | TimetableEntryCreateWithoutTeacherInput[] | TimetableEntryUncheckedCreateWithoutTeacherInput[]
+    connectOrCreate?: TimetableEntryCreateOrConnectWithoutTeacherInput | TimetableEntryCreateOrConnectWithoutTeacherInput[]
+    createMany?: TimetableEntryCreateManyTeacherInputEnvelope
+    connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
   }
 
   export type UserUpdateOneRequiredWithoutTeacherProfileNestedInput = {
@@ -41248,6 +43185,20 @@ export namespace Prisma {
     deleteMany?: ClassSessionScalarWhereInput | ClassSessionScalarWhereInput[]
   }
 
+  export type AttendanceTokenUpdateManyWithoutTeacherNestedInput = {
+    create?: XOR<AttendanceTokenCreateWithoutTeacherInput, AttendanceTokenUncheckedCreateWithoutTeacherInput> | AttendanceTokenCreateWithoutTeacherInput[] | AttendanceTokenUncheckedCreateWithoutTeacherInput[]
+    connectOrCreate?: AttendanceTokenCreateOrConnectWithoutTeacherInput | AttendanceTokenCreateOrConnectWithoutTeacherInput[]
+    upsert?: AttendanceTokenUpsertWithWhereUniqueWithoutTeacherInput | AttendanceTokenUpsertWithWhereUniqueWithoutTeacherInput[]
+    createMany?: AttendanceTokenCreateManyTeacherInputEnvelope
+    set?: AttendanceTokenWhereUniqueInput | AttendanceTokenWhereUniqueInput[]
+    disconnect?: AttendanceTokenWhereUniqueInput | AttendanceTokenWhereUniqueInput[]
+    delete?: AttendanceTokenWhereUniqueInput | AttendanceTokenWhereUniqueInput[]
+    connect?: AttendanceTokenWhereUniqueInput | AttendanceTokenWhereUniqueInput[]
+    update?: AttendanceTokenUpdateWithWhereUniqueWithoutTeacherInput | AttendanceTokenUpdateWithWhereUniqueWithoutTeacherInput[]
+    updateMany?: AttendanceTokenUpdateManyWithWhereWithoutTeacherInput | AttendanceTokenUpdateManyWithWhereWithoutTeacherInput[]
+    deleteMany?: AttendanceTokenScalarWhereInput | AttendanceTokenScalarWhereInput[]
+  }
+
   export type AnnouncementUpdateManyWithoutAuthorNestedInput = {
     create?: XOR<AnnouncementCreateWithoutAuthorInput, AnnouncementUncheckedCreateWithoutAuthorInput> | AnnouncementCreateWithoutAuthorInput[] | AnnouncementUncheckedCreateWithoutAuthorInput[]
     connectOrCreate?: AnnouncementCreateOrConnectWithoutAuthorInput | AnnouncementCreateOrConnectWithoutAuthorInput[]
@@ -41274,6 +43225,20 @@ export namespace Prisma {
     update?: AssignmentUpdateWithWhereUniqueWithoutTeacherInput | AssignmentUpdateWithWhereUniqueWithoutTeacherInput[]
     updateMany?: AssignmentUpdateManyWithWhereWithoutTeacherInput | AssignmentUpdateManyWithWhereWithoutTeacherInput[]
     deleteMany?: AssignmentScalarWhereInput | AssignmentScalarWhereInput[]
+  }
+
+  export type TimetableEntryUpdateManyWithoutTeacherNestedInput = {
+    create?: XOR<TimetableEntryCreateWithoutTeacherInput, TimetableEntryUncheckedCreateWithoutTeacherInput> | TimetableEntryCreateWithoutTeacherInput[] | TimetableEntryUncheckedCreateWithoutTeacherInput[]
+    connectOrCreate?: TimetableEntryCreateOrConnectWithoutTeacherInput | TimetableEntryCreateOrConnectWithoutTeacherInput[]
+    upsert?: TimetableEntryUpsertWithWhereUniqueWithoutTeacherInput | TimetableEntryUpsertWithWhereUniqueWithoutTeacherInput[]
+    createMany?: TimetableEntryCreateManyTeacherInputEnvelope
+    set?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    disconnect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    delete?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    update?: TimetableEntryUpdateWithWhereUniqueWithoutTeacherInput | TimetableEntryUpdateWithWhereUniqueWithoutTeacherInput[]
+    updateMany?: TimetableEntryUpdateManyWithWhereWithoutTeacherInput | TimetableEntryUpdateManyWithWhereWithoutTeacherInput[]
+    deleteMany?: TimetableEntryScalarWhereInput | TimetableEntryScalarWhereInput[]
   }
 
   export type TeacherSubjectUncheckedUpdateManyWithoutTeacherNestedInput = {
@@ -41304,6 +43269,20 @@ export namespace Prisma {
     deleteMany?: ClassSessionScalarWhereInput | ClassSessionScalarWhereInput[]
   }
 
+  export type AttendanceTokenUncheckedUpdateManyWithoutTeacherNestedInput = {
+    create?: XOR<AttendanceTokenCreateWithoutTeacherInput, AttendanceTokenUncheckedCreateWithoutTeacherInput> | AttendanceTokenCreateWithoutTeacherInput[] | AttendanceTokenUncheckedCreateWithoutTeacherInput[]
+    connectOrCreate?: AttendanceTokenCreateOrConnectWithoutTeacherInput | AttendanceTokenCreateOrConnectWithoutTeacherInput[]
+    upsert?: AttendanceTokenUpsertWithWhereUniqueWithoutTeacherInput | AttendanceTokenUpsertWithWhereUniqueWithoutTeacherInput[]
+    createMany?: AttendanceTokenCreateManyTeacherInputEnvelope
+    set?: AttendanceTokenWhereUniqueInput | AttendanceTokenWhereUniqueInput[]
+    disconnect?: AttendanceTokenWhereUniqueInput | AttendanceTokenWhereUniqueInput[]
+    delete?: AttendanceTokenWhereUniqueInput | AttendanceTokenWhereUniqueInput[]
+    connect?: AttendanceTokenWhereUniqueInput | AttendanceTokenWhereUniqueInput[]
+    update?: AttendanceTokenUpdateWithWhereUniqueWithoutTeacherInput | AttendanceTokenUpdateWithWhereUniqueWithoutTeacherInput[]
+    updateMany?: AttendanceTokenUpdateManyWithWhereWithoutTeacherInput | AttendanceTokenUpdateManyWithWhereWithoutTeacherInput[]
+    deleteMany?: AttendanceTokenScalarWhereInput | AttendanceTokenScalarWhereInput[]
+  }
+
   export type AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput = {
     create?: XOR<AnnouncementCreateWithoutAuthorInput, AnnouncementUncheckedCreateWithoutAuthorInput> | AnnouncementCreateWithoutAuthorInput[] | AnnouncementUncheckedCreateWithoutAuthorInput[]
     connectOrCreate?: AnnouncementCreateOrConnectWithoutAuthorInput | AnnouncementCreateOrConnectWithoutAuthorInput[]
@@ -41330,6 +43309,20 @@ export namespace Prisma {
     update?: AssignmentUpdateWithWhereUniqueWithoutTeacherInput | AssignmentUpdateWithWhereUniqueWithoutTeacherInput[]
     updateMany?: AssignmentUpdateManyWithWhereWithoutTeacherInput | AssignmentUpdateManyWithWhereWithoutTeacherInput[]
     deleteMany?: AssignmentScalarWhereInput | AssignmentScalarWhereInput[]
+  }
+
+  export type TimetableEntryUncheckedUpdateManyWithoutTeacherNestedInput = {
+    create?: XOR<TimetableEntryCreateWithoutTeacherInput, TimetableEntryUncheckedCreateWithoutTeacherInput> | TimetableEntryCreateWithoutTeacherInput[] | TimetableEntryUncheckedCreateWithoutTeacherInput[]
+    connectOrCreate?: TimetableEntryCreateOrConnectWithoutTeacherInput | TimetableEntryCreateOrConnectWithoutTeacherInput[]
+    upsert?: TimetableEntryUpsertWithWhereUniqueWithoutTeacherInput | TimetableEntryUpsertWithWhereUniqueWithoutTeacherInput[]
+    createMany?: TimetableEntryCreateManyTeacherInputEnvelope
+    set?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    disconnect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    delete?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    update?: TimetableEntryUpdateWithWhereUniqueWithoutTeacherInput | TimetableEntryUpdateWithWhereUniqueWithoutTeacherInput[]
+    updateMany?: TimetableEntryUpdateManyWithWhereWithoutTeacherInput | TimetableEntryUpdateManyWithWhereWithoutTeacherInput[]
+    deleteMany?: TimetableEntryScalarWhereInput | TimetableEntryScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutStudentProfileInput = {
@@ -41573,6 +43566,13 @@ export namespace Prisma {
     connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
   }
 
+  export type TimetableEntryCreateNestedManyWithoutSemesterInput = {
+    create?: XOR<TimetableEntryCreateWithoutSemesterInput, TimetableEntryUncheckedCreateWithoutSemesterInput> | TimetableEntryCreateWithoutSemesterInput[] | TimetableEntryUncheckedCreateWithoutSemesterInput[]
+    connectOrCreate?: TimetableEntryCreateOrConnectWithoutSemesterInput | TimetableEntryCreateOrConnectWithoutSemesterInput[]
+    createMany?: TimetableEntryCreateManySemesterInputEnvelope
+    connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+  }
+
   export type TeacherSubjectUncheckedCreateNestedManyWithoutSemesterInput = {
     create?: XOR<TeacherSubjectCreateWithoutSemesterInput, TeacherSubjectUncheckedCreateWithoutSemesterInput> | TeacherSubjectCreateWithoutSemesterInput[] | TeacherSubjectUncheckedCreateWithoutSemesterInput[]
     connectOrCreate?: TeacherSubjectCreateOrConnectWithoutSemesterInput | TeacherSubjectCreateOrConnectWithoutSemesterInput[]
@@ -41592,6 +43592,13 @@ export namespace Prisma {
     connectOrCreate?: StudentCreateOrConnectWithoutSemesterInput | StudentCreateOrConnectWithoutSemesterInput[]
     createMany?: StudentCreateManySemesterInputEnvelope
     connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+  }
+
+  export type TimetableEntryUncheckedCreateNestedManyWithoutSemesterInput = {
+    create?: XOR<TimetableEntryCreateWithoutSemesterInput, TimetableEntryUncheckedCreateWithoutSemesterInput> | TimetableEntryCreateWithoutSemesterInput[] | TimetableEntryUncheckedCreateWithoutSemesterInput[]
+    connectOrCreate?: TimetableEntryCreateOrConnectWithoutSemesterInput | TimetableEntryCreateOrConnectWithoutSemesterInput[]
+    createMany?: TimetableEntryCreateManySemesterInputEnvelope
+    connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
   }
 
   export type CampusUpdateOneRequiredWithoutSemestersNestedInput = {
@@ -41644,6 +43651,20 @@ export namespace Prisma {
     deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[]
   }
 
+  export type TimetableEntryUpdateManyWithoutSemesterNestedInput = {
+    create?: XOR<TimetableEntryCreateWithoutSemesterInput, TimetableEntryUncheckedCreateWithoutSemesterInput> | TimetableEntryCreateWithoutSemesterInput[] | TimetableEntryUncheckedCreateWithoutSemesterInput[]
+    connectOrCreate?: TimetableEntryCreateOrConnectWithoutSemesterInput | TimetableEntryCreateOrConnectWithoutSemesterInput[]
+    upsert?: TimetableEntryUpsertWithWhereUniqueWithoutSemesterInput | TimetableEntryUpsertWithWhereUniqueWithoutSemesterInput[]
+    createMany?: TimetableEntryCreateManySemesterInputEnvelope
+    set?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    disconnect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    delete?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    update?: TimetableEntryUpdateWithWhereUniqueWithoutSemesterInput | TimetableEntryUpdateWithWhereUniqueWithoutSemesterInput[]
+    updateMany?: TimetableEntryUpdateManyWithWhereWithoutSemesterInput | TimetableEntryUpdateManyWithWhereWithoutSemesterInput[]
+    deleteMany?: TimetableEntryScalarWhereInput | TimetableEntryScalarWhereInput[]
+  }
+
   export type TeacherSubjectUncheckedUpdateManyWithoutSemesterNestedInput = {
     create?: XOR<TeacherSubjectCreateWithoutSemesterInput, TeacherSubjectUncheckedCreateWithoutSemesterInput> | TeacherSubjectCreateWithoutSemesterInput[] | TeacherSubjectUncheckedCreateWithoutSemesterInput[]
     connectOrCreate?: TeacherSubjectCreateOrConnectWithoutSemesterInput | TeacherSubjectCreateOrConnectWithoutSemesterInput[]
@@ -41686,6 +43707,20 @@ export namespace Prisma {
     deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[]
   }
 
+  export type TimetableEntryUncheckedUpdateManyWithoutSemesterNestedInput = {
+    create?: XOR<TimetableEntryCreateWithoutSemesterInput, TimetableEntryUncheckedCreateWithoutSemesterInput> | TimetableEntryCreateWithoutSemesterInput[] | TimetableEntryUncheckedCreateWithoutSemesterInput[]
+    connectOrCreate?: TimetableEntryCreateOrConnectWithoutSemesterInput | TimetableEntryCreateOrConnectWithoutSemesterInput[]
+    upsert?: TimetableEntryUpsertWithWhereUniqueWithoutSemesterInput | TimetableEntryUpsertWithWhereUniqueWithoutSemesterInput[]
+    createMany?: TimetableEntryCreateManySemesterInputEnvelope
+    set?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    disconnect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    delete?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    update?: TimetableEntryUpdateWithWhereUniqueWithoutSemesterInput | TimetableEntryUpdateWithWhereUniqueWithoutSemesterInput[]
+    updateMany?: TimetableEntryUpdateManyWithWhereWithoutSemesterInput | TimetableEntryUpdateManyWithWhereWithoutSemesterInput[]
+    deleteMany?: TimetableEntryScalarWhereInput | TimetableEntryScalarWhereInput[]
+  }
+
   export type CampusCreateNestedOneWithoutSectionsInput = {
     create?: XOR<CampusCreateWithoutSectionsInput, CampusUncheckedCreateWithoutSectionsInput>
     connectOrCreate?: CampusCreateOrConnectWithoutSectionsInput
@@ -41713,6 +43748,13 @@ export namespace Prisma {
     connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
   }
 
+  export type TimetableEntryCreateNestedManyWithoutSectionInput = {
+    create?: XOR<TimetableEntryCreateWithoutSectionInput, TimetableEntryUncheckedCreateWithoutSectionInput> | TimetableEntryCreateWithoutSectionInput[] | TimetableEntryUncheckedCreateWithoutSectionInput[]
+    connectOrCreate?: TimetableEntryCreateOrConnectWithoutSectionInput | TimetableEntryCreateOrConnectWithoutSectionInput[]
+    createMany?: TimetableEntryCreateManySectionInputEnvelope
+    connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+  }
+
   export type TeacherSubjectUncheckedCreateNestedManyWithoutSectionInput = {
     create?: XOR<TeacherSubjectCreateWithoutSectionInput, TeacherSubjectUncheckedCreateWithoutSectionInput> | TeacherSubjectCreateWithoutSectionInput[] | TeacherSubjectUncheckedCreateWithoutSectionInput[]
     connectOrCreate?: TeacherSubjectCreateOrConnectWithoutSectionInput | TeacherSubjectCreateOrConnectWithoutSectionInput[]
@@ -41732,6 +43774,13 @@ export namespace Prisma {
     connectOrCreate?: StudentCreateOrConnectWithoutSectionInput | StudentCreateOrConnectWithoutSectionInput[]
     createMany?: StudentCreateManySectionInputEnvelope
     connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+  }
+
+  export type TimetableEntryUncheckedCreateNestedManyWithoutSectionInput = {
+    create?: XOR<TimetableEntryCreateWithoutSectionInput, TimetableEntryUncheckedCreateWithoutSectionInput> | TimetableEntryCreateWithoutSectionInput[] | TimetableEntryUncheckedCreateWithoutSectionInput[]
+    connectOrCreate?: TimetableEntryCreateOrConnectWithoutSectionInput | TimetableEntryCreateOrConnectWithoutSectionInput[]
+    createMany?: TimetableEntryCreateManySectionInputEnvelope
+    connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
   }
 
   export type CampusUpdateOneRequiredWithoutSectionsNestedInput = {
@@ -41784,6 +43833,20 @@ export namespace Prisma {
     deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[]
   }
 
+  export type TimetableEntryUpdateManyWithoutSectionNestedInput = {
+    create?: XOR<TimetableEntryCreateWithoutSectionInput, TimetableEntryUncheckedCreateWithoutSectionInput> | TimetableEntryCreateWithoutSectionInput[] | TimetableEntryUncheckedCreateWithoutSectionInput[]
+    connectOrCreate?: TimetableEntryCreateOrConnectWithoutSectionInput | TimetableEntryCreateOrConnectWithoutSectionInput[]
+    upsert?: TimetableEntryUpsertWithWhereUniqueWithoutSectionInput | TimetableEntryUpsertWithWhereUniqueWithoutSectionInput[]
+    createMany?: TimetableEntryCreateManySectionInputEnvelope
+    set?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    disconnect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    delete?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    update?: TimetableEntryUpdateWithWhereUniqueWithoutSectionInput | TimetableEntryUpdateWithWhereUniqueWithoutSectionInput[]
+    updateMany?: TimetableEntryUpdateManyWithWhereWithoutSectionInput | TimetableEntryUpdateManyWithWhereWithoutSectionInput[]
+    deleteMany?: TimetableEntryScalarWhereInput | TimetableEntryScalarWhereInput[]
+  }
+
   export type TeacherSubjectUncheckedUpdateManyWithoutSectionNestedInput = {
     create?: XOR<TeacherSubjectCreateWithoutSectionInput, TeacherSubjectUncheckedCreateWithoutSectionInput> | TeacherSubjectCreateWithoutSectionInput[] | TeacherSubjectUncheckedCreateWithoutSectionInput[]
     connectOrCreate?: TeacherSubjectCreateOrConnectWithoutSectionInput | TeacherSubjectCreateOrConnectWithoutSectionInput[]
@@ -41824,6 +43887,20 @@ export namespace Prisma {
     update?: StudentUpdateWithWhereUniqueWithoutSectionInput | StudentUpdateWithWhereUniqueWithoutSectionInput[]
     updateMany?: StudentUpdateManyWithWhereWithoutSectionInput | StudentUpdateManyWithWhereWithoutSectionInput[]
     deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[]
+  }
+
+  export type TimetableEntryUncheckedUpdateManyWithoutSectionNestedInput = {
+    create?: XOR<TimetableEntryCreateWithoutSectionInput, TimetableEntryUncheckedCreateWithoutSectionInput> | TimetableEntryCreateWithoutSectionInput[] | TimetableEntryUncheckedCreateWithoutSectionInput[]
+    connectOrCreate?: TimetableEntryCreateOrConnectWithoutSectionInput | TimetableEntryCreateOrConnectWithoutSectionInput[]
+    upsert?: TimetableEntryUpsertWithWhereUniqueWithoutSectionInput | TimetableEntryUpsertWithWhereUniqueWithoutSectionInput[]
+    createMany?: TimetableEntryCreateManySectionInputEnvelope
+    set?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    disconnect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    delete?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    update?: TimetableEntryUpdateWithWhereUniqueWithoutSectionInput | TimetableEntryUpdateWithWhereUniqueWithoutSectionInput[]
+    updateMany?: TimetableEntryUpdateManyWithWhereWithoutSectionInput | TimetableEntryUpdateManyWithWhereWithoutSectionInput[]
+    deleteMany?: TimetableEntryScalarWhereInput | TimetableEntryScalarWhereInput[]
   }
 
   export type CampusCreateNestedOneWithoutSubjectsInput = {
@@ -41874,6 +43951,13 @@ export namespace Prisma {
     connect?: AttendanceTokenWhereUniqueInput | AttendanceTokenWhereUniqueInput[]
   }
 
+  export type TimetableEntryCreateNestedManyWithoutSubjectInput = {
+    create?: XOR<TimetableEntryCreateWithoutSubjectInput, TimetableEntryUncheckedCreateWithoutSubjectInput> | TimetableEntryCreateWithoutSubjectInput[] | TimetableEntryUncheckedCreateWithoutSubjectInput[]
+    connectOrCreate?: TimetableEntryCreateOrConnectWithoutSubjectInput | TimetableEntryCreateOrConnectWithoutSubjectInput[]
+    createMany?: TimetableEntryCreateManySubjectInputEnvelope
+    connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+  }
+
   export type TeacherSubjectUncheckedCreateNestedManyWithoutSubjectInput = {
     create?: XOR<TeacherSubjectCreateWithoutSubjectInput, TeacherSubjectUncheckedCreateWithoutSubjectInput> | TeacherSubjectCreateWithoutSubjectInput[] | TeacherSubjectUncheckedCreateWithoutSubjectInput[]
     connectOrCreate?: TeacherSubjectCreateOrConnectWithoutSubjectInput | TeacherSubjectCreateOrConnectWithoutSubjectInput[]
@@ -41914,6 +43998,13 @@ export namespace Prisma {
     connectOrCreate?: AttendanceTokenCreateOrConnectWithoutSubjectInput | AttendanceTokenCreateOrConnectWithoutSubjectInput[]
     createMany?: AttendanceTokenCreateManySubjectInputEnvelope
     connect?: AttendanceTokenWhereUniqueInput | AttendanceTokenWhereUniqueInput[]
+  }
+
+  export type TimetableEntryUncheckedCreateNestedManyWithoutSubjectInput = {
+    create?: XOR<TimetableEntryCreateWithoutSubjectInput, TimetableEntryUncheckedCreateWithoutSubjectInput> | TimetableEntryCreateWithoutSubjectInput[] | TimetableEntryUncheckedCreateWithoutSubjectInput[]
+    connectOrCreate?: TimetableEntryCreateOrConnectWithoutSubjectInput | TimetableEntryCreateOrConnectWithoutSubjectInput[]
+    createMany?: TimetableEntryCreateManySubjectInputEnvelope
+    connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
   }
 
   export type CampusUpdateOneRequiredWithoutSubjectsNestedInput = {
@@ -42008,6 +44099,20 @@ export namespace Prisma {
     deleteMany?: AttendanceTokenScalarWhereInput | AttendanceTokenScalarWhereInput[]
   }
 
+  export type TimetableEntryUpdateManyWithoutSubjectNestedInput = {
+    create?: XOR<TimetableEntryCreateWithoutSubjectInput, TimetableEntryUncheckedCreateWithoutSubjectInput> | TimetableEntryCreateWithoutSubjectInput[] | TimetableEntryUncheckedCreateWithoutSubjectInput[]
+    connectOrCreate?: TimetableEntryCreateOrConnectWithoutSubjectInput | TimetableEntryCreateOrConnectWithoutSubjectInput[]
+    upsert?: TimetableEntryUpsertWithWhereUniqueWithoutSubjectInput | TimetableEntryUpsertWithWhereUniqueWithoutSubjectInput[]
+    createMany?: TimetableEntryCreateManySubjectInputEnvelope
+    set?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    disconnect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    delete?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    update?: TimetableEntryUpdateWithWhereUniqueWithoutSubjectInput | TimetableEntryUpdateWithWhereUniqueWithoutSubjectInput[]
+    updateMany?: TimetableEntryUpdateManyWithWhereWithoutSubjectInput | TimetableEntryUpdateManyWithWhereWithoutSubjectInput[]
+    deleteMany?: TimetableEntryScalarWhereInput | TimetableEntryScalarWhereInput[]
+  }
+
   export type TeacherSubjectUncheckedUpdateManyWithoutSubjectNestedInput = {
     create?: XOR<TeacherSubjectCreateWithoutSubjectInput, TeacherSubjectUncheckedCreateWithoutSubjectInput> | TeacherSubjectCreateWithoutSubjectInput[] | TeacherSubjectUncheckedCreateWithoutSubjectInput[]
     connectOrCreate?: TeacherSubjectCreateOrConnectWithoutSubjectInput | TeacherSubjectCreateOrConnectWithoutSubjectInput[]
@@ -42090,6 +44195,20 @@ export namespace Prisma {
     update?: AttendanceTokenUpdateWithWhereUniqueWithoutSubjectInput | AttendanceTokenUpdateWithWhereUniqueWithoutSubjectInput[]
     updateMany?: AttendanceTokenUpdateManyWithWhereWithoutSubjectInput | AttendanceTokenUpdateManyWithWhereWithoutSubjectInput[]
     deleteMany?: AttendanceTokenScalarWhereInput | AttendanceTokenScalarWhereInput[]
+  }
+
+  export type TimetableEntryUncheckedUpdateManyWithoutSubjectNestedInput = {
+    create?: XOR<TimetableEntryCreateWithoutSubjectInput, TimetableEntryUncheckedCreateWithoutSubjectInput> | TimetableEntryCreateWithoutSubjectInput[] | TimetableEntryUncheckedCreateWithoutSubjectInput[]
+    connectOrCreate?: TimetableEntryCreateOrConnectWithoutSubjectInput | TimetableEntryCreateOrConnectWithoutSubjectInput[]
+    upsert?: TimetableEntryUpsertWithWhereUniqueWithoutSubjectInput | TimetableEntryUpsertWithWhereUniqueWithoutSubjectInput[]
+    createMany?: TimetableEntryCreateManySubjectInputEnvelope
+    set?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    disconnect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    delete?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    update?: TimetableEntryUpdateWithWhereUniqueWithoutSubjectInput | TimetableEntryUpdateWithWhereUniqueWithoutSubjectInput[]
+    updateMany?: TimetableEntryUpdateManyWithWhereWithoutSubjectInput | TimetableEntryUpdateManyWithWhereWithoutSubjectInput[]
+    deleteMany?: TimetableEntryScalarWhereInput | TimetableEntryScalarWhereInput[]
   }
 
   export type TeacherCreateNestedOneWithoutTeacherSubjectsInput = {
@@ -42194,6 +44313,13 @@ export namespace Prisma {
     connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
   }
 
+  export type TimetableEntryCreateNestedManyWithoutCampusInput = {
+    create?: XOR<TimetableEntryCreateWithoutCampusInput, TimetableEntryUncheckedCreateWithoutCampusInput> | TimetableEntryCreateWithoutCampusInput[] | TimetableEntryUncheckedCreateWithoutCampusInput[]
+    connectOrCreate?: TimetableEntryCreateOrConnectWithoutCampusInput | TimetableEntryCreateOrConnectWithoutCampusInput[]
+    createMany?: TimetableEntryCreateManyCampusInputEnvelope
+    connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+  }
+
   export type UserUncheckedCreateNestedManyWithoutCampusInput = {
     create?: XOR<UserCreateWithoutCampusInput, UserUncheckedCreateWithoutCampusInput> | UserCreateWithoutCampusInput[] | UserUncheckedCreateWithoutCampusInput[]
     connectOrCreate?: UserCreateOrConnectWithoutCampusInput | UserCreateOrConnectWithoutCampusInput[]
@@ -42234,6 +44360,13 @@ export namespace Prisma {
     connectOrCreate?: EventCreateOrConnectWithoutCampusInput | EventCreateOrConnectWithoutCampusInput[]
     createMany?: EventCreateManyCampusInputEnvelope
     connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+  }
+
+  export type TimetableEntryUncheckedCreateNestedManyWithoutCampusInput = {
+    create?: XOR<TimetableEntryCreateWithoutCampusInput, TimetableEntryUncheckedCreateWithoutCampusInput> | TimetableEntryCreateWithoutCampusInput[] | TimetableEntryUncheckedCreateWithoutCampusInput[]
+    connectOrCreate?: TimetableEntryCreateOrConnectWithoutCampusInput | TimetableEntryCreateOrConnectWithoutCampusInput[]
+    createMany?: TimetableEntryCreateManyCampusInputEnvelope
+    connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
   }
 
   export type FloatFieldUpdateOperationsInput = {
@@ -42341,6 +44474,20 @@ export namespace Prisma {
     deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
   }
 
+  export type TimetableEntryUpdateManyWithoutCampusNestedInput = {
+    create?: XOR<TimetableEntryCreateWithoutCampusInput, TimetableEntryUncheckedCreateWithoutCampusInput> | TimetableEntryCreateWithoutCampusInput[] | TimetableEntryUncheckedCreateWithoutCampusInput[]
+    connectOrCreate?: TimetableEntryCreateOrConnectWithoutCampusInput | TimetableEntryCreateOrConnectWithoutCampusInput[]
+    upsert?: TimetableEntryUpsertWithWhereUniqueWithoutCampusInput | TimetableEntryUpsertWithWhereUniqueWithoutCampusInput[]
+    createMany?: TimetableEntryCreateManyCampusInputEnvelope
+    set?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    disconnect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    delete?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    update?: TimetableEntryUpdateWithWhereUniqueWithoutCampusInput | TimetableEntryUpdateWithWhereUniqueWithoutCampusInput[]
+    updateMany?: TimetableEntryUpdateManyWithWhereWithoutCampusInput | TimetableEntryUpdateManyWithWhereWithoutCampusInput[]
+    deleteMany?: TimetableEntryScalarWhereInput | TimetableEntryScalarWhereInput[]
+  }
+
   export type UserUncheckedUpdateManyWithoutCampusNestedInput = {
     create?: XOR<UserCreateWithoutCampusInput, UserUncheckedCreateWithoutCampusInput> | UserCreateWithoutCampusInput[] | UserUncheckedCreateWithoutCampusInput[]
     connectOrCreate?: UserCreateOrConnectWithoutCampusInput | UserCreateOrConnectWithoutCampusInput[]
@@ -42423,6 +44570,20 @@ export namespace Prisma {
     update?: EventUpdateWithWhereUniqueWithoutCampusInput | EventUpdateWithWhereUniqueWithoutCampusInput[]
     updateMany?: EventUpdateManyWithWhereWithoutCampusInput | EventUpdateManyWithWhereWithoutCampusInput[]
     deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
+  }
+
+  export type TimetableEntryUncheckedUpdateManyWithoutCampusNestedInput = {
+    create?: XOR<TimetableEntryCreateWithoutCampusInput, TimetableEntryUncheckedCreateWithoutCampusInput> | TimetableEntryCreateWithoutCampusInput[] | TimetableEntryUncheckedCreateWithoutCampusInput[]
+    connectOrCreate?: TimetableEntryCreateOrConnectWithoutCampusInput | TimetableEntryCreateOrConnectWithoutCampusInput[]
+    upsert?: TimetableEntryUpsertWithWhereUniqueWithoutCampusInput | TimetableEntryUpsertWithWhereUniqueWithoutCampusInput[]
+    createMany?: TimetableEntryCreateManyCampusInputEnvelope
+    set?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    disconnect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    delete?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+    update?: TimetableEntryUpdateWithWhereUniqueWithoutCampusInput | TimetableEntryUpdateWithWhereUniqueWithoutCampusInput[]
+    updateMany?: TimetableEntryUpdateManyWithWhereWithoutCampusInput | TimetableEntryUpdateManyWithWhereWithoutCampusInput[]
+    deleteMany?: TimetableEntryScalarWhereInput | TimetableEntryScalarWhereInput[]
   }
 
   export type SubjectCreateNestedOneWithoutClassSessionsInput = {
@@ -42557,6 +44718,76 @@ export namespace Prisma {
     deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
   }
 
+  export type CampusCreateNestedOneWithoutTimetableEntryInput = {
+    create?: XOR<CampusCreateWithoutTimetableEntryInput, CampusUncheckedCreateWithoutTimetableEntryInput>
+    connectOrCreate?: CampusCreateOrConnectWithoutTimetableEntryInput
+    connect?: CampusWhereUniqueInput
+  }
+
+  export type TeacherCreateNestedOneWithoutTimetableEntryInput = {
+    create?: XOR<TeacherCreateWithoutTimetableEntryInput, TeacherUncheckedCreateWithoutTimetableEntryInput>
+    connectOrCreate?: TeacherCreateOrConnectWithoutTimetableEntryInput
+    connect?: TeacherWhereUniqueInput
+  }
+
+  export type SubjectCreateNestedOneWithoutTimetableEntryInput = {
+    create?: XOR<SubjectCreateWithoutTimetableEntryInput, SubjectUncheckedCreateWithoutTimetableEntryInput>
+    connectOrCreate?: SubjectCreateOrConnectWithoutTimetableEntryInput
+    connect?: SubjectWhereUniqueInput
+  }
+
+  export type SemesterCreateNestedOneWithoutTimetableEntryInput = {
+    create?: XOR<SemesterCreateWithoutTimetableEntryInput, SemesterUncheckedCreateWithoutTimetableEntryInput>
+    connectOrCreate?: SemesterCreateOrConnectWithoutTimetableEntryInput
+    connect?: SemesterWhereUniqueInput
+  }
+
+  export type SectionCreateNestedOneWithoutTimetableEntryInput = {
+    create?: XOR<SectionCreateWithoutTimetableEntryInput, SectionUncheckedCreateWithoutTimetableEntryInput>
+    connectOrCreate?: SectionCreateOrConnectWithoutTimetableEntryInput
+    connect?: SectionWhereUniqueInput
+  }
+
+  export type CampusUpdateOneRequiredWithoutTimetableEntryNestedInput = {
+    create?: XOR<CampusCreateWithoutTimetableEntryInput, CampusUncheckedCreateWithoutTimetableEntryInput>
+    connectOrCreate?: CampusCreateOrConnectWithoutTimetableEntryInput
+    upsert?: CampusUpsertWithoutTimetableEntryInput
+    connect?: CampusWhereUniqueInput
+    update?: XOR<XOR<CampusUpdateToOneWithWhereWithoutTimetableEntryInput, CampusUpdateWithoutTimetableEntryInput>, CampusUncheckedUpdateWithoutTimetableEntryInput>
+  }
+
+  export type TeacherUpdateOneRequiredWithoutTimetableEntryNestedInput = {
+    create?: XOR<TeacherCreateWithoutTimetableEntryInput, TeacherUncheckedCreateWithoutTimetableEntryInput>
+    connectOrCreate?: TeacherCreateOrConnectWithoutTimetableEntryInput
+    upsert?: TeacherUpsertWithoutTimetableEntryInput
+    connect?: TeacherWhereUniqueInput
+    update?: XOR<XOR<TeacherUpdateToOneWithWhereWithoutTimetableEntryInput, TeacherUpdateWithoutTimetableEntryInput>, TeacherUncheckedUpdateWithoutTimetableEntryInput>
+  }
+
+  export type SubjectUpdateOneRequiredWithoutTimetableEntryNestedInput = {
+    create?: XOR<SubjectCreateWithoutTimetableEntryInput, SubjectUncheckedCreateWithoutTimetableEntryInput>
+    connectOrCreate?: SubjectCreateOrConnectWithoutTimetableEntryInput
+    upsert?: SubjectUpsertWithoutTimetableEntryInput
+    connect?: SubjectWhereUniqueInput
+    update?: XOR<XOR<SubjectUpdateToOneWithWhereWithoutTimetableEntryInput, SubjectUpdateWithoutTimetableEntryInput>, SubjectUncheckedUpdateWithoutTimetableEntryInput>
+  }
+
+  export type SemesterUpdateOneRequiredWithoutTimetableEntryNestedInput = {
+    create?: XOR<SemesterCreateWithoutTimetableEntryInput, SemesterUncheckedCreateWithoutTimetableEntryInput>
+    connectOrCreate?: SemesterCreateOrConnectWithoutTimetableEntryInput
+    upsert?: SemesterUpsertWithoutTimetableEntryInput
+    connect?: SemesterWhereUniqueInput
+    update?: XOR<XOR<SemesterUpdateToOneWithWhereWithoutTimetableEntryInput, SemesterUpdateWithoutTimetableEntryInput>, SemesterUncheckedUpdateWithoutTimetableEntryInput>
+  }
+
+  export type SectionUpdateOneRequiredWithoutTimetableEntryNestedInput = {
+    create?: XOR<SectionCreateWithoutTimetableEntryInput, SectionUncheckedCreateWithoutTimetableEntryInput>
+    connectOrCreate?: SectionCreateOrConnectWithoutTimetableEntryInput
+    upsert?: SectionUpsertWithoutTimetableEntryInput
+    connect?: SectionWhereUniqueInput
+    update?: XOR<XOR<SectionUpdateToOneWithWhereWithoutTimetableEntryInput, SectionUpdateWithoutTimetableEntryInput>, SectionUncheckedUpdateWithoutTimetableEntryInput>
+  }
+
   export type ClassSessionCreateNestedOneWithoutAttendancesInput = {
     create?: XOR<ClassSessionCreateWithoutAttendancesInput, ClassSessionUncheckedCreateWithoutAttendancesInput>
     connectOrCreate?: ClassSessionCreateOrConnectWithoutAttendancesInput
@@ -42621,12 +44852,22 @@ export namespace Prisma {
     connect?: SubjectWhereUniqueInput
   }
 
+  export type TeacherCreateNestedOneWithoutAttendanceTokensInput = {
+    create?: XOR<TeacherCreateWithoutAttendanceTokensInput, TeacherUncheckedCreateWithoutAttendanceTokensInput>
+    connectOrCreate?: TeacherCreateOrConnectWithoutAttendanceTokensInput
+    connect?: TeacherWhereUniqueInput
+  }
+
   export type NullableFloatFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type EnumAttendanceModeFieldUpdateOperationsInput = {
+    set?: $Enums.AttendanceMode
   }
 
   export type StudentUpdateOneWithoutAttendanceTokensNestedInput = {
@@ -42647,6 +44888,14 @@ export namespace Prisma {
     delete?: SubjectWhereInput | boolean
     connect?: SubjectWhereUniqueInput
     update?: XOR<XOR<SubjectUpdateToOneWithWhereWithoutAttendanceTokensInput, SubjectUpdateWithoutAttendanceTokensInput>, SubjectUncheckedUpdateWithoutAttendanceTokensInput>
+  }
+
+  export type TeacherUpdateOneRequiredWithoutAttendanceTokensNestedInput = {
+    create?: XOR<TeacherCreateWithoutAttendanceTokensInput, TeacherUncheckedCreateWithoutAttendanceTokensInput>
+    connectOrCreate?: TeacherCreateOrConnectWithoutAttendanceTokensInput
+    upsert?: TeacherUpsertWithoutAttendanceTokensInput
+    connect?: TeacherWhereUniqueInput
+    update?: XOR<XOR<TeacherUpdateToOneWithWhereWithoutAttendanceTokensInput, TeacherUpdateWithoutAttendanceTokensInput>, TeacherUncheckedUpdateWithoutAttendanceTokensInput>
   }
 
   export type UserCreateNestedOneWithoutSessionsInput = {
@@ -43474,6 +45723,13 @@ export namespace Prisma {
     _max?: NestedEnumAttendanceStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumAttendanceModeFilter<$PrismaModel = never> = {
+    equals?: $Enums.AttendanceMode | EnumAttendanceModeFieldRefInput<$PrismaModel>
+    in?: $Enums.AttendanceMode[] | ListEnumAttendanceModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AttendanceMode[] | ListEnumAttendanceModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumAttendanceModeFilter<$PrismaModel> | $Enums.AttendanceMode
+  }
+
   export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -43488,6 +45744,16 @@ export namespace Prisma {
     _sum?: NestedFloatNullableFilter<$PrismaModel>
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumAttendanceModeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AttendanceMode | EnumAttendanceModeFieldRefInput<$PrismaModel>
+    in?: $Enums.AttendanceMode[] | ListEnumAttendanceModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AttendanceMode[] | ListEnumAttendanceModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumAttendanceModeWithAggregatesFilter<$PrismaModel> | $Enums.AttendanceMode
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAttendanceModeFilter<$PrismaModel>
+    _max?: NestedEnumAttendanceModeFilter<$PrismaModel>
   }
   export type NestedJsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -43529,6 +45795,7 @@ export namespace Prisma {
     sections?: SectionCreateNestedManyWithoutCampusInput
     subjects?: SubjectCreateNestedManyWithoutCampusInput
     events?: EventCreateNestedManyWithoutCampusInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutCampusInput
   }
 
   export type CampusUncheckedCreateWithoutUsersInput = {
@@ -43547,6 +45814,7 @@ export namespace Prisma {
     sections?: SectionUncheckedCreateNestedManyWithoutCampusInput
     subjects?: SubjectUncheckedCreateNestedManyWithoutCampusInput
     events?: EventUncheckedCreateNestedManyWithoutCampusInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutCampusInput
   }
 
   export type CampusCreateOrConnectWithoutUsersInput = {
@@ -43562,8 +45830,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutTeacherInput
     classSessions?: ClassSessionCreateNestedManyWithoutTeacherInput
+    attendanceTokens?: AttendanceTokenCreateNestedManyWithoutTeacherInput
     announcements?: AnnouncementCreateNestedManyWithoutAuthorInput
     assignments?: AssignmentCreateNestedManyWithoutTeacherInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherUncheckedCreateWithoutUserInput = {
@@ -43574,8 +45844,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutTeacherInput
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutTeacherInput
+    attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutTeacherInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutTeacherInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherCreateOrConnectWithoutUserInput = {
@@ -43880,6 +46152,7 @@ export namespace Prisma {
     sections?: SectionUpdateManyWithoutCampusNestedInput
     subjects?: SubjectUpdateManyWithoutCampusNestedInput
     events?: EventUpdateManyWithoutCampusNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutCampusNestedInput
   }
 
   export type CampusUncheckedUpdateWithoutUsersInput = {
@@ -43898,6 +46171,7 @@ export namespace Prisma {
     sections?: SectionUncheckedUpdateManyWithoutCampusNestedInput
     subjects?: SubjectUncheckedUpdateManyWithoutCampusNestedInput
     events?: EventUncheckedUpdateManyWithoutCampusNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutCampusNestedInput
   }
 
   export type TeacherUpsertWithoutUserInput = {
@@ -43919,8 +46193,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     teacherSubjects?: TeacherSubjectUpdateManyWithoutTeacherNestedInput
     classSessions?: ClassSessionUpdateManyWithoutTeacherNestedInput
+    attendanceTokens?: AttendanceTokenUpdateManyWithoutTeacherNestedInput
     announcements?: AnnouncementUpdateManyWithoutAuthorNestedInput
     assignments?: AssignmentUpdateManyWithoutTeacherNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutTeacherNestedInput
   }
 
   export type TeacherUncheckedUpdateWithoutUserInput = {
@@ -43931,8 +46207,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutTeacherNestedInput
     classSessions?: ClassSessionUncheckedUpdateManyWithoutTeacherNestedInput
+    attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutTeacherNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutTeacherNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutTeacherNestedInput
   }
 
   export type StudentUpsertWithoutUserInput = {
@@ -44299,17 +46577,19 @@ export namespace Prisma {
 
   export type ClassSessionCreateWithoutTeacherInput = {
     id?: string
-    subject?: string | null
-    semester: number
-    section: string
-    weekday: $Enums.Weekday
-    room?: string | null
+    date: Date | string
     startTime: Date | string
     endTime: Date | string
+    weekday: $Enums.Weekday
+    room?: string | null
     status?: $Enums.SessionStatus
+    attendanceWindowEndsAt?: Date | string | null
     attendanceMarked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    subject?: string | null
+    semester: number
+    section: string
     subjectRel?: SubjectCreateNestedOneWithoutClassSessionsInput
     campus?: CampusCreateNestedOneWithoutClassSessionsInput
     semesterRel?: SemesterCreateNestedOneWithoutClassSessionsInput
@@ -44319,21 +46599,23 @@ export namespace Prisma {
 
   export type ClassSessionUncheckedCreateWithoutTeacherInput = {
     id?: string
-    subject?: string | null
-    subjectId?: string | null
-    campusId?: string | null
-    semester: number
-    section: string
-    weekday: $Enums.Weekday
-    room?: string | null
+    date: Date | string
     startTime: Date | string
     endTime: Date | string
-    semesterId?: string | null
-    sectionId?: string | null
+    weekday: $Enums.Weekday
+    room?: string | null
     status?: $Enums.SessionStatus
+    attendanceWindowEndsAt?: Date | string | null
     attendanceMarked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    subjectId?: string | null
+    subject?: string | null
+    campusId?: string | null
+    semester: number
+    section: string
+    semesterId?: string | null
+    sectionId?: string | null
     attendances?: AttendanceUncheckedCreateNestedManyWithoutClassSessionInput
   }
 
@@ -44344,6 +46626,42 @@ export namespace Prisma {
 
   export type ClassSessionCreateManyTeacherInputEnvelope = {
     data: ClassSessionCreateManyTeacherInput | ClassSessionCreateManyTeacherInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AttendanceTokenCreateWithoutTeacherInput = {
+    id?: string
+    token: string
+    issuedAt?: Date | string
+    expiresAt: Date | string
+    used?: boolean
+    latitude?: number | null
+    longitude?: number | null
+    mode?: $Enums.AttendanceMode
+    student?: StudentCreateNestedOneWithoutAttendanceTokensInput
+    subject?: SubjectCreateNestedOneWithoutAttendanceTokensInput
+  }
+
+  export type AttendanceTokenUncheckedCreateWithoutTeacherInput = {
+    id?: string
+    token: string
+    studentId?: string | null
+    subjectId?: string | null
+    issuedAt?: Date | string
+    expiresAt: Date | string
+    used?: boolean
+    latitude?: number | null
+    longitude?: number | null
+    mode?: $Enums.AttendanceMode
+  }
+
+  export type AttendanceTokenCreateOrConnectWithoutTeacherInput = {
+    where: AttendanceTokenWhereUniqueInput
+    create: XOR<AttendanceTokenCreateWithoutTeacherInput, AttendanceTokenUncheckedCreateWithoutTeacherInput>
+  }
+
+  export type AttendanceTokenCreateManyTeacherInputEnvelope = {
+    data: AttendanceTokenCreateManyTeacherInput | AttendanceTokenCreateManyTeacherInput[]
     skipDuplicates?: boolean
   }
 
@@ -44414,6 +46732,40 @@ export namespace Prisma {
 
   export type AssignmentCreateManyTeacherInputEnvelope = {
     data: AssignmentCreateManyTeacherInput | AssignmentCreateManyTeacherInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TimetableEntryCreateWithoutTeacherInput = {
+    id?: string
+    weekday: $Enums.Weekday
+    startTime: Date | string
+    endTime: Date | string
+    room?: string | null
+    campus: CampusCreateNestedOneWithoutTimetableEntryInput
+    subject: SubjectCreateNestedOneWithoutTimetableEntryInput
+    semester: SemesterCreateNestedOneWithoutTimetableEntryInput
+    section: SectionCreateNestedOneWithoutTimetableEntryInput
+  }
+
+  export type TimetableEntryUncheckedCreateWithoutTeacherInput = {
+    id?: string
+    weekday: $Enums.Weekday
+    startTime: Date | string
+    endTime: Date | string
+    room?: string | null
+    campusId: string
+    subjectId: string
+    semesterId: string
+    sectionId: string
+  }
+
+  export type TimetableEntryCreateOrConnectWithoutTeacherInput = {
+    where: TimetableEntryWhereUniqueInput
+    create: XOR<TimetableEntryCreateWithoutTeacherInput, TimetableEntryUncheckedCreateWithoutTeacherInput>
+  }
+
+  export type TimetableEntryCreateManyTeacherInputEnvelope = {
+    data: TimetableEntryCreateManyTeacherInput | TimetableEntryCreateManyTeacherInput[]
     skipDuplicates?: boolean
   }
 
@@ -44530,22 +46882,57 @@ export namespace Prisma {
     OR?: ClassSessionScalarWhereInput[]
     NOT?: ClassSessionScalarWhereInput | ClassSessionScalarWhereInput[]
     id?: StringFilter<"ClassSession"> | string
-    subject?: StringNullableFilter<"ClassSession"> | string | null
-    subjectId?: StringNullableFilter<"ClassSession"> | string | null
-    campusId?: StringNullableFilter<"ClassSession"> | string | null
-    semester?: IntFilter<"ClassSession"> | number
-    section?: StringFilter<"ClassSession"> | string
-    weekday?: EnumWeekdayFilter<"ClassSession"> | $Enums.Weekday
-    room?: StringNullableFilter<"ClassSession"> | string | null
+    date?: DateTimeFilter<"ClassSession"> | Date | string
     startTime?: DateTimeFilter<"ClassSession"> | Date | string
     endTime?: DateTimeFilter<"ClassSession"> | Date | string
-    teacherId?: StringFilter<"ClassSession"> | string
-    semesterId?: StringNullableFilter<"ClassSession"> | string | null
-    sectionId?: StringNullableFilter<"ClassSession"> | string | null
+    weekday?: EnumWeekdayFilter<"ClassSession"> | $Enums.Weekday
+    room?: StringNullableFilter<"ClassSession"> | string | null
     status?: EnumSessionStatusFilter<"ClassSession"> | $Enums.SessionStatus
+    attendanceWindowEndsAt?: DateTimeNullableFilter<"ClassSession"> | Date | string | null
     attendanceMarked?: BoolFilter<"ClassSession"> | boolean
     createdAt?: DateTimeFilter<"ClassSession"> | Date | string
     updatedAt?: DateTimeFilter<"ClassSession"> | Date | string
+    subjectId?: StringNullableFilter<"ClassSession"> | string | null
+    subject?: StringNullableFilter<"ClassSession"> | string | null
+    campusId?: StringNullableFilter<"ClassSession"> | string | null
+    semester?: IntFilter<"ClassSession"> | number
+    section?: StringFilter<"ClassSession"> | string
+    teacherId?: StringFilter<"ClassSession"> | string
+    semesterId?: StringNullableFilter<"ClassSession"> | string | null
+    sectionId?: StringNullableFilter<"ClassSession"> | string | null
+  }
+
+  export type AttendanceTokenUpsertWithWhereUniqueWithoutTeacherInput = {
+    where: AttendanceTokenWhereUniqueInput
+    update: XOR<AttendanceTokenUpdateWithoutTeacherInput, AttendanceTokenUncheckedUpdateWithoutTeacherInput>
+    create: XOR<AttendanceTokenCreateWithoutTeacherInput, AttendanceTokenUncheckedCreateWithoutTeacherInput>
+  }
+
+  export type AttendanceTokenUpdateWithWhereUniqueWithoutTeacherInput = {
+    where: AttendanceTokenWhereUniqueInput
+    data: XOR<AttendanceTokenUpdateWithoutTeacherInput, AttendanceTokenUncheckedUpdateWithoutTeacherInput>
+  }
+
+  export type AttendanceTokenUpdateManyWithWhereWithoutTeacherInput = {
+    where: AttendanceTokenScalarWhereInput
+    data: XOR<AttendanceTokenUpdateManyMutationInput, AttendanceTokenUncheckedUpdateManyWithoutTeacherInput>
+  }
+
+  export type AttendanceTokenScalarWhereInput = {
+    AND?: AttendanceTokenScalarWhereInput | AttendanceTokenScalarWhereInput[]
+    OR?: AttendanceTokenScalarWhereInput[]
+    NOT?: AttendanceTokenScalarWhereInput | AttendanceTokenScalarWhereInput[]
+    id?: StringFilter<"AttendanceToken"> | string
+    token?: StringFilter<"AttendanceToken"> | string
+    studentId?: StringNullableFilter<"AttendanceToken"> | string | null
+    subjectId?: StringNullableFilter<"AttendanceToken"> | string | null
+    professorId?: StringFilter<"AttendanceToken"> | string
+    issuedAt?: DateTimeFilter<"AttendanceToken"> | Date | string
+    expiresAt?: DateTimeFilter<"AttendanceToken"> | Date | string
+    used?: BoolFilter<"AttendanceToken"> | boolean
+    latitude?: FloatNullableFilter<"AttendanceToken"> | number | null
+    longitude?: FloatNullableFilter<"AttendanceToken"> | number | null
+    mode?: EnumAttendanceModeFilter<"AttendanceToken"> | $Enums.AttendanceMode
   }
 
   export type AnnouncementUpsertWithWhereUniqueWithoutAuthorInput = {
@@ -44608,6 +46995,38 @@ export namespace Prisma {
     dueDate?: DateTimeNullableFilter<"Assignment"> | Date | string | null
     createdAt?: DateTimeFilter<"Assignment"> | Date | string
     updatedAt?: DateTimeFilter<"Assignment"> | Date | string
+  }
+
+  export type TimetableEntryUpsertWithWhereUniqueWithoutTeacherInput = {
+    where: TimetableEntryWhereUniqueInput
+    update: XOR<TimetableEntryUpdateWithoutTeacherInput, TimetableEntryUncheckedUpdateWithoutTeacherInput>
+    create: XOR<TimetableEntryCreateWithoutTeacherInput, TimetableEntryUncheckedCreateWithoutTeacherInput>
+  }
+
+  export type TimetableEntryUpdateWithWhereUniqueWithoutTeacherInput = {
+    where: TimetableEntryWhereUniqueInput
+    data: XOR<TimetableEntryUpdateWithoutTeacherInput, TimetableEntryUncheckedUpdateWithoutTeacherInput>
+  }
+
+  export type TimetableEntryUpdateManyWithWhereWithoutTeacherInput = {
+    where: TimetableEntryScalarWhereInput
+    data: XOR<TimetableEntryUpdateManyMutationInput, TimetableEntryUncheckedUpdateManyWithoutTeacherInput>
+  }
+
+  export type TimetableEntryScalarWhereInput = {
+    AND?: TimetableEntryScalarWhereInput | TimetableEntryScalarWhereInput[]
+    OR?: TimetableEntryScalarWhereInput[]
+    NOT?: TimetableEntryScalarWhereInput | TimetableEntryScalarWhereInput[]
+    id?: StringFilter<"TimetableEntry"> | string
+    weekday?: EnumWeekdayFilter<"TimetableEntry"> | $Enums.Weekday
+    startTime?: DateTimeFilter<"TimetableEntry"> | Date | string
+    endTime?: DateTimeFilter<"TimetableEntry"> | Date | string
+    room?: StringNullableFilter<"TimetableEntry"> | string | null
+    campusId?: StringFilter<"TimetableEntry"> | string
+    teacherId?: StringFilter<"TimetableEntry"> | string
+    subjectId?: StringFilter<"TimetableEntry"> | string
+    semesterId?: StringFilter<"TimetableEntry"> | string
+    sectionId?: StringFilter<"TimetableEntry"> | string
   }
 
   export type UserCreateWithoutStudentProfileInput = {
@@ -44677,6 +47096,7 @@ export namespace Prisma {
     campus: CampusCreateNestedOneWithoutSemestersInput
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutSemesterInput
     classSessions?: ClassSessionCreateNestedManyWithoutSemesterRelInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutStudentsInput = {
@@ -44687,6 +47107,7 @@ export namespace Prisma {
     campusId: string
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutSemesterInput
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSemesterRelInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutStudentsInput = {
@@ -44701,6 +47122,7 @@ export namespace Prisma {
     campus: CampusCreateNestedOneWithoutSectionsInput
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutSectionInput
     classSessions?: ClassSessionCreateNestedManyWithoutSectionRelInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSectionInput
   }
 
   export type SectionUncheckedCreateWithoutStudentsInput = {
@@ -44710,6 +47132,7 @@ export namespace Prisma {
     campusId: string
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutSectionInput
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSectionRelInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSectionInput
   }
 
   export type SectionCreateOrConnectWithoutStudentsInput = {
@@ -44818,13 +47241,14 @@ export namespace Prisma {
   export type AttendanceTokenCreateWithoutStudentInput = {
     id?: string
     token: string
-    professorId: string
     issuedAt?: Date | string
     expiresAt: Date | string
     used?: boolean
     latitude?: number | null
     longitude?: number | null
+    mode?: $Enums.AttendanceMode
     subject?: SubjectCreateNestedOneWithoutAttendanceTokensInput
+    teacher: TeacherCreateNestedOneWithoutAttendanceTokensInput
   }
 
   export type AttendanceTokenUncheckedCreateWithoutStudentInput = {
@@ -44837,6 +47261,7 @@ export namespace Prisma {
     used?: boolean
     latitude?: number | null
     longitude?: number | null
+    mode?: $Enums.AttendanceMode
   }
 
   export type AttendanceTokenCreateOrConnectWithoutStudentInput = {
@@ -44933,6 +47358,7 @@ export namespace Prisma {
     campus?: CampusUpdateOneRequiredWithoutSemestersNestedInput
     teacherSubjects?: TeacherSubjectUpdateManyWithoutSemesterNestedInput
     classSessions?: ClassSessionUpdateManyWithoutSemesterRelNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutStudentsInput = {
@@ -44943,6 +47369,7 @@ export namespace Prisma {
     campusId?: StringFieldUpdateOperationsInput | string
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutSemesterNestedInput
     classSessions?: ClassSessionUncheckedUpdateManyWithoutSemesterRelNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type SectionUpsertWithoutStudentsInput = {
@@ -44963,6 +47390,7 @@ export namespace Prisma {
     campus?: CampusUpdateOneRequiredWithoutSectionsNestedInput
     teacherSubjects?: TeacherSubjectUpdateManyWithoutSectionNestedInput
     classSessions?: ClassSessionUpdateManyWithoutSectionRelNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSectionNestedInput
   }
 
   export type SectionUncheckedUpdateWithoutStudentsInput = {
@@ -44972,6 +47400,7 @@ export namespace Prisma {
     campusId?: StringFieldUpdateOperationsInput | string
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutSectionNestedInput
     classSessions?: ClassSessionUncheckedUpdateManyWithoutSectionRelNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSectionNestedInput
   }
 
   export type AttendanceUpsertWithWhereUniqueWithoutStudentInput = {
@@ -45068,22 +47497,6 @@ export namespace Prisma {
     data: XOR<AttendanceTokenUpdateManyMutationInput, AttendanceTokenUncheckedUpdateManyWithoutStudentInput>
   }
 
-  export type AttendanceTokenScalarWhereInput = {
-    AND?: AttendanceTokenScalarWhereInput | AttendanceTokenScalarWhereInput[]
-    OR?: AttendanceTokenScalarWhereInput[]
-    NOT?: AttendanceTokenScalarWhereInput | AttendanceTokenScalarWhereInput[]
-    id?: StringFilter<"AttendanceToken"> | string
-    token?: StringFilter<"AttendanceToken"> | string
-    studentId?: StringNullableFilter<"AttendanceToken"> | string | null
-    subjectId?: StringNullableFilter<"AttendanceToken"> | string | null
-    professorId?: StringFilter<"AttendanceToken"> | string
-    issuedAt?: DateTimeFilter<"AttendanceToken"> | Date | string
-    expiresAt?: DateTimeFilter<"AttendanceToken"> | Date | string
-    used?: BoolFilter<"AttendanceToken"> | boolean
-    latitude?: FloatNullableFilter<"AttendanceToken"> | number | null
-    longitude?: FloatNullableFilter<"AttendanceToken"> | number | null
-  }
-
   export type CampusCreateWithoutSemestersInput = {
     id?: string
     name: string
@@ -45100,6 +47513,7 @@ export namespace Prisma {
     sections?: SectionCreateNestedManyWithoutCampusInput
     subjects?: SubjectCreateNestedManyWithoutCampusInput
     events?: EventCreateNestedManyWithoutCampusInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutCampusInput
   }
 
   export type CampusUncheckedCreateWithoutSemestersInput = {
@@ -45118,6 +47532,7 @@ export namespace Prisma {
     sections?: SectionUncheckedCreateNestedManyWithoutCampusInput
     subjects?: SubjectUncheckedCreateNestedManyWithoutCampusInput
     events?: EventUncheckedCreateNestedManyWithoutCampusInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutCampusInput
   }
 
   export type CampusCreateOrConnectWithoutSemestersInput = {
@@ -45151,17 +47566,19 @@ export namespace Prisma {
 
   export type ClassSessionCreateWithoutSemesterRelInput = {
     id?: string
-    subject?: string | null
-    semester: number
-    section: string
-    weekday: $Enums.Weekday
-    room?: string | null
+    date: Date | string
     startTime: Date | string
     endTime: Date | string
+    weekday: $Enums.Weekday
+    room?: string | null
     status?: $Enums.SessionStatus
+    attendanceWindowEndsAt?: Date | string | null
     attendanceMarked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    subject?: string | null
+    semester: number
+    section: string
     subjectRel?: SubjectCreateNestedOneWithoutClassSessionsInput
     campus?: CampusCreateNestedOneWithoutClassSessionsInput
     teacher: TeacherCreateNestedOneWithoutClassSessionsInput
@@ -45171,21 +47588,23 @@ export namespace Prisma {
 
   export type ClassSessionUncheckedCreateWithoutSemesterRelInput = {
     id?: string
-    subject?: string | null
-    subjectId?: string | null
-    campusId?: string | null
-    semester: number
-    section: string
-    weekday: $Enums.Weekday
-    room?: string | null
+    date: Date | string
     startTime: Date | string
     endTime: Date | string
-    teacherId: string
-    sectionId?: string | null
+    weekday: $Enums.Weekday
+    room?: string | null
     status?: $Enums.SessionStatus
+    attendanceWindowEndsAt?: Date | string | null
     attendanceMarked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    subjectId?: string | null
+    subject?: string | null
+    campusId?: string | null
+    semester: number
+    section: string
+    teacherId: string
+    sectionId?: string | null
     attendances?: AttendanceUncheckedCreateNestedManyWithoutClassSessionInput
   }
 
@@ -45235,6 +47654,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TimetableEntryCreateWithoutSemesterInput = {
+    id?: string
+    weekday: $Enums.Weekday
+    startTime: Date | string
+    endTime: Date | string
+    room?: string | null
+    campus: CampusCreateNestedOneWithoutTimetableEntryInput
+    teacher: TeacherCreateNestedOneWithoutTimetableEntryInput
+    subject: SubjectCreateNestedOneWithoutTimetableEntryInput
+    section: SectionCreateNestedOneWithoutTimetableEntryInput
+  }
+
+  export type TimetableEntryUncheckedCreateWithoutSemesterInput = {
+    id?: string
+    weekday: $Enums.Weekday
+    startTime: Date | string
+    endTime: Date | string
+    room?: string | null
+    campusId: string
+    teacherId: string
+    subjectId: string
+    sectionId: string
+  }
+
+  export type TimetableEntryCreateOrConnectWithoutSemesterInput = {
+    where: TimetableEntryWhereUniqueInput
+    create: XOR<TimetableEntryCreateWithoutSemesterInput, TimetableEntryUncheckedCreateWithoutSemesterInput>
+  }
+
+  export type TimetableEntryCreateManySemesterInputEnvelope = {
+    data: TimetableEntryCreateManySemesterInput | TimetableEntryCreateManySemesterInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CampusUpsertWithoutSemestersInput = {
     update: XOR<CampusUpdateWithoutSemestersInput, CampusUncheckedUpdateWithoutSemestersInput>
     create: XOR<CampusCreateWithoutSemestersInput, CampusUncheckedCreateWithoutSemestersInput>
@@ -45262,6 +47715,7 @@ export namespace Prisma {
     sections?: SectionUpdateManyWithoutCampusNestedInput
     subjects?: SubjectUpdateManyWithoutCampusNestedInput
     events?: EventUpdateManyWithoutCampusNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutCampusNestedInput
   }
 
   export type CampusUncheckedUpdateWithoutSemestersInput = {
@@ -45280,6 +47734,7 @@ export namespace Prisma {
     sections?: SectionUncheckedUpdateManyWithoutCampusNestedInput
     subjects?: SubjectUncheckedUpdateManyWithoutCampusNestedInput
     events?: EventUncheckedUpdateManyWithoutCampusNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutCampusNestedInput
   }
 
   export type TeacherSubjectUpsertWithWhereUniqueWithoutSemesterInput = {
@@ -45343,6 +47798,22 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Student"> | Date | string
   }
 
+  export type TimetableEntryUpsertWithWhereUniqueWithoutSemesterInput = {
+    where: TimetableEntryWhereUniqueInput
+    update: XOR<TimetableEntryUpdateWithoutSemesterInput, TimetableEntryUncheckedUpdateWithoutSemesterInput>
+    create: XOR<TimetableEntryCreateWithoutSemesterInput, TimetableEntryUncheckedCreateWithoutSemesterInput>
+  }
+
+  export type TimetableEntryUpdateWithWhereUniqueWithoutSemesterInput = {
+    where: TimetableEntryWhereUniqueInput
+    data: XOR<TimetableEntryUpdateWithoutSemesterInput, TimetableEntryUncheckedUpdateWithoutSemesterInput>
+  }
+
+  export type TimetableEntryUpdateManyWithWhereWithoutSemesterInput = {
+    where: TimetableEntryScalarWhereInput
+    data: XOR<TimetableEntryUpdateManyMutationInput, TimetableEntryUncheckedUpdateManyWithoutSemesterInput>
+  }
+
   export type CampusCreateWithoutSectionsInput = {
     id?: string
     name: string
@@ -45359,6 +47830,7 @@ export namespace Prisma {
     semesters?: SemesterCreateNestedManyWithoutCampusInput
     subjects?: SubjectCreateNestedManyWithoutCampusInput
     events?: EventCreateNestedManyWithoutCampusInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutCampusInput
   }
 
   export type CampusUncheckedCreateWithoutSectionsInput = {
@@ -45377,6 +47849,7 @@ export namespace Prisma {
     semesters?: SemesterUncheckedCreateNestedManyWithoutCampusInput
     subjects?: SubjectUncheckedCreateNestedManyWithoutCampusInput
     events?: EventUncheckedCreateNestedManyWithoutCampusInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutCampusInput
   }
 
   export type CampusCreateOrConnectWithoutSectionsInput = {
@@ -45410,17 +47883,19 @@ export namespace Prisma {
 
   export type ClassSessionCreateWithoutSectionRelInput = {
     id?: string
-    subject?: string | null
-    semester: number
-    section: string
-    weekday: $Enums.Weekday
-    room?: string | null
+    date: Date | string
     startTime: Date | string
     endTime: Date | string
+    weekday: $Enums.Weekday
+    room?: string | null
     status?: $Enums.SessionStatus
+    attendanceWindowEndsAt?: Date | string | null
     attendanceMarked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    subject?: string | null
+    semester: number
+    section: string
     subjectRel?: SubjectCreateNestedOneWithoutClassSessionsInput
     campus?: CampusCreateNestedOneWithoutClassSessionsInput
     teacher: TeacherCreateNestedOneWithoutClassSessionsInput
@@ -45430,21 +47905,23 @@ export namespace Prisma {
 
   export type ClassSessionUncheckedCreateWithoutSectionRelInput = {
     id?: string
-    subject?: string | null
-    subjectId?: string | null
-    campusId?: string | null
-    semester: number
-    section: string
-    weekday: $Enums.Weekday
-    room?: string | null
+    date: Date | string
     startTime: Date | string
     endTime: Date | string
-    teacherId: string
-    semesterId?: string | null
+    weekday: $Enums.Weekday
+    room?: string | null
     status?: $Enums.SessionStatus
+    attendanceWindowEndsAt?: Date | string | null
     attendanceMarked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    subjectId?: string | null
+    subject?: string | null
+    campusId?: string | null
+    semester: number
+    section: string
+    teacherId: string
+    semesterId?: string | null
     attendances?: AttendanceUncheckedCreateNestedManyWithoutClassSessionInput
   }
 
@@ -45494,6 +47971,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TimetableEntryCreateWithoutSectionInput = {
+    id?: string
+    weekday: $Enums.Weekday
+    startTime: Date | string
+    endTime: Date | string
+    room?: string | null
+    campus: CampusCreateNestedOneWithoutTimetableEntryInput
+    teacher: TeacherCreateNestedOneWithoutTimetableEntryInput
+    subject: SubjectCreateNestedOneWithoutTimetableEntryInput
+    semester: SemesterCreateNestedOneWithoutTimetableEntryInput
+  }
+
+  export type TimetableEntryUncheckedCreateWithoutSectionInput = {
+    id?: string
+    weekday: $Enums.Weekday
+    startTime: Date | string
+    endTime: Date | string
+    room?: string | null
+    campusId: string
+    teacherId: string
+    subjectId: string
+    semesterId: string
+  }
+
+  export type TimetableEntryCreateOrConnectWithoutSectionInput = {
+    where: TimetableEntryWhereUniqueInput
+    create: XOR<TimetableEntryCreateWithoutSectionInput, TimetableEntryUncheckedCreateWithoutSectionInput>
+  }
+
+  export type TimetableEntryCreateManySectionInputEnvelope = {
+    data: TimetableEntryCreateManySectionInput | TimetableEntryCreateManySectionInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CampusUpsertWithoutSectionsInput = {
     update: XOR<CampusUpdateWithoutSectionsInput, CampusUncheckedUpdateWithoutSectionsInput>
     create: XOR<CampusCreateWithoutSectionsInput, CampusUncheckedCreateWithoutSectionsInput>
@@ -45521,6 +48032,7 @@ export namespace Prisma {
     semesters?: SemesterUpdateManyWithoutCampusNestedInput
     subjects?: SubjectUpdateManyWithoutCampusNestedInput
     events?: EventUpdateManyWithoutCampusNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutCampusNestedInput
   }
 
   export type CampusUncheckedUpdateWithoutSectionsInput = {
@@ -45539,6 +48051,7 @@ export namespace Prisma {
     semesters?: SemesterUncheckedUpdateManyWithoutCampusNestedInput
     subjects?: SubjectUncheckedUpdateManyWithoutCampusNestedInput
     events?: EventUncheckedUpdateManyWithoutCampusNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutCampusNestedInput
   }
 
   export type TeacherSubjectUpsertWithWhereUniqueWithoutSectionInput = {
@@ -45589,6 +48102,22 @@ export namespace Prisma {
     data: XOR<StudentUpdateManyMutationInput, StudentUncheckedUpdateManyWithoutSectionInput>
   }
 
+  export type TimetableEntryUpsertWithWhereUniqueWithoutSectionInput = {
+    where: TimetableEntryWhereUniqueInput
+    update: XOR<TimetableEntryUpdateWithoutSectionInput, TimetableEntryUncheckedUpdateWithoutSectionInput>
+    create: XOR<TimetableEntryCreateWithoutSectionInput, TimetableEntryUncheckedCreateWithoutSectionInput>
+  }
+
+  export type TimetableEntryUpdateWithWhereUniqueWithoutSectionInput = {
+    where: TimetableEntryWhereUniqueInput
+    data: XOR<TimetableEntryUpdateWithoutSectionInput, TimetableEntryUncheckedUpdateWithoutSectionInput>
+  }
+
+  export type TimetableEntryUpdateManyWithWhereWithoutSectionInput = {
+    where: TimetableEntryScalarWhereInput
+    data: XOR<TimetableEntryUpdateManyMutationInput, TimetableEntryUncheckedUpdateManyWithoutSectionInput>
+  }
+
   export type CampusCreateWithoutSubjectsInput = {
     id?: string
     name: string
@@ -45605,6 +48134,7 @@ export namespace Prisma {
     semesters?: SemesterCreateNestedManyWithoutCampusInput
     sections?: SectionCreateNestedManyWithoutCampusInput
     events?: EventCreateNestedManyWithoutCampusInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutCampusInput
   }
 
   export type CampusUncheckedCreateWithoutSubjectsInput = {
@@ -45623,6 +48153,7 @@ export namespace Prisma {
     semesters?: SemesterUncheckedCreateNestedManyWithoutCampusInput
     sections?: SectionUncheckedCreateNestedManyWithoutCampusInput
     events?: EventUncheckedCreateNestedManyWithoutCampusInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutCampusInput
   }
 
   export type CampusCreateOrConnectWithoutSubjectsInput = {
@@ -45656,17 +48187,19 @@ export namespace Prisma {
 
   export type ClassSessionCreateWithoutSubjectRelInput = {
     id?: string
-    subject?: string | null
-    semester: number
-    section: string
-    weekday: $Enums.Weekday
-    room?: string | null
+    date: Date | string
     startTime: Date | string
     endTime: Date | string
+    weekday: $Enums.Weekday
+    room?: string | null
     status?: $Enums.SessionStatus
+    attendanceWindowEndsAt?: Date | string | null
     attendanceMarked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    subject?: string | null
+    semester: number
+    section: string
     campus?: CampusCreateNestedOneWithoutClassSessionsInput
     teacher: TeacherCreateNestedOneWithoutClassSessionsInput
     semesterRel?: SemesterCreateNestedOneWithoutClassSessionsInput
@@ -45676,21 +48209,23 @@ export namespace Prisma {
 
   export type ClassSessionUncheckedCreateWithoutSubjectRelInput = {
     id?: string
+    date: Date | string
+    startTime: Date | string
+    endTime: Date | string
+    weekday: $Enums.Weekday
+    room?: string | null
+    status?: $Enums.SessionStatus
+    attendanceWindowEndsAt?: Date | string | null
+    attendanceMarked?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
     subject?: string | null
     campusId?: string | null
     semester: number
     section: string
-    weekday: $Enums.Weekday
-    room?: string | null
-    startTime: Date | string
-    endTime: Date | string
     teacherId: string
     semesterId?: string | null
     sectionId?: string | null
-    status?: $Enums.SessionStatus
-    attendanceMarked?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
     attendances?: AttendanceUncheckedCreateNestedManyWithoutClassSessionInput
   }
 
@@ -45807,13 +48342,14 @@ export namespace Prisma {
   export type AttendanceTokenCreateWithoutSubjectInput = {
     id?: string
     token: string
-    professorId: string
     issuedAt?: Date | string
     expiresAt: Date | string
     used?: boolean
     latitude?: number | null
     longitude?: number | null
+    mode?: $Enums.AttendanceMode
     student?: StudentCreateNestedOneWithoutAttendanceTokensInput
+    teacher: TeacherCreateNestedOneWithoutAttendanceTokensInput
   }
 
   export type AttendanceTokenUncheckedCreateWithoutSubjectInput = {
@@ -45826,6 +48362,7 @@ export namespace Prisma {
     used?: boolean
     latitude?: number | null
     longitude?: number | null
+    mode?: $Enums.AttendanceMode
   }
 
   export type AttendanceTokenCreateOrConnectWithoutSubjectInput = {
@@ -45835,6 +48372,40 @@ export namespace Prisma {
 
   export type AttendanceTokenCreateManySubjectInputEnvelope = {
     data: AttendanceTokenCreateManySubjectInput | AttendanceTokenCreateManySubjectInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TimetableEntryCreateWithoutSubjectInput = {
+    id?: string
+    weekday: $Enums.Weekday
+    startTime: Date | string
+    endTime: Date | string
+    room?: string | null
+    campus: CampusCreateNestedOneWithoutTimetableEntryInput
+    teacher: TeacherCreateNestedOneWithoutTimetableEntryInput
+    semester: SemesterCreateNestedOneWithoutTimetableEntryInput
+    section: SectionCreateNestedOneWithoutTimetableEntryInput
+  }
+
+  export type TimetableEntryUncheckedCreateWithoutSubjectInput = {
+    id?: string
+    weekday: $Enums.Weekday
+    startTime: Date | string
+    endTime: Date | string
+    room?: string | null
+    campusId: string
+    teacherId: string
+    semesterId: string
+    sectionId: string
+  }
+
+  export type TimetableEntryCreateOrConnectWithoutSubjectInput = {
+    where: TimetableEntryWhereUniqueInput
+    create: XOR<TimetableEntryCreateWithoutSubjectInput, TimetableEntryUncheckedCreateWithoutSubjectInput>
+  }
+
+  export type TimetableEntryCreateManySubjectInputEnvelope = {
+    data: TimetableEntryCreateManySubjectInput | TimetableEntryCreateManySubjectInput[]
     skipDuplicates?: boolean
   }
 
@@ -45865,6 +48436,7 @@ export namespace Prisma {
     semesters?: SemesterUpdateManyWithoutCampusNestedInput
     sections?: SectionUpdateManyWithoutCampusNestedInput
     events?: EventUpdateManyWithoutCampusNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutCampusNestedInput
   }
 
   export type CampusUncheckedUpdateWithoutSubjectsInput = {
@@ -45883,6 +48455,7 @@ export namespace Prisma {
     semesters?: SemesterUncheckedUpdateManyWithoutCampusNestedInput
     sections?: SectionUncheckedUpdateManyWithoutCampusNestedInput
     events?: EventUncheckedUpdateManyWithoutCampusNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutCampusNestedInput
   }
 
   export type TeacherSubjectUpsertWithWhereUniqueWithoutSubjectInput = {
@@ -46011,6 +48584,22 @@ export namespace Prisma {
     data: XOR<AttendanceTokenUpdateManyMutationInput, AttendanceTokenUncheckedUpdateManyWithoutSubjectInput>
   }
 
+  export type TimetableEntryUpsertWithWhereUniqueWithoutSubjectInput = {
+    where: TimetableEntryWhereUniqueInput
+    update: XOR<TimetableEntryUpdateWithoutSubjectInput, TimetableEntryUncheckedUpdateWithoutSubjectInput>
+    create: XOR<TimetableEntryCreateWithoutSubjectInput, TimetableEntryUncheckedCreateWithoutSubjectInput>
+  }
+
+  export type TimetableEntryUpdateWithWhereUniqueWithoutSubjectInput = {
+    where: TimetableEntryWhereUniqueInput
+    data: XOR<TimetableEntryUpdateWithoutSubjectInput, TimetableEntryUncheckedUpdateWithoutSubjectInput>
+  }
+
+  export type TimetableEntryUpdateManyWithWhereWithoutSubjectInput = {
+    where: TimetableEntryScalarWhereInput
+    data: XOR<TimetableEntryUpdateManyMutationInput, TimetableEntryUncheckedUpdateManyWithoutSubjectInput>
+  }
+
   export type TeacherCreateWithoutTeacherSubjectsInput = {
     id?: string
     department?: string | null
@@ -46019,8 +48608,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutTeacherProfileInput
     classSessions?: ClassSessionCreateNestedManyWithoutTeacherInput
+    attendanceTokens?: AttendanceTokenCreateNestedManyWithoutTeacherInput
     announcements?: AnnouncementCreateNestedManyWithoutAuthorInput
     assignments?: AssignmentCreateNestedManyWithoutTeacherInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherUncheckedCreateWithoutTeacherSubjectsInput = {
@@ -46031,8 +48622,10 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutTeacherInput
+    attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutTeacherInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutTeacherInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherCreateOrConnectWithoutTeacherSubjectsInput = {
@@ -46053,6 +48646,7 @@ export namespace Prisma {
     resources?: ResourceCreateNestedManyWithoutSubjectInput
     exams?: ExamCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutSubjectInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectUncheckedCreateWithoutTeacherSubjectsInput = {
@@ -46068,6 +48662,7 @@ export namespace Prisma {
     resources?: ResourceUncheckedCreateNestedManyWithoutSubjectInput
     exams?: ExamUncheckedCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutSubjectInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectCreateOrConnectWithoutTeacherSubjectsInput = {
@@ -46083,6 +48678,7 @@ export namespace Prisma {
     campus: CampusCreateNestedOneWithoutSemestersInput
     classSessions?: ClassSessionCreateNestedManyWithoutSemesterRelInput
     students?: StudentCreateNestedManyWithoutSemesterInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutTeacherSubjectsInput = {
@@ -46093,6 +48689,7 @@ export namespace Prisma {
     campusId: string
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSemesterRelInput
     students?: StudentUncheckedCreateNestedManyWithoutSemesterInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutTeacherSubjectsInput = {
@@ -46107,6 +48704,7 @@ export namespace Prisma {
     campus: CampusCreateNestedOneWithoutSectionsInput
     classSessions?: ClassSessionCreateNestedManyWithoutSectionRelInput
     students?: StudentCreateNestedManyWithoutSectionInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSectionInput
   }
 
   export type SectionUncheckedCreateWithoutTeacherSubjectsInput = {
@@ -46116,6 +48714,7 @@ export namespace Prisma {
     campusId: string
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSectionRelInput
     students?: StudentUncheckedCreateNestedManyWithoutSectionInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSectionInput
   }
 
   export type SectionCreateOrConnectWithoutTeacherSubjectsInput = {
@@ -46142,8 +48741,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutTeacherProfileNestedInput
     classSessions?: ClassSessionUpdateManyWithoutTeacherNestedInput
+    attendanceTokens?: AttendanceTokenUpdateManyWithoutTeacherNestedInput
     announcements?: AnnouncementUpdateManyWithoutAuthorNestedInput
     assignments?: AssignmentUpdateManyWithoutTeacherNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutTeacherNestedInput
   }
 
   export type TeacherUncheckedUpdateWithoutTeacherSubjectsInput = {
@@ -46154,8 +48755,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     classSessions?: ClassSessionUncheckedUpdateManyWithoutTeacherNestedInput
+    attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutTeacherNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutTeacherNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutTeacherNestedInput
   }
 
   export type SubjectUpsertWithoutTeacherSubjectsInput = {
@@ -46182,6 +48785,7 @@ export namespace Prisma {
     resources?: ResourceUpdateManyWithoutSubjectNestedInput
     exams?: ExamUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUpdateManyWithoutSubjectNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectUncheckedUpdateWithoutTeacherSubjectsInput = {
@@ -46197,6 +48801,7 @@ export namespace Prisma {
     resources?: ResourceUncheckedUpdateManyWithoutSubjectNestedInput
     exams?: ExamUncheckedUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutSubjectNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSubjectNestedInput
   }
 
   export type SemesterUpsertWithoutTeacherSubjectsInput = {
@@ -46218,6 +48823,7 @@ export namespace Prisma {
     campus?: CampusUpdateOneRequiredWithoutSemestersNestedInput
     classSessions?: ClassSessionUpdateManyWithoutSemesterRelNestedInput
     students?: StudentUpdateManyWithoutSemesterNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutTeacherSubjectsInput = {
@@ -46228,6 +48834,7 @@ export namespace Prisma {
     campusId?: StringFieldUpdateOperationsInput | string
     classSessions?: ClassSessionUncheckedUpdateManyWithoutSemesterRelNestedInput
     students?: StudentUncheckedUpdateManyWithoutSemesterNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type SectionUpsertWithoutTeacherSubjectsInput = {
@@ -46248,6 +48855,7 @@ export namespace Prisma {
     campus?: CampusUpdateOneRequiredWithoutSectionsNestedInput
     classSessions?: ClassSessionUpdateManyWithoutSectionRelNestedInput
     students?: StudentUpdateManyWithoutSectionNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSectionNestedInput
   }
 
   export type SectionUncheckedUpdateWithoutTeacherSubjectsInput = {
@@ -46257,6 +48865,7 @@ export namespace Prisma {
     campusId?: StringFieldUpdateOperationsInput | string
     classSessions?: ClassSessionUncheckedUpdateManyWithoutSectionRelNestedInput
     students?: StudentUncheckedUpdateManyWithoutSectionNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSectionNestedInput
   }
 
   export type UserCreateWithoutCampusInput = {
@@ -46325,17 +48934,19 @@ export namespace Prisma {
 
   export type ClassSessionCreateWithoutCampusInput = {
     id?: string
-    subject?: string | null
-    semester: number
-    section: string
-    weekday: $Enums.Weekday
-    room?: string | null
+    date: Date | string
     startTime: Date | string
     endTime: Date | string
+    weekday: $Enums.Weekday
+    room?: string | null
     status?: $Enums.SessionStatus
+    attendanceWindowEndsAt?: Date | string | null
     attendanceMarked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    subject?: string | null
+    semester: number
+    section: string
     subjectRel?: SubjectCreateNestedOneWithoutClassSessionsInput
     teacher: TeacherCreateNestedOneWithoutClassSessionsInput
     semesterRel?: SemesterCreateNestedOneWithoutClassSessionsInput
@@ -46345,21 +48956,23 @@ export namespace Prisma {
 
   export type ClassSessionUncheckedCreateWithoutCampusInput = {
     id?: string
-    subject?: string | null
-    subjectId?: string | null
-    semester: number
-    section: string
-    weekday: $Enums.Weekday
-    room?: string | null
+    date: Date | string
     startTime: Date | string
     endTime: Date | string
-    teacherId: string
-    semesterId?: string | null
-    sectionId?: string | null
+    weekday: $Enums.Weekday
+    room?: string | null
     status?: $Enums.SessionStatus
+    attendanceWindowEndsAt?: Date | string | null
     attendanceMarked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    subjectId?: string | null
+    subject?: string | null
+    semester: number
+    section: string
+    teacherId: string
+    semesterId?: string | null
+    sectionId?: string | null
     attendances?: AttendanceUncheckedCreateNestedManyWithoutClassSessionInput
   }
 
@@ -46381,6 +48994,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutSemesterInput
     classSessions?: ClassSessionCreateNestedManyWithoutSemesterRelInput
     students?: StudentCreateNestedManyWithoutSemesterInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutCampusInput = {
@@ -46391,6 +49005,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutSemesterInput
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSemesterRelInput
     students?: StudentUncheckedCreateNestedManyWithoutSemesterInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutCampusInput = {
@@ -46410,6 +49025,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutSectionInput
     classSessions?: ClassSessionCreateNestedManyWithoutSectionRelInput
     students?: StudentCreateNestedManyWithoutSectionInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSectionInput
   }
 
   export type SectionUncheckedCreateWithoutCampusInput = {
@@ -46419,6 +49035,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutSectionInput
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSectionRelInput
     students?: StudentUncheckedCreateNestedManyWithoutSectionInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSectionInput
   }
 
   export type SectionCreateOrConnectWithoutCampusInput = {
@@ -46444,6 +49061,7 @@ export namespace Prisma {
     resources?: ResourceCreateNestedManyWithoutSubjectInput
     exams?: ExamCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutSubjectInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectUncheckedCreateWithoutCampusInput = {
@@ -46459,6 +49077,7 @@ export namespace Prisma {
     resources?: ResourceUncheckedCreateNestedManyWithoutSubjectInput
     exams?: ExamUncheckedCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutSubjectInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectCreateOrConnectWithoutCampusInput = {
@@ -46502,6 +49121,40 @@ export namespace Prisma {
 
   export type EventCreateManyCampusInputEnvelope = {
     data: EventCreateManyCampusInput | EventCreateManyCampusInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TimetableEntryCreateWithoutCampusInput = {
+    id?: string
+    weekday: $Enums.Weekday
+    startTime: Date | string
+    endTime: Date | string
+    room?: string | null
+    teacher: TeacherCreateNestedOneWithoutTimetableEntryInput
+    subject: SubjectCreateNestedOneWithoutTimetableEntryInput
+    semester: SemesterCreateNestedOneWithoutTimetableEntryInput
+    section: SectionCreateNestedOneWithoutTimetableEntryInput
+  }
+
+  export type TimetableEntryUncheckedCreateWithoutCampusInput = {
+    id?: string
+    weekday: $Enums.Weekday
+    startTime: Date | string
+    endTime: Date | string
+    room?: string | null
+    teacherId: string
+    subjectId: string
+    semesterId: string
+    sectionId: string
+  }
+
+  export type TimetableEntryCreateOrConnectWithoutCampusInput = {
+    where: TimetableEntryWhereUniqueInput
+    create: XOR<TimetableEntryCreateWithoutCampusInput, TimetableEntryUncheckedCreateWithoutCampusInput>
+  }
+
+  export type TimetableEntryCreateManyCampusInputEnvelope = {
+    data: TimetableEntryCreateManyCampusInput | TimetableEntryCreateManyCampusInput[]
     skipDuplicates?: boolean
   }
 
@@ -46671,6 +49324,22 @@ export namespace Prisma {
     campusId?: StringFilter<"Event"> | string
   }
 
+  export type TimetableEntryUpsertWithWhereUniqueWithoutCampusInput = {
+    where: TimetableEntryWhereUniqueInput
+    update: XOR<TimetableEntryUpdateWithoutCampusInput, TimetableEntryUncheckedUpdateWithoutCampusInput>
+    create: XOR<TimetableEntryCreateWithoutCampusInput, TimetableEntryUncheckedCreateWithoutCampusInput>
+  }
+
+  export type TimetableEntryUpdateWithWhereUniqueWithoutCampusInput = {
+    where: TimetableEntryWhereUniqueInput
+    data: XOR<TimetableEntryUpdateWithoutCampusInput, TimetableEntryUncheckedUpdateWithoutCampusInput>
+  }
+
+  export type TimetableEntryUpdateManyWithWhereWithoutCampusInput = {
+    where: TimetableEntryScalarWhereInput
+    data: XOR<TimetableEntryUpdateManyMutationInput, TimetableEntryUncheckedUpdateManyWithoutCampusInput>
+  }
+
   export type SubjectCreateWithoutClassSessionsInput = {
     id?: string
     name: string
@@ -46684,6 +49353,7 @@ export namespace Prisma {
     resources?: ResourceCreateNestedManyWithoutSubjectInput
     exams?: ExamCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutSubjectInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectUncheckedCreateWithoutClassSessionsInput = {
@@ -46699,6 +49369,7 @@ export namespace Prisma {
     resources?: ResourceUncheckedCreateNestedManyWithoutSubjectInput
     exams?: ExamUncheckedCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutSubjectInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectCreateOrConnectWithoutClassSessionsInput = {
@@ -46722,6 +49393,7 @@ export namespace Prisma {
     sections?: SectionCreateNestedManyWithoutCampusInput
     subjects?: SubjectCreateNestedManyWithoutCampusInput
     events?: EventCreateNestedManyWithoutCampusInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutCampusInput
   }
 
   export type CampusUncheckedCreateWithoutClassSessionsInput = {
@@ -46740,6 +49412,7 @@ export namespace Prisma {
     sections?: SectionUncheckedCreateNestedManyWithoutCampusInput
     subjects?: SubjectUncheckedCreateNestedManyWithoutCampusInput
     events?: EventUncheckedCreateNestedManyWithoutCampusInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutCampusInput
   }
 
   export type CampusCreateOrConnectWithoutClassSessionsInput = {
@@ -46755,8 +49428,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutTeacherProfileInput
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutTeacherInput
+    attendanceTokens?: AttendanceTokenCreateNestedManyWithoutTeacherInput
     announcements?: AnnouncementCreateNestedManyWithoutAuthorInput
     assignments?: AssignmentCreateNestedManyWithoutTeacherInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherUncheckedCreateWithoutClassSessionsInput = {
@@ -46767,8 +49442,10 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutTeacherInput
+    attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutTeacherInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutTeacherInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherCreateOrConnectWithoutClassSessionsInput = {
@@ -46784,6 +49461,7 @@ export namespace Prisma {
     campus: CampusCreateNestedOneWithoutSemestersInput
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutSemesterInput
     students?: StudentCreateNestedManyWithoutSemesterInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutClassSessionsInput = {
@@ -46794,6 +49472,7 @@ export namespace Prisma {
     campusId: string
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutSemesterInput
     students?: StudentUncheckedCreateNestedManyWithoutSemesterInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutClassSessionsInput = {
@@ -46808,6 +49487,7 @@ export namespace Prisma {
     campus: CampusCreateNestedOneWithoutSectionsInput
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutSectionInput
     students?: StudentCreateNestedManyWithoutSectionInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSectionInput
   }
 
   export type SectionUncheckedCreateWithoutClassSessionsInput = {
@@ -46817,6 +49497,7 @@ export namespace Prisma {
     campusId: string
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutSectionInput
     students?: StudentUncheckedCreateNestedManyWithoutSectionInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSectionInput
   }
 
   export type SectionCreateOrConnectWithoutClassSessionsInput = {
@@ -46882,6 +49563,7 @@ export namespace Prisma {
     resources?: ResourceUpdateManyWithoutSubjectNestedInput
     exams?: ExamUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUpdateManyWithoutSubjectNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectUncheckedUpdateWithoutClassSessionsInput = {
@@ -46897,6 +49579,7 @@ export namespace Prisma {
     resources?: ResourceUncheckedUpdateManyWithoutSubjectNestedInput
     exams?: ExamUncheckedUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutSubjectNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSubjectNestedInput
   }
 
   export type CampusUpsertWithoutClassSessionsInput = {
@@ -46926,6 +49609,7 @@ export namespace Prisma {
     sections?: SectionUpdateManyWithoutCampusNestedInput
     subjects?: SubjectUpdateManyWithoutCampusNestedInput
     events?: EventUpdateManyWithoutCampusNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutCampusNestedInput
   }
 
   export type CampusUncheckedUpdateWithoutClassSessionsInput = {
@@ -46944,6 +49628,7 @@ export namespace Prisma {
     sections?: SectionUncheckedUpdateManyWithoutCampusNestedInput
     subjects?: SubjectUncheckedUpdateManyWithoutCampusNestedInput
     events?: EventUncheckedUpdateManyWithoutCampusNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutCampusNestedInput
   }
 
   export type TeacherUpsertWithoutClassSessionsInput = {
@@ -46965,8 +49650,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutTeacherProfileNestedInput
     teacherSubjects?: TeacherSubjectUpdateManyWithoutTeacherNestedInput
+    attendanceTokens?: AttendanceTokenUpdateManyWithoutTeacherNestedInput
     announcements?: AnnouncementUpdateManyWithoutAuthorNestedInput
     assignments?: AssignmentUpdateManyWithoutTeacherNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutTeacherNestedInput
   }
 
   export type TeacherUncheckedUpdateWithoutClassSessionsInput = {
@@ -46977,8 +49664,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutTeacherNestedInput
+    attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutTeacherNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutTeacherNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutTeacherNestedInput
   }
 
   export type SemesterUpsertWithoutClassSessionsInput = {
@@ -47000,6 +49689,7 @@ export namespace Prisma {
     campus?: CampusUpdateOneRequiredWithoutSemestersNestedInput
     teacherSubjects?: TeacherSubjectUpdateManyWithoutSemesterNestedInput
     students?: StudentUpdateManyWithoutSemesterNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutClassSessionsInput = {
@@ -47010,6 +49700,7 @@ export namespace Prisma {
     campusId?: StringFieldUpdateOperationsInput | string
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutSemesterNestedInput
     students?: StudentUncheckedUpdateManyWithoutSemesterNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type SectionUpsertWithoutClassSessionsInput = {
@@ -47030,6 +49721,7 @@ export namespace Prisma {
     campus?: CampusUpdateOneRequiredWithoutSectionsNestedInput
     teacherSubjects?: TeacherSubjectUpdateManyWithoutSectionNestedInput
     students?: StudentUpdateManyWithoutSectionNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSectionNestedInput
   }
 
   export type SectionUncheckedUpdateWithoutClassSessionsInput = {
@@ -47039,6 +49731,7 @@ export namespace Prisma {
     campusId?: StringFieldUpdateOperationsInput | string
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutSectionNestedInput
     students?: StudentUncheckedUpdateManyWithoutSectionNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSectionNestedInput
   }
 
   export type AttendanceUpsertWithWhereUniqueWithoutClassSessionInput = {
@@ -47057,19 +49750,381 @@ export namespace Prisma {
     data: XOR<AttendanceUpdateManyMutationInput, AttendanceUncheckedUpdateManyWithoutClassSessionInput>
   }
 
+  export type CampusCreateWithoutTimetableEntryInput = {
+    id?: string
+    name: string
+    hindiName?: string | null
+    slug: string
+    city: string
+    logoUrl?: string | null
+    latitude: number
+    longitude: number
+    geofenceRadius?: number
+    wifiBssids?: CampusCreatewifiBssidsInput | string[]
+    users?: UserCreateNestedManyWithoutCampusInput
+    classSessions?: ClassSessionCreateNestedManyWithoutCampusInput
+    semesters?: SemesterCreateNestedManyWithoutCampusInput
+    sections?: SectionCreateNestedManyWithoutCampusInput
+    subjects?: SubjectCreateNestedManyWithoutCampusInput
+    events?: EventCreateNestedManyWithoutCampusInput
+  }
+
+  export type CampusUncheckedCreateWithoutTimetableEntryInput = {
+    id?: string
+    name: string
+    hindiName?: string | null
+    slug: string
+    city: string
+    logoUrl?: string | null
+    latitude: number
+    longitude: number
+    geofenceRadius?: number
+    wifiBssids?: CampusCreatewifiBssidsInput | string[]
+    users?: UserUncheckedCreateNestedManyWithoutCampusInput
+    classSessions?: ClassSessionUncheckedCreateNestedManyWithoutCampusInput
+    semesters?: SemesterUncheckedCreateNestedManyWithoutCampusInput
+    sections?: SectionUncheckedCreateNestedManyWithoutCampusInput
+    subjects?: SubjectUncheckedCreateNestedManyWithoutCampusInput
+    events?: EventUncheckedCreateNestedManyWithoutCampusInput
+  }
+
+  export type CampusCreateOrConnectWithoutTimetableEntryInput = {
+    where: CampusWhereUniqueInput
+    create: XOR<CampusCreateWithoutTimetableEntryInput, CampusUncheckedCreateWithoutTimetableEntryInput>
+  }
+
+  export type TeacherCreateWithoutTimetableEntryInput = {
+    id?: string
+    department?: string | null
+    designation?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutTeacherProfileInput
+    teacherSubjects?: TeacherSubjectCreateNestedManyWithoutTeacherInput
+    classSessions?: ClassSessionCreateNestedManyWithoutTeacherInput
+    attendanceTokens?: AttendanceTokenCreateNestedManyWithoutTeacherInput
+    announcements?: AnnouncementCreateNestedManyWithoutAuthorInput
+    assignments?: AssignmentCreateNestedManyWithoutTeacherInput
+  }
+
+  export type TeacherUncheckedCreateWithoutTimetableEntryInput = {
+    id?: string
+    userId: string
+    department?: string | null
+    designation?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutTeacherInput
+    classSessions?: ClassSessionUncheckedCreateNestedManyWithoutTeacherInput
+    attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutTeacherInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
+    assignments?: AssignmentUncheckedCreateNestedManyWithoutTeacherInput
+  }
+
+  export type TeacherCreateOrConnectWithoutTimetableEntryInput = {
+    where: TeacherWhereUniqueInput
+    create: XOR<TeacherCreateWithoutTimetableEntryInput, TeacherUncheckedCreateWithoutTimetableEntryInput>
+  }
+
+  export type SubjectCreateWithoutTimetableEntryInput = {
+    id?: string
+    name: string
+    code?: string | null
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campus: CampusCreateNestedOneWithoutSubjectsInput
+    teacherSubjects?: TeacherSubjectCreateNestedManyWithoutSubjectInput
+    classSessions?: ClassSessionCreateNestedManyWithoutSubjectRelInput
+    assignments?: AssignmentCreateNestedManyWithoutSubjectInput
+    resources?: ResourceCreateNestedManyWithoutSubjectInput
+    exams?: ExamCreateNestedManyWithoutSubjectInput
+    attendanceTokens?: AttendanceTokenCreateNestedManyWithoutSubjectInput
+  }
+
+  export type SubjectUncheckedCreateWithoutTimetableEntryInput = {
+    id?: string
+    name: string
+    code?: string | null
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campusId: string
+    teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutSubjectInput
+    classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSubjectRelInput
+    assignments?: AssignmentUncheckedCreateNestedManyWithoutSubjectInput
+    resources?: ResourceUncheckedCreateNestedManyWithoutSubjectInput
+    exams?: ExamUncheckedCreateNestedManyWithoutSubjectInput
+    attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutSubjectInput
+  }
+
+  export type SubjectCreateOrConnectWithoutTimetableEntryInput = {
+    where: SubjectWhereUniqueInput
+    create: XOR<SubjectCreateWithoutTimetableEntryInput, SubjectUncheckedCreateWithoutTimetableEntryInput>
+  }
+
+  export type SemesterCreateWithoutTimetableEntryInput = {
+    id?: string
+    name: string
+    number?: number | null
+    createdAt?: Date | string
+    campus: CampusCreateNestedOneWithoutSemestersInput
+    teacherSubjects?: TeacherSubjectCreateNestedManyWithoutSemesterInput
+    classSessions?: ClassSessionCreateNestedManyWithoutSemesterRelInput
+    students?: StudentCreateNestedManyWithoutSemesterInput
+  }
+
+  export type SemesterUncheckedCreateWithoutTimetableEntryInput = {
+    id?: string
+    name: string
+    number?: number | null
+    createdAt?: Date | string
+    campusId: string
+    teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutSemesterInput
+    classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSemesterRelInput
+    students?: StudentUncheckedCreateNestedManyWithoutSemesterInput
+  }
+
+  export type SemesterCreateOrConnectWithoutTimetableEntryInput = {
+    where: SemesterWhereUniqueInput
+    create: XOR<SemesterCreateWithoutTimetableEntryInput, SemesterUncheckedCreateWithoutTimetableEntryInput>
+  }
+
+  export type SectionCreateWithoutTimetableEntryInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    campus: CampusCreateNestedOneWithoutSectionsInput
+    teacherSubjects?: TeacherSubjectCreateNestedManyWithoutSectionInput
+    classSessions?: ClassSessionCreateNestedManyWithoutSectionRelInput
+    students?: StudentCreateNestedManyWithoutSectionInput
+  }
+
+  export type SectionUncheckedCreateWithoutTimetableEntryInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    campusId: string
+    teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutSectionInput
+    classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSectionRelInput
+    students?: StudentUncheckedCreateNestedManyWithoutSectionInput
+  }
+
+  export type SectionCreateOrConnectWithoutTimetableEntryInput = {
+    where: SectionWhereUniqueInput
+    create: XOR<SectionCreateWithoutTimetableEntryInput, SectionUncheckedCreateWithoutTimetableEntryInput>
+  }
+
+  export type CampusUpsertWithoutTimetableEntryInput = {
+    update: XOR<CampusUpdateWithoutTimetableEntryInput, CampusUncheckedUpdateWithoutTimetableEntryInput>
+    create: XOR<CampusCreateWithoutTimetableEntryInput, CampusUncheckedCreateWithoutTimetableEntryInput>
+    where?: CampusWhereInput
+  }
+
+  export type CampusUpdateToOneWithWhereWithoutTimetableEntryInput = {
+    where?: CampusWhereInput
+    data: XOR<CampusUpdateWithoutTimetableEntryInput, CampusUncheckedUpdateWithoutTimetableEntryInput>
+  }
+
+  export type CampusUpdateWithoutTimetableEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    hindiName?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    geofenceRadius?: IntFieldUpdateOperationsInput | number
+    wifiBssids?: CampusUpdatewifiBssidsInput | string[]
+    users?: UserUpdateManyWithoutCampusNestedInput
+    classSessions?: ClassSessionUpdateManyWithoutCampusNestedInput
+    semesters?: SemesterUpdateManyWithoutCampusNestedInput
+    sections?: SectionUpdateManyWithoutCampusNestedInput
+    subjects?: SubjectUpdateManyWithoutCampusNestedInput
+    events?: EventUpdateManyWithoutCampusNestedInput
+  }
+
+  export type CampusUncheckedUpdateWithoutTimetableEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    hindiName?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: FloatFieldUpdateOperationsInput | number
+    longitude?: FloatFieldUpdateOperationsInput | number
+    geofenceRadius?: IntFieldUpdateOperationsInput | number
+    wifiBssids?: CampusUpdatewifiBssidsInput | string[]
+    users?: UserUncheckedUpdateManyWithoutCampusNestedInput
+    classSessions?: ClassSessionUncheckedUpdateManyWithoutCampusNestedInput
+    semesters?: SemesterUncheckedUpdateManyWithoutCampusNestedInput
+    sections?: SectionUncheckedUpdateManyWithoutCampusNestedInput
+    subjects?: SubjectUncheckedUpdateManyWithoutCampusNestedInput
+    events?: EventUncheckedUpdateManyWithoutCampusNestedInput
+  }
+
+  export type TeacherUpsertWithoutTimetableEntryInput = {
+    update: XOR<TeacherUpdateWithoutTimetableEntryInput, TeacherUncheckedUpdateWithoutTimetableEntryInput>
+    create: XOR<TeacherCreateWithoutTimetableEntryInput, TeacherUncheckedCreateWithoutTimetableEntryInput>
+    where?: TeacherWhereInput
+  }
+
+  export type TeacherUpdateToOneWithWhereWithoutTimetableEntryInput = {
+    where?: TeacherWhereInput
+    data: XOR<TeacherUpdateWithoutTimetableEntryInput, TeacherUncheckedUpdateWithoutTimetableEntryInput>
+  }
+
+  export type TeacherUpdateWithoutTimetableEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutTeacherProfileNestedInput
+    teacherSubjects?: TeacherSubjectUpdateManyWithoutTeacherNestedInput
+    classSessions?: ClassSessionUpdateManyWithoutTeacherNestedInput
+    attendanceTokens?: AttendanceTokenUpdateManyWithoutTeacherNestedInput
+    announcements?: AnnouncementUpdateManyWithoutAuthorNestedInput
+    assignments?: AssignmentUpdateManyWithoutTeacherNestedInput
+  }
+
+  export type TeacherUncheckedUpdateWithoutTimetableEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutTeacherNestedInput
+    classSessions?: ClassSessionUncheckedUpdateManyWithoutTeacherNestedInput
+    attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutTeacherNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
+    assignments?: AssignmentUncheckedUpdateManyWithoutTeacherNestedInput
+  }
+
+  export type SubjectUpsertWithoutTimetableEntryInput = {
+    update: XOR<SubjectUpdateWithoutTimetableEntryInput, SubjectUncheckedUpdateWithoutTimetableEntryInput>
+    create: XOR<SubjectCreateWithoutTimetableEntryInput, SubjectUncheckedCreateWithoutTimetableEntryInput>
+    where?: SubjectWhereInput
+  }
+
+  export type SubjectUpdateToOneWithWhereWithoutTimetableEntryInput = {
+    where?: SubjectWhereInput
+    data: XOR<SubjectUpdateWithoutTimetableEntryInput, SubjectUncheckedUpdateWithoutTimetableEntryInput>
+  }
+
+  export type SubjectUpdateWithoutTimetableEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campus?: CampusUpdateOneRequiredWithoutSubjectsNestedInput
+    teacherSubjects?: TeacherSubjectUpdateManyWithoutSubjectNestedInput
+    classSessions?: ClassSessionUpdateManyWithoutSubjectRelNestedInput
+    assignments?: AssignmentUpdateManyWithoutSubjectNestedInput
+    resources?: ResourceUpdateManyWithoutSubjectNestedInput
+    exams?: ExamUpdateManyWithoutSubjectNestedInput
+    attendanceTokens?: AttendanceTokenUpdateManyWithoutSubjectNestedInput
+  }
+
+  export type SubjectUncheckedUpdateWithoutTimetableEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campusId?: StringFieldUpdateOperationsInput | string
+    teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutSubjectNestedInput
+    classSessions?: ClassSessionUncheckedUpdateManyWithoutSubjectRelNestedInput
+    assignments?: AssignmentUncheckedUpdateManyWithoutSubjectNestedInput
+    resources?: ResourceUncheckedUpdateManyWithoutSubjectNestedInput
+    exams?: ExamUncheckedUpdateManyWithoutSubjectNestedInput
+    attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutSubjectNestedInput
+  }
+
+  export type SemesterUpsertWithoutTimetableEntryInput = {
+    update: XOR<SemesterUpdateWithoutTimetableEntryInput, SemesterUncheckedUpdateWithoutTimetableEntryInput>
+    create: XOR<SemesterCreateWithoutTimetableEntryInput, SemesterUncheckedCreateWithoutTimetableEntryInput>
+    where?: SemesterWhereInput
+  }
+
+  export type SemesterUpdateToOneWithWhereWithoutTimetableEntryInput = {
+    where?: SemesterWhereInput
+    data: XOR<SemesterUpdateWithoutTimetableEntryInput, SemesterUncheckedUpdateWithoutTimetableEntryInput>
+  }
+
+  export type SemesterUpdateWithoutTimetableEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    number?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campus?: CampusUpdateOneRequiredWithoutSemestersNestedInput
+    teacherSubjects?: TeacherSubjectUpdateManyWithoutSemesterNestedInput
+    classSessions?: ClassSessionUpdateManyWithoutSemesterRelNestedInput
+    students?: StudentUpdateManyWithoutSemesterNestedInput
+  }
+
+  export type SemesterUncheckedUpdateWithoutTimetableEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    number?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campusId?: StringFieldUpdateOperationsInput | string
+    teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutSemesterNestedInput
+    classSessions?: ClassSessionUncheckedUpdateManyWithoutSemesterRelNestedInput
+    students?: StudentUncheckedUpdateManyWithoutSemesterNestedInput
+  }
+
+  export type SectionUpsertWithoutTimetableEntryInput = {
+    update: XOR<SectionUpdateWithoutTimetableEntryInput, SectionUncheckedUpdateWithoutTimetableEntryInput>
+    create: XOR<SectionCreateWithoutTimetableEntryInput, SectionUncheckedCreateWithoutTimetableEntryInput>
+    where?: SectionWhereInput
+  }
+
+  export type SectionUpdateToOneWithWhereWithoutTimetableEntryInput = {
+    where?: SectionWhereInput
+    data: XOR<SectionUpdateWithoutTimetableEntryInput, SectionUncheckedUpdateWithoutTimetableEntryInput>
+  }
+
+  export type SectionUpdateWithoutTimetableEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campus?: CampusUpdateOneRequiredWithoutSectionsNestedInput
+    teacherSubjects?: TeacherSubjectUpdateManyWithoutSectionNestedInput
+    classSessions?: ClassSessionUpdateManyWithoutSectionRelNestedInput
+    students?: StudentUpdateManyWithoutSectionNestedInput
+  }
+
+  export type SectionUncheckedUpdateWithoutTimetableEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campusId?: StringFieldUpdateOperationsInput | string
+    teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutSectionNestedInput
+    classSessions?: ClassSessionUncheckedUpdateManyWithoutSectionRelNestedInput
+    students?: StudentUncheckedUpdateManyWithoutSectionNestedInput
+  }
+
   export type ClassSessionCreateWithoutAttendancesInput = {
     id?: string
-    subject?: string | null
-    semester: number
-    section: string
-    weekday: $Enums.Weekday
-    room?: string | null
+    date: Date | string
     startTime: Date | string
     endTime: Date | string
+    weekday: $Enums.Weekday
+    room?: string | null
     status?: $Enums.SessionStatus
+    attendanceWindowEndsAt?: Date | string | null
     attendanceMarked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    subject?: string | null
+    semester: number
+    section: string
     subjectRel?: SubjectCreateNestedOneWithoutClassSessionsInput
     campus?: CampusCreateNestedOneWithoutClassSessionsInput
     teacher: TeacherCreateNestedOneWithoutClassSessionsInput
@@ -47079,22 +50134,24 @@ export namespace Prisma {
 
   export type ClassSessionUncheckedCreateWithoutAttendancesInput = {
     id?: string
-    subject?: string | null
-    subjectId?: string | null
-    campusId?: string | null
-    semester: number
-    section: string
-    weekday: $Enums.Weekday
-    room?: string | null
+    date: Date | string
     startTime: Date | string
     endTime: Date | string
-    teacherId: string
-    semesterId?: string | null
-    sectionId?: string | null
+    weekday: $Enums.Weekday
+    room?: string | null
     status?: $Enums.SessionStatus
+    attendanceWindowEndsAt?: Date | string | null
     attendanceMarked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    subjectId?: string | null
+    subject?: string | null
+    campusId?: string | null
+    semester: number
+    section: string
+    teacherId: string
+    semesterId?: string | null
+    sectionId?: string | null
   }
 
   export type ClassSessionCreateOrConnectWithoutAttendancesInput = {
@@ -47205,17 +50262,19 @@ export namespace Prisma {
 
   export type ClassSessionUpdateWithoutAttendancesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: IntFieldUpdateOperationsInput | number
-    section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: IntFieldUpdateOperationsInput | number
+    section?: StringFieldUpdateOperationsInput | string
     subjectRel?: SubjectUpdateOneWithoutClassSessionsNestedInput
     campus?: CampusUpdateOneWithoutClassSessionsNestedInput
     teacher?: TeacherUpdateOneRequiredWithoutClassSessionsNestedInput
@@ -47225,22 +50284,24 @@ export namespace Prisma {
 
   export type ClassSessionUncheckedUpdateWithoutAttendancesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
-    campusId?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: IntFieldUpdateOperationsInput | number
-    section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    teacherId?: StringFieldUpdateOperationsInput | string
-    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
-    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: IntFieldUpdateOperationsInput | number
+    section?: StringFieldUpdateOperationsInput | string
+    teacherId?: StringFieldUpdateOperationsInput | string
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StudentUpsertWithoutAttendancesInput = {
@@ -47389,6 +50450,7 @@ export namespace Prisma {
     assignments?: AssignmentCreateNestedManyWithoutSubjectInput
     resources?: ResourceCreateNestedManyWithoutSubjectInput
     exams?: ExamCreateNestedManyWithoutSubjectInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectUncheckedCreateWithoutAttendanceTokensInput = {
@@ -47404,11 +50466,45 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedCreateNestedManyWithoutSubjectInput
     resources?: ResourceUncheckedCreateNestedManyWithoutSubjectInput
     exams?: ExamUncheckedCreateNestedManyWithoutSubjectInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectCreateOrConnectWithoutAttendanceTokensInput = {
     where: SubjectWhereUniqueInput
     create: XOR<SubjectCreateWithoutAttendanceTokensInput, SubjectUncheckedCreateWithoutAttendanceTokensInput>
+  }
+
+  export type TeacherCreateWithoutAttendanceTokensInput = {
+    id?: string
+    department?: string | null
+    designation?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutTeacherProfileInput
+    teacherSubjects?: TeacherSubjectCreateNestedManyWithoutTeacherInput
+    classSessions?: ClassSessionCreateNestedManyWithoutTeacherInput
+    announcements?: AnnouncementCreateNestedManyWithoutAuthorInput
+    assignments?: AssignmentCreateNestedManyWithoutTeacherInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutTeacherInput
+  }
+
+  export type TeacherUncheckedCreateWithoutAttendanceTokensInput = {
+    id?: string
+    userId: string
+    department?: string | null
+    designation?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutTeacherInput
+    classSessions?: ClassSessionUncheckedCreateNestedManyWithoutTeacherInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
+    assignments?: AssignmentUncheckedCreateNestedManyWithoutTeacherInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutTeacherInput
+  }
+
+  export type TeacherCreateOrConnectWithoutAttendanceTokensInput = {
+    where: TeacherWhereUniqueInput
+    create: XOR<TeacherCreateWithoutAttendanceTokensInput, TeacherUncheckedCreateWithoutAttendanceTokensInput>
   }
 
   export type StudentUpsertWithoutAttendanceTokensInput = {
@@ -47472,6 +50568,7 @@ export namespace Prisma {
     assignments?: AssignmentUpdateManyWithoutSubjectNestedInput
     resources?: ResourceUpdateManyWithoutSubjectNestedInput
     exams?: ExamUpdateManyWithoutSubjectNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectUncheckedUpdateWithoutAttendanceTokensInput = {
@@ -47487,6 +50584,46 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedUpdateManyWithoutSubjectNestedInput
     resources?: ResourceUncheckedUpdateManyWithoutSubjectNestedInput
     exams?: ExamUncheckedUpdateManyWithoutSubjectNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSubjectNestedInput
+  }
+
+  export type TeacherUpsertWithoutAttendanceTokensInput = {
+    update: XOR<TeacherUpdateWithoutAttendanceTokensInput, TeacherUncheckedUpdateWithoutAttendanceTokensInput>
+    create: XOR<TeacherCreateWithoutAttendanceTokensInput, TeacherUncheckedCreateWithoutAttendanceTokensInput>
+    where?: TeacherWhereInput
+  }
+
+  export type TeacherUpdateToOneWithWhereWithoutAttendanceTokensInput = {
+    where?: TeacherWhereInput
+    data: XOR<TeacherUpdateWithoutAttendanceTokensInput, TeacherUncheckedUpdateWithoutAttendanceTokensInput>
+  }
+
+  export type TeacherUpdateWithoutAttendanceTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutTeacherProfileNestedInput
+    teacherSubjects?: TeacherSubjectUpdateManyWithoutTeacherNestedInput
+    classSessions?: ClassSessionUpdateManyWithoutTeacherNestedInput
+    announcements?: AnnouncementUpdateManyWithoutAuthorNestedInput
+    assignments?: AssignmentUpdateManyWithoutTeacherNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutTeacherNestedInput
+  }
+
+  export type TeacherUncheckedUpdateWithoutAttendanceTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutTeacherNestedInput
+    classSessions?: ClassSessionUncheckedUpdateManyWithoutTeacherNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
+    assignments?: AssignmentUncheckedUpdateManyWithoutTeacherNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutTeacherNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -47629,6 +50766,7 @@ export namespace Prisma {
     semesters?: SemesterCreateNestedManyWithoutCampusInput
     sections?: SectionCreateNestedManyWithoutCampusInput
     subjects?: SubjectCreateNestedManyWithoutCampusInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutCampusInput
   }
 
   export type CampusUncheckedCreateWithoutEventsInput = {
@@ -47647,6 +50785,7 @@ export namespace Prisma {
     semesters?: SemesterUncheckedCreateNestedManyWithoutCampusInput
     sections?: SectionUncheckedCreateNestedManyWithoutCampusInput
     subjects?: SubjectUncheckedCreateNestedManyWithoutCampusInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutCampusInput
   }
 
   export type CampusCreateOrConnectWithoutEventsInput = {
@@ -47681,6 +50820,7 @@ export namespace Prisma {
     semesters?: SemesterUpdateManyWithoutCampusNestedInput
     sections?: SectionUpdateManyWithoutCampusNestedInput
     subjects?: SubjectUpdateManyWithoutCampusNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutCampusNestedInput
   }
 
   export type CampusUncheckedUpdateWithoutEventsInput = {
@@ -47699,6 +50839,7 @@ export namespace Prisma {
     semesters?: SemesterUncheckedUpdateManyWithoutCampusNestedInput
     sections?: SectionUncheckedUpdateManyWithoutCampusNestedInput
     subjects?: SubjectUncheckedUpdateManyWithoutCampusNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutCampusNestedInput
   }
 
   export type SubjectCreateWithoutAssignmentsInput = {
@@ -47714,6 +50855,7 @@ export namespace Prisma {
     resources?: ResourceCreateNestedManyWithoutSubjectInput
     exams?: ExamCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutSubjectInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectUncheckedCreateWithoutAssignmentsInput = {
@@ -47729,6 +50871,7 @@ export namespace Prisma {
     resources?: ResourceUncheckedCreateNestedManyWithoutSubjectInput
     exams?: ExamUncheckedCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutSubjectInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectCreateOrConnectWithoutAssignmentsInput = {
@@ -47745,7 +50888,9 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutTeacherProfileInput
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutTeacherInput
     classSessions?: ClassSessionCreateNestedManyWithoutTeacherInput
+    attendanceTokens?: AttendanceTokenCreateNestedManyWithoutTeacherInput
     announcements?: AnnouncementCreateNestedManyWithoutAuthorInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherUncheckedCreateWithoutAssignmentsInput = {
@@ -47757,7 +50902,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutTeacherInput
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutTeacherInput
+    attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutTeacherInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherCreateOrConnectWithoutAssignmentsInput = {
@@ -47863,6 +51010,7 @@ export namespace Prisma {
     resources?: ResourceUpdateManyWithoutSubjectNestedInput
     exams?: ExamUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUpdateManyWithoutSubjectNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectUncheckedUpdateWithoutAssignmentsInput = {
@@ -47878,6 +51026,7 @@ export namespace Prisma {
     resources?: ResourceUncheckedUpdateManyWithoutSubjectNestedInput
     exams?: ExamUncheckedUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutSubjectNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSubjectNestedInput
   }
 
   export type TeacherUpsertWithoutAssignmentsInput = {
@@ -47900,7 +51049,9 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutTeacherProfileNestedInput
     teacherSubjects?: TeacherSubjectUpdateManyWithoutTeacherNestedInput
     classSessions?: ClassSessionUpdateManyWithoutTeacherNestedInput
+    attendanceTokens?: AttendanceTokenUpdateManyWithoutTeacherNestedInput
     announcements?: AnnouncementUpdateManyWithoutAuthorNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutTeacherNestedInput
   }
 
   export type TeacherUncheckedUpdateWithoutAssignmentsInput = {
@@ -47912,7 +51063,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutTeacherNestedInput
     classSessions?: ClassSessionUncheckedUpdateManyWithoutTeacherNestedInput
+    attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutTeacherNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutTeacherNestedInput
   }
 
   export type ResourceUpsertWithWhereUniqueWithoutAssignmentInput = {
@@ -48088,7 +51241,9 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutTeacherProfileInput
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutTeacherInput
     classSessions?: ClassSessionCreateNestedManyWithoutTeacherInput
+    attendanceTokens?: AttendanceTokenCreateNestedManyWithoutTeacherInput
     assignments?: AssignmentCreateNestedManyWithoutTeacherInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherUncheckedCreateWithoutAnnouncementsInput = {
@@ -48100,7 +51255,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutTeacherInput
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutTeacherInput
+    attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutTeacherInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutTeacherInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherCreateOrConnectWithoutAnnouncementsInput = {
@@ -48164,7 +51321,9 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutTeacherProfileNestedInput
     teacherSubjects?: TeacherSubjectUpdateManyWithoutTeacherNestedInput
     classSessions?: ClassSessionUpdateManyWithoutTeacherNestedInput
+    attendanceTokens?: AttendanceTokenUpdateManyWithoutTeacherNestedInput
     assignments?: AssignmentUpdateManyWithoutTeacherNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutTeacherNestedInput
   }
 
   export type TeacherUncheckedUpdateWithoutAnnouncementsInput = {
@@ -48176,7 +51335,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutTeacherNestedInput
     classSessions?: ClassSessionUncheckedUpdateManyWithoutTeacherNestedInput
+    attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutTeacherNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutTeacherNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutTeacherNestedInput
   }
 
   export type ResourceUpsertWithWhereUniqueWithoutAnnouncementInput = {
@@ -48208,6 +51369,7 @@ export namespace Prisma {
     assignments?: AssignmentCreateNestedManyWithoutSubjectInput
     exams?: ExamCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutSubjectInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectUncheckedCreateWithoutResourcesInput = {
@@ -48223,6 +51385,7 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedCreateNestedManyWithoutSubjectInput
     exams?: ExamUncheckedCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutSubjectInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectCreateOrConnectWithoutResourcesInput = {
@@ -48337,6 +51500,7 @@ export namespace Prisma {
     assignments?: AssignmentUpdateManyWithoutSubjectNestedInput
     exams?: ExamUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUpdateManyWithoutSubjectNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectUncheckedUpdateWithoutResourcesInput = {
@@ -48352,6 +51516,7 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedUpdateManyWithoutSubjectNestedInput
     exams?: ExamUncheckedUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutSubjectNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSubjectNestedInput
   }
 
   export type AssignmentUpsertWithoutAttachmentsInput = {
@@ -48468,6 +51633,7 @@ export namespace Prisma {
     assignments?: AssignmentCreateNestedManyWithoutSubjectInput
     resources?: ResourceCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutSubjectInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectUncheckedCreateWithoutExamsInput = {
@@ -48483,6 +51649,7 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedCreateNestedManyWithoutSubjectInput
     resources?: ResourceUncheckedCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutSubjectInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectCreateOrConnectWithoutExamsInput = {
@@ -48540,6 +51707,7 @@ export namespace Prisma {
     assignments?: AssignmentUpdateManyWithoutSubjectNestedInput
     resources?: ResourceUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUpdateManyWithoutSubjectNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectUncheckedUpdateWithoutExamsInput = {
@@ -48555,6 +51723,7 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedUpdateManyWithoutSubjectNestedInput
     resources?: ResourceUncheckedUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutSubjectNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSubjectNestedInput
   }
 
   export type GradeUpsertWithWhereUniqueWithoutExamInput = {
@@ -49874,21 +53043,36 @@ export namespace Prisma {
 
   export type ClassSessionCreateManyTeacherInput = {
     id?: string
-    subject?: string | null
-    subjectId?: string | null
-    campusId?: string | null
-    semester: number
-    section: string
-    weekday: $Enums.Weekday
-    room?: string | null
+    date: Date | string
     startTime: Date | string
     endTime: Date | string
-    semesterId?: string | null
-    sectionId?: string | null
+    weekday: $Enums.Weekday
+    room?: string | null
     status?: $Enums.SessionStatus
+    attendanceWindowEndsAt?: Date | string | null
     attendanceMarked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    subjectId?: string | null
+    subject?: string | null
+    campusId?: string | null
+    semester: number
+    section: string
+    semesterId?: string | null
+    sectionId?: string | null
+  }
+
+  export type AttendanceTokenCreateManyTeacherInput = {
+    id?: string
+    token: string
+    studentId?: string | null
+    subjectId?: string | null
+    issuedAt?: Date | string
+    expiresAt: Date | string
+    used?: boolean
+    latitude?: number | null
+    longitude?: number | null
+    mode?: $Enums.AttendanceMode
   }
 
   export type AnnouncementCreateManyAuthorInput = {
@@ -49911,6 +53095,18 @@ export namespace Prisma {
     dueDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type TimetableEntryCreateManyTeacherInput = {
+    id?: string
+    weekday: $Enums.Weekday
+    startTime: Date | string
+    endTime: Date | string
+    room?: string | null
+    campusId: string
+    subjectId: string
+    semesterId: string
+    sectionId: string
   }
 
   export type TeacherSubjectUpdateWithoutTeacherInput = {
@@ -49936,17 +53132,19 @@ export namespace Prisma {
 
   export type ClassSessionUpdateWithoutTeacherInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: IntFieldUpdateOperationsInput | number
-    section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: IntFieldUpdateOperationsInput | number
+    section?: StringFieldUpdateOperationsInput | string
     subjectRel?: SubjectUpdateOneWithoutClassSessionsNestedInput
     campus?: CampusUpdateOneWithoutClassSessionsNestedInput
     semesterRel?: SemesterUpdateOneWithoutClassSessionsNestedInput
@@ -49956,41 +53154,84 @@ export namespace Prisma {
 
   export type ClassSessionUncheckedUpdateWithoutTeacherInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
-    campusId?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: IntFieldUpdateOperationsInput | number
-    section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
-    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: IntFieldUpdateOperationsInput | number
+    section?: StringFieldUpdateOperationsInput | string
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
     attendances?: AttendanceUncheckedUpdateManyWithoutClassSessionNestedInput
   }
 
   export type ClassSessionUncheckedUpdateManyWithoutTeacherInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
-    campusId?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: IntFieldUpdateOperationsInput | number
-    section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
-    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: IntFieldUpdateOperationsInput | number
+    section?: StringFieldUpdateOperationsInput | string
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AttendanceTokenUpdateWithoutTeacherInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    used?: BoolFieldUpdateOperationsInput | boolean
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    mode?: EnumAttendanceModeFieldUpdateOperationsInput | $Enums.AttendanceMode
+    student?: StudentUpdateOneWithoutAttendanceTokensNestedInput
+    subject?: SubjectUpdateOneWithoutAttendanceTokensNestedInput
+  }
+
+  export type AttendanceTokenUncheckedUpdateWithoutTeacherInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    studentId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    used?: BoolFieldUpdateOperationsInput | boolean
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    mode?: EnumAttendanceModeFieldUpdateOperationsInput | $Enums.AttendanceMode
+  }
+
+  export type AttendanceTokenUncheckedUpdateManyWithoutTeacherInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    studentId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    used?: BoolFieldUpdateOperationsInput | boolean
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    mode?: EnumAttendanceModeFieldUpdateOperationsInput | $Enums.AttendanceMode
   }
 
   export type AnnouncementUpdateWithoutAuthorInput = {
@@ -50065,6 +53306,42 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TimetableEntryUpdateWithoutTeacherInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+    campus?: CampusUpdateOneRequiredWithoutTimetableEntryNestedInput
+    subject?: SubjectUpdateOneRequiredWithoutTimetableEntryNestedInput
+    semester?: SemesterUpdateOneRequiredWithoutTimetableEntryNestedInput
+    section?: SectionUpdateOneRequiredWithoutTimetableEntryNestedInput
+  }
+
+  export type TimetableEntryUncheckedUpdateWithoutTeacherInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    subjectId?: StringFieldUpdateOperationsInput | string
+    semesterId?: StringFieldUpdateOperationsInput | string
+    sectionId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TimetableEntryUncheckedUpdateManyWithoutTeacherInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    subjectId?: StringFieldUpdateOperationsInput | string
+    semesterId?: StringFieldUpdateOperationsInput | string
+    sectionId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type AttendanceCreateManyStudentInput = {
     id?: string
     classSessionId?: string | null
@@ -50109,6 +53386,7 @@ export namespace Prisma {
     used?: boolean
     latitude?: number | null
     longitude?: number | null
+    mode?: $Enums.AttendanceMode
   }
 
   export type AttendanceUpdateWithoutStudentInput = {
@@ -50216,13 +53494,14 @@ export namespace Prisma {
   export type AttendanceTokenUpdateWithoutStudentInput = {
     id?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
-    professorId?: StringFieldUpdateOperationsInput | string
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    mode?: EnumAttendanceModeFieldUpdateOperationsInput | $Enums.AttendanceMode
     subject?: SubjectUpdateOneWithoutAttendanceTokensNestedInput
+    teacher?: TeacherUpdateOneRequiredWithoutAttendanceTokensNestedInput
   }
 
   export type AttendanceTokenUncheckedUpdateWithoutStudentInput = {
@@ -50235,6 +53514,7 @@ export namespace Prisma {
     used?: BoolFieldUpdateOperationsInput | boolean
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    mode?: EnumAttendanceModeFieldUpdateOperationsInput | $Enums.AttendanceMode
   }
 
   export type AttendanceTokenUncheckedUpdateManyWithoutStudentInput = {
@@ -50247,6 +53527,7 @@ export namespace Prisma {
     used?: BoolFieldUpdateOperationsInput | boolean
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    mode?: EnumAttendanceModeFieldUpdateOperationsInput | $Enums.AttendanceMode
   }
 
   export type TeacherSubjectCreateManySemesterInput = {
@@ -50258,21 +53539,23 @@ export namespace Prisma {
 
   export type ClassSessionCreateManySemesterRelInput = {
     id?: string
-    subject?: string | null
-    subjectId?: string | null
-    campusId?: string | null
-    semester: number
-    section: string
-    weekday: $Enums.Weekday
-    room?: string | null
+    date: Date | string
     startTime: Date | string
     endTime: Date | string
-    teacherId: string
-    sectionId?: string | null
+    weekday: $Enums.Weekday
+    room?: string | null
     status?: $Enums.SessionStatus
+    attendanceWindowEndsAt?: Date | string | null
     attendanceMarked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    subjectId?: string | null
+    subject?: string | null
+    campusId?: string | null
+    semester: number
+    section: string
+    teacherId: string
+    sectionId?: string | null
   }
 
   export type StudentCreateManySemesterInput = {
@@ -50282,6 +53565,18 @@ export namespace Prisma {
     sectionId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type TimetableEntryCreateManySemesterInput = {
+    id?: string
+    weekday: $Enums.Weekday
+    startTime: Date | string
+    endTime: Date | string
+    room?: string | null
+    campusId: string
+    teacherId: string
+    subjectId: string
+    sectionId: string
   }
 
   export type TeacherSubjectUpdateWithoutSemesterInput = {
@@ -50307,17 +53602,19 @@ export namespace Prisma {
 
   export type ClassSessionUpdateWithoutSemesterRelInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: IntFieldUpdateOperationsInput | number
-    section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: IntFieldUpdateOperationsInput | number
+    section?: StringFieldUpdateOperationsInput | string
     subjectRel?: SubjectUpdateOneWithoutClassSessionsNestedInput
     campus?: CampusUpdateOneWithoutClassSessionsNestedInput
     teacher?: TeacherUpdateOneRequiredWithoutClassSessionsNestedInput
@@ -50327,41 +53624,45 @@ export namespace Prisma {
 
   export type ClassSessionUncheckedUpdateWithoutSemesterRelInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
-    campusId?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: IntFieldUpdateOperationsInput | number
-    section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    teacherId?: StringFieldUpdateOperationsInput | string
-    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: IntFieldUpdateOperationsInput | number
+    section?: StringFieldUpdateOperationsInput | string
+    teacherId?: StringFieldUpdateOperationsInput | string
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
     attendances?: AttendanceUncheckedUpdateManyWithoutClassSessionNestedInput
   }
 
   export type ClassSessionUncheckedUpdateManyWithoutSemesterRelInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
-    campusId?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: IntFieldUpdateOperationsInput | number
-    section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    teacherId?: StringFieldUpdateOperationsInput | string
-    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: IntFieldUpdateOperationsInput | number
+    section?: StringFieldUpdateOperationsInput | string
+    teacherId?: StringFieldUpdateOperationsInput | string
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StudentUpdateWithoutSemesterInput = {
@@ -50399,6 +53700,42 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TimetableEntryUpdateWithoutSemesterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+    campus?: CampusUpdateOneRequiredWithoutTimetableEntryNestedInput
+    teacher?: TeacherUpdateOneRequiredWithoutTimetableEntryNestedInput
+    subject?: SubjectUpdateOneRequiredWithoutTimetableEntryNestedInput
+    section?: SectionUpdateOneRequiredWithoutTimetableEntryNestedInput
+  }
+
+  export type TimetableEntryUncheckedUpdateWithoutSemesterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    teacherId?: StringFieldUpdateOperationsInput | string
+    subjectId?: StringFieldUpdateOperationsInput | string
+    sectionId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TimetableEntryUncheckedUpdateManyWithoutSemesterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    teacherId?: StringFieldUpdateOperationsInput | string
+    subjectId?: StringFieldUpdateOperationsInput | string
+    sectionId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type TeacherSubjectCreateManySectionInput = {
     id?: string
     teacherId: string
@@ -50408,21 +53745,23 @@ export namespace Prisma {
 
   export type ClassSessionCreateManySectionRelInput = {
     id?: string
-    subject?: string | null
-    subjectId?: string | null
-    campusId?: string | null
-    semester: number
-    section: string
-    weekday: $Enums.Weekday
-    room?: string | null
+    date: Date | string
     startTime: Date | string
     endTime: Date | string
-    teacherId: string
-    semesterId?: string | null
+    weekday: $Enums.Weekday
+    room?: string | null
     status?: $Enums.SessionStatus
+    attendanceWindowEndsAt?: Date | string | null
     attendanceMarked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    subjectId?: string | null
+    subject?: string | null
+    campusId?: string | null
+    semester: number
+    section: string
+    teacherId: string
+    semesterId?: string | null
   }
 
   export type StudentCreateManySectionInput = {
@@ -50432,6 +53771,18 @@ export namespace Prisma {
     semesterId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type TimetableEntryCreateManySectionInput = {
+    id?: string
+    weekday: $Enums.Weekday
+    startTime: Date | string
+    endTime: Date | string
+    room?: string | null
+    campusId: string
+    teacherId: string
+    subjectId: string
+    semesterId: string
   }
 
   export type TeacherSubjectUpdateWithoutSectionInput = {
@@ -50457,17 +53808,19 @@ export namespace Prisma {
 
   export type ClassSessionUpdateWithoutSectionRelInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: IntFieldUpdateOperationsInput | number
-    section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: IntFieldUpdateOperationsInput | number
+    section?: StringFieldUpdateOperationsInput | string
     subjectRel?: SubjectUpdateOneWithoutClassSessionsNestedInput
     campus?: CampusUpdateOneWithoutClassSessionsNestedInput
     teacher?: TeacherUpdateOneRequiredWithoutClassSessionsNestedInput
@@ -50477,41 +53830,45 @@ export namespace Prisma {
 
   export type ClassSessionUncheckedUpdateWithoutSectionRelInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
-    campusId?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: IntFieldUpdateOperationsInput | number
-    section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    teacherId?: StringFieldUpdateOperationsInput | string
-    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: IntFieldUpdateOperationsInput | number
+    section?: StringFieldUpdateOperationsInput | string
+    teacherId?: StringFieldUpdateOperationsInput | string
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
     attendances?: AttendanceUncheckedUpdateManyWithoutClassSessionNestedInput
   }
 
   export type ClassSessionUncheckedUpdateManyWithoutSectionRelInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
-    campusId?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: IntFieldUpdateOperationsInput | number
-    section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    teacherId?: StringFieldUpdateOperationsInput | string
-    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: IntFieldUpdateOperationsInput | number
+    section?: StringFieldUpdateOperationsInput | string
+    teacherId?: StringFieldUpdateOperationsInput | string
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StudentUpdateWithoutSectionInput = {
@@ -50549,6 +53906,42 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TimetableEntryUpdateWithoutSectionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+    campus?: CampusUpdateOneRequiredWithoutTimetableEntryNestedInput
+    teacher?: TeacherUpdateOneRequiredWithoutTimetableEntryNestedInput
+    subject?: SubjectUpdateOneRequiredWithoutTimetableEntryNestedInput
+    semester?: SemesterUpdateOneRequiredWithoutTimetableEntryNestedInput
+  }
+
+  export type TimetableEntryUncheckedUpdateWithoutSectionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    teacherId?: StringFieldUpdateOperationsInput | string
+    subjectId?: StringFieldUpdateOperationsInput | string
+    semesterId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TimetableEntryUncheckedUpdateManyWithoutSectionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    teacherId?: StringFieldUpdateOperationsInput | string
+    subjectId?: StringFieldUpdateOperationsInput | string
+    semesterId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type TeacherSubjectCreateManySubjectInput = {
     id?: string
     teacherId: string
@@ -50558,21 +53951,23 @@ export namespace Prisma {
 
   export type ClassSessionCreateManySubjectRelInput = {
     id?: string
+    date: Date | string
+    startTime: Date | string
+    endTime: Date | string
+    weekday: $Enums.Weekday
+    room?: string | null
+    status?: $Enums.SessionStatus
+    attendanceWindowEndsAt?: Date | string | null
+    attendanceMarked?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
     subject?: string | null
     campusId?: string | null
     semester: number
     section: string
-    weekday: $Enums.Weekday
-    room?: string | null
-    startTime: Date | string
-    endTime: Date | string
     teacherId: string
     semesterId?: string | null
     sectionId?: string | null
-    status?: $Enums.SessionStatus
-    attendanceMarked?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type AssignmentCreateManySubjectInput = {
@@ -50617,6 +54012,19 @@ export namespace Prisma {
     used?: boolean
     latitude?: number | null
     longitude?: number | null
+    mode?: $Enums.AttendanceMode
+  }
+
+  export type TimetableEntryCreateManySubjectInput = {
+    id?: string
+    weekday: $Enums.Weekday
+    startTime: Date | string
+    endTime: Date | string
+    room?: string | null
+    campusId: string
+    teacherId: string
+    semesterId: string
+    sectionId: string
   }
 
   export type TeacherSubjectUpdateWithoutSubjectInput = {
@@ -50642,17 +54050,19 @@ export namespace Prisma {
 
   export type ClassSessionUpdateWithoutSubjectRelInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: IntFieldUpdateOperationsInput | number
-    section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: IntFieldUpdateOperationsInput | number
+    section?: StringFieldUpdateOperationsInput | string
     campus?: CampusUpdateOneWithoutClassSessionsNestedInput
     teacher?: TeacherUpdateOneRequiredWithoutClassSessionsNestedInput
     semesterRel?: SemesterUpdateOneWithoutClassSessionsNestedInput
@@ -50662,41 +54072,45 @@ export namespace Prisma {
 
   export type ClassSessionUncheckedUpdateWithoutSubjectRelInput = {
     id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
     campusId?: NullableStringFieldUpdateOperationsInput | string | null
     semester?: IntFieldUpdateOperationsInput | number
     section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
-    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     teacherId?: StringFieldUpdateOperationsInput | string
     semesterId?: NullableStringFieldUpdateOperationsInput | string | null
     sectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
-    attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUncheckedUpdateManyWithoutClassSessionNestedInput
   }
 
   export type ClassSessionUncheckedUpdateManyWithoutSubjectRelInput = {
     id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
     campusId?: NullableStringFieldUpdateOperationsInput | string | null
     semester?: IntFieldUpdateOperationsInput | number
     section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
-    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     teacherId?: StringFieldUpdateOperationsInput | string
     semesterId?: NullableStringFieldUpdateOperationsInput | string | null
     sectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
-    attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AssignmentUpdateWithoutSubjectInput = {
@@ -50804,13 +54218,14 @@ export namespace Prisma {
   export type AttendanceTokenUpdateWithoutSubjectInput = {
     id?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
-    professorId?: StringFieldUpdateOperationsInput | string
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    mode?: EnumAttendanceModeFieldUpdateOperationsInput | $Enums.AttendanceMode
     student?: StudentUpdateOneWithoutAttendanceTokensNestedInput
+    teacher?: TeacherUpdateOneRequiredWithoutAttendanceTokensNestedInput
   }
 
   export type AttendanceTokenUncheckedUpdateWithoutSubjectInput = {
@@ -50823,6 +54238,7 @@ export namespace Prisma {
     used?: BoolFieldUpdateOperationsInput | boolean
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    mode?: EnumAttendanceModeFieldUpdateOperationsInput | $Enums.AttendanceMode
   }
 
   export type AttendanceTokenUncheckedUpdateManyWithoutSubjectInput = {
@@ -50835,6 +54251,43 @@ export namespace Prisma {
     used?: BoolFieldUpdateOperationsInput | boolean
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    mode?: EnumAttendanceModeFieldUpdateOperationsInput | $Enums.AttendanceMode
+  }
+
+  export type TimetableEntryUpdateWithoutSubjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+    campus?: CampusUpdateOneRequiredWithoutTimetableEntryNestedInput
+    teacher?: TeacherUpdateOneRequiredWithoutTimetableEntryNestedInput
+    semester?: SemesterUpdateOneRequiredWithoutTimetableEntryNestedInput
+    section?: SectionUpdateOneRequiredWithoutTimetableEntryNestedInput
+  }
+
+  export type TimetableEntryUncheckedUpdateWithoutSubjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    teacherId?: StringFieldUpdateOperationsInput | string
+    semesterId?: StringFieldUpdateOperationsInput | string
+    sectionId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TimetableEntryUncheckedUpdateManyWithoutSubjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    teacherId?: StringFieldUpdateOperationsInput | string
+    semesterId?: StringFieldUpdateOperationsInput | string
+    sectionId?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserCreateManyCampusInput = {
@@ -50855,21 +54308,23 @@ export namespace Prisma {
 
   export type ClassSessionCreateManyCampusInput = {
     id?: string
-    subject?: string | null
-    subjectId?: string | null
-    semester: number
-    section: string
-    weekday: $Enums.Weekday
-    room?: string | null
+    date: Date | string
     startTime: Date | string
     endTime: Date | string
-    teacherId: string
-    semesterId?: string | null
-    sectionId?: string | null
+    weekday: $Enums.Weekday
+    room?: string | null
     status?: $Enums.SessionStatus
+    attendanceWindowEndsAt?: Date | string | null
     attendanceMarked?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    subjectId?: string | null
+    subject?: string | null
+    semester: number
+    section: string
+    teacherId: string
+    semesterId?: string | null
+    sectionId?: string | null
   }
 
   export type SemesterCreateManyCampusInput = {
@@ -50904,6 +54359,18 @@ export namespace Prisma {
     createdBy: string
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type TimetableEntryCreateManyCampusInput = {
+    id?: string
+    weekday: $Enums.Weekday
+    startTime: Date | string
+    endTime: Date | string
+    room?: string | null
+    teacherId: string
+    subjectId: string
+    semesterId: string
+    sectionId: string
   }
 
   export type UserUpdateWithoutCampusInput = {
@@ -50978,17 +54445,19 @@ export namespace Prisma {
 
   export type ClassSessionUpdateWithoutCampusInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: IntFieldUpdateOperationsInput | number
-    section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: IntFieldUpdateOperationsInput | number
+    section?: StringFieldUpdateOperationsInput | string
     subjectRel?: SubjectUpdateOneWithoutClassSessionsNestedInput
     teacher?: TeacherUpdateOneRequiredWithoutClassSessionsNestedInput
     semesterRel?: SemesterUpdateOneWithoutClassSessionsNestedInput
@@ -50998,41 +54467,45 @@ export namespace Prisma {
 
   export type ClassSessionUncheckedUpdateWithoutCampusInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: IntFieldUpdateOperationsInput | number
-    section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    teacherId?: StringFieldUpdateOperationsInput | string
-    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
-    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: IntFieldUpdateOperationsInput | number
+    section?: StringFieldUpdateOperationsInput | string
+    teacherId?: StringFieldUpdateOperationsInput | string
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
     attendances?: AttendanceUncheckedUpdateManyWithoutClassSessionNestedInput
   }
 
   export type ClassSessionUncheckedUpdateManyWithoutCampusInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: IntFieldUpdateOperationsInput | number
-    section?: StringFieldUpdateOperationsInput | string
-    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
-    room?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    teacherId?: StringFieldUpdateOperationsInput | string
-    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
-    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    room?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumSessionStatusFieldUpdateOperationsInput | $Enums.SessionStatus
+    attendanceWindowEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     attendanceMarked?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: IntFieldUpdateOperationsInput | number
+    section?: StringFieldUpdateOperationsInput | string
+    teacherId?: StringFieldUpdateOperationsInput | string
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SemesterUpdateWithoutCampusInput = {
@@ -51043,6 +54516,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUpdateManyWithoutSemesterNestedInput
     classSessions?: ClassSessionUpdateManyWithoutSemesterRelNestedInput
     students?: StudentUpdateManyWithoutSemesterNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutCampusInput = {
@@ -51053,6 +54527,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutSemesterNestedInput
     classSessions?: ClassSessionUncheckedUpdateManyWithoutSemesterRelNestedInput
     students?: StudentUncheckedUpdateManyWithoutSemesterNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateManyWithoutCampusInput = {
@@ -51069,6 +54544,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUpdateManyWithoutSectionNestedInput
     classSessions?: ClassSessionUpdateManyWithoutSectionRelNestedInput
     students?: StudentUpdateManyWithoutSectionNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSectionNestedInput
   }
 
   export type SectionUncheckedUpdateWithoutCampusInput = {
@@ -51078,6 +54554,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutSectionNestedInput
     classSessions?: ClassSessionUncheckedUpdateManyWithoutSectionRelNestedInput
     students?: StudentUncheckedUpdateManyWithoutSectionNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSectionNestedInput
   }
 
   export type SectionUncheckedUpdateManyWithoutCampusInput = {
@@ -51099,6 +54576,7 @@ export namespace Prisma {
     resources?: ResourceUpdateManyWithoutSubjectNestedInput
     exams?: ExamUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUpdateManyWithoutSubjectNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectUncheckedUpdateWithoutCampusInput = {
@@ -51114,6 +54592,7 @@ export namespace Prisma {
     resources?: ResourceUncheckedUpdateManyWithoutSubjectNestedInput
     exams?: ExamUncheckedUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutSubjectNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectUncheckedUpdateManyWithoutCampusInput = {
@@ -51159,6 +54638,42 @@ export namespace Prisma {
     createdBy?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TimetableEntryUpdateWithoutCampusInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+    teacher?: TeacherUpdateOneRequiredWithoutTimetableEntryNestedInput
+    subject?: SubjectUpdateOneRequiredWithoutTimetableEntryNestedInput
+    semester?: SemesterUpdateOneRequiredWithoutTimetableEntryNestedInput
+    section?: SectionUpdateOneRequiredWithoutTimetableEntryNestedInput
+  }
+
+  export type TimetableEntryUncheckedUpdateWithoutCampusInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+    teacherId?: StringFieldUpdateOperationsInput | string
+    subjectId?: StringFieldUpdateOperationsInput | string
+    semesterId?: StringFieldUpdateOperationsInput | string
+    sectionId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TimetableEntryUncheckedUpdateManyWithoutCampusInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weekday?: EnumWeekdayFieldUpdateOperationsInput | $Enums.Weekday
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    room?: NullableStringFieldUpdateOperationsInput | string | null
+    teacherId?: StringFieldUpdateOperationsInput | string
+    subjectId?: StringFieldUpdateOperationsInput | string
+    semesterId?: StringFieldUpdateOperationsInput | string
+    sectionId?: StringFieldUpdateOperationsInput | string
   }
 
   export type AttendanceCreateManyClassSessionInput = {

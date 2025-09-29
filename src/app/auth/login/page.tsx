@@ -1,6 +1,6 @@
 "use client";
 
-import { showErrorMessage, showSuccessMessage } from "@/lib/helper";
+import { showErrorMessage, showLoadingMessage, showSuccessMessage } from "@/lib/helper";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -8,7 +8,7 @@ import React, { useEffect, useState } from "react";
 const defaultCampus = {
   name: "CLASSIFY AI",
   logoUrl: "/only-logo.png",
-  hindiName: "Smart Attendance System and Campus Management",
+  hindiName: "AI Smart Attendance & Analytics System and Campus Community App",
 };
 
 const Page = () => {
@@ -21,6 +21,7 @@ const Page = () => {
   const router = useRouter();
 
   const handleLogin = async () => {
+    showLoadingMessage("Verifying Credentials...");
     if (!email || !name) {
       showErrorMessage("Please fill in both fields");
       return;

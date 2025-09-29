@@ -150,7 +150,7 @@ export const sendAttendanceQrEmail = async (
       <!-- BODY -->
       <div class="content">
         <p class="lead">Hello Student 👋,</p>
-        <p>Please scan the QR code below to mark your attendance. <br/>This code is valid for <b>10 minutes</b>.</p>
+        <p>Please scan the QR code below to mark your attendance. <br/>This code is valid for <b>5 minutes</b>.</p>
 
         <!-- QR CODE -->
         <div class="qrbox" role="status" aria-live="polite" aria-label="Attendance QR Code">

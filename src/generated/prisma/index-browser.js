@@ -204,22 +204,37 @@ exports.Prisma.CampusScalarFieldEnum = {
 
 exports.Prisma.ClassSessionScalarFieldEnum = {
   id: 'id',
-  subject: 'subject',
+  date: 'date',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  weekday: 'weekday',
+  room: 'room',
+  status: 'status',
+  attendanceWindowEndsAt: 'attendanceWindowEndsAt',
+  attendanceMarked: 'attendanceMarked',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   subjectId: 'subjectId',
+  subject: 'subject',
   campusId: 'campusId',
   semester: 'semester',
   section: 'section',
-  weekday: 'weekday',
-  room: 'room',
-  startTime: 'startTime',
-  endTime: 'endTime',
   teacherId: 'teacherId',
   semesterId: 'semesterId',
-  sectionId: 'sectionId',
-  status: 'status',
-  attendanceMarked: 'attendanceMarked',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  sectionId: 'sectionId'
+};
+
+exports.Prisma.TimetableEntryScalarFieldEnum = {
+  id: 'id',
+  weekday: 'weekday',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  room: 'room',
+  campusId: 'campusId',
+  teacherId: 'teacherId',
+  subjectId: 'subjectId',
+  semesterId: 'semesterId',
+  sectionId: 'sectionId'
 };
 
 exports.Prisma.AttendanceScalarFieldEnum = {
@@ -245,7 +260,8 @@ exports.Prisma.AttendanceTokenScalarFieldEnum = {
   expiresAt: 'expiresAt',
   used: 'used',
   latitude: 'latitude',
-  longitude: 'longitude'
+  longitude: 'longitude',
+  mode: 'mode'
 };
 
 exports.Prisma.SessionScalarFieldEnum = {
@@ -447,6 +463,7 @@ exports.Weekday = exports.$Enums.Weekday = {
 
 exports.SessionStatus = exports.$Enums.SessionStatus = {
   UPCOMING: 'UPCOMING',
+  LIVE: 'LIVE',
   COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED'
 };
@@ -456,6 +473,11 @@ exports.AttendanceStatus = exports.$Enums.AttendanceStatus = {
   ABSENT: 'ABSENT',
   LATE: 'LATE',
   PENDING: 'PENDING'
+};
+
+exports.AttendanceMode = exports.$Enums.AttendanceMode = {
+  ONLINE: 'ONLINE',
+  OFFLINE: 'OFFLINE'
 };
 
 exports.Prisma.ModelName = {
@@ -468,6 +490,7 @@ exports.Prisma.ModelName = {
   TeacherSubject: 'TeacherSubject',
   Campus: 'Campus',
   ClassSession: 'ClassSession',
+  TimetableEntry: 'TimetableEntry',
   Attendance: 'Attendance',
   AttendanceToken: 'AttendanceToken',
   Session: 'Session',

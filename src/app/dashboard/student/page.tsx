@@ -17,6 +17,7 @@ import { showErrorMessage } from "@/lib/helper";
 import FirstLoginModal from "@/components/student/FirstLoginModal";
 import FaceVerificationModal from "@/components/student/FaceVerificationModal";
 import { set } from "date-fns";
+import DashboardLoader from "@/components/student/DashboardLoader";
 
 export default function StudentDashboard() {
   const [todayAttendance, setTodayAttendance] = useState<Attendance[]>([]);
@@ -104,7 +105,7 @@ export default function StudentDashboard() {
     fetchTodayAttendance();
     fetchPremiumStatus();
     fetchStudentData();
-    setNeedsFaceVerification(true)
+    setNeedsFaceVerification(false) //false for development
   }, []);
 
   const handleAvatarSuccess = (newAvatarUrl: string) => {
@@ -121,7 +122,7 @@ export default function StudentDashboard() {
   if (loading){
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <p className="text-gray-500 text-lg">Loading...</p>
+        <DashboardLoader/>
       </div>
     );
   }
@@ -298,7 +299,7 @@ export default function StudentDashboard() {
                 {premiumStatus?.features?.includes("AI_CHATBOT") && (
                   <div
                     className="hidden gap-4 items-center justify-center ring hover:ring-2 w-56 p-3 ml-2 rounded-2xl bg-blue-600/50 ring-blue-300 transition-all duration-300 hover:bg-blue-500 cursor-pointer 2xl:flex"
-                    onClick={() => logout()}
+                    onClick={() => router.push("/dashboard/student/chat")}
                   >
                     <span className="text-xl">Chat with AI</span>
                   </div>

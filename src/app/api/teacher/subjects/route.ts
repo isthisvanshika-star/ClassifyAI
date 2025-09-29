@@ -3,43 +3,54 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(req: NextRequest) {
   try {
-    const teacherUserId = req.nextUrl.searchParams.get("teacherId");
-    if (!teacherUserId) {
+    const { searchParams } = new URL(req.url);
+
+    // 1. Get both teacherId and campusId from the URL
+    const teacherUserId = searchParams.get("teacherId");
+    const campusId = searchParams.get("campusId");
+
+    if (!teacherUserId || !campusId) {
       return NextResponse.json(
-        { error: "Teacher ID is required" },
+        { error: "Teacher ID and Campus ID are required" },
         { status: 400 }
       );
     }
 
-    // find teacher by userId
-    const teacher = await prisma.teacher.findUnique({
-      where: { userId: teacherUserId },
+    // 2. Update the query to be a secure, scoped findFirst.
+    // This finds the teacher profile only if their userId and campusId both match.
+    const teacher = await prisma.teacher.findFirst({
+      where: {
+        userId: teacherUserId,
+        user: {
+          campusId: campusId,
+        },
+      },
       select: { id: true },
     });
 
     if (!teacher) {
-      return NextResponse.json({ error: "Teacher not found" }, { status: 404 });
+      return NextResponse.json({ error: "Teacher not found on this campus" }, { status: 404 });
     }
 
-    // fetch subjects taught by teacher with semester & section
+    // This query is now implicitly secure because it uses the teacher.id we just verified.
     const subjects = await prisma.teacherSubject.findMany({
       where: { teacherId: teacher.id },
       select: {
         id: true,
-        subject: {          // ✅ relation to Subject
+        subject: {
           select: {
             id: true,
             name: true,
             code: true,
           },
         },
-        semester: {         // ✅ relation to Semester
+        semester: {
           select: {
             id: true,
             name: true,
           },
         },
-        section: {          // ✅ relation to Section
+        section: {
           select: {
             id: true,
             name: true,
@@ -50,7 +61,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(subjects);
   } catch (err: any) {
-    console.error("Error fetching subjects:", err);
+    console.error("Error fetching teacher's subjects:", err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import toast from "react-hot-toast";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
+import { getCurrentLocation, showErrorMessage, showLoadingMessage, showSuccessMessage } from "@/lib/helper";
+import { get } from "http";
 
 const ScanPage = () => {
   const scannerRef = useRef<Html5QrcodeScanner | null>(null);
@@ -17,7 +18,7 @@ const ScanPage = () => {
       return;
     }
     scannedRef.current = true;
-    toast.loading("Verifying...");
+    showLoadingMessage("QR Code detected, getting your location...");
 
     let qrData;
     try {
@@ -26,8 +27,7 @@ const ScanPage = () => {
         throw new Error("Invalid QR: No token found.");
       }
     } catch (e: any) {
-      toast.dismiss();
-      toast.error(e.message || "Invalid QR code format");
+      showErrorMessage(e.message || "Invalid QR code format");
       scannedRef.current = false; // Allow rescanning
       return;
     }
@@ -42,34 +42,38 @@ const ScanPage = () => {
       if (!loggedInStudentId) {
         throw new Error("Login error: Could not find your student ID.");
       }
+
+      //2. Call the location helper function.
+      const location = await getCurrentLocation();
+      showLoadingMessage("Location found, Verifying attendance...")
       
       // FIX 2: Send the correct data to the correct API endpoint.
       const res = await fetch(`/api/attendance/mark`, { // Corrected URL
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-        },
+        }, 
         body: JSON.stringify({
           token: qrData.token,          // The token from the QR code
           studentId: loggedInStudentId, // The ID of the student who is scanning
+          location: location,
+          wifibssid: null, // Optional: Add WiFi BSSID if needed///NEEDED TO BE FETCHED FROM RUST API....
         }),
       });
 
       const result = await res.json();
-      toast.dismiss();
 
       if (res.ok) {
-        toast.success(result.message || "Attendance Recorded!");
+        showSuccessMessage(result.message || "Attendance Recorded!");
         setTimeout(() => {
           router.replace("/dashboard/student");
         }, 1500);
       } else {
-        toast.error(result.message || "Failed marking attendance");
+        showErrorMessage(result.message || "Failed marking attendance");
         scannedRef.current = false; // Allow rescanning on API error
       }
     } catch (error: any) {
-      toast.dismiss();
-      toast.error(error.message || "Error marking attendance");
+      showErrorMessage(error.message || "Error marking attendance");
       scannedRef.current = false; // Allow rescanning on fetch error
     }
   };

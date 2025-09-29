@@ -1,6 +1,6 @@
 export default function DashboardSkeleton() {
     return (
-        <div className="min-h-screen bg-gray-900 text-white p-4 md:p-8 animate-pulse">
+        <div className="min-h-screen overflow-hidden bg-gray-950/30 text-white p-4 md:p-8 animate-pulse">
             <header className="flex flex-col md:flex-row justify-between items-center mb-10">
                 <div>
                     <div className="h-10 bg-gray-700 rounded w-64 mb-4"></div>
@@ -14,6 +14,9 @@ export default function DashboardSkeleton() {
                     <div className="bg-gray-800 p-6 rounded-xl h-56"></div>
                 </div>
                 <div className="bg-gray-800 p-6 rounded-xl h-[450px]"></div>
+            </div>
+            <div className="mt-2">
+                <div className="h-32 bg-gray-800 rounded-xl w-96 mb-4"></div>
             </div>
         </div>
     );

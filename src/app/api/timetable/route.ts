@@ -1,169 +1,125 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { z } from "zod";
+
+const WEEKDAYS = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"] as const;
 
 /**
- * Weekdays as string-literals (match your Prisma enum values).
+ * POST: Creates a new TimetableEntry in the recurring weekly schedule.
  */
-const WEEKDAYS = [
-  "SUNDAY",
-  "MONDAY",
-  "TUESDAY",
-  "WEDNESDAY",
-  "THURSDAY",
-  "FRIDAY",
-  "SATURDAY",
-] as const;
+const createTimetableEntrySchema = z.object({
+  campusId: z.string().cuid(),
+  teacherId: z.string().cuid(), // Teacher Profile ID
+  subjectId: z.string().cuid(),
+  semesterId: z.string().cuid(),
+  sectionId: z.string().cuid(),
+  weekday: z.enum(WEEKDAYS),
+  startTime: z.string().datetime(),
+  endTime: z.string().datetime(),
+  room: z.string().optional(),
+});
 
-type WeekdayStr = (typeof WEEKDAYS)[number];
-
-function isValidWeekday(v: any): v is WeekdayStr {
-  return typeof v === "string" && (WEEKDAYS as readonly string[]).includes(v);
-}
-
-/**
- * POST: create a ClassSession
- */
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+    const validation = createTimetableEntrySchema.safeParse(body);
 
-    const {
-      subjectId,
-      subjectName,
-      subjectCode,
-      section,
-      semester,
-      weekday,
-      startTime,
-      endTime,
-      teacherId,
-      room,
-    } = body;
+    if (!validation.success) {
+      return NextResponse.json({ error: validation.error.flatten().fieldErrors }, { status: 400 });
+    }
+    const { campusId, teacherId, subjectId, semesterId, sectionId, weekday, startTime, endTime, room } = validation.data;
 
-    // Basic validation
-    if (!teacherId || !section || semester == null || !weekday || !startTime || !endTime) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    // Verify that all provided IDs belong to the specified campus
+    const [teacher, subject, semester, section] = await Promise.all([
+        prisma.teacher.findFirst({ where: { id: teacherId, user: { campusId } } }),
+        prisma.subject.findFirst({ where: { id: subjectId, campusId } }),
+        prisma.semester.findFirst({ where: { id: semesterId, campusId } }),
+        prisma.section.findFirst({ where: { id: sectionId, campusId } }),
+    ]);
+
+    if (!teacher || !subject || !semester || !section) {
+        return NextResponse.json({ error: "One or more provided IDs are invalid or do not belong to the specified campus." }, { status: 404 });
     }
 
-    if (!isValidWeekday(weekday)) {
-      return NextResponse.json({ error: "Invalid weekday" }, { status: 400 });
-    }
-
-    const start = new Date(startTime);
-    const end = new Date(endTime);
-    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
-      return NextResponse.json({ error: "Invalid startTime or endTime" }, { status: 400 });
-    }
-
-    // Ensure teacher exists
-    const teacher = await prisma.teacher.findUnique({ where: { id: teacherId } });
-    if (!teacher) {
-      return NextResponse.json({ error: "Teacher not found" }, { status: 404 });
-    }
-
-    // Resolve or create subject
-    let finalSubjectId = subjectId as string | undefined;
-    if (!finalSubjectId) {
-      if (!subjectName) {
-        return NextResponse.json(
-          { error: "Either subjectId or subjectName must be provided" },
-          { status: 400 }
-        );
-      }
-
-      // Try to find by name (case-insensitive)
-      const existing = await prisma.subject.findFirst({
-        where: { name: { equals: subjectName, mode: "insensitive" } },
-        select: { id: true },
-      });
-
-      if (existing) {
-        finalSubjectId = existing.id;
-      } else {
-        const created = await prisma.subject.create({
-          data: { name: subjectName, code: subjectCode ?? undefined },
-          select: { id: true },
-        });
-        finalSubjectId = created.id;
-      }
-    } else {
-      // verify subject exists
-      const existing = await prisma.subject.findUnique({ where: { id: finalSubjectId } });
-      if (!existing) {
-        return NextResponse.json({ error: "subjectId not found" }, { status: 404 });
-      }
-    }
-
-    // Create the ClassSession
-    const session = await prisma.classSession.create({
+    // FIX: This now creates a record in the new 'TimetableEntry' table
+    const timetableEntry = await prisma.timetableEntry.create({
       data: {
-        subjectId: finalSubjectId,    // use scalar ID
-        section,
-        semester: Number(semester),
-        weekday: weekday as any,
+        teacherId,
+        subjectId,
+        campusId,
+        sectionId,
+        semesterId,
+        weekday,
         room: room ?? null,
-        startTime: start,
-        endTime: end,
-        teacherId: teacher.id,        // use scalar ID
-      },
-      include: {
-        subjectRel: {                // relation field
-          select: { id: true, name: true, code: true },
-        },
-        teacher: { select: { id: true, userId: true } },
-      },
+        startTime: new Date(startTime),
+        endTime: new Date(endTime),
+      }
     });
 
-    // Map output to keep "subject" field for frontend compatibility
-    const output = {
-      ...session,
-      subject: session.subjectRel,
-    };
+    return NextResponse.json({ success: true, timetableEntry }, { status: 201 });
 
-    return NextResponse.json({ success: true, session: output }, { status: 201 });
   } catch (err: any) {
-    console.error("Error creating timetable:", err);
-    return NextResponse.json({ error: "Failed to create timetable", details: String(err) }, { status: 500 });
+    console.error("Error creating timetable entry:", err);
+    // Check for unique constraint violation
+    if (err.code === 'P2002') {
+        return NextResponse.json({ error: "This teacher already has a class scheduled at this exact time and day." }, { status: 409 });
+    }
+    return NextResponse.json({ error: "Failed to create timetable entry" }, { status: 500 });
   }
 }
 
 /**
- * GET: fetch today's pending sessions
+ * GET: Fetches a teacher's full weekly timetable for a specific campus.
  */
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
-    const url = new URL(req.url);
-    const teacherId = url.searchParams.get("teacherId") || undefined;
+    const { searchParams } = new URL(req.url);
+    const teacherId = searchParams.get("teacherId"); // Teacher User ID
+    const campusId = searchParams.get("campusId");
 
-    // Current IST datetime
-    const nowIST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
-    const today = WEEKDAYS[nowIST.getDay()]; // e.g. "MONDAY"
-
-    // Build where clause
-    const where: any = {
-      weekday: today as any,
-      startTime: { gt: nowIST },
-    };
-    if (teacherId) where.teacherId = teacherId;
-
-    const sessions = await prisma.classSession.findMany({
-      where,
-      orderBy: { startTime: "asc" },
-      include: {
-        subjectRel: { select: { id: true, name: true, code: true } }, // ✅ Fixed: use subjectRel instead of subject
-        teacher: { select: { id: true, userId: true } },
-      },
+    if (!teacherId || !campusId) {
+        return NextResponse.json({ error: "Teacher ID and Campus ID are required" }, { status: 400 });
+    }
+    
+    const teacherProfile = await prisma.teacher.findFirst({
+        where: { userId: teacherId, user: { campusId: campusId } },
+        select: { id: true }
     });
 
-    // Map output to keep "subject" field for frontend compatibility
-    const formattedSessions = sessions.map(s => ({
-      ...s,
-      subject: s.subjectRel,
+    if (!teacherProfile) {
+        return NextResponse.json({ error: "Teacher not found on this campus." }, { status: 404 });
+    }
+
+    // FIX: This now fetches data from the 'TimetableEntry' table
+    const entries = await prisma.timetableEntry.findMany({
+      where: {
+        teacherId: teacherProfile.id,
+        campusId: campusId,
+      },
+      orderBy: { startTime: "asc" },
+      include: {
+        subject: { select: { name: true, code: true } },
+        section: { select: { name: true } },
+        semester: { select: { name: true } },
+      },
+    });
+    
+    // Format the response to be easy for the frontend to use
+    // This now directly represents the weekly schedule
+    const formattedEntries = entries.map(entry => ({
+      id: entry.id,
+      weekday: entry.weekday,
+      startTime: entry.startTime,
+      endTime: entry.endTime,
+      room: entry.room,
+      subject: entry.subject,
+      section: entry.section.name,
+      semester: entry.semester.name,
     }));
 
-    return NextResponse.json({ success: true, sessions: formattedSessions });
+    return NextResponse.json({ success: true, sessions: formattedEntries });
   } catch (err: any) {
-    console.error("Error fetching today's classes:", err);
-    return NextResponse.json({ error: "Failed to fetch today's classes", details: String(err) }, { status: 500 });
+    console.error("Error fetching timetable:", err);
+    return NextResponse.json({ error: "Failed to fetch timetable" }, { status: 500 });
   }
 }

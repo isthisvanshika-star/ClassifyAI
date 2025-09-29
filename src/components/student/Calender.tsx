@@ -20,11 +20,8 @@ const AppCalendar = () => {
       try {
         const res = await fetch(`/api/assistant/event?campusId=${campusId}`);
         const data = await res.json();
-        console.log({data})
-        console.log(data.events)
         if (data.success) {
           setEvents(data.events);
-          console.log({events})
         }
       } catch (error) {
         console.log("Failed to fetch events", error);
