@@ -173,7 +173,7 @@ const Page = () => {
         />
         <input
           type="text"
-          placeholder="Name"
+          placeholder="User Name"
           value={name}
           className="p-2 rounded bg-white/10 text-white placeholder-white/70 outline-none focus:ring-2 focus:ring-cyan-500 transition-all duration-500"
           onChange={(event) => setName(event.target.value)}

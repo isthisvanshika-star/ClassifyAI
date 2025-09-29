@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import { prisma } from "./prisma";
-import { BookOpen, Calendar, Home, LogOut, Megaphone, Upload } from "lucide-react";
+import { BookOpen, Home, LogOut, Megaphone, ClipboardCheck, NotepadText, Upload } from "lucide-react";
 
 export const logActivity = async (
   userId: string,
@@ -232,8 +232,9 @@ export function haversineDistance(
 
 export const teacherNavLinks = [
   { label: "Dashboard", href: "/dashboard/teacher", icon: Home },
-  { label: "Classes", href: "/dashboard/teacher/classes", icon: BookOpen },
-  { label: "Attendance", href: "/dashboard/teacher/attendance", icon: Calendar },
+  { label: "Assignments", href: "/dashboard/teacher/assignments", icon: BookOpen },
+  { label: "Classes", href: "/dashboard/teacher/classes", icon: NotepadText },
+  { label: "Attendance", href: "/dashboard/teacher/attendance", icon: ClipboardCheck },
   { label: "Announcements", href: "/dashboard/teacher/announcements", icon: Megaphone },
   { label: "Resources", href: "/dashboard/teacher/resources", icon: Upload },
   { label: "Logout", href: "/dashboard/teacher/logout", icon: LogOut },

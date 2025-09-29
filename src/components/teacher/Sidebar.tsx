@@ -9,7 +9,7 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="2xl:w-30 2xl:ml-32 bg-white/5 h-[35rem] items-center justify-center rounded-full backdrop-blur-lg border border-white/10 p-1 flex flex-col shadow-lg">
+    <aside className="2xl:w-30 2xl:ml-32 bg-white/5 h-[40rem] items-center justify-center rounded-full backdrop-blur-lg border border-white/10 p-1 flex flex-col shadow-lg">
       <nav className="flex items-center space-y-10 flex-col">
         {teacherNavLinks.map(({ label, href, icon: Icon }) => (
           <div key={label} className="relative group">

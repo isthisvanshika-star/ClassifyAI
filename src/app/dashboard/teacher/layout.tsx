@@ -7,7 +7,7 @@ export default function TeacherLayout({
 }) {
   return (
     <div className="flex h-screen">
-      <div className=" mt-64">
+      <div className=" mt-50">
       <Sidebar />
       </div>
        <div className="flex flex-col items-center 2xl:-ml-[5rem] justify-center flex-1">
