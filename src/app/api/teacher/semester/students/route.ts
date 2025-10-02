@@ -5,19 +5,26 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     
-    // 1. Get both semesterId and sectionId from the URL
+    // 1. Get campusId along with the other parameters.
     const semesterId = searchParams.get('semesterId');
     const sectionId = searchParams.get('sectionId');
+    const campusId = searchParams.get('campusId');
 
-    if (!semesterId && !sectionId) {
+    // Campus ID is now mandatory for security.
+    if (!campusId) {
       return NextResponse.json(
-        { message: "Either semesterId or sectionId is required" },
+        { message: "Campus ID is required" },
         { status: 400 }
       );
     }
 
-    // 2. Build a dynamic where clause based on the provided parameters
-    const whereClause: any = {};
+    // Build the dynamic where clause.
+    const whereClause: any = {
+        // 2. Scope the query to the specific campus.
+        user: {
+            campusId: campusId
+        }
+    };
     if (semesterId) {
       whereClause.semesterId = semesterId;
     }
@@ -25,7 +32,6 @@ export async function GET(request: NextRequest) {
       whereClause.sectionId = sectionId;
     }
 
-    // 3. Use the dynamic where clause in the Prisma query
     const students = await prisma.student.findMany({
       where: whereClause,
       include: {

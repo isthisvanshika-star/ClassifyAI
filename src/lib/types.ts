@@ -250,3 +250,21 @@ export type AttendanceSessionType = {
 };
 
 export type AssignmentStatus = "DRAFT" | "PUBLISHED" | "CLOSED";
+
+export type TeacherClassSession = {
+  id: string;
+  subject: {id: string, name: string; code?: string; };
+  section: { id: string, name: string; };
+  semester: { id: string, name: string; };
+  weekday: string;
+  startTime: string;
+  endTime: string;
+  room?: string | null;
+};
+
+// New prop to allow pre-selecting a class
+export interface PreselectedClass {
+  subjectId: string;
+  semesterId: string;
+  sectionId: string;
+}

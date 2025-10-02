@@ -2,7 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Subject, Semester, Student, Section } from "@/lib/types";
+import {
+  Subject,
+  Semester,
+  Student,
+  Section,
+  PreselectedClass,
+} from "@/lib/types";
 import {
   getCurrentLocation,
   showErrorMessage,
@@ -10,14 +16,22 @@ import {
   showSuccessMessage,
 } from "@/lib/helper";
 
+function SkeletonBox({ className = "" }: { className?: string }) {
+  return (
+    <div className={`animate-pulse bg-gray-700/50 rounded-md ${className}`} />
+  );
+}
+
 export default function GenerateTokenDialog({
   isOpen,
   onClose,
   onSuccess,
+  preselectedClass,
 }: {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: (token: string) => void;
+  preselectedClass?: PreselectedClass | null;
 }) {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [semesters, setSemesters] = useState<Semester[]>([]);
@@ -31,9 +45,15 @@ export default function GenerateTokenDialog({
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isFetchingStudents, setIsFetchingStudents] = useState(false);
-  const [mode, setMode] = useState<"OFFLINE" | "ONLINE">("OFFLINE"); // ADDED: State for online/offline mode
+  const [mode, setMode] = useState<"OFFLINE" | "ONLINE">("OFFLINE");
+  const [campusId, setCampusId] = useState<string | null>(null);
+  const [isFetchingInitial, setIsFetchingInitial] = useState(false);
 
-  // Preselect all students when fetched
+  useEffect(() => {
+    const storedCampusId = localStorage.getItem("CampusID");
+    setCampusId(storedCampusId);
+  }, []);
+
   useEffect(() => {
     if (students && students.length > 0) {
       setSelectedStudents(students.map((s) => s.id));
@@ -48,11 +68,12 @@ export default function GenerateTokenDialog({
     setSelectedStudents([]);
 
     async function fetchData() {
+      setIsFetchingInitial(true);
       try {
         const [subjectsRes, semestersRes, sectionsRes] = await Promise.all([
-          fetch("/api/teacher/subjects/all"),
-          fetch("/api/teacher/semester/all"),
-          fetch("/api/teacher/sections/all"),
+          fetch(`/api/teacher/subjects/all?campusId=${campusId}`),
+          fetch(`/api/teacher/semester/all?campusId=${campusId}`),
+          fetch(`/api/teacher/sections/all?campusId=${campusId}`),
         ]);
         if (!subjectsRes.ok || !semestersRes.ok || !sectionsRes.ok)
           throw new Error("Failed to load initial data.");
@@ -65,15 +86,24 @@ export default function GenerateTokenDialog({
         setSemesters(semestersData);
         setSections(sectionsData);
 
-        if (subjectsData.length > 0) setSelectedSubject(subjectsData[0].id);
-        if (semestersData.length > 0) setSelectedSemester(semestersData[0].id);
-        if (sectionsData.length > 0) setSelectedSection(sectionsData[0].id);
+        if (preselectedClass) {
+          setSelectedSubject(preselectedClass.subjectId);
+          setSelectedSemester(preselectedClass.semesterId);
+          setSelectedSection(preselectedClass.sectionId);
+        } else {
+          if (subjectsData.length > 0) setSelectedSubject(subjectsData[0].id);
+          if (semestersData.length > 0)
+            setSelectedSemester(semestersData[0].id);
+          if (sectionsData.length > 0) setSelectedSection(sectionsData[0].id);
+        }
       } catch (err: any) {
         setError(err.message);
+      } finally {
+        setIsFetchingInitial(false);
       }
     }
     fetchData();
-  }, [isOpen]);
+  }, [isOpen, preselectedClass, campusId]);
 
   useEffect(() => {
     if (!selectedSemester || !selectedSection) return;
@@ -84,7 +114,7 @@ export default function GenerateTokenDialog({
       setSelectedStudents([]);
       try {
         const res = await fetch(
-          `/api/teacher/semester/students?semesterId=${selectedSemester}&sectionId=${selectedSection}`
+          `/api/teacher/semester/students?semesterId=${selectedSemester}&sectionId=${selectedSection}&campusId=${campusId}`
         );
         if (!res.ok) throw new Error("Failed to fetch students.");
         const data = await res.json();
@@ -96,7 +126,7 @@ export default function GenerateTokenDialog({
       }
     }
     fetchStudents();
-  }, [selectedSemester, selectedSection]);
+  }, [selectedSemester, selectedSection, campusId]);
 
   const handleStudentSelect = (studentId: string) => {
     setSelectedStudents((prev) =>
@@ -121,7 +151,6 @@ export default function GenerateTokenDialog({
 
     try {
       let location = null;
-      // Only get location if the mode is OFFLINE
       if (mode === "OFFLINE") {
         location = await getCurrentLocation();
         showLoadingMessage("Location found. Generating tokens...");
@@ -155,6 +184,7 @@ export default function GenerateTokenDialog({
       setIsLoading(false);
     }
   };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -182,51 +212,63 @@ export default function GenerateTokenDialog({
                   <label className="block text-sm font-medium text-gray-300 mb-1">
                     Subject
                   </label>
-                  <select
-                    value={selectedSubject}
-                    onChange={(e) => setSelectedSubject(e.target.value)}
-                    className="w-full appearance-none bg-gray-800 border border-cyan-500/30 rounded-lg p-2 text-white focus:ring-2 focus:ring-cyan-400"
-                  >
-                    {subjects.map((s) => (
-                      <option key={s.id} value={s.id} className="bg-gray-900">
-                        {s.name} {s.code && `(${s.code})`}
-                      </option>
-                    ))}
-                  </select>
+                  {isFetchingInitial ? (
+                    <SkeletonBox className="h-10 w-full" />
+                  ) : (
+                    <select
+                      value={selectedSubject}
+                      onChange={(e) => setSelectedSubject(e.target.value)}
+                      className="w-full appearance-none bg-gray-800 border border-cyan-500/30 rounded-lg p-2 text-white focus:ring-2 focus:ring-cyan-400"
+                    >
+                      {subjects.map((s) => (
+                        <option key={s.id} value={s.id} className="bg-gray-900">
+                          {s.name} {s.code && `(${s.code})`}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
                     Semester
                   </label>
-                  <select
-                    value={selectedSemester}
-                    onChange={(e) => setSelectedSemester(e.target.value)}
-                    className="w-full appearance-none bg-gray-800 border border-cyan-500/30 rounded-lg p-2 text-white focus:ring-2 focus:ring-cyan-400"
-                  >
-                    {semesters.map((s) => (
-                      <option key={s.id} value={s.id} className="bg-gray-900">
-                        {s.name.includes("Semester")
-                          ? s.name
-                          : `Semester ${s.name}`}
-                      </option>
-                    ))}
-                  </select>
+                  {isFetchingInitial ? (
+                    <SkeletonBox className="h-10 w-full" />
+                  ) : (
+                    <select
+                      value={selectedSemester}
+                      onChange={(e) => setSelectedSemester(e.target.value)}
+                      className="w-full appearance-none bg-gray-800 border border-cyan-500/30 rounded-lg p-2 text-white focus:ring-2 focus:ring-cyan-400"
+                    >
+                      {semesters.map((s) => (
+                        <option key={s.id} value={s.id} className="bg-gray-900">
+                          {s.name.includes("Semester")
+                            ? s.name
+                            : `Semester ${s.name}`}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
                     Section
                   </label>
-                  <select
-                    value={selectedSection}
-                    onChange={(e) => setSelectedSection(e.target.value)}
-                    className="w-full appearance-none bg-gray-800 border border-cyan-500/30 rounded-lg p-2 text-white focus:ring-2 focus:ring-cyan-400"
-                  >
-                    {sections.map((s) => (
-                      <option key={s.id} value={s.id} className="bg-gray-900">
-                        {s.name}
-                      </option>
-                    ))}
-                  </select>
+                  {isFetchingInitial ? (
+                    <SkeletonBox className="h-10 w-full" />
+                  ) : (
+                    <select
+                      value={selectedSection}
+                      onChange={(e) => setSelectedSection(e.target.value)}
+                      className="w-full appearance-none bg-gray-800 border border-cyan-500/30 rounded-lg p-2 text-white focus:ring-2 focus:ring-cyan-400"
+                    >
+                      {sections.map((s) => (
+                        <option key={s.id} value={s.id} className="bg-gray-900">
+                          {s.name}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </div>
               </div>
 
@@ -284,23 +326,29 @@ export default function GenerateTokenDialog({
                 </p>
               )}
               <div className="relative w-full bg-transparent ring-1 h-10 ring-cyan-800 rounded-lg p-1 flex">
-                {/* Buttons */}
                 <button
                   type="button"
                   onClick={() => setMode("OFFLINE")}
-                  className={`relative uppercase w-1/2 text-sm transition-all duration-300 rounded-lg ${mode === "OFFLINE" ? "font-semibold bg-cyan-700  text-white z-10" : "text-gray-200"} `}
+                  className={`relative uppercase w-1/2 text-sm transition-all duration-300 rounded-lg ${
+                    mode === "OFFLINE"
+                      ? "font-semibold bg-cyan-700  text-white z-10"
+                      : "text-gray-200"
+                  } `}
                 >
                   Offline Mode
                 </button>
                 <button
                   type="button"
                   onClick={() => setMode("ONLINE")}
-                  className={`relative uppercase w-1/2 text-sm transition-all duration-300 rounded-lg ${mode === "ONLINE" ? "font-semibold bg-cyan-700 text-white z-10" : "text-gray-200"} `}
+                  className={`relative uppercase w-1/2 text-sm transition-all duration-300 rounded-lg ${
+                    mode === "ONLINE"
+                      ? "font-semibold bg-cyan-700 text-white z-10"
+                      : "text-gray-200"
+                  } `}
                 >
                   Online Mode
                 </button>
               </div>
-              {/* Actions */}
               <div className="flex justify-end gap-4 pt-4 border-t border-gray-700">
                 <button
                   type="button"
