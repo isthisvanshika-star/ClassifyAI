@@ -289,6 +289,9 @@ exports.Prisma.AssignmentScalarFieldEnum = {
   title: 'title',
   description: 'description',
   subjectId: 'subjectId',
+  totalMarks: 'totalMarks',
+  status: 'status',
+  rubric: 'rubric',
   teacherId: 'teacherId',
   dueDate: 'dueDate',
   createdAt: 'createdAt',
@@ -478,6 +481,12 @@ exports.AttendanceStatus = exports.$Enums.AttendanceStatus = {
 exports.AttendanceMode = exports.$Enums.AttendanceMode = {
   ONLINE: 'ONLINE',
   OFFLINE: 'OFFLINE'
+};
+
+exports.AssignmentStatus = exports.$Enums.AssignmentStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  CLOSED: 'CLOSED'
 };
 
 exports.Prisma.ModelName = {

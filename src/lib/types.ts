@@ -248,3 +248,5 @@ export type AttendanceSessionType = {
   endTime: string;
   room?: string | null;
 };
+
+export type AssignmentStatus = "DRAFT" | "PUBLISHED" | "CLOSED";

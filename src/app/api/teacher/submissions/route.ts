@@ -1,0 +1,103 @@
+import { prisma } from "@/lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+
+/**
+ * GET: Fetches all submissions for a specific assignment.
+ * Authorization: Only the teacher who created the assignment can view its submissions.
+ */
+export async function GET(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const assignmentId = searchParams.get("assignmentId");
+    const teacherId = searchParams.get("teacherId"); // This is the Teacher User ID
+
+    if (!assignmentId || !teacherId) {
+      return NextResponse.json({ error: "Assignment ID and Teacher ID are required" }, { status: 400 });
+    }
+
+    // --- Authorization Check ---
+    const [assignment, teacherProfile] = await Promise.all([
+        prisma.assignment.findUnique({ where: { id: assignmentId } }),
+        prisma.teacher.findUnique({ where: { userId: teacherId } })
+    ]);
+    
+    if (!assignment || !teacherProfile || assignment.teacherId !== teacherProfile.id) {
+        return NextResponse.json({ error: "Unauthorized or assignment not found." }, { status: 403 });
+    }
+    // --- End Authorization ---
+
+    const submissions = await prisma.submission.findMany({
+      where: { assignmentId: assignmentId },
+      include: {
+        student: {
+          include: {
+            user: { select: { name: true, email: true } },
+          },
+        },
+      },
+      orderBy: { submittedAt: 'asc' },
+    });
+
+    return NextResponse.json({ success: true, submissions });
+  } catch (error) {
+    console.error("Error fetching submissions:", error);
+    return NextResponse.json({ error: "Failed to fetch submissions." }, { status: 500 });
+  }
+}
+
+/**
+ * PATCH: Updates a single submission with a grade and feedback.
+ * Authorization: Only the teacher who owns the assignment can grade a submission.
+ */
+const gradeSubmissionSchema = z.object({
+    submissionId: z.string().cuid(),
+    teacherId: z.string().cuid(), // Teacher User ID
+    grade: z.number().min(0),
+    feedback: z.string().optional(),
+});
+
+export async function PATCH(req: NextRequest) {
+    try {
+        const body = await req.json();
+        const validation = gradeSubmissionSchema.safeParse(body);
+
+        if (!validation.success) {
+            return NextResponse.json({ error: validation.error.flatten().fieldErrors }, { status: 400 });
+        }
+        const { submissionId, teacherId, grade, feedback } = validation.data;
+
+        // --- Authorization Check ---
+        const [submission, teacherProfile] = await Promise.all([
+            prisma.submission.findUnique({ 
+                where: { id: submissionId }, 
+                include: { assignment: true } 
+            }),
+            prisma.teacher.findUnique({ 
+                where: { userId: teacherId },
+                include: { user: { select: { name: true } } }
+            })
+        ]);
+
+        if (!submission || !teacherProfile || submission.assignment.teacherId !== teacherProfile.id) {
+            return NextResponse.json({ error: "Unauthorized or submission not found." }, { status: 403 });
+        }
+        // --- End Authorization ---
+
+        const updatedSubmission = await prisma.submission.update({
+            where: { id: submissionId },
+            data: {
+                grade,
+                feedback,
+                gradedBy: teacherProfile.user.name,
+                gradedAt: new Date(),
+            }
+        });
+
+        return NextResponse.json({ success: true, submission: updatedSubmission });
+
+    } catch (error) {
+        console.error("Error grading submission:", error);
+        return NextResponse.json({ error: "Failed to grade submission." }, { status: 500 });
+    }
+}

@@ -1,37 +1,63 @@
 import { prisma } from "@/lib/prisma";
-import { sub } from "date-fns";
 import { NextRequest, NextResponse } from "next/server";
-import { title } from "process";
 import z from "zod";
 
 /**
  * GET: Fetches a list of all assignments created by a specific teacher for their campus.
  */
 
-export async function GET(request: NextRequest) {
+/**
+ * GET: Handles two cases:
+ * 1. Fetching a list of all assignments for a teacher.
+ * 2. Fetching the details of a single assignment if 'assignmentId' is provided.
+ */
+export async function GET(req: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const teacherId = searchParams.get("teacherId");
+    const { searchParams } = new URL(req.url);
+    const teacherId = searchParams.get("teacherId"); // Teacher User ID
     const campusId = searchParams.get("campusId");
+    const assignmentId = searchParams.get("assignmentId"); // The new optional parameter
+
     if (!teacherId || !campusId) {
-      return NextResponse.json(
-        { error: "Missing required parameters" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Teacher ID and Campus ID are required" }, { status: 400 });
     }
+
     const teacherProfile = await prisma.teacher.findFirst({
-      where: {
-        userId: teacherId,
-        user: { campusId: campusId },
-      },
+      where: { userId: teacherId, user: { campusId: campusId } },
       select: { id: true },
     });
+
     if (!teacherProfile) {
-      return NextResponse.json(
-        { error: "Teacher not found for campus" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Teacher not found for campus" }, { status: 404 });
     }
+
+    // --- NEW: Handle fetching a single assignment ---
+    if (assignmentId) {
+      const assignment = await prisma.assignment.findFirst({
+        where: {
+          id: assignmentId,
+          teacherId: teacherProfile.id, // Security check: ensure it belongs to this teacher
+        },
+        include: {
+          subject: true,
+          submissions: {
+            include: {
+              student: { include: { user: { select: { name: true } } } },
+            },
+            orderBy: { submittedAt: 'asc' }
+          },
+        },
+      });
+
+      if (!assignment) {
+        return NextResponse.json({ error: "Assignment not found or you do not have permission." }, { status: 404 });
+      }
+      return NextResponse.json({ success: true, assignment });
+    }
+    // --- END of single assignment logic ---
+
+
+    // --- Original logic: Fetch the list of all assignments ---
     const assignments = await prisma.assignment.findMany({
       where: { teacherId: teacherProfile.id },
       include: {
@@ -40,12 +66,12 @@ export async function GET(request: NextRequest) {
       },
       orderBy: { createdAt: "desc" },
     });
-    return NextResponse.json({ success: true, assignments }, { status: 200 });
+
+    return NextResponse.json({ success: true, assignments });
+
   } catch (error) {
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    console.error("Error fetching assignments:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
 
@@ -59,6 +85,9 @@ const createAssignmentSchema = z.object({
   subjectId: z.string().cuid(),
   teacherId: z.string().cuid(),
   campusId: z.string().cuid(),
+  totalMarks: z.number().int().optional(),
+  status: z.enum(["DRAFT", "PUBLISHED", "CLOSED"]).default("DRAFT"),
+  rubric: z.string().optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -71,8 +100,17 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    const { title, description, dueDate, subjectId, teacherId, campusId } =
-      validation.data;
+    const {
+      title,
+      description,
+      dueDate,
+      subjectId,
+      teacherId,
+      campusId,
+      totalMarks,
+      status,
+      rubric,
+    } = validation.data;
     const [teacherProfile, subject] = await Promise.all([
       prisma.teacher.findFirst({
         where: { userId: teacherId, user: { campusId } },
@@ -92,6 +130,9 @@ export async function POST(request: NextRequest) {
         dueDate: dueDate ? new Date(dueDate) : null,
         subjectId: subject.id,
         teacherId: teacherProfile.id,
+        totalMarks,
+        status,
+        rubric,
       },
     });
     return NextResponse.json(

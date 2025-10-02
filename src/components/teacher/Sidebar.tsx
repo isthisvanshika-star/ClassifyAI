@@ -17,7 +17,7 @@ export default function Sidebar() {
               href={href}
               className={`flex items-center justify-center gap-13 px-1 py-1 rounded-full h-10 w-10 transition-all duration-200 
                 ${pathname === href 
-                  ? "bg-white/10 text-white shadow-inner" 
+                  ? "bg-white/20 bg-gradient-to-r from-indigo-400 to-cyan-400 shadow-inner" 
                   : "text-white/80 hover:bg-white/20 hover:text-white"
                 }`}
             >

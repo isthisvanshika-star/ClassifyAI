@@ -296,16 +296,19 @@ model Event {
 }
 
 model Assignment {
-  id          String       @id @default(cuid())
+  id          String           @id @default(cuid())
   title       String
   description String?
   subjectId   String
-  subject     Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade, map: "fk_assignment_subject")
+  totalMarks  Int?
+  status      AssignmentStatus @default(DRAFT)
+  rubric      String?
+  subject     Subject          @relation(fields: [subjectId], references: [id], onDelete: Cascade, map: "fk_assignment_subject")
   teacherId   String
-  teacher     Teacher      @relation(fields: [teacherId], references: [id], map: "fk_assignment_teacher")
+  teacher     Teacher          @relation(fields: [teacherId], references: [id], map: "fk_assignment_teacher")
   dueDate     DateTime?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
   attachments Resource[]
   submissions Submission[]
 }
@@ -497,4 +500,10 @@ enum AttendanceStatus {
 enum AttendanceMode {
   ONLINE
   OFFLINE
+}
+
+enum AssignmentStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
 }

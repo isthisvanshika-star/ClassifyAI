@@ -15,7 +15,7 @@
         "title": "CLASSIFYAI",
         "width": 1200,
         "height": 770,
-        "fullscreen": false
+        "fullscreen": true
       }
     ],
     "security": {

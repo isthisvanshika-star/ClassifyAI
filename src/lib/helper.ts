@@ -95,7 +95,7 @@ export function showSuccessMessage(message: string) {
 
 export function showLoadingMessage(message: string) {
   toast.dismiss();
-  toast.loading(message, {
+  const toastID = toast.loading(message, {
     style: {
       background: "rgba(0, 0, 0, 0.5)",
       color: "#fff",
@@ -105,6 +105,10 @@ export function showLoadingMessage(message: string) {
     },
     position: "bottom-right",
   });
+  return toastID
+}
+export function toastDissmisser(toastID: string) {
+  toast.dismiss(toastID);
 }
 
 export function showErrorMessage(message: string) {

@@ -203,6 +203,15 @@ export const AttendanceMode: {
 
 export type AttendanceMode = (typeof AttendanceMode)[keyof typeof AttendanceMode]
 
+
+export const AssignmentStatus: {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  CLOSED: 'CLOSED'
+};
+
+export type AssignmentStatus = (typeof AssignmentStatus)[keyof typeof AssignmentStatus]
+
 }
 
 export type Role = $Enums.Role
@@ -224,6 +233,10 @@ export const AttendanceStatus: typeof $Enums.AttendanceStatus
 export type AttendanceMode = $Enums.AttendanceMode
 
 export const AttendanceMode: typeof $Enums.AttendanceMode
+
+export type AssignmentStatus = $Enums.AssignmentStatus
+
+export const AssignmentStatus: typeof $Enums.AssignmentStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -21279,8 +21292,18 @@ export namespace Prisma {
 
   export type AggregateAssignment = {
     _count: AssignmentCountAggregateOutputType | null
+    _avg: AssignmentAvgAggregateOutputType | null
+    _sum: AssignmentSumAggregateOutputType | null
     _min: AssignmentMinAggregateOutputType | null
     _max: AssignmentMaxAggregateOutputType | null
+  }
+
+  export type AssignmentAvgAggregateOutputType = {
+    totalMarks: number | null
+  }
+
+  export type AssignmentSumAggregateOutputType = {
+    totalMarks: number | null
   }
 
   export type AssignmentMinAggregateOutputType = {
@@ -21288,6 +21311,9 @@ export namespace Prisma {
     title: string | null
     description: string | null
     subjectId: string | null
+    totalMarks: number | null
+    status: $Enums.AssignmentStatus | null
+    rubric: string | null
     teacherId: string | null
     dueDate: Date | null
     createdAt: Date | null
@@ -21299,6 +21325,9 @@ export namespace Prisma {
     title: string | null
     description: string | null
     subjectId: string | null
+    totalMarks: number | null
+    status: $Enums.AssignmentStatus | null
+    rubric: string | null
     teacherId: string | null
     dueDate: Date | null
     createdAt: Date | null
@@ -21310,6 +21339,9 @@ export namespace Prisma {
     title: number
     description: number
     subjectId: number
+    totalMarks: number
+    status: number
+    rubric: number
     teacherId: number
     dueDate: number
     createdAt: number
@@ -21318,11 +21350,22 @@ export namespace Prisma {
   }
 
 
+  export type AssignmentAvgAggregateInputType = {
+    totalMarks?: true
+  }
+
+  export type AssignmentSumAggregateInputType = {
+    totalMarks?: true
+  }
+
   export type AssignmentMinAggregateInputType = {
     id?: true
     title?: true
     description?: true
     subjectId?: true
+    totalMarks?: true
+    status?: true
+    rubric?: true
     teacherId?: true
     dueDate?: true
     createdAt?: true
@@ -21334,6 +21377,9 @@ export namespace Prisma {
     title?: true
     description?: true
     subjectId?: true
+    totalMarks?: true
+    status?: true
+    rubric?: true
     teacherId?: true
     dueDate?: true
     createdAt?: true
@@ -21345,6 +21391,9 @@ export namespace Prisma {
     title?: true
     description?: true
     subjectId?: true
+    totalMarks?: true
+    status?: true
+    rubric?: true
     teacherId?: true
     dueDate?: true
     createdAt?: true
@@ -21390,6 +21439,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: AssignmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AssignmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: AssignmentMinAggregateInputType
@@ -21420,6 +21481,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: AssignmentCountAggregateInputType | true
+    _avg?: AssignmentAvgAggregateInputType
+    _sum?: AssignmentSumAggregateInputType
     _min?: AssignmentMinAggregateInputType
     _max?: AssignmentMaxAggregateInputType
   }
@@ -21429,11 +21492,16 @@ export namespace Prisma {
     title: string
     description: string | null
     subjectId: string
+    totalMarks: number | null
+    status: $Enums.AssignmentStatus
+    rubric: string | null
     teacherId: string
     dueDate: Date | null
     createdAt: Date
     updatedAt: Date
     _count: AssignmentCountAggregateOutputType | null
+    _avg: AssignmentAvgAggregateOutputType | null
+    _sum: AssignmentSumAggregateOutputType | null
     _min: AssignmentMinAggregateOutputType | null
     _max: AssignmentMaxAggregateOutputType | null
   }
@@ -21457,6 +21525,9 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     subjectId?: boolean
+    totalMarks?: boolean
+    status?: boolean
+    rubric?: boolean
     teacherId?: boolean
     dueDate?: boolean
     createdAt?: boolean
@@ -21473,6 +21544,9 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     subjectId?: boolean
+    totalMarks?: boolean
+    status?: boolean
+    rubric?: boolean
     teacherId?: boolean
     dueDate?: boolean
     createdAt?: boolean
@@ -21486,6 +21560,9 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     subjectId?: boolean
+    totalMarks?: boolean
+    status?: boolean
+    rubric?: boolean
     teacherId?: boolean
     dueDate?: boolean
     createdAt?: boolean
@@ -21499,13 +21576,16 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     subjectId?: boolean
+    totalMarks?: boolean
+    status?: boolean
+    rubric?: boolean
     teacherId?: boolean
     dueDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AssignmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "subjectId" | "teacherId" | "dueDate" | "createdAt" | "updatedAt", ExtArgs["result"]["assignment"]>
+  export type AssignmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "subjectId" | "totalMarks" | "status" | "rubric" | "teacherId" | "dueDate" | "createdAt" | "updatedAt", ExtArgs["result"]["assignment"]>
   export type AssignmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subject?: boolean | SubjectDefaultArgs<ExtArgs>
     teacher?: boolean | TeacherDefaultArgs<ExtArgs>
@@ -21535,6 +21615,9 @@ export namespace Prisma {
       title: string
       description: string | null
       subjectId: string
+      totalMarks: number | null
+      status: $Enums.AssignmentStatus
+      rubric: string | null
       teacherId: string
       dueDate: Date | null
       createdAt: Date
@@ -21970,6 +22053,9 @@ export namespace Prisma {
     readonly title: FieldRef<"Assignment", 'String'>
     readonly description: FieldRef<"Assignment", 'String'>
     readonly subjectId: FieldRef<"Assignment", 'String'>
+    readonly totalMarks: FieldRef<"Assignment", 'Int'>
+    readonly status: FieldRef<"Assignment", 'AssignmentStatus'>
+    readonly rubric: FieldRef<"Assignment", 'String'>
     readonly teacherId: FieldRef<"Assignment", 'String'>
     readonly dueDate: FieldRef<"Assignment", 'DateTime'>
     readonly createdAt: FieldRef<"Assignment", 'DateTime'>
@@ -36080,6 +36166,9 @@ export namespace Prisma {
     title: 'title',
     description: 'description',
     subjectId: 'subjectId',
+    totalMarks: 'totalMarks',
+    status: 'status',
+    rubric: 'rubric',
     teacherId: 'teacherId',
     dueDate: 'dueDate',
     createdAt: 'createdAt',
@@ -36425,6 +36514,20 @@ export namespace Prisma {
    * Reference to a field of type 'AttendanceMode[]'
    */
   export type ListEnumAttendanceModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AttendanceMode[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'AssignmentStatus'
+   */
+  export type EnumAssignmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssignmentStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'AssignmentStatus[]'
+   */
+  export type ListEnumAssignmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssignmentStatus[]'>
     
 
 
@@ -37680,6 +37783,9 @@ export namespace Prisma {
     title?: StringFilter<"Assignment"> | string
     description?: StringNullableFilter<"Assignment"> | string | null
     subjectId?: StringFilter<"Assignment"> | string
+    totalMarks?: IntNullableFilter<"Assignment"> | number | null
+    status?: EnumAssignmentStatusFilter<"Assignment"> | $Enums.AssignmentStatus
+    rubric?: StringNullableFilter<"Assignment"> | string | null
     teacherId?: StringFilter<"Assignment"> | string
     dueDate?: DateTimeNullableFilter<"Assignment"> | Date | string | null
     createdAt?: DateTimeFilter<"Assignment"> | Date | string
@@ -37695,6 +37801,9 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrderInput | SortOrder
     subjectId?: SortOrder
+    totalMarks?: SortOrderInput | SortOrder
+    status?: SortOrder
+    rubric?: SortOrderInput | SortOrder
     teacherId?: SortOrder
     dueDate?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -37713,6 +37822,9 @@ export namespace Prisma {
     title?: StringFilter<"Assignment"> | string
     description?: StringNullableFilter<"Assignment"> | string | null
     subjectId?: StringFilter<"Assignment"> | string
+    totalMarks?: IntNullableFilter<"Assignment"> | number | null
+    status?: EnumAssignmentStatusFilter<"Assignment"> | $Enums.AssignmentStatus
+    rubric?: StringNullableFilter<"Assignment"> | string | null
     teacherId?: StringFilter<"Assignment"> | string
     dueDate?: DateTimeNullableFilter<"Assignment"> | Date | string | null
     createdAt?: DateTimeFilter<"Assignment"> | Date | string
@@ -37728,13 +37840,18 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrderInput | SortOrder
     subjectId?: SortOrder
+    totalMarks?: SortOrderInput | SortOrder
+    status?: SortOrder
+    rubric?: SortOrderInput | SortOrder
     teacherId?: SortOrder
     dueDate?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: AssignmentCountOrderByAggregateInput
+    _avg?: AssignmentAvgOrderByAggregateInput
     _max?: AssignmentMaxOrderByAggregateInput
     _min?: AssignmentMinOrderByAggregateInput
+    _sum?: AssignmentSumOrderByAggregateInput
   }
 
   export type AssignmentScalarWhereWithAggregatesInput = {
@@ -37745,6 +37862,9 @@ export namespace Prisma {
     title?: StringWithAggregatesFilter<"Assignment"> | string
     description?: StringNullableWithAggregatesFilter<"Assignment"> | string | null
     subjectId?: StringWithAggregatesFilter<"Assignment"> | string
+    totalMarks?: IntNullableWithAggregatesFilter<"Assignment"> | number | null
+    status?: EnumAssignmentStatusWithAggregatesFilter<"Assignment"> | $Enums.AssignmentStatus
+    rubric?: StringNullableWithAggregatesFilter<"Assignment"> | string | null
     teacherId?: StringWithAggregatesFilter<"Assignment"> | string
     dueDate?: DateTimeNullableWithAggregatesFilter<"Assignment"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Assignment"> | Date | string
@@ -39884,6 +40004,9 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
+    totalMarks?: number | null
+    status?: $Enums.AssignmentStatus
+    rubric?: string | null
     dueDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -39898,6 +40021,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     subjectId: string
+    totalMarks?: number | null
+    status?: $Enums.AssignmentStatus
+    rubric?: string | null
     teacherId: string
     dueDate?: Date | string | null
     createdAt?: Date | string
@@ -39910,6 +40036,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+    rubric?: NullableStringFieldUpdateOperationsInput | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -39924,6 +40053,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+    rubric?: NullableStringFieldUpdateOperationsInput | string | null
     teacherId?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -39937,6 +40069,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     subjectId: string
+    totalMarks?: number | null
+    status?: $Enums.AssignmentStatus
+    rubric?: string | null
     teacherId: string
     dueDate?: Date | string | null
     createdAt?: Date | string
@@ -39947,6 +40082,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+    rubric?: NullableStringFieldUpdateOperationsInput | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -39957,6 +40095,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+    rubric?: NullableStringFieldUpdateOperationsInput | string | null
     teacherId?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42054,15 +42195,29 @@ export namespace Prisma {
     campusId?: SortOrder
   }
 
+  export type EnumAssignmentStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.AssignmentStatus | EnumAssignmentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AssignmentStatus[] | ListEnumAssignmentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AssignmentStatus[] | ListEnumAssignmentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAssignmentStatusFilter<$PrismaModel> | $Enums.AssignmentStatus
+  }
+
   export type AssignmentCountOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
     description?: SortOrder
     subjectId?: SortOrder
+    totalMarks?: SortOrder
+    status?: SortOrder
+    rubric?: SortOrder
     teacherId?: SortOrder
     dueDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type AssignmentAvgOrderByAggregateInput = {
+    totalMarks?: SortOrder
   }
 
   export type AssignmentMaxOrderByAggregateInput = {
@@ -42070,6 +42225,9 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     subjectId?: SortOrder
+    totalMarks?: SortOrder
+    status?: SortOrder
+    rubric?: SortOrder
     teacherId?: SortOrder
     dueDate?: SortOrder
     createdAt?: SortOrder
@@ -42081,10 +42239,27 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     subjectId?: SortOrder
+    totalMarks?: SortOrder
+    status?: SortOrder
+    rubric?: SortOrder
     teacherId?: SortOrder
     dueDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type AssignmentSumOrderByAggregateInput = {
+    totalMarks?: SortOrder
+  }
+
+  export type EnumAssignmentStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AssignmentStatus | EnumAssignmentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AssignmentStatus[] | ListEnumAssignmentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AssignmentStatus[] | ListEnumAssignmentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAssignmentStatusWithAggregatesFilter<$PrismaModel> | $Enums.AssignmentStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAssignmentStatusFilter<$PrismaModel>
+    _max?: NestedEnumAssignmentStatusFilter<$PrismaModel>
   }
 
   export type AssignmentScalarRelationFilter = {
@@ -44966,6 +45141,10 @@ export namespace Prisma {
     connect?: SubmissionWhereUniqueInput | SubmissionWhereUniqueInput[]
   }
 
+  export type EnumAssignmentStatusFieldUpdateOperationsInput = {
+    set?: $Enums.AssignmentStatus
+  }
+
   export type SubjectUpdateOneRequiredWithoutAssignmentsNestedInput = {
     create?: XOR<SubjectCreateWithoutAssignmentsInput, SubjectUncheckedCreateWithoutAssignmentsInput>
     connectOrCreate?: SubjectCreateOrConnectWithoutAssignmentsInput
@@ -45754,6 +45933,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAttendanceModeFilter<$PrismaModel>
     _max?: NestedEnumAttendanceModeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumAssignmentStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.AssignmentStatus | EnumAssignmentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AssignmentStatus[] | ListEnumAssignmentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AssignmentStatus[] | ListEnumAssignmentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAssignmentStatusFilter<$PrismaModel> | $Enums.AssignmentStatus
+  }
+
+  export type NestedEnumAssignmentStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AssignmentStatus | EnumAssignmentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AssignmentStatus[] | ListEnumAssignmentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AssignmentStatus[] | ListEnumAssignmentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAssignmentStatusWithAggregatesFilter<$PrismaModel> | $Enums.AssignmentStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAssignmentStatusFilter<$PrismaModel>
+    _max?: NestedEnumAssignmentStatusFilter<$PrismaModel>
   }
   export type NestedJsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -46705,6 +46901,9 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
+    totalMarks?: number | null
+    status?: $Enums.AssignmentStatus
+    rubric?: string | null
     dueDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -46718,6 +46917,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     subjectId: string
+    totalMarks?: number | null
+    status?: $Enums.AssignmentStatus
+    rubric?: string | null
     dueDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -46991,6 +47193,9 @@ export namespace Prisma {
     title?: StringFilter<"Assignment"> | string
     description?: StringNullableFilter<"Assignment"> | string | null
     subjectId?: StringFilter<"Assignment"> | string
+    totalMarks?: IntNullableFilter<"Assignment"> | number | null
+    status?: EnumAssignmentStatusFilter<"Assignment"> | $Enums.AssignmentStatus
+    rubric?: StringNullableFilter<"Assignment"> | string | null
     teacherId?: StringFilter<"Assignment"> | string
     dueDate?: DateTimeNullableFilter<"Assignment"> | Date | string | null
     createdAt?: DateTimeFilter<"Assignment"> | Date | string
@@ -48243,6 +48448,9 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
+    totalMarks?: number | null
+    status?: $Enums.AssignmentStatus
+    rubric?: string | null
     dueDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -48255,6 +48463,9 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
+    totalMarks?: number | null
+    status?: $Enums.AssignmentStatus
+    rubric?: string | null
     teacherId: string
     dueDate?: Date | string | null
     createdAt?: Date | string
@@ -51104,6 +51315,9 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
+    totalMarks?: number | null
+    status?: $Enums.AssignmentStatus
+    rubric?: string | null
     dueDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51117,6 +51331,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     subjectId: string
+    totalMarks?: number | null
+    status?: $Enums.AssignmentStatus
+    rubric?: string | null
     teacherId: string
     dueDate?: Date | string | null
     createdAt?: Date | string
@@ -51175,6 +51392,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+    rubric?: NullableStringFieldUpdateOperationsInput | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51188,6 +51408,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+    rubric?: NullableStringFieldUpdateOperationsInput | string | null
     teacherId?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51397,6 +51620,9 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
+    totalMarks?: number | null
+    status?: $Enums.AssignmentStatus
+    rubric?: string | null
     dueDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51410,6 +51636,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     subjectId: string
+    totalMarks?: number | null
+    status?: $Enums.AssignmentStatus
+    rubric?: string | null
     teacherId: string
     dueDate?: Date | string | null
     createdAt?: Date | string
@@ -51534,6 +51763,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+    rubric?: NullableStringFieldUpdateOperationsInput | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51547,6 +51779,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+    rubric?: NullableStringFieldUpdateOperationsInput | string | null
     teacherId?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53092,6 +53327,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     subjectId: string
+    totalMarks?: number | null
+    status?: $Enums.AssignmentStatus
+    rubric?: string | null
     dueDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -53276,6 +53514,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+    rubric?: NullableStringFieldUpdateOperationsInput | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53289,6 +53530,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+    rubric?: NullableStringFieldUpdateOperationsInput | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53301,6 +53545,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+    rubric?: NullableStringFieldUpdateOperationsInput | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53974,6 +54221,9 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
+    totalMarks?: number | null
+    status?: $Enums.AssignmentStatus
+    rubric?: string | null
     teacherId: string
     dueDate?: Date | string | null
     createdAt?: Date | string
@@ -54117,6 +54367,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+    rubric?: NullableStringFieldUpdateOperationsInput | string | null
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54129,6 +54382,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+    rubric?: NullableStringFieldUpdateOperationsInput | string | null
     teacherId?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54141,6 +54397,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    totalMarks?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumAssignmentStatusFieldUpdateOperationsInput | $Enums.AssignmentStatus
+    rubric?: NullableStringFieldUpdateOperationsInput | string | null
     teacherId?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
