@@ -2,16 +2,17 @@
 
 import React, { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Clock, Users, Calendar } from "lucide-react";
+import { Clock, Users, Calendar, BookOpen } from "lucide-react";
 import { TeacherClassSession } from "@/lib/types";
-import { showErrorMessage, showSuccessMessage } from "@/lib/helper";
+import { showErrorMessage } from "@/lib/helper";
 import GenerateTokenDialog from "@/components/teacher/GenerateTokenDialog";
 import AttendanceFinalizer from "@/components/teacher/AttendanceFinalizer";
+import { motion } from "framer-motion";
+import { ClassesLoadingSkeleton } from "@/components/teacher/SkeletonLoaders";
 
 export default function ClassesPage() {
   const [classes, setClasses] = useState<TeacherClassSession[]>([]);
   const [loading, setLoading] = useState(true);
-
   const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [preselectedClass, setPreselectedClass] = useState<any | null>(null);
@@ -51,95 +52,104 @@ export default function ClassesPage() {
 
   const handleTakeAttendance = (cls: TeacherClassSession) => {
     setPreselectedClass({
-        subjectId: cls.subject.id,
-        semesterId: cls.semester.id,
-        sectionId: cls.section.id
+      subjectId: cls.subject.id,
+      semesterId: cls.semester.id,
+      sectionId: cls.section.id,
     });
     setIsGenerateModalOpen(true);
   };
 
-
-
-
   if (loading) {
-    // Skeleton loader
     return (
-      <div className="min-h-screen p-8">
-        <div className="mb-10 space-y-4 max-w-6xl mx-auto">
-          {/* Header skeleton */}
-          <div className="h-10 w-1/3 bg-gray-700/60 rounded-lg animate-pulse"></div>
-          <div className="h-4 w-1/2 bg-gray-700/50 rounded-lg animate-pulse"></div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div
-              key={i}
-              className="p-6 rounded-2xl bg-gray-800/40 backdrop-blur-xl border border-gray-700 shadow-lg space-y-4 animate-pulse"
-            >
-              <div className="h-6 w-3/4 bg-gray-700/70 rounded-lg"></div>
-              <div className="h-4 w-1/2 bg-gray-700/60 rounded-lg"></div>
-              <div className="h-4 w-2/3 bg-gray-700/50 rounded-lg"></div>
-              <div className="h-10 w-full bg-gray-700/60 rounded-lg mt-4"></div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <ClassesLoadingSkeleton />
     );
   }
 
   return (
- <>
-      <main className="min-h-screen p-8">
-        <header className="mb-10">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+    <>
+      <main className="min-h-screen p-8 bg-transparent text-white">
+        <header className="mb-10 text-start">
+          <h1 className="text-4xl h-11 font-extrabold bg-gradient-to-r from-indigo-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(56,189,248,0.4)]">
             Your Weekly Schedule
           </h1>
-          <p className="mt-2 text-gray-400">Select a class to begin an attendance session.</p>
+          <p className="mt-2 text-gray-400">
+            Manage your classes and take attendance in one place.
+          </p>
         </header>
 
         {classes.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {classes.map((cls) => (
-              <div
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            {classes.map((cls, index) => (
+              <motion.div
                 key={cls.id}
-                className="bg-gray-800/40 backdrop-blur-xl border border-gray-700 hover:border-indigo-500 rounded-2xl p-6 flex flex-col justify-between shadow-lg transition-all"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+                className="group relative p-[1px] rounded-2xl bg-gradient-to-r from-indigo-500/40 via-cyan-500/40 to-blue-500/40"
               >
-                <div>
-                  <h2 className="text-xl font-bold text-white">
-                    {cls.subject?.name}{" "}
-                    {cls.subject?.code && (
-                      <span className="text-gray-400 text-sm">({cls.subject.code})</span>
-                    )}
-                  </h2>
-                  <div className="mt-3 space-y-2 text-sm text-gray-300">
-                      <p className="flex items-center gap-2"><Users size={14} /> {cls.semester?.name.includes('Semester') ? cls.semester?.name : 'Semester ' + cls.semester?.name} • {cls.section?.name}</p>
-                      <p className="flex items-center gap-2"><Calendar size={14} /> {cls.weekday}</p>
+                <div className="rounded-2xl bg-[#0f172a]/80 backdrop-blur-xl p-6 flex flex-col justify-between h-full border border-white/10 shadow-lg group-hover:shadow-cyan-500/30 transition-all duration-300">
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <BookOpen className="text-cyan-400" size={20} />
+                      <h2 className="text-xl font-semibold text-white">
+                        {cls.subject?.name}
+                      </h2>
+                    </div>
+                    <div className="space-y-2 text-sm text-gray-300">
                       <p className="flex items-center gap-2">
-                          <Clock size={14} />
-                          {new Date(cls.startTime).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} - {new Date(cls.endTime).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                        <Users size={14} className="text-indigo-400" />
+                        {cls.semester?.name.includes("Semester")
+                          ? cls.semester?.name
+                          : "Semester " + cls.semester?.name}{" "}
+                        • {cls.section?.name}
                       </p>
+                      <p className="flex items-center gap-2">
+                        <Calendar size={14} className="text-cyan-400" />{" "}
+                        {cls.weekday}
+                      </p>
+                      <p className="flex items-center gap-2">
+                        <Clock size={14} className="text-blue-400" />
+                        {new Date(cls.startTime).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}{" "}
+                        -{" "}
+                        {new Date(cls.endTime).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
                   </div>
-                </div>
 
-                <button
-                  onClick={() => handleTakeAttendance(cls)}
-                  className="mt-6 w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:scale-105 transition-transform text-white font-semibold py-2 rounded-xl shadow-md"
-                >
-                  Take Attendance
-                </button>
-              </div>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => handleTakeAttendance(cls)}
+                    className="mt-6 w-full bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-semibold py-2 rounded-xl shadow-lg transition-all"
+                  >
+                    Take Attendance
+                  </motion.button>
+                </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         ) : (
-            <div className="text-center mt-20 space-y-4">
-              <div className="text-6xl">📚</div>
-              <p className="text-gray-500 text-lg">You have not been assigned to any classes yet.</p>
-            </div>
+          <div className="text-center mt-20 space-y-4">
+            <div className="text-6xl">📚</div>
+            <p className="text-gray-500 text-lg">
+              You have not been assigned to any classes yet.
+            </p>
+          </div>
         )}
       </main>
 
-      {/* --- 3. ADD the modal rendering logic --- */}
+      {/* --- Modals --- */}
       <Suspense fallback={null}>
         <GenerateTokenDialog
           isOpen={isGenerateModalOpen}
@@ -152,7 +162,7 @@ export default function ClassesPage() {
         />
         {activeSessionId && (
           <AttendanceFinalizer
-            token={activeSessionId} 
+            token={activeSessionId}
             onClose={() => setActiveSessionId(null)}
           />
         )}

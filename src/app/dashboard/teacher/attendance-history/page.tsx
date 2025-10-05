@@ -48,24 +48,11 @@ export default function AttendanceHistoryPage() {
     }
   }, [teacherId, campusId]);
 
-  const handleExport = () => {
-    const exportUrl = createApiUrl("/api/teacher/past-attendance/export");
-    if (exportUrl) {
-      showSuccessMessage("Your download will begin shortly...");
-      // Trigger the download
-      window.location.href = exportUrl;
-    } else {
-      showErrorMessage("Could not generate export link. Please refresh.");
-    }
-  };
-
   const createApiUrl = (basePath: string) => {
     if (!teacherId || !campusId) return null;
     const params = new URLSearchParams({ teacherId, campusId });
-    // Add filters to params
     if (filters.subjectId) params.append("subjectId", filters.subjectId);
     if (filters.date) params.append("date", filters.date);
-    // For list view, add pagination
     if (basePath.includes("past-attendance")) {
       params.append("page", page.toString());
       params.append("limit", "15");
@@ -85,28 +72,38 @@ export default function AttendanceHistoryPage() {
     setPage(1);
   };
 
+  const handleExport = () => {
+    const exportUrl = createApiUrl("/api/teacher/past-attendance/export");
+    if (exportUrl) {
+      showSuccessMessage("Preparing your report...");
+      window.location.href = exportUrl;
+    } else {
+      showErrorMessage("Could not generate export link. Please refresh.");
+    }
+  };
+
   if (!hydrated) return <AttendanceHistoryLoadingSkeleton />;
 
   return (
-    <main className="min-h-screen bg-transparent text-white p-8">
+    <main className="min-h-screen bg-gradient-to-br  text-white p-8 relative">
       {/* Header */}
       <motion.header
-        className="mb-10 text-center"
+        className="mb-10 text-start"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-cyan-400 to-indigo-400 text-transparent bg-clip-text drop-shadow-md">
+        <h1 className="text-4xl h-11 font-extrabold bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(0,255,255,0.3)]">
           Attendance History
         </h1>
         <p className="mt-2 text-gray-400">
-          View and filter past attendance records.
+          View and filter past attendance records with ease.
         </p>
       </motion.header>
 
       {/* Filters */}
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 rounded-2xl border border-cyan-500/30 bg-gray-900/60 backdrop-blur-md shadow-lg shadow-cyan-500/10 mb-8"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 rounded-2xl border border-cyan-500/30 bg-white/5 backdrop-blur-xl shadow-lg shadow-cyan-500/10 mb-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.5 }}
@@ -115,14 +112,14 @@ export default function AttendanceHistoryPage() {
           name="subjectId"
           value={filters.subjectId}
           onChange={handleFilterChange}
-          className="w-full bg-gray-800/80 border border-cyan-500/30 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-cyan-400 outline-none transition"
-          whileHover={{ scale: 1.03 }}
-          whileFocus={{ scale: 1.03 }}
+          className="w-full appearance-none bg-gray-900/70 border border-cyan-400/30 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-cyan-400 outline-none transition"
+          whileHover={{ scale: 1.02 }}
+          whileFocus={{ scale: 1.02 }}
         >
           <option value="">All Subjects</option>
           {[
             ...new Map(
-              teacherSubjects.map((item) => [item.subject.id, item.subject])
+              teacherSubjects.map((i) => [i.subject.id, i.subject])
             ).values(),
           ].map((subject: any) => (
             <option key={subject.id} value={subject.id} className="bg-gray-900">
@@ -131,10 +128,10 @@ export default function AttendanceHistoryPage() {
           ))}
         </motion.select>
 
-        <motion.div whileHover={{ scale: 1.03 }}>
+        <motion.div whileHover={{ scale: 1.02 }}>
           <DatePicker
             value={filters.date}
-            onChange={(val) => setFilters((prev) => ({ ...prev, date: val }))}
+            onChange={(val) => setFilters((p) => ({ ...p, date: val }))}
           />
         </motion.div>
       </motion.div>
@@ -148,13 +145,13 @@ export default function AttendanceHistoryPage() {
         </p>
       ) : (
         <motion.div
-          className="rounded-2xl border border-cyan-500/30 bg-gray-900/60 backdrop-blur-md shadow-xl shadow-cyan-500/10 overflow-hidden"
+          className="rounded-2xl border border-cyan-500/30 bg-white/5 backdrop-blur-xl shadow-xl shadow-cyan-500/10 overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
           <table className="w-full text-left">
-            <thead className="bg-gray-800/60 text-xs text-cyan-300 uppercase tracking-wider">
+            <thead className="bg-gray-900/60 text-xs text-cyan-300 uppercase tracking-wider">
               <tr>
                 <th className="px-6 py-3">Student Name</th>
                 <th className="px-6 py-3">Subject</th>
@@ -167,7 +164,7 @@ export default function AttendanceHistoryPage() {
               {data.attendance.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={4}
+                    colSpan={5}
                     className="text-center py-16 text-gray-500 italic"
                   >
                     No records found for the selected filters.
@@ -178,15 +175,10 @@ export default function AttendanceHistoryPage() {
                   {data.attendance.map((rec: any) => (
                     <motion.tr
                       key={rec.id}
-                      className="hover:bg-cyan-500/5 transition-colors cursor-pointer"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
-                      whileHover={{
-                        scale: 1.02,
-                        backgroundColor: "rgba(16, 185, 129, 0.1)",
-                      }}
-                      transition={{ duration: 0.2 }}
+                      className="hover:bg-cyan-500/5 transition-all"
                     >
                       <td className="px-6 py-4 font-medium">
                         {rec.studentName}
@@ -216,7 +208,7 @@ export default function AttendanceHistoryPage() {
                       <td className="px-6 py-4 text-right">
                         <button
                           onClick={() => setRecordToEdit(rec)}
-                          className="p-1.5 hover:bg-indigo-600 rounded-md"
+                          className="p-1.5 hover:bg-cyan-600/20 rounded-md transition-all"
                         >
                           <Edit size={16} />
                         </button>
@@ -230,12 +222,7 @@ export default function AttendanceHistoryPage() {
 
           {/* Pagination */}
           {data.pagination.totalPages > 1 && (
-            <motion.div
-              className="flex justify-between items-center p-4 bg-gray-800/60 border-t border-cyan-500/20"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-            >
+            <div className="flex justify-between items-center p-4 bg-gray-900/70 border-t border-cyan-500/20">
               <motion.button
                 onClick={() => setPage((p) => p - 1)}
                 disabled={data.pagination.currentPage <= 1}
@@ -262,23 +249,29 @@ export default function AttendanceHistoryPage() {
               >
                 Next <ChevronRight size={16} />
               </motion.button>
-            </motion.div>
+            </div>
           )}
         </motion.div>
       )}
-      <button
+
+      {/* Download Report Button */}
+      <motion.button
         onClick={handleExport}
-        className="fixed bottom-8 right-8 flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:scale-105 transition-transform rounded-2xl text-white font-semibold shadow-lg shadow-cyan-500/30 z-50"
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.96 }}
+        className="fixed bottom-8 right-8 flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-2xl shadow-[0_0_20px_rgba(0,255,255,0.3)] hover:shadow-[0_0_30px_rgba(0,255,255,0.5)] transition-all z-50"
       >
         <Download size={18} /> Download Report
-      </button>
+      </motion.button>
+
+      {/* Edit Modal */}
       {recordToEdit && (
         <EditAttendanceModal
           isOpen={!!recordToEdit}
           onClose={() => setRecordToEdit(null)}
           onSuccess={() => {
             const key = createApiUrl("/api/teacher/past-attendance");
-            if (key) mutate(key); // Re-fetch SWR data for this key
+            if (key) mutate(key);
             setRecordToEdit(null);
           }}
           attendanceRecord={recordToEdit}
