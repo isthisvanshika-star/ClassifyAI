@@ -238,7 +238,7 @@ export const teacherNavLinks = [
   { label: "Dashboard", href: "/dashboard/teacher", icon: Home },
   { label: "Assignments", href: "/dashboard/teacher/assignments", icon: BookOpen },
   { label: "Classes", href: "/dashboard/teacher/classes", icon: NotepadText },
-  { label: "Attendance", href: "/dashboard/teacher/attendance", icon: ClipboardCheck },
+  { label: "Attendance", href: "/dashboard/teacher/attendance-history", icon: ClipboardCheck },
   { label: "Announcements", href: "/dashboard/teacher/announcements", icon: Megaphone },
   { label: "Resources", href: "/dashboard/teacher/resources", icon: Upload },
   { label: "Logout", href: "/dashboard/teacher/logout", icon: LogOut },

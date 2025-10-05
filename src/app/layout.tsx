@@ -7,6 +7,7 @@ import RazorpayScriptLoader from "@/components/apps/RazorpayScriptLoader";
 import RouteLoader from "@/components/apps/RouteLoader";
 import NetworkListener from "@/components/apps/NetworkListener";
 import RootBackground from "@/components/apps/RootBackground";
+import AppVersionCard from "@/components/apps/AppVersionCard";
 
 const lora = Lora({
   variable: "--font-lora",
@@ -40,8 +41,9 @@ export default function RootLayout({
 
         <div className="relative z-10">{children}</div>
 
-        <div className="absolute bottom-4 right-4 text-xs uppercase text-gray-400">
-          <p>© 2025 ClassifyAI</p>
+        <div className="absolute bottom-4 right-4 text-xs  text-gray-400">
+          <p className="uppercase">© 2025 ClassifyAI</p>
+          <AppVersionCard/>
         </div>
       </body>
     </html>

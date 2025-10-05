@@ -199,6 +199,7 @@ export type Subject = {
 export type Semester = {
   id: string;
   name: string;
+  number?: number;
 };
 
 export type Student = {
