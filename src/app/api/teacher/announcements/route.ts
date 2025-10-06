@@ -1,14 +1,40 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { v2 as cloudinary } from "cloudinary";
 
-/**
- * GET: Fetches a list of all announcements created by a specific teacher.
- */
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true,
+});
+
+const createAnnouncementSchema = z.object({
+  title: z.string().min(3, "Title must be at least 3 characters."),
+  message: z.string().min(1, "Message is required."),
+  targetAll: z.boolean().default(false),
+  targetSemester: z.number().optional().nullable(),
+  targetSection: z.string().optional().nullable(),
+  teacherId: z.string().cuid(), 
+  campusId: z.string().cuid(),
+});
+
+const updateAnnouncementSchema = z.object({
+  announcementId: z.string().cuid(),
+  teacherId: z.string().cuid(), 
+  title: z.string().min(3).optional(),
+  message: z.string().min(1).optional(),
+  targetAll: z.boolean().optional(),
+  targetSemester: z.number().optional().nullable(),
+  targetSection: z.string().optional().nullable(),
+});
+
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const teacherId = searchParams.get("teacherId"); // This is the Teacher User ID
+    const teacherId = searchParams.get("teacherId"); 
     const campusId = searchParams.get("campusId");
 
     if (!teacherId || !campusId) {
@@ -17,8 +43,6 @@ export async function GET(req: NextRequest) {
         { status: 400 }
       );
     }
-
-    // Securely find the teacher's profile ID
     const teacherProfile = await prisma.teacher.findFirst({
       where: { userId: teacherId, user: { campusId: campusId } },
       select: { id: true },
@@ -32,7 +56,7 @@ export async function GET(req: NextRequest) {
     }
 
     const announcements = await prisma.announcement.findMany({
-      where: { authorId: teacherProfile.id }, // Fetch announcements by this teacher
+      where: { authorId: teacherProfile.id },
       orderBy: { createdAt: "desc" },
     });
 
@@ -46,23 +70,22 @@ export async function GET(req: NextRequest) {
   }
 }
 
-/**
- * POST: Creates a new announcement.
- */
-const createAnnouncementSchema = z.object({
-  title: z.string().min(3, "Title must be at least 3 characters."),
-  message: z.string().min(1, "Message is required."),
-  targetAll: z.boolean().default(false),
-  targetSemester: z.number().optional().nullable(), // semester number, e.g., 3
-  targetSection: z.string().optional().nullable(), // section name, e.g., "A"
-  teacherId: z.string().cuid(), // Teacher User ID
-  campusId: z.string().cuid(),
-});
-
+//*ZOD SCHEMA UPAR LE LIYA HAI (CONFUSE MAT HONA)
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const validation = createAnnouncementSchema.safeParse(body);
+    const formData = await req.formData();
+    const file = formData.get("attachment") as File | null;
+
+    const rawData = {
+      title: formData.get("title"),
+      message: formData.get("message"),
+      targetAll: formData.get("targetAll"),
+      targetSemester: formData.get("targetSemester"),
+      targetSection: formData.get("targetSection"),
+      teacherId: formData.get("teacherId"),
+      campusId: formData.get("campusId"),
+    };
+    const validation = createAnnouncementSchema.safeParse(rawData);
 
     if (!validation.success) {
       return NextResponse.json(
@@ -80,8 +103,6 @@ export async function POST(req: NextRequest) {
       teacherId,
       campusId,
     } = validation.data;
-
-    // Authorization: Verify the teacher belongs to the campus
     const teacherProfile = await prisma.teacher.findFirst({
       where: { userId: teacherId, user: { campusId } },
     });
@@ -92,14 +113,43 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    let attachmentData;
+    if (file) {
+      const fileBuffer = await file.arrayBuffer();
+      const buffer = Buffer.from(fileBuffer);
+      const uploadResult = await new Promise<any>((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream(
+            {
+              folder: "announcements_attachments",
+              resource_type: "auto",
+            },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result);
+            }
+          )
+          .end(buffer);
+      });
+
+      attachmentData = {
+        create: {
+          title: file.name,
+          url: uploadResult.secure_url,
+          uploadedBy: teacherProfile.id,
+        }
+      }
+    }
+
     const newAnnouncement = await prisma.announcement.create({
       data: {
         title,
         message,
-        authorId: teacherProfile.id, // Link to the verified Teacher Profile ID
+        authorId: teacherProfile.id,
         targetAll,
         targetSemester,
         targetSection,
+        attachments: attachmentData
       },
     });
 
@@ -151,18 +201,9 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
-// =================================================================
-// --- NEW DELETE FUNCTION ---
-// =================================================================
-
-/**
- * DELETE: Deletes an announcement.
- * Authorization: Only the original author (teacher) can delete their own announcement.
- */
 const deleteAnnouncementSchema = z.object({
   announcementId: z.string().cuid(),
-  teacherId: z.string().cuid(), // The Teacher User ID
+  teacherId: z.string().cuid(),
 });
 
 export async function DELETE(req: NextRequest) {
@@ -177,9 +218,6 @@ export async function DELETE(req: NextRequest) {
       );
     }
     const { announcementId, teacherId } = validation.data;
-
-    // --- Authorization Check ---
-    // 1. Find the teacher's profile ID
     const teacherProfile = await prisma.teacher.findUnique({
       where: { userId: teacherId },
       select: { id: true },
@@ -190,23 +228,16 @@ export async function DELETE(req: NextRequest) {
         { status: 404 }
       );
     }
-
-    // 2. Find the announcement
     const announcement = await prisma.announcement.findUnique({
       where: { id: announcementId },
       select: { authorId: true },
     });
-
-    // 3. Verify that the teacher making the request is the author of the announcement
     if (!announcement || announcement.authorId !== teacherProfile.id) {
       return NextResponse.json(
         { error: "You are not authorized to delete this announcement." },
         { status: 403 }
       );
     }
-    // --- End Authorization ---
-
-    // 4. If authorized, delete the announcement
     await prisma.announcement.delete({
       where: { id: announcementId },
     });
@@ -224,25 +255,7 @@ export async function DELETE(req: NextRequest) {
   }
 }
 
-// =================================================================
-// --- NEW PATCH FUNCTION (for Editing) ---
-// =================================================================
-
-/**
- * PATCH: Updates an existing announcement.
- * Authorization: Only the original author (teacher) can edit their own announcement.
- */
-const updateAnnouncementSchema = z.object({
-  announcementId: z.string().cuid(),
-  teacherId: z.string().cuid(), // The Teacher User ID
-  // All other fields are optional for a partial update
-  title: z.string().min(3).optional(),
-  message: z.string().min(1).optional(),
-  targetAll: z.boolean().optional(),
-  targetSemester: z.number().optional().nullable(),
-  targetSection: z.string().optional().nullable(),
-});
-
+//* SCHEMA UPAR LE LIYA GAYA HAI SIR JI
 export async function PATCH(req: NextRequest) {
   try {
     const body = await req.json();
@@ -256,7 +269,6 @@ export async function PATCH(req: NextRequest) {
     }
     const { announcementId, teacherId, ...dataToUpdate } = validation.data;
 
-    // --- Authorization Check (same as DELETE) ---
     const teacherProfile = await prisma.teacher.findUnique({
       where: { userId: teacherId },
       select: { id: true },
@@ -279,9 +291,6 @@ export async function PATCH(req: NextRequest) {
         { status: 403 }
       );
     }
-    // --- End Authorization ---
-
-    // If authorized, update the announcement with the provided data
     const updatedAnnouncement = await prisma.announcement.update({
       where: { id: announcementId },
       data: dataToUpdate,

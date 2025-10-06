@@ -4,23 +4,16 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    
-    // 1. Get campusId along with the other parameters.
     const semesterId = searchParams.get('semesterId');
     const sectionId = searchParams.get('sectionId');
     const campusId = searchParams.get('campusId');
-
-    // Campus ID is now mandatory for security.
     if (!campusId) {
       return NextResponse.json(
         { message: "Campus ID is required" },
         { status: 400 }
       );
     }
-
-    // Build the dynamic where clause.
     const whereClause: any = {
-        // 2. Scope the query to the specific campus.
         user: {
             campusId: campusId
         }

@@ -15,7 +15,6 @@ export async function GET(request: NextRequest) {
     }
 
     const sections = await prisma.section.findMany({
-      // 2. Add a 'where' clause to filter sections by the provided campusId.
       where: {
         campusId: campusId,
       },

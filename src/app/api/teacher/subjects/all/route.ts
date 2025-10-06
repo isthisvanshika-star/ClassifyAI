@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    // 1. Get the campusId from the URL query parameters.
     const { searchParams } = new URL(request.url);
     const campusId = searchParams.get('campusId');
 
@@ -15,7 +14,6 @@ export async function GET(request: NextRequest) {
     }
 
     const subjects = await prisma.subject.findMany({
-      // 2. Add a 'where' clause to filter subjects by the provided campusId.
       where: {
         campusId: campusId,
       },

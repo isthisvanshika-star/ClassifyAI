@@ -3,13 +3,9 @@ import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 
 const WEEKDAYS = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"] as const;
-
-/**
- * POST: Creates a new TimetableEntry in the recurring weekly schedule.
- */
 const createTimetableEntrySchema = z.object({
   campusId: z.string().cuid(),
-  teacherId: z.string().cuid(), // Teacher Profile ID
+  teacherId: z.string().cuid(),
   subjectId: z.string().cuid(),
   semesterId: z.string().cuid(),
   sectionId: z.string().cuid(),
@@ -28,8 +24,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: validation.error.flatten().fieldErrors }, { status: 400 });
     }
     const { campusId, teacherId, subjectId, semesterId, sectionId, weekday, startTime, endTime, room } = validation.data;
-
-    // Verify that all provided IDs belong to the specified campus
     const [teacher, subject, semester, section] = await Promise.all([
         prisma.teacher.findFirst({ where: { id: teacherId, user: { campusId } } }),
         prisma.subject.findFirst({ where: { id: subjectId, campusId } }),
@@ -40,8 +34,6 @@ export async function POST(req: NextRequest) {
     if (!teacher || !subject || !semester || !section) {
         return NextResponse.json({ error: "One or more provided IDs are invalid or do not belong to the specified campus." }, { status: 404 });
     }
-
-    // FIX: This now creates a record in the new 'TimetableEntry' table
     const timetableEntry = await prisma.timetableEntry.create({
       data: {
         teacherId,
@@ -60,21 +52,17 @@ export async function POST(req: NextRequest) {
 
   } catch (err: any) {
     console.error("Error creating timetable entry:", err);
-    // Check for unique constraint violation
+    // ! UNIQUE ERROR VALIDATION HAI "P2002"
     if (err.code === 'P2002') {
         return NextResponse.json({ error: "This teacher already has a class scheduled at this exact time and day." }, { status: 409 });
     }
     return NextResponse.json({ error: "Failed to create timetable entry" }, { status: 500 });
   }
 }
-
-/**
- * GET: Fetches a teacher's full weekly timetable for a specific campus.
- */
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const teacherId = searchParams.get("teacherId"); // Teacher User ID
+    const teacherId = searchParams.get("teacherId");
     const campusId = searchParams.get("campusId");
 
     if (!teacherId || !campusId) {
@@ -89,8 +77,6 @@ export async function GET(req: NextRequest) {
     if (!teacherProfile) {
         return NextResponse.json({ error: "Teacher not found on this campus." }, { status: 404 });
     }
-
-    // FIX: This now fetches data from the 'TimetableEntry' table
     const entries = await prisma.timetableEntry.findMany({
       where: {
         teacherId: teacherProfile.id,
@@ -103,9 +89,6 @@ export async function GET(req: NextRequest) {
         semester: { select: { name: true } },
       },
     });
-    
-    // Format the response to be easy for the frontend to use
-    // This now directly represents the weekly schedule
     const formattedEntries = entries.map(entry => ({
       id: entry.id,
       weekday: entry.weekday,

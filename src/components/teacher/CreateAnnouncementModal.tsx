@@ -9,6 +9,7 @@ import {
   showSuccessMessage,
   toastDissmisser,
 } from "@/lib/helper";
+import { FileIcon, UploadCloud, X } from "lucide-react";
 
 export default function CreateAnnouncementModal({
   isOpen,
@@ -31,6 +32,7 @@ export default function CreateAnnouncementModal({
   const [semesters, setSemesters] = useState<Semester[]>([]);
   const [sections, setSections] = useState<Section[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -40,12 +42,14 @@ export default function CreateAnnouncementModal({
         setTargetAll(initialData.targetAll || true);
         setTargetSemester(initialData.targetSemester?.toString() || "");
         setTargetSection(initialData.targetSection || "");
+        setFile(initialData.file || null);
       } else {
         setTitle("");
         setMessage("");
         setTargetAll(true);
         setTargetSemester("");
         setTargetSection("");
+        setFile(null);
       }
       const campusId = localStorage.getItem("CampusID");
       if (campusId) {
@@ -88,24 +92,26 @@ export default function CreateAnnouncementModal({
     );
 
     try {
-      const basePayload = {
-        teacherId,
-        title,
-        message,
-        targetAll,
-        targetSemester: !targetAll ? parseInt(targetSemester) : null,
-        targetSection: !targetAll ? targetSection : null,
-      };
-
-      const payload =
-        mode === "edit"
-          ? { ...basePayload, announcementId: initialData.id }
-          : basePayload;
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("message", message);
+      formData.append("targetAll", String(targetAll));
+      if (!targetAll) {
+        formData.append("targetSemester", targetSemester);
+        formData.append("targetSection", targetSection);
+      }
+      formData.append("teacherId", teacherId);
+      formData.append("campusId", campusId);
+      if (file) {
+        formData.append("attachment", file);
+      }
+      if (mode === "edit") {
+        formData.append("announcementId", initialData.id);
+      }
 
       const response = await fetch("/api/teacher/announcements", {
         method: mode === "create" ? "POST" : "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
       const data = await response.json();
@@ -168,8 +174,58 @@ export default function CreateAnnouncementModal({
                 rows={5}
                 className="w-full bg-white/10 border border-white/10 p-3 rounded-md focus:ring-2 focus:ring-blue-400/60 focus:outline-none placeholder-gray-400"
               ></textarea>
-
               <div>
+                {/* === ClassifyAI Styled Attachment Upload === */}
+                <div>
+                  <label className="text-sm font-semibold text-gray-300">
+                    Attachment (Optional)
+                  </label>
+                  <div className="mt-3 relative group rounded-xl p-[1px] bg-gradient-to-r from-violet-500 via-blue-500 to-cyan-500">
+                    <div className="rounded-xl bg-[#0f172a]/90 backdrop-blur-lg border border-white/10 p-6 text-center transition-all duration-300 group-hover:bg-[#1a2337]/90">
+                      <UploadCloud className="mx-auto h-10 w-10 text-cyan-400 opacity-80 group-hover:opacity-100 transition-opacity" />
+                      <p className="mt-2 text-sm text-gray-400">
+                        Drop or choose a file to attach
+                      </p>
+
+                      <label
+                        htmlFor="file-upload"
+                        className="mt-3 inline-flex items-center gap-2 bg-gradient-to-r from-violet-500 via-blue-500 to-cyan-500 hover:from-violet-400 hover:via-blue-400 hover:to-cyan-400 text-white font-semibold text-sm py-2 px-4 rounded-lg shadow-md transition-all cursor-pointer"
+                      >
+                        <UploadCloud size={16} className="text-white" />
+                        <span>Select File</span>
+                        <input
+                          id="file-upload"
+                          name="file"
+                          type="file"
+                          className="sr-only"
+                          onChange={(e) =>
+                            setFile(e.target.files ? e.target.files[0] : null)
+                          }
+                        />
+                      </label>
+
+                      {file && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -5 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="mt-4 flex items-center justify-center gap-2 text-sm bg-white/5 border border-white/10 rounded-lg py-2 px-3 backdrop-blur-lg"
+                        >
+                          <FileIcon size={16} className="text-green-400" />
+                          <span className="text-gray-300 truncate max-w-[200px]">
+                            {file.name}
+                          </span>
+                          <button
+                            onClick={() => setFile(null)}
+                            className="text-red-400 hover:text-red-300 transition-colors"
+                          >
+                            <X size={16} />
+                          </button>
+                        </motion.div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
                 <label className="text-sm font-medium text-gray-300">
                   Target Audience
                 </label>

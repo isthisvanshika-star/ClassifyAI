@@ -58,8 +58,6 @@ export async function GET(req: NextRequest) {
       time: rec.markedAt ? new Date(rec.markedAt).toLocaleTimeString() : "",
       remarks: rec.remarks || "",
     }));
-
-    // Provide headers explicitly if no data
     const fields = ["studentName", "subjectName", "status", "date", "time", "remarks"];
     const json2csvParser = new Parser({ fields });
     const csv = json2csvParser.parse(formattedRecords);
