@@ -5,6 +5,13 @@ import useSWR from "swr";
 import { PlusCircle, File, Trash2 } from "lucide-react";
 import UploadResourceModal from "@/components/teacher/UploadResourceModal";
 import ResourcePreviewModal from "@/components/teacher/ResourcePreviewModal";
+import {
+  showErrorMessage,
+  showLoadingMessage,
+  showSuccessMessage,
+  toastDissmisser,
+} from "@/lib/helper";
+import TConfirmModal from "@/components/ui/TConfirmModal";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -14,11 +21,12 @@ export default function ResourcesPage() {
   const [campusId, setCampusId] = useState<string | null>(null);
   const [selectedResource, setSelectedResource] = useState<any>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [resourceToDelete, setResourceToDelete] = useState<any | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   useEffect(() => {
-    const tId = localStorage.getItem("teacherId");
-    const cId = localStorage.getItem("CampusID");
-    setTeacherId(tId);
-    setCampusId(cId);
+    setTeacherId(localStorage.getItem("teacherId"));
+    setCampusId(localStorage.getItem("CampusID"));
   }, []);
 
   const { data, error, isLoading, mutate } = useSWR(
@@ -27,6 +35,39 @@ export default function ResourcesPage() {
       : null,
     fetcher
   );
+
+  const handleDelete = async () => {
+    if (!resourceToDelete || !teacherId) {
+      showErrorMessage("An error occurred. Please refresh.");
+      return;
+    }
+
+    setIsDeleting(true);
+    const toastId = showLoadingMessage("Deleting resource...");
+    try {
+      const res = await fetch("/api/teacher/resources", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          resourceId: resourceToDelete.id,
+          teacherId: teacherId,
+        }),
+      });
+
+      const data = await res.json();
+      toastDissmisser(toastId);
+      if (!res.ok) throw new Error(data.error || "Failed to delete.");
+
+      showSuccessMessage("Resource deleted successfully.");
+      mutate();
+      setResourceToDelete(null);
+    } catch (err: any) {
+      toastDissmisser(toastId);
+      showErrorMessage(err.message);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   const resources = data?.resources || [];
 
@@ -52,19 +93,21 @@ export default function ResourcesPage() {
               className="group-hover:rotate-90 transition-transform duration-300"
             />
             <span>Upload Resource</span>
-            <span className="absolute inset-0 bg-gradient-to-r from-cyan-500/30 to-blue-500/30 opacity-0 group-hover:opacity-100 blur-md transition duration-500"></span>
           </button>
         </header>
+
         {isLoading && (
           <p className="text-center text-gray-400 animate-pulse">
             Loading resources...
           </p>
         )}
+
         {error && (
           <p className="text-center text-red-400">
             Failed to load resources. Please try again later.
           </p>
         )}
+
         {!isLoading && !error && (
           <>
             {resources.length === 0 ? (
@@ -93,18 +136,20 @@ export default function ResourcesPage() {
                             {resource.title}
                           </h3>
                           <p className="text-xs text-gray-400">
-                            {resource.subject.name}
+                            {resource.subject?.name || "Unknown Subject"}
                           </p>
                         </div>
                       </div>
 
                       <p className="text-sm text-gray-300 mt-4 line-clamp-3">
-                        {resource.description}
+                        {resource.description || "No description provided."}
                       </p>
                     </div>
+
                     <div className="mt-5 pt-4 border-t border-white/10 flex justify-between items-center">
                       <button
                         onClick={() => {
+                          console.log({ resource });
                           setSelectedResource(resource);
                           setIsPreviewOpen(true);
                         }}
@@ -113,13 +158,17 @@ export default function ResourcesPage() {
                         View
                       </button>
                       <button
-                        className="group p-[2px] rounded-full bg-gradient-to-r from-blue-500 via-violet-500 to-cyan-500 hover:scale-110 transition-transform duration-300"
-                        aria-label="Delete resource"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setResourceToDelete(resource);
+                        }}
+                        className="cursor-pointer relative group p-[2px] rounded-full bg-gradient-to-r from-pink-500 via-rose-500 to-red-500 hover:scale-110 transition-transform duration-300"
+                        aria-label="Delete announcement"
                       >
-                        <div className="bg-[#0f172a] p-2 rounded-full group-hover:bg-[#1e293b] transition-colors">
+                        <div className="rounded-full bg-[#0f172a]/90 p-2 group-hover:bg-[#1e293b]/90 backdrop-blur-md transition-colors duration-300">
                           <Trash2
-                            size={16}
-                            className="text-gray-400 group-hover:text-blue-400 transition-colors"
+                            size={18}
+                            className="text-rose-400 group-hover:text-white transition-colors duration-300 drop-shadow-[0_0_6px_rgba(244,63,94,0.8)]"
                           />
                         </div>
                       </button>
@@ -132,7 +181,6 @@ export default function ResourcesPage() {
         )}
       </main>
 
-      {/* Upload Modal */}
       <UploadResourceModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -140,9 +188,17 @@ export default function ResourcesPage() {
       />
 
       <ResourcePreviewModal
-        isOpen={isPreviewOpen}
+        isOpen={isPreviewOpen && selectedResource !== null}
         onClose={() => setIsPreviewOpen(false)}
         resource={selectedResource}
+      />
+      <TConfirmModal
+        isOpen={!!resourceToDelete}
+        onClose={() => setResourceToDelete(null)}
+        onConfirm={handleDelete}
+        title="Delete Resource"
+        message={`Are you sure you want to permanently delete "${resourceToDelete?.title}"? This action cannot be undone.`}
+        isLoading={isDeleting}
       />
     </>
   );
