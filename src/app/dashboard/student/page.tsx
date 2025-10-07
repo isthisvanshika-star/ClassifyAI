@@ -105,7 +105,7 @@ export default function StudentDashboard() {
     fetchTodayAttendance();
     fetchPremiumStatus();
     fetchStudentData();
-    setNeedsFaceVerification(false) //false for development
+    setNeedsFaceVerification(true) //false for development
   }, []);
 
   const handleAvatarSuccess = (newAvatarUrl: string) => {
@@ -114,9 +114,7 @@ export default function StudentDashboard() {
     setNeedsFaceVerification(true);
   };
    const handleFaceVerificationSuccess = () => {
-      // Close the verification modal
       setNeedsFaceVerification(false);
-      // The user now has full access to the dashboard
   };
 
   if (loading){

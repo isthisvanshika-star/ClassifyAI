@@ -43,10 +43,10 @@ export function QuickActionsCard() {
       href: "/dashboard/teacher/resources",
     },
     {
-      label: "Manual Attendance",
+      label: "Attendance Analytics",
       icon: <ClipboardCheck size={22} />,
       color: "from-yellow-400 via-orange-500 to-red-500",
-      href: "/dashboard/teacher/attendance",
+      href: "/dashboard/teacher/analytics/attendance",
     },
   ];
 
