@@ -9,7 +9,7 @@ import {
   AttendanceHistoryTableLoadingSkeleton,
 } from "@/components/teacher/SkeletonLoaders";
 import { motion, AnimatePresence } from "framer-motion";
-import { showErrorMessage, showSuccessMessage } from "@/lib/helper";
+import { showErrorMessage, showLoadingMessage, showSuccessMessage } from "@/lib/helper";
 import EditAttendanceModal from "@/components/teacher/EditAttendanceModal";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -75,7 +75,7 @@ export default function AttendanceHistoryPage() {
   const handleExport = () => {
     const exportUrl = createApiUrl("/api/teacher/past-attendance/export");
     if (exportUrl) {
-      showSuccessMessage("Preparing your report...");
+      showLoadingMessage("Preparing your report...");
       window.location.href = exportUrl;
     } else {
       showErrorMessage("Could not generate export link. Please refresh.");

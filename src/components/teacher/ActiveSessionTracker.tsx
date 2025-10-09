@@ -15,10 +15,21 @@ export default function ActiveSessionTracker({
   const [timeLeft, setTimeLeft] = useState(durationInSeconds);
   const [isDialogOpen, setIsDialogOpen] = useState(true);
 
+  // Set flag in localStorage when component mounts
+  useEffect(() => {
+    localStorage.setItem("activeAttendanceSession", "true");
+
+    return () => {
+      // Remove flag when component unmounts
+      localStorage.removeItem("activeAttendanceSession");
+    };
+  }, []);
+
   // Timer logic
   useEffect(() => {
     if (timeLeft <= 0) {
       onTimerEnd();
+      localStorage.removeItem("activeAttendanceSession"); // Remove flag when timer ends
       return;
     }
 
@@ -55,7 +66,7 @@ export default function ActiveSessionTracker({
                 onClick={() => setIsDialogOpen(false)}
                 className="absolute top-3 right-3 text-gray-300 hover:text-white"
               >
-                <FontAwesomeIcon icon={faXmark}/>
+                <FontAwesomeIcon icon={faXmark} />
               </button>
 
               <p className="font-semibold text-cyan-300 mb-2">
@@ -66,6 +77,9 @@ export default function ActiveSessionTracker({
                 {String(seconds).padStart(2, "0")}
               </p>
               <p className="text-xs text-gray-400 mt-2">Time Remaining</p>
+              <p className="text-xs text-cyan-100 mt-2">
+                Do not Logout till timer ends.
+              </p>
             </motion.div>
           </motion.div>
         )}

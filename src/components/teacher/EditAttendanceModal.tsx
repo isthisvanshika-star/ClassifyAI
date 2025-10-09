@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
+import { showErrorMessage, showLoadingMessage, showSuccessMessage, toastDissmisser } from "@/lib/helper";
 
 enum AttendanceStatus {
   PRESENT = "PRESENT",
@@ -36,16 +36,16 @@ export default function EditAttendanceModal({
 
   const handleUpdate = async () => {
     if (!teacherId) {
-      toast.error("Session error. Please log in again.");
+      showErrorMessage("Session error. Please log in again.");
       return;
     }
     if (!newStatus || newStatus === attendanceRecord.status) {
-      toast.error("Please select a new status.");
+      showErrorMessage("Please select a new status.");
       return;
     }
 
     setIsLoading(true);
-    const toastId = toast.loading("Updating status...");
+    const toastId = showLoadingMessage("Updating status...");
     try {
       const response = await fetch('/api/teacher/past-attendance/edit', {
         method: 'PATCH',
@@ -58,19 +58,19 @@ export default function EditAttendanceModal({
       });
 
       const data = await response.json();
-      toast.dismiss(toastId);
+      toastDissmisser(toastId);
 
       if (!response.ok) {
         throw new Error(data.error || "Failed to update status.");
       }
 
-      toast.success("Attendance status updated successfully!");
+      showSuccessMessage("Attendance status updated successfully!");
       onSuccess(); // Triggers a refresh on the main page
       onClose();   // Closes the modal
 
     } catch (err: any) {
-      toast.dismiss(toastId);
-      toast.error(err.message);
+      toastDissmisser(toastId);
+      showErrorMessage(err.message);
     } finally {
       setIsLoading(false);
     }

@@ -105,7 +105,7 @@ export default function StudentDashboard() {
     fetchTodayAttendance();
     fetchPremiumStatus();
     fetchStudentData();
-    setNeedsFaceVerification(true) //false for development
+    setNeedsFaceVerification(false) //false for development
   }, []);
 
   const handleAvatarSuccess = (newAvatarUrl: string) => {

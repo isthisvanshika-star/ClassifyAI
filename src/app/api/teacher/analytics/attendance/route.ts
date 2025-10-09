@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -9,6 +10,7 @@ export async function GET(req: NextRequest) {
     if (!teacherId || !campusId) {
       return NextResponse.json({ error: "Teacher ID and Campus ID are required" }, { status: 400 });
     }
+
     const teacherProfile = await prisma.teacher.findFirst({
       where: { userId: teacherId, user: { campusId: campusId } },
       select: { id: true },
@@ -17,12 +19,9 @@ export async function GET(req: NextRequest) {
     if (!teacherProfile) {
       return NextResponse.json({ error: "Teacher not found on this campus." }, { status: 404 });
     }
+
     const allAttendance = await prisma.attendance.findMany({
-      where: {
-        classSession: {
-          teacherId: teacherProfile.id,
-        },
-      },
+      where: { classSession: { teacherId: teacherProfile.id } },
       select: {
         status: true,
         markedAt: true,
@@ -32,8 +31,13 @@ export async function GET(req: NextRequest) {
     });
 
     if (allAttendance.length === 0) {
-      return NextResponse.json({ success: true, analytics: null, message: "No attendance data available yet." });
+      return NextResponse.json({
+        success: true,
+        analytics: null,
+        message: "No attendance data available yet.",
+      });
     }
+
     const subjectStats: { [subjectName: string]: { present: number; total: number } } = {};
     const studentStats: { [studentId: string]: { name: string; present: number; total: number } } = {};
     const attendanceTrend: { [date: string]: { present: number; total: number } } = {};
@@ -52,7 +56,7 @@ export async function GET(req: NextRequest) {
 
       if (!subjectStats[subjectName]) subjectStats[subjectName] = { present: 0, total: 0 };
       if (!studentStats[studentId]) studentStats[studentId] = { name: studentName, present: 0, total: 0 };
-      
+
       subjectStats[subjectName].total++;
       studentStats[studentId].total++;
       overallTotal++;
@@ -63,45 +67,55 @@ export async function GET(req: NextRequest) {
         overallPresent++;
       }
 
-      //! Aggregate trend data for the last 30 days
       if (record.markedAt && record.markedAt > thirtyDaysAgo) {
-          const dateString = record.markedAt.toISOString().split('T')[0];
-          if(!attendanceTrend[dateString]) attendanceTrend[dateString] = { present: 0, total: 0 };
-          attendanceTrend[dateString].total++;
-          if (record.status === "PRESENT" || record.status === "LATE") {
-            attendanceTrend[dateString].present++;
-          }
+        const dateString = record.markedAt.toISOString().split("T")[0];
+        if (!attendanceTrend[dateString]) attendanceTrend[dateString] = { present: 0, total: 0 };
+        attendanceTrend[dateString].total++;
+        if (record.status === "PRESENT" || record.status === "LATE") {
+          attendanceTrend[dateString].present++;
+        }
       }
     }
 
     const overallAttendancePercentage = overallTotal > 0 ? Math.round((overallPresent / overallTotal) * 100) : 0;
-    
-    const performanceBySubject = Object.entries(subjectStats).map(([subject, { present, total }]) => ({
+
+    const performanceBySubject = Object.entries(subjectStats)
+      .map(([subject, { present, total }]) => ({
         subject,
         percentage: total > 0 ? Math.round((present / total) * 100) : 0,
-    })).sort((a,b) => b.percentage - a.percentage);
+      }))
+      .sort((a, b) => b.percentage - a.percentage);
 
     const studentPerformance = Object.values(studentStats).map(({ name, present, total }) => ({
-        name,
-        percentage: total > 0 ? Math.round((present / total) * 100) : 0,
+      name,
+      percentage: total > 0 ? Math.round((present / total) * 100) : 0,
     }));
-    
-    const highestAttendingStudent = [...studentPerformance].sort((a,b) => b.percentage - a.percentage)[0] || null;
-    const lowestAttendingStudent = [...studentPerformance].sort((a,b) => a.percentage - b.percentage)[0] || null;
 
-    const dailyTrend = Object.entries(attendanceTrend).map(([date, { present, total }]) => ({
+    // Highest attending students: all students with max percentage
+    const maxPercentage = Math.max(...studentPerformance.map(s => s.percentage));
+    const highestAttendingStudents = studentPerformance.filter(s => s.percentage === maxPercentage);
+
+    // Lowest attending students: only students below 75%, all tied for min <75%
+    const belowThreshold = studentPerformance.filter(s => s.percentage < 75);
+    const lowestAttendingStudents =
+      belowThreshold.length > 0
+        ? belowThreshold.filter(s => s.percentage === Math.min(...belowThreshold.map(st => st.percentage)))
+        : [];
+
+    const dailyTrend = Object.entries(attendanceTrend)
+      .map(([date, { present, total }]) => ({
         date,
         percentage: total > 0 ? Math.round((present / total) * 100) : 0,
-    })).sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
+      }))
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
     return NextResponse.json({
       success: true,
       analytics: {
         overallAttendancePercentage,
         performanceBySubject,
-        highestAttendingStudent,
-        lowestAttendingStudent,
+        highestAttendingStudents,
+        lowestAttendingStudents,
         dailyTrend,
       },
     });
