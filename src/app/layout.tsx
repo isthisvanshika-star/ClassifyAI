@@ -30,9 +30,10 @@ export default function RootLayout({
       <head>
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
       </head>
-      <body className={` scrollbar-hide sm:overflow-x-hidden sm:overflow-y-auto md:overflow-x-hidden md:overflow-y-auto  lg:overflow-hidden font-lora antialiased relative min-h-screen`}>
+      <body
+        className={` scrollbar-hide sm:overflow-x-hidden sm:overflow-y-auto md:overflow-x-hidden md:overflow-y-auto  lg:overflow-hidden font-lora antialiased relative min-h-screen`}
+      >
         <RootBackground />
-
         <ClientNavBlocker />
         <RazorpayScriptLoader />
         <RouteLoader />
@@ -43,7 +44,7 @@ export default function RootLayout({
 
         <div className="absolute bottom-4 right-4 text-xs  text-gray-400">
           <p className="uppercase">© 2025 ClassifyAI</p>
-          <AppVersionCard/>
+          <AppVersionCard />
         </div>
       </body>
     </html>
