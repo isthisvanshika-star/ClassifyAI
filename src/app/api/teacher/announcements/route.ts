@@ -16,13 +16,13 @@ const createAnnouncementSchema = z.object({
   targetAll: z.boolean().default(false),
   targetSemester: z.number().optional().nullable(),
   targetSection: z.string().optional().nullable(),
-  teacherId: z.string().cuid(), 
+  teacherId: z.string().cuid(),
   campusId: z.string().cuid(),
 });
 
 const updateAnnouncementSchema = z.object({
   announcementId: z.string().cuid(),
-  teacherId: z.string().cuid(), 
+  teacherId: z.string().cuid(),
   title: z.string().min(3).optional(),
   message: z.string().min(1).optional(),
   targetAll: z.boolean().optional(),
@@ -30,11 +30,10 @@ const updateAnnouncementSchema = z.object({
   targetSection: z.string().optional().nullable(),
 });
 
-
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const teacherId = searchParams.get("teacherId"); 
+    const teacherId = searchParams.get("teacherId");
     const campusId = searchParams.get("campusId");
 
     if (!teacherId || !campusId) {
@@ -137,8 +136,8 @@ export async function POST(req: NextRequest) {
           title: file.name,
           url: uploadResult.secure_url,
           uploadedBy: teacherProfile.id,
-        }
-      }
+        },
+      };
     }
 
     const newAnnouncement = await prisma.announcement.create({
@@ -149,7 +148,7 @@ export async function POST(req: NextRequest) {
         targetAll,
         targetSemester,
         targetSection,
-        attachments: attachmentData
+        attachments: attachmentData,
       },
     });
 

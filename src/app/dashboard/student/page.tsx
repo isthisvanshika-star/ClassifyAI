@@ -16,13 +16,13 @@ import PremiumFeaturesCard from "@/components/student/PremiumFeaturesCard";
 import { showErrorMessage } from "@/lib/helper";
 import FirstLoginModal from "@/components/student/FirstLoginModal";
 import FaceVerificationModal from "@/components/student/FaceVerificationModal";
-import { set } from "date-fns";
 import DashboardLoader from "@/components/student/DashboardLoader";
+import NotificationBell from "@/components/student/NotificationBell";
 
 export default function StudentDashboard() {
   const [todayAttendance, setTodayAttendance] = useState<Attendance[]>([]);
   const [stats, setStats] = useState<any>(null);
-  const [needsFaceVerification, setNeedsFaceVerification] = useState(false); // Controls the face verification modal
+  const [needsFaceVerification, setNeedsFaceVerification] = useState(false);
   const [isFirstLogin, setIsFirstLogin] = useState(false);
   const [studentDetails, setStudentDetails] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -105,7 +105,7 @@ export default function StudentDashboard() {
     fetchTodayAttendance();
     fetchPremiumStatus();
     fetchStudentData();
-    setNeedsFaceVerification(false) //false for development
+    setNeedsFaceVerification(false); //false for development
   }, []);
 
   const handleAvatarSuccess = (newAvatarUrl: string) => {
@@ -113,14 +113,14 @@ export default function StudentDashboard() {
     setIsFirstLogin(false);
     setNeedsFaceVerification(true);
   };
-   const handleFaceVerificationSuccess = () => {
-      setNeedsFaceVerification(false);
+  const handleFaceVerificationSuccess = () => {
+    setNeedsFaceVerification(false);
   };
 
-  if (loading){
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <DashboardLoader/>
+        <DashboardLoader />
       </div>
     );
   }
@@ -134,13 +134,12 @@ export default function StudentDashboard() {
         />
       )}
       {needsFaceVerification && studentDetails?.avatarUrl && (
-        <FaceVerificationModal 
-            studentId={studentDetails.id}
-            avatarUrl={studentDetails.avatarUrl} // <-- Pass the avatarUrl
-            onSuccess={handleFaceVerificationSuccess}
+        <FaceVerificationModal
+          studentId={studentDetails.id}
+          avatarUrl={studentDetails.avatarUrl} // <-- Pass the avatarUrl
+          onSuccess={handleFaceVerificationSuccess}
         />
       )}
-
       <div className="sm:min-h-screen  sm:p-4">
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 h-full">
           {/* Left Sidebar */}
@@ -234,11 +233,14 @@ export default function StudentDashboard() {
 
             {/* Right Section - Charts and Stats */}
             <div className="flex-1 sm:flex-0 2xl:ml-10 flex flex-col space-y-6 relative">
+              <div className="flex flex-row-reverse">
+            <NotificationBell />
+
               {/* Bar Graph */}
               <div className="w-full">
                 <BarGraph />
               </div>
-
+</div>
               {/* Calendar and Number Cards */}
               <div className="flex flex-col xl:flex-row gap-4 xl:gap-6">
                 <div className="flex-1">
@@ -312,7 +314,6 @@ export default function StudentDashboard() {
             </div>
           </div>
         </div>
-
 
         {/* Mobile ChatBot - Show at bottom on smaller screens */}
         {premiumStatus?.features?.includes("AI_CHATBOT") && (

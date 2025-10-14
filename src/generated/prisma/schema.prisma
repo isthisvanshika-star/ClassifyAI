@@ -46,6 +46,7 @@ model User {
   messagesReceived Message[]        @relation("MessageReceiver")
   notifications    Notification[]
   sessions         Session[]
+  pushTokens       PushToken[]
 }
 
 model Teacher {
@@ -460,6 +461,16 @@ model PlanConfig {
   features  Json?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model PushToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 /// ---------------------

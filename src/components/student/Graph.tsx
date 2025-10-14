@@ -75,16 +75,16 @@ const BarGraph: React.FC = () => {
       {/* Graph */}
       <div className=" px-3 h-[160px] md:h-[15rem] lg:w-[22.7rem]  sm:h-[12rem]  w-92">
         <div className="bg-gray-50/5 rounded-lg p-1 md:w-[40.5rem] 2xl:w-[38.4rem] 2xl:h-[22.5rem] lg:w-[22.5rem] md:h-[12rem] sm:w-[33.5rem] sm:h-[9rem] w-92">
-          <div className="flex items-end justify-between gap-1 h-26 rounded-md p-2 shadow-inner overflow-x-auto">
+          <div className="flex items-end justify-between gap-1 h-26  2xl:h-89 rounded-md p-2 shadow-inner overflow-x-auto">
             {attendanceData.map((item, index) => {
               const value = item.percentage;
-              const height = Math.max((value / 100) * 140, 6);
+              const height = Math.max((value / 100) * 300, 6);
               const isSelected = selectedBar === index;
 
               return (
                 <div
                   key={index}
-                  className="flex flex-col items-center flex-1 min-w-[20px] group cursor-pointer"
+                  className="flex flex-col items-center flex-1 min-w-[20px] 2xl:min-w-[30px]  group cursor-pointer"
                   onClick={() => handleClick(index)}
                 >
                   {/* Tooltip */}
@@ -94,7 +94,7 @@ const BarGraph: React.FC = () => {
 
                   {/* Bar */}
                   <div
-                    className="w-full max-h-18 max-w-5 rounded-t-md shadow-md relative overflow-hidden transition-all duration-300 bg-cyan-500"
+                    className="w-full max-h-18 2xl:max-w-10 2xl:max-h-[30rem]  max-w-5  rounded-t-md shadow-md relative overflow-hidden transition-all duration-300 bg-cyan-500"
                     style={{ height: `${height}px` }}
                   >
                     {isSelected && (
@@ -115,7 +115,7 @@ const BarGraph: React.FC = () => {
 
                   {/* Label */}
                   <div
-                    className={` text-[9px] font-medium ${
+                    className={` text-[9px] 2xl:text-sm font-medium ${
                       isSelected ? "text-cyan-300 font-bold" : "text-gray-200"
                     }`}
                   >
@@ -129,7 +129,7 @@ const BarGraph: React.FC = () => {
 
         {/* Details Panel */}
         {selectedBar !== null && attendanceData[selectedBar] !== undefined ? (
-          <div className="mt-2 w-92  p-1 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-lg border border-blue-200 text-[10px] text-gray-200">
+          <div className="mt-2 w-92 2xl:w-[38rem] 2xl:text-sm  p-1 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-lg border border-blue-200 text-[10px] text-gray-200">
             <div className="flex justify-between items-center">
               <div className="flex gap-2">
                 <h3 className="font-semibold">
