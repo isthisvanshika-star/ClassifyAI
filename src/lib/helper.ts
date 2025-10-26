@@ -147,6 +147,29 @@ export const eventTypeColors: Record<string, string> = {
   EVENT: "bg-gradient-to-tr from-green-200/20 to-green-400/20 text-green-50",
 };
 
+export function showNotification({
+  id,
+  title,
+  message,
+  link,
+}: {
+  id?: string;
+  title: string;
+  message: string;
+  link?: string;
+}) {
+  const event = new CustomEvent("show-notification", {
+    detail: {
+      id: id || crypto.randomUUID(),
+      title,
+      message,
+      link,
+    },
+  });
+  window.dispatchEvent(event);
+}
+
+
 export function extractJSON(rawText: string): any {
   try {
     const cleanedText = rawText.replace(/```json|```/g, "").trim();

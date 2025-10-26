@@ -8,6 +8,7 @@ import RouteLoader from "@/components/apps/RouteLoader";
 import NetworkListener from "@/components/apps/NetworkListener";
 import RootBackground from "@/components/apps/RootBackground";
 import AppVersionCard from "@/components/apps/AppVersionCard";
+import NotificationPortal from "@/components/ui/NotificationPortal";
 
 const lora = Lora({
   variable: "--font-lora",
@@ -33,6 +34,7 @@ export default function RootLayout({
       <body
         className={` scrollbar-hide sm:overflow-x-hidden sm:overflow-y-auto md:overflow-x-hidden md:overflow-y-auto  lg:overflow-hidden font-lora antialiased relative min-h-screen`}
       >
+        <NotificationPortal />
         <RootBackground />
         <ClientNavBlocker />
         <RazorpayScriptLoader />

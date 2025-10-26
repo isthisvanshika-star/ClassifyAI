@@ -4,8 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import useSWR from "swr";
 import { Bell, CheckCheck } from "lucide-react";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
-import Link from "next/link";
 import toast from "react-hot-toast";
+import { showNotification } from "@/lib/helper";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -13,6 +13,7 @@ export default function NotificationBell() {
   const [isOpen, setIsOpen] = useState(false);
   const [studentId, setStudentId] = useState<string | null>(null);
   const prevUnreadCount = useRef<number>(0);
+  const shownNotifications = useRef<Set<string>>(new Set());
   const bellControls = useAnimation();
 
   useEffect(() => {
@@ -23,34 +24,49 @@ export default function NotificationBell() {
     studentId ? `/api/student/notifications?studentId=${studentId}` : null,
     fetcher,
     {
-      refreshInterval: 60000,
+      refreshInterval: 10000,
       revalidateOnFocus: true,
     }
   );
 
   const notifications = data?.notifications || [];
   const unreadCount = data?.unreadCount || 0;
-
-  // 🎵 Bell animation when new notification arrives
   useEffect(() => {
     if (unreadCount > prevUnreadCount.current) {
       bellControls.start({
         rotate: [0, -15, 15, -10, 10, -5, 5, 0],
         transition: { duration: 0.7, ease: "easeInOut" },
       });
-      const audio = new Audio("/sounds/notify.mp3"); // optional
+      const audio = new Audio("/ClassifyAI-notification.mp3");
       audio.volume = 0.4;
       audio.play().catch(() => {});
     }
     prevUnreadCount.current = unreadCount;
   }, [unreadCount, bellControls]);
 
+  useEffect(() => {
+    if (!notifications.length) return;
+
+    notifications.forEach((n: any) => {
+      if (!shownNotifications.current.has(n.id)) {
+        shownNotifications.current.add(n.id);
+        showNotification({
+          id: n.id,
+          title: n.title,
+          message: n.body,
+          link: n.meta?.link,
+        });
+      }
+    });
+  }, [notifications]);
   const handleToggle = async () => {
     const currentlyOpening = !isOpen;
     setIsOpen(currentlyOpening);
 
     if (currentlyOpening && unreadCount > 0 && studentId) {
-      const unreadIds = notifications.filter((n: any) => !n.read).map((n: any) => n.id);
+      const unreadIds = notifications
+        .filter((n: any) => !n.read)
+        .map((n: any) => n.id);
       if (unreadIds.length === 0) return;
 
       mutate({ ...data, unreadCount: 0 }, false);
@@ -72,7 +88,7 @@ export default function NotificationBell() {
     <div className="relative">
       <motion.button
         onClick={handleToggle}
-        className="relative p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-200 backdrop-blur-md"
+        className="relative p-2  rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-200 backdrop-blur-md"
         animate={bellControls}
       >
         <Bell className="text-cyan-400" size={22} />
@@ -102,22 +118,33 @@ export default function NotificationBell() {
               )}
             </div>
             <ul className="max-h-96 overflow-y-auto text-gray-200">
-              {error && <li className="p-4 text-sm text-red-400">Failed to load notifications.</li>}
+              {error && (
+                <li className="p-4 text-sm text-red-400">
+                  Failed to load notifications.
+                </li>
+              )}
               {!error && notifications.length > 0 ? (
-                notifications.map((n: any) => (
-                  <li
-                    key={n.id}
-                    className={`p-4 border-b border-white/10 hover:bg-white/10 transition-colors ${
-                      !n.read ? "bg-cyan-900/30" : ""
-                    }`}
-                  >
-                    <p className="font-medium text-white">{n.title}</p>
-                    <p className="text-sm text-gray-400 mt-1">{n.body}</p>
-                    <p className="text-xs text-gray-500 mt-2">
-                      {new Date(n.createdAt).toLocaleString()}
-                    </p>
-                  </li>
-                ))
+                [...notifications]
+                  .sort(
+                    (a: any, b: any) =>
+                      new Date(b.createdAt).getTime() -
+                      new Date(a.createdAt).getTime()
+                  )
+                  .slice(0, 3)
+                  .map((n: any) => (
+                    <li
+                      key={n.id}
+                      className={`p-4 border-b scrollbar-hide border-white/10 hover:bg-white/10 transition-colors ${
+                        !n.read ? "bg-cyan-900/30" : ""
+                      }`}
+                    >
+                      <p className="font-medium text-white">{n.title}</p>
+                      <p className="text-sm text-gray-400 mt-1">{n.body}</p>
+                      <p className="text-xs text-gray-500 mt-2">
+                        {new Date(n.createdAt).toLocaleString()}
+                      </p>
+                    </li>
+                  ))
               ) : (
                 <p className="p-4 text-sm text-center text-gray-500">
                   You have no new notifications.

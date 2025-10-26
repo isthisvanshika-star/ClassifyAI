@@ -41,7 +41,9 @@ export default function DatePicker({
         onClick={() => setOpen((prev) => !prev)}
         className="w-full flex items-center justify-between px-4 py-2 rounded-lg bg-gray-800/80 border border-cyan-500/30 text-white hover:border-cyan-400 transition"
       >
-        <span>{selectedDate ? format(selectedDate, "dd MMM yyyy") : "Select Date"}</span>
+        <span>
+          {selectedDate ? format(selectedDate, "dd MMM yyyy") : "Select Date"}
+        </span>
         <Calendar className="w-4 h-4 text-cyan-400" />
       </button>
 
@@ -67,7 +69,11 @@ export default function DatePicker({
                   <motion.button
                     onClick={() =>
                       setCurrentMonth(
-                        new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1)
+                        new Date(
+                          currentMonth.getFullYear(),
+                          currentMonth.getMonth() - 1,
+                          1
+                        )
                       )
                     }
                     className="p-1 rounded"
@@ -81,7 +87,11 @@ export default function DatePicker({
                   <motion.button
                     onClick={() =>
                       setCurrentMonth(
-                        new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1)
+                        new Date(
+                          currentMonth.getFullYear(),
+                          currentMonth.getMonth() + 1,
+                          1
+                        )
                       )
                     }
                     className="p-1 rounded"
@@ -94,12 +104,23 @@ export default function DatePicker({
                 {/* Weekdays */}
                 <div className="grid grid-cols-7 gap-2 text-center text-sm mb-2">
                   {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((d) => (
-                    <span key={d} className="text-cyan-400">{d}</span>
+                    <span key={d} className="text-cyan-400">
+                      {d}
+                    </span>
                   ))}
                 </div>
 
                 {/* Days */}
+                {/* Days */}
                 <div className="grid grid-cols-7 gap-2 text-center text-sm">
+                  {/* Empty cells before the 1st day */}
+                  {Array.from({
+                    length: startOfMonth(currentMonth).getDay(),
+                  }).map((_, i) => (
+                    <div key={`empty-${i}`} className="p-2 text-gray-700" />
+                  ))}
+
+                  {/* Actual days */}
                   {daysInMonth.map((day) => {
                     const isSelected =
                       selectedDate &&
@@ -111,13 +132,10 @@ export default function DatePicker({
                         className={`p-2 rounded-lg ${
                           isSelected
                             ? "bg-cyan-600 text-white"
-                            : "text-gray-300"
+                            : "text-gray-300 hover:bg-cyan-600/10"
                         }`}
                         whileHover={{
                           scale: 1.1,
-                          backgroundColor: isSelected
-                            ? "rgba(16, 185, 129, 1)"
-                            : "rgba(16, 185, 129, 0.1)",
                         }}
                         transition={{ duration: 0.15 }}
                       >

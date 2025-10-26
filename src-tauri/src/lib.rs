@@ -1,5 +1,3 @@
-use tauri_plugin_notification::init as notification_init;
-
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()

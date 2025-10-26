@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { v2 as cloudinary } from "cloudinary";
+import { createInAppNotification } from "@/lib/notification";
+import { logActivity } from "@/lib/helper";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -13,7 +15,7 @@ cloudinary.config({
 const createAnnouncementSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters."),
   message: z.string().min(1, "Message is required."),
-  targetAll: z.boolean().default(false),
+  targetAll: z.coerce.boolean().default(false),
   targetSemester: z.number().optional().nullable(),
   targetSection: z.string().optional().nullable(),
   teacherId: z.string().cuid(),
@@ -104,6 +106,7 @@ export async function POST(req: NextRequest) {
     } = validation.data;
     const teacherProfile = await prisma.teacher.findFirst({
       where: { userId: teacherId, user: { campusId } },
+      select: { id: true, user: { select: { name: true } } },
     });
     if (!teacherProfile) {
       return NextResponse.json(
@@ -121,6 +124,7 @@ export async function POST(req: NextRequest) {
           .upload_stream(
             {
               folder: "announcements_attachments",
+              access_mode:"public",
               resource_type: "auto",
             },
             (error, result) => {
@@ -165,21 +169,18 @@ export async function POST(req: NextRequest) {
         where: studentWhereClause,
         select: { userId: true },
       });
-      if (studentsToNotify.length > 0) {
-        const studentUserIds = studentsToNotify
-          .map((s) => s.userId)
-          .filter((id): id is string => !!id);
-        const notificationData = studentUserIds.map((userId) => ({
-          userId: userId,
-          title: `New Announcement: ${newAnnouncement.title}`,
-          body:
-            newAnnouncement.message.substring(0, 100) +
-            (newAnnouncement.message.length > 100 ? "..." : ""),
-        }));
-
-        await prisma.notification.createMany({
-          data: notificationData,
-        });
+      const userIds = studentsToNotify
+        .map((s) => s.userId)
+        .filter((id): id is string => !!id);
+      if (userIds.length > 0) {
+        await createInAppNotification(
+          "create",
+          userIds,
+          `New Announcement: ${title}`,
+          message.substring(0, 100) + (message.length > 100 ? "...." : ""),
+          { link: `/dashboard/student/announcement/${newAnnouncement.id}` },
+          { id: teacherId, name: teacherProfile.user.name }
+        );
       }
     } catch (notificationError) {
       console.error(

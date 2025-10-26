@@ -18,6 +18,9 @@ import FirstLoginModal from "@/components/student/FirstLoginModal";
 import FaceVerificationModal from "@/components/student/FaceVerificationModal";
 import DashboardLoader from "@/components/student/DashboardLoader";
 import NotificationBell from "@/components/student/NotificationBell";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBook, faBookOpen, faBullhorn } from "@fortawesome/free-solid-svg-icons";
+import { motion } from "framer-motion";
 
 export default function StudentDashboard() {
   const [todayAttendance, setTodayAttendance] = useState<Attendance[]>([]);
@@ -233,14 +236,33 @@ export default function StudentDashboard() {
 
             {/* Right Section - Charts and Stats */}
             <div className="flex-1 sm:flex-0 2xl:ml-10 flex flex-col space-y-6 relative">
-              <div className="flex flex-row-reverse">
-            <NotificationBell />
-
-              {/* Bar Graph */}
-              <div className="w-full">
-                <BarGraph />
+              <div className="flex flex-row-reverse gap-2">
+                <div
+                  className="relative p-2 rounded-full 2xl:h-[40px] bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-200 backdrop-blur-md flex items-center justify-center cursor-pointer"
+                  title="View Assignments"
+                  onClick={() => { router.push("/dashboard/student/assignments")}}
+                >
+                  <FontAwesomeIcon
+                    icon={faBookOpen}
+                    className="h-6 w-6 text-cyan-300"
+                  />
+                </div>
+                <div
+                  className="relative p-2 rounded-full 2xl:h-[40px] bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-200 backdrop-blur-md flex items-center justify-center cursor-pointer"
+                  title="View Announcements"
+                  onClick={() => { router.push("/dashboard/student/announcements")}}
+                >
+                  <FontAwesomeIcon
+                    icon={faBullhorn}
+                    className="h-6 w-6 text-cyan-300"
+                  />
+                </div>
+                <NotificationBell />
+                {/* Bar Graph */}
+                <div className="w-full">
+                  <BarGraph />
+                </div>
               </div>
-</div>
               {/* Calendar and Number Cards */}
               <div className="flex flex-col xl:flex-row gap-4 xl:gap-6">
                 <div className="flex-1">
@@ -286,7 +308,7 @@ export default function StudentDashboard() {
               </div>
               <div className="2xl:flex 2xl:gap-13">
                 <div
-                  className="hidden gap-4 items-center justify-center ring hover:ring-2 w-56 p-3 ml-2 rounded-2xl bg-blue-600 ring-blue-300 transition-all duration-300 hover:bg-blue-500 cursor-pointer 2xl:flex"
+                  className="hidden gap-4 items-center justify-center ring hover:ring-2 w-56 p-3 ml-2 rounded-2xl bg-white/10 backdrop-blur-lg ring-blue-300 transition-all duration-300 hover:bg-blue-500 cursor-pointer 2xl:flex"
                   onClick={() => logout()}
                 >
                   <LogOut
@@ -298,7 +320,7 @@ export default function StudentDashboard() {
 
                 {premiumStatus?.features?.includes("AI_CHATBOT") && (
                   <div
-                    className="hidden gap-4 items-center justify-center ring hover:ring-2 w-56 p-3 ml-2 rounded-2xl bg-blue-600/50 ring-blue-300 transition-all duration-300 hover:bg-blue-500 cursor-pointer 2xl:flex"
+                    className="hidden gap-4 items-center justify-center ring hover:ring-2 w-56 p-3 ml-2 rounded-2xl bg-white/10 backdrop-blur-lg ring-blue-300 transition-all duration-300 hover:bg-blue-500 cursor-pointer 2xl:flex"
                     onClick={() => router.push("/dashboard/student/chat")}
                   >
                     <span className="text-xl">Chat with AI</span>
