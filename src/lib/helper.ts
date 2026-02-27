@@ -1,11 +1,19 @@
 import toast from "react-hot-toast";
 import { prisma } from "./prisma";
-import { BookOpen, Home, LogOut, Megaphone, ClipboardCheck, NotepadText, Upload } from "lucide-react";
+import {
+  BookOpen,
+  Home,
+  LogOut,
+  Megaphone,
+  ClipboardCheck,
+  NotepadText,
+  Upload,
+} from "lucide-react";
 
 export const logActivity = async (
   userId: string,
   userName: string,
-  action: string
+  action: string,
 ) => {
   await prisma.recentActivity.create({
     data: {
@@ -35,10 +43,7 @@ export const monthlyPlans = [
     title: "Starter",
     price: 0,
     bg: "from-cyan-500 to-cyan-700",
-    features: [
-      "QR Code Attendance",
-      "Exam & Assignment Tracker",
-    ],
+    features: ["QR Code Attendance", "Exam & Assignment Tracker"],
     extra: [
       "Bunk Manager",
       "Smart Study Plan Generator",
@@ -58,7 +63,7 @@ export const monthlyPlans = [
       "Bunk Manager",
       "Smart Study Plan Generator",
     ],
-    extra: ["AI Doubt Solver","Monthly Attendance Reports", "Calendar Sync"],
+    extra: ["AI Doubt Solver", "Monthly Attendance Reports", "Calendar Sync"],
     popular: true,
   },
   {
@@ -105,7 +110,7 @@ export function showLoadingMessage(message: string) {
     },
     position: "bottom-right",
   });
-  return toastID
+  return toastID;
 }
 export function toastDissmisser(toastID: string) {
   toast.dismiss(toastID);
@@ -168,7 +173,6 @@ export function showNotification({
   });
   window.dispatchEvent(event);
 }
-
 
 export function extractJSON(rawText: string): any {
   try {
@@ -243,7 +247,7 @@ export function haversineDistance(
   lat1: number,
   lon1: number,
   lat2: number,
-  lon2: number
+  lon2: number,
 ) {
   const R = 6371e3; // Earth's radius in metres
   const φ1 = (lat1 * Math.PI) / 180;
@@ -259,14 +263,25 @@ export function haversineDistance(
 
 export const teacherNavLinks = [
   { label: "Dashboard", href: "/dashboard/teacher", icon: Home },
-  { label: "Assignments", href: "/dashboard/teacher/assignments", icon: BookOpen },
+  {
+    label: "Assignments",
+    href: "/dashboard/teacher/assignments",
+    icon: BookOpen,
+  },
   { label: "Classes", href: "/dashboard/teacher/classes", icon: NotepadText },
-  { label: "Attendance", href: "/dashboard/teacher/attendance-history", icon: ClipboardCheck },
-  { label: "Announcements", href: "/dashboard/teacher/announcements", icon: Megaphone },
+  {
+    label: "Attendance",
+    href: "/dashboard/teacher/attendance-history",
+    icon: ClipboardCheck,
+  },
+  {
+    label: "Announcements",
+    href: "/dashboard/teacher/announcements",
+    icon: Megaphone,
+  },
   { label: "Resources", href: "/dashboard/teacher/resources", icon: Upload },
   { label: "Logout", href: "/dashboard/teacher/logout", icon: LogOut },
 ];
-
 
 // --- NEWLY IMPLEMENTED FUNCTION ---
 /**
@@ -275,9 +290,9 @@ export const teacherNavLinks = [
  * @returns The city name as a string, or "Unknown" if it fails.
  */
 
-export async  function getCityfromIp(ip: string): Promise<string>{
+export async function getCityfromIp(ip: string): Promise<string> {
   // Handle special cases like localhost or unknown IPs
-  if(ip === "unknown" || ip === "::1" || ip === "127.0.0.1"){
+  if (ip === "unknown" || ip === "::1" || ip === "127.0.0.1") {
     // For local development, return a default city to allow tests to pass.
     // In production, an "unknown" IP might be treated with more suspicion.
     return "Udaipur"; // Or your default development city
@@ -286,16 +301,16 @@ export async  function getCityfromIp(ip: string): Promise<string>{
     // Use the ip-api.com service, requesting only the 'city' field for efficiency
     const response = await fetch(`http://ip-api.com/json/${ip}?fields=city`);
     if (!response.ok) {
-        console.error(`IP API failed with status: ${response.status}`);
-        return "Unknown";
+      console.error(`IP API failed with status: ${response.status}`);
+      return "Unknown";
     }
 
     const data = await response.json();
-    
-    if (data.status === 'success' && data.city) {
-        return data.city;
+
+    if (data.status === "success" && data.city) {
+      return data.city;
     } else {
-        return "Unknown";
+      return "Unknown";
     }
   } catch (error) {
     console.error("Error fetching city from IP:", error);
@@ -303,7 +318,10 @@ export async  function getCityfromIp(ip: string): Promise<string>{
   }
 }
 
-export const getCurrentLocation = (): Promise<{ latitude: number; longitude: number }> => {
+export const getCurrentLocation = (): Promise<{
+  latitude: number;
+  longitude: number;
+}> => {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
       reject(new Error("Geolocation is not supported by your browser."));
@@ -316,15 +334,36 @@ export const getCurrentLocation = (): Promise<{ latitude: number; longitude: num
           });
         },
         () => {
-          reject(new Error("Unable to retrieve your location. Please enable location permissions."));
-        }
+          reject(
+            new Error(
+              "Unable to retrieve your location. Please enable location permissions.",
+            ),
+          );
+        },
       );
     }
   });
 };
 
+export const transformUsername = (email: string) => {
+  const prefix = email.split("@")[0].toLowerCase();
+  const charMap: Record<string, string> = {
+    a: "@",
+    i: "!",
+    s: "$",
+    e: "3",
+    o: "0",
+    t: "7",
+    l: "1",
+  };
+  return prefix
+    .split("")
+    .map((char) => charMap[char] || char)
+    .join("");
+};
+
 export function getCurrentWeekday(
-  date: Date
+  date: Date,
 ):
   | "MONDAY"
   | "TUESDAY"

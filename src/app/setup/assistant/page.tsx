@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
-import { showErrorMessage, showLoadingMessage, showSuccessMessage } from "@/lib/helper";
+import { showErrorMessage, showLoadingMessage, showSuccessMessage, toastDissmisser } from "@/lib/helper";
 
 export default function AdminSetupPage() {
   const router = useRouter();
@@ -44,7 +43,7 @@ export default function AdminSetupPage() {
     if (!file) return;
 
     setIsUploading(true);
-    showLoadingMessage("Uploading logo...");
+    let toastID = showLoadingMessage("Uploading logo...");
     const uploadFormData = new FormData();
     uploadFormData.append("file", file);
 
@@ -54,14 +53,14 @@ export default function AdminSetupPage() {
         body: uploadFormData,
       });
       const data = await response.json();
-      toast.dismiss();
+      toastDissmisser(toastID);
 
       if (!response.ok) throw new Error(data.error || "Upload failed");
 
       setLogoUrl(data.url);
       showSuccessMessage("Logo uploaded successfully!");
     } catch (err: any) {
-      toast.dismiss();
+      toastDissmisser(toastID);
       showErrorMessage(err.message);
     } finally {
       setIsUploading(false);
@@ -71,7 +70,7 @@ export default function AdminSetupPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    showLoadingMessage("Saving college details...");
+   let toastID= showLoadingMessage("Saving college details...");
 
     try {
       // 3. 'hindiName' is now automatically included in the payload via the spread operator
@@ -94,7 +93,7 @@ export default function AdminSetupPage() {
       });
 
       const data = await response.json();
-      toast.dismiss();
+      toastDissmisser(toastID);
 
       if (!response.ok) {
         const errorMessage =
@@ -105,8 +104,8 @@ export default function AdminSetupPage() {
       showSuccessMessage("College registered successfully! Login Again...");
       setTimeout(() => router.push("/auth/login"), 1500);
     } catch (err: any) {
-      toast.dismiss();
-      toast.error(err.message);
+      toastDissmisser(toastID);
+      showErrorMessage(err.message);
     } finally {
       setIsSubmitting(false);
     }

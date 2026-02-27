@@ -29,6 +29,7 @@
     "@tauri-apps/plugin-store": "^2.4.0",
     "anthropic": "^0.0.0",
     "axios": "^1.12.2",
+    "bcrypt": "^6.0.0",
     "bullmq": "^5.58.9",
     "cloudinary": "^2.7.0",
     "date-fns": "^4.1.0",
@@ -74,6 +75,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/bcrypt": "^6.0.0",
     "@types/jest": "^29.5.14",
     "@types/json2csv": "^5.0.7",
     "@types/jsonwebtoken": "^9.0.10",

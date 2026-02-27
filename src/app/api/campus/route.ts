@@ -20,35 +20,27 @@ export async function POST(req: NextRequest) {
     const data = campusCreateSchema.parse(body);
 
     const assistantUser = await prisma.user.findUnique({ where: { id: data.assistantId } });
-    if (!assistantUser || assistantUser.role !== 'ASSISTANT') {
-        return NextResponse.json({ error: "Invalid assistant ID" }, { status: 403 });
-    }
-    if (assistantUser.campusId) {
-        return NextResponse.json({ error: "This assistant is already configured." }, { status: 409 });
-    }
+    if (!assistantUser || !assistantUser.campusId) {
+    return NextResponse.json(
+      { error: "Assistant is not associated with any campus." }, 
+      { status: 400 }
+    );
+}
 
-    const newCampus = await prisma.$transaction(async (tx) => {
-      const campus = await tx.campus.create({
-        data: {
-          name: data.name,
-          slug: data.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
-          hindiName: data.hindiName,
-          city: data.city,
-          logoUrl: data.logoUrl,
-          latitude: data.latitude,
-          longitude: data.longitude,
-          wifiBssids: data.wifiBssids,
-        },
-      });
-      
-      await tx.user.update({
-        where: { id: data.assistantId },
-        data: { campusId: campus.id },
-      });
-      return campus;
+const updatedCampus = await prisma.campus.update({
+      where: { id: assistantUser.campusId },
+      data: {
+        hindiName: data.hindiName,
+        logoUrl: data.logoUrl,
+        latitude: data.latitude,
+        longitude: data.longitude,
+        wifiBssids: data.wifiBssids,
+        name: data.name,
+        city: data.city,
+      },
     });
 
-    return NextResponse.json(newCampus, { status: 201 });
+    return NextResponse.json(updatedCampus, { status: 200 });
     
   } catch (error) {
     if (error instanceof z.ZodError) {
