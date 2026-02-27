@@ -1,7 +1,7 @@
 generator client {
   provider      = "prisma-client-js"
   output        = "../src/generated/prisma"
-  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+  binaryTargets = ["native"]
 }
 
 datasource db {
@@ -14,14 +14,14 @@ datasource db {
 /// ---------------------
 
 model User {
-  id           String   @id @default(cuid())
-  name         String
-  email        String   @unique
-  passwordHash String? // nullable when OAuth-only users
-  role         Role
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now()) @updatedAt
-
+  id               String    @id @default(cuid())
+  name             String
+  email            String    @unique
+  passwordHash     String? // nullable when OAuth-only users
+  role             Role
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @default(now()) @updatedAt
+  username         String    @unique
   // Profile fields
   avatarUrl        String?
   phone            String?
@@ -46,7 +46,6 @@ model User {
   messagesReceived Message[]        @relation("MessageReceiver")
   notifications    Notification[]
   sessions         Session[]
-  pushTokens       PushToken[]
 }
 
 model Teacher {
@@ -461,16 +460,6 @@ model PlanConfig {
   features  Json?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model PushToken {
-  id        String   @id @default(cuid())
-  token     String   @unique
-  createdAt DateTime @default(now())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
 }
 
 /// ---------------------

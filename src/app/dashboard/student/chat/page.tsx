@@ -55,8 +55,12 @@ const router = useRouter();
     <div className="relative flex flex-col items-center justify-between min-h-screen w-full px-4 py-6 text-white">
       <div className="flex-1 flex items-center justify-center w-full max-w-[95rem] mt-10 px-4">
         <div className="w-full h-[85vh] rounded-xl bg-white/5 backdrop-blur-md border border-white/10 p-4 flex flex-col justify-between chat-box-glow scrollbar-thin scrollbar-thumb-cyan-500/30 scrollbar-track-transparent">
-          <div className="flex flex-col items-center mb-4">
-            <Logo />
+          <div className="flex flex-col gap-1 items-center mb-4">
+            <div className="flex gap-2">
+            <Image src={"/only-logo.png"} alt="...." width={35} height={35}/>
+            <p className="text-3xl">Chud<span className="text-cyan-500">AI</span></p>
+            </div>
+            <p className="text-sm">Cloud-Hosted Unethical Dataset Artificial Intelligence</p>
           </div>
           <div className="flex-1 overflow-y-auto space-y-4 p-2 pr-2 scrollbar-thin scrollbar-thumb-cyan-500/30">
             {messages.map((msg, index) => (

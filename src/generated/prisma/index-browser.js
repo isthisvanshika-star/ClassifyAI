@@ -128,6 +128,7 @@ exports.Prisma.UserScalarFieldEnum = {
   role: 'role',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  username: 'username',
   avatarUrl: 'avatarUrl',
   phone: 'phone',
   branch: 'branch',
@@ -422,13 +423,6 @@ exports.Prisma.PlanConfigScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.PushTokenScalarFieldEnum = {
-  id: 'id',
-  token: 'token',
-  createdAt: 'createdAt',
-  userId: 'userId'
-};
-
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -523,8 +517,7 @@ exports.Prisma.ModelName = {
   GoogleToken: 'GoogleToken',
   RecentActivity: 'RecentActivity',
   SupportRequest: 'SupportRequest',
-  PlanConfig: 'PlanConfig',
-  PushToken: 'PushToken'
+  PlanConfig: 'PlanConfig'
 };
 
 /**

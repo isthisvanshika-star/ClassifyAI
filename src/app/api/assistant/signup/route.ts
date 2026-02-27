@@ -20,7 +20,7 @@ const signupSchema = z.object({
       z.object({
         name: z.string().min(1),
         code: z.string().optional(),
-        description: z.string().optional(), // <-- ADDED
+        description: z.string().optional(),
       })
     )
     .optional(),
@@ -87,6 +87,7 @@ export async function POST(req: NextRequest) {
         data: {
           name: data.name,
           email: data.email,
+          username: data.email.split("@")[0],
           role: data.role,
           campusId: campusId,
           premiumFeatures: data.premiumFeatures
@@ -138,7 +139,7 @@ export async function POST(req: NextRequest) {
                   data: {
                     name: subject.name,
                     code: subject.code,
-                    description: subject.description, // <-- ADDED
+                    description: subject.description, 
                     campusId: campusId,
                   },
                 });

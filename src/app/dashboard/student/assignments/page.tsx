@@ -52,7 +52,7 @@ export default function StudentAssignmentsPage() {
   const [selectedAssignment, setSelectedAssignment] = useState<any | null>(
     null
   );
-const router = useRouter();
+  const router = useRouter();
   useEffect(() => {
     setStudentId(localStorage.getItem("studentId"));
     setCampusId(localStorage.getItem("CampusID"));
@@ -66,7 +66,7 @@ const router = useRouter();
   );
 
   const assignments = data?.assignments || [];
-console.log({data})
+  console.log({ data });
   return (
     <main className="min-h-screen bg-transparent p-8 text-white">
       {/* Header */}
@@ -121,7 +121,9 @@ console.log({data})
                       </h3>
                       <StatusBadge status={assignment.submissionStatus} />
                     </div>
-                    <p className="text-sm text-gray-400">{assignment.subjectName}</p>
+                    <p className="text-sm text-gray-400">
+                      {assignment.subjectName}
+                    </p>
                     <p className="text-xs text-gray-500 mt-2">
                       Due:{" "}
                       {assignment.dueDate
@@ -140,22 +142,32 @@ console.log({data})
                     {assignment.submissionStatus === "GRADED" && (
                       <div className="flex justify-between items-center text-sm">
                         <span className="text-gray-400">Your Grade</span>
-                        <span className="font-semibold text-green-400">{assignment.grade}</span>
+                        <span className="font-semibold text-green-400">
+                          {assignment.grade}
+                        </span>
                       </div>
                     )}
-                    <button
-                      onClick={() => setSelectedAssignment(assignment)}
-                      disabled={assignment.submissionStatus !== "PENDING"}
-                      className={`w-full mt-2 py-2 font-semibold rounded-lg transition ${
-                        assignment.submissionStatus === "PENDING"
-                          ? "bg-cyan-500 hover:bg-cyan-400 text-black"
-                          : "bg-gray-700 cursor-not-allowed text-gray-400"
-                      }`}
-                    >
-                      {assignment.submissionStatus === "PENDING"
-                        ? "Submit Now"
-                        : "View Details"}
-                    </button>
+                    <div className="flex gap-3 justify-between items-center">
+                      <button
+                        onClick={() => setSelectedAssignment(assignment)}
+                        disabled={assignment.submissionStatus !== "PENDING"}
+                        className={`w-full mt-2 py-2 font-semibold rounded-lg transition ${
+                          assignment.submissionStatus === "PENDING"
+                            ? "bg-cyan-500 hover:bg-cyan-400 text-black"
+                            : "bg-gray-700 cursor-not-allowed text-gray-400"
+                        }`}
+                      >
+                        {assignment.submissionStatus === "PENDING"
+                          ? "Submit Now"
+                          : "View Details"}
+                      </button>
+                      {assignment.submissionStatus === "PENDING" && (
+                        <button onClick={()=>{router.push(`/dashboard/student/assignments/questions?assignmentId=${assignment.id}`)
+                        }} className="w-full mt-2 py-2 px-4 font-bold text-white transition-all duration-200 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 shadow-[0_0_15px_rgba(8,145,178,0.3)] hover:shadow-[0_0_20px_rgba(8,145,178,0.5)] active:scale-[0.98] border border-cyan-400/30">
+                          View Questions
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </motion.div>
               ))}

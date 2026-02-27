@@ -14,6 +14,9 @@ export async function POST(req: Request) {
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
+    if (user.username !== name) {
+      return NextResponse.json({ message: "Invalid username" }, { status: 401 });
+    }
     const session = randomBytes(32).toString("hex");
     const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
     await prisma.session.create({

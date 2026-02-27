@@ -66,15 +66,18 @@ const Page = () => {
           const response = await fetch(
             `/api/campus/details?campusID=${campusID}`
           );
-          console.log(response);
           if (response.ok) {
             const data = await response.json();
-            console.log(data[0].name);
-            setCampusData({
-              name: data[0].name,
-              logoUrl: data[0].logoUrl || defaultCampus.logoUrl,
-              hindiName: data[0].hindiName || defaultCampus.hindiName,
-            });
+            if (data && data.length > 0) {
+              const info = data[0];
+              setCampusData({
+                name: info.name || defaultCampus.name,
+                logoUrl: info.logoUrl || defaultCampus.logoUrl,
+                hindiName: info.hindiName || defaultCampus.hindiName,
+              });
+            } else {
+              console.warn("No campus data found, using default branding.");
+            }
           }
         } catch (error) {
           console.error("Failed to fetch campus data:", error);

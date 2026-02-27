@@ -323,7 +323,7 @@ export default function StudentDashboard() {
                     className="hidden gap-4 items-center justify-center ring hover:ring-2 w-56 p-3 ml-2 rounded-2xl bg-white/10 backdrop-blur-lg ring-blue-300 transition-all duration-300 hover:bg-blue-500 cursor-pointer 2xl:flex"
                     onClick={() => router.push("/dashboard/student/chat")}
                   >
-                    <span className="text-xl">Chat with AI</span>
+                    <span className="text-xl">ChudAI</span>
                   </div>
                 )}
               </div>
