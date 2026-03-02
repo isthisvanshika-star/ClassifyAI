@@ -11,15 +11,15 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
   secure: true,
 });
-
+// updation for 400 error.(V.A.)
 const createAnnouncementSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters."),
   message: z.string().min(1, "Message is required."),
   targetAll: z.coerce.boolean().default(false),
-  targetSemester: z.number().optional().nullable(),
+  targetSemester: z.coerce.number().optional().nullable(), 
   targetSection: z.string().optional().nullable(),
-  teacherId: z.string().cuid(),
-  campusId: z.string().cuid(),
+  teacherId: z.string(),
+  campusId: z.string(),
 });
 
 const updateAnnouncementSchema = z.object({

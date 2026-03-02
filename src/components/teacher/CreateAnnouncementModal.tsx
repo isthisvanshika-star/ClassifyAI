@@ -124,7 +124,7 @@ export default function CreateAnnouncementModal({
       showSuccessMessage(
         `Announcement  ${
           mode === "create" ? "posted" : "updated"
-        } posted successfully!`
+        }  successfully!`
       );
       onSuccess();
       onClose();

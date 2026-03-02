@@ -1,6 +1,7 @@
 import { AssignmentStatus } from "@/generated/prisma";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { title } from "process";
 import z from "zod";
 export async function GET(req: NextRequest) {
   try {
@@ -12,7 +13,7 @@ export async function GET(req: NextRequest) {
     if (!teacherId || !campusId) {
       return NextResponse.json(
         { error: "Teacher ID and Campus ID are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -24,7 +25,7 @@ export async function GET(req: NextRequest) {
     if (!teacherProfile) {
       return NextResponse.json(
         { error: "Teacher not found for campus" },
-        { status: 404 }
+        { status: 404 },
       );
     }
     if (assignmentId) {
@@ -47,7 +48,7 @@ export async function GET(req: NextRequest) {
       if (!assignment) {
         return NextResponse.json(
           { error: "Assignment not found or you do not have permission." },
-          { status: 404 }
+          { status: 404 },
         );
       }
       return NextResponse.json({ success: true, assignment });
@@ -66,7 +67,7 @@ export async function GET(req: NextRequest) {
     console.error("Error fetching assignments:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -89,7 +90,7 @@ export async function POST(request: NextRequest) {
     if (!validation.success) {
       return NextResponse.json(
         { error: validation.error.flatten().fieldErrors },
-        { status: 400 }
+        { status: 400 },
       );
     }
     const {
@@ -112,7 +113,7 @@ export async function POST(request: NextRequest) {
     if (!teacherProfile || !subject) {
       return NextResponse.json(
         { error: "Invalid teacher or subject for this campus" },
-        { status: 404 }
+        { status: 404 },
       );
     }
     const newAssignment = await prisma.assignment.create({
@@ -140,7 +141,7 @@ export async function POST(request: NextRequest) {
               sectionId: { in: sectionIds },
               user: { campusId: campusId },
             },
-            select: { userId: true }
+            select: { userId: true },
           });
           if (studentsToNotify.length > 0) {
             const studentUserIds = studentsToNotify.map((s) => s.userId);
@@ -160,19 +161,121 @@ export async function POST(request: NextRequest) {
       } catch (notificationError) {
         console.error(
           "Assignment created, but failed to send notifications:",
-          notificationError
+          notificationError,
         );
       }
     }
 
     return NextResponse.json(
       { success: true, assignment: newAssignment },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
+    );
+  }
+}
+
+const updateAssignementSchema = z.object({
+  assignmentId: z.string().cuid(),
+  teacherId: z.string().cuid(),
+  campusId: z.string().cuid(),
+  status: z.enum(["DRAFT", "PUBLISHED", "CLOSED"]).optional(),
+  title: z
+    .string()
+    .min(3, "Title must be at least 3 characters long")
+    .optional(),
+  description: z.string().optional(),
+  totalMarks: z.number().int().optional(),
+});
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const validation = updateAssignementSchema.safeParse(body);
+    if (!validation.success) {
+      return NextResponse.json(
+        { error: validation.error.flatten().fieldErrors },
+        { status: 400 },
+      );
+    }
+    const { assignmentId, teacherId, campusId, status, ...otherData } =
+      validation.data;
+    const [teacherProfile, existingAssignment] = await Promise.all([
+      prisma.teacher.findFirst({
+        where: { userId: teacherId, user: { campusId } },
+      }),
+      prisma.assignment.findUnique({
+        where: { id: assignmentId },
+        include: { _count: { select: { submissions: true } }, subject: true },
+      }),
+    ]);
+    if (
+      !teacherProfile ||
+      !existingAssignment ||
+      existingAssignment.teacherId !== teacherProfile.id
+    ) {
+      return NextResponse.json(
+        { error: "Unauthorized or Assignment not found" },
+        { status: 403 },
+      );
+    }
+    if (status === "DRAFT" && existingAssignment._count.submissions > 0) {
+      return NextResponse.json(
+        {
+          error:
+            "Cannot revert to Draft. Students have already submitted work.",
+        },
+        { status: 400 },
+      );
+    }
+    const updatedAssignment = await prisma.assignment.update({
+      where: { id: assignmentId },
+      data: { status, ...otherData },
+    });
+    if (status === "PUBLISHED" && existingAssignment.status !== "PUBLISHED") {
+      try {
+        const teacherSubjectLinks = await prisma.teacherSubject.findMany({
+          where: {
+            teacherId: teacherProfile.id,
+            subjectId: existingAssignment.subjectId,
+          },
+          select: { sectionId: true },
+        });
+        const sectionIds = teacherSubjectLinks.map((link) => link.sectionId);
+        if (sectionIds.length > 0) {
+          const studentToNotify = await prisma.student.findMany({
+            where: {
+              sectionId: { in: sectionIds },
+              user: { campusId: campusId },
+            },
+            select: { userId: true },
+          });
+          if (studentToNotify.length > 0) {
+            const notificationData = studentToNotify.map((s) => ({
+              userId: s.userId,
+              title: "Assignment Updated",
+              body: `The assignment '${updatedAssignment.title}' has been updated. Please check the details.`,
+              meta: {
+                link: `/student/assignments/${updatedAssignment.id}`,
+              },
+            }));
+            await prisma.notification.createMany({ data: notificationData });
+          }
+        }
+      } catch (notificationError) {
+        console.error(
+          "Notifications failed during Publish:",
+          notificationError,
+        );
+      }
+    }
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
     );
   }
 }

@@ -2,11 +2,17 @@
 
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-import { Clock, CheckCircle, BarChart } from "lucide-react";
+import { Clock, CheckCircle, BarChart, UploadCloud, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import GradeSubmissionModal from "@/components/teacher/GradeSubmissionModal";
+import {
+  showErrorMessage,
+  showLoadingMessage,
+  showSuccessMessage,
+  toastDissmisser,
+} from "@/lib/helper";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -16,6 +22,7 @@ export default function AssignmentDetailPage() {
   const [teacherId, setTeacherId] = useState<string | null>(null);
   const [campusId, setCampusId] = useState<string | null>(null);
   const [submissionToGrade, setSubmissionToGrade] = useState<any | null>(null);
+  const [isStatusLoading, setIsStatusLoading] = useState(false);
 
   useEffect(() => {
     setTeacherId(localStorage.getItem("teacherId"));
@@ -32,7 +39,7 @@ export default function AssignmentDetailPage() {
     assignmentId && teacherId && campusId
       ? `/api/teacher/assignments?assignmentId=${assignmentId}&teacherId=${teacherId}&campusId=${campusId}`
       : null,
-    fetcher
+    fetcher,
   );
 
   // Fetch 2: Analytics
@@ -44,7 +51,7 @@ export default function AssignmentDetailPage() {
     assignmentId && teacherId
       ? `/api/teacher/assignments/analytics?assignmentId=${assignmentId}&teacherId=${teacherId}`
       : null,
-    fetcher
+    fetcher,
   );
 
   const isLoading = assignmentLoading || analyticsLoading;
@@ -65,6 +72,40 @@ export default function AssignmentDetailPage() {
       </div>
     );
   }
+
+  const handleStautsChange = async (newStatus: "PUBLISHED" | "DRAFT") => {
+    if (!assignmentId || !teacherId) return;
+    setIsStatusLoading(true);
+    const toastId = showLoadingMessage(
+      newStatus === "PUBLISHED" ? "Publishing..." : "Reverting to draft...",
+    );
+    try {
+      const res = await fetch("api/teacher/assignments", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          assignmentId,
+          teacherId,
+          status: newStatus,
+        }),
+      });
+      const data = await res.json();
+      toastDissmisser(toastId);
+      if (res.ok) {
+        showSuccessMessage(
+          `Assignment ${newStatus === "PUBLISHED" ? "Published" : "Reverted to Draft"} successfully!`,
+        );
+        mutateAssignment();
+      } else {
+        showErrorMessage(data.error || "Failed to update status.");
+      }
+    } catch (err) {
+      toastDissmisser(toastId);
+      showErrorMessage("Network error. Please try again.");
+    } finally {
+      setIsStatusLoading(false);
+    }
+  };
 
   if (error || !assignmentData?.success) {
     return (
@@ -89,9 +130,42 @@ export default function AssignmentDetailPage() {
         >
           &larr; Back to All Assignments
         </Link>
-        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 bg-clip-text text-transparent drop-shadow-lg">
-          {assignment.title}
-        </h1>
+        <div className="flex justify-between items-center">
+          <h1 className="text-4xl font-extrabold bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 bg-clip-text text-transparent drop-shadow-lg">
+            {assignment.title}
+          </h1>
+          {assignment.status === "DRAFT" ? (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-6 p-[1px] flex justify-center items-center gap-2 bg-gradient-to-r from-violet-500 via-blue-500 to-cyan-500 hover:from-violet-400 hover:via-blue-400 hover:to-cyan-400  text-white font-bold py-2 px-6 rounded-xl transition-all duration-300 cursor-pointer shadow-[0_0_20px_rgba(59,130,246,0.3)] disabled:opacity-50"
+            >
+              <UploadCloud
+                size={18}
+                className="group-hover:scale-110 mt-1 transition-transform "
+              />
+              <span>Publish</span>
+            </motion.div>
+          ) : (
+            <button
+              disabled={isStatusLoading || assignment.submissions.lenght > 0}
+              className={`flex items-center gap-2 font-bold py-2 px-6 rounded-xl border transition-all duration-300 ${
+                assignment.submissions.length > 0
+                  ? "border-white/5 text-gray-600 cursor-not-allowed"
+                  : "border-yellow-500/50 text-yellow-500 hover:bg-yellow-500/10 shadow-[0_0_15px_rgba(234,179,8,0.1)] cursor-pointer"
+              }`}
+            >
+              <X />
+              <span>Revert to Draft</span>
+            </button>
+          )}
+          {assignment.status === "PUBLISHED" &&
+            assignment.submissions.length > 0 && (
+              <p className="text-[10px] text-gray-500 italic max-w-[150px] leading-tight">
+                Cannot revert: Students have already started submitting.
+              </p>
+            )}
+        </div>
         <div className="flex flex-wrap gap-4 mt-3 text-gray-400 text-sm">
           <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm">
             {assignment.subject.name}

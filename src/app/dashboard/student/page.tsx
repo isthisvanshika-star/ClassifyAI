@@ -25,7 +25,7 @@ import { motion } from "framer-motion";
 export default function StudentDashboard() {
   const [todayAttendance, setTodayAttendance] = useState<Attendance[]>([]);
   const [stats, setStats] = useState<any>(null);
-  const [needsFaceVerification, setNeedsFaceVerification] = useState(false);
+  const [needsFaceVerification, setNeedsFaceVerification] = useState(true);
   const [isFirstLogin, setIsFirstLogin] = useState(false);
   const [studentDetails, setStudentDetails] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -323,7 +323,7 @@ export default function StudentDashboard() {
                     className="hidden gap-4 items-center justify-center ring hover:ring-2 w-56 p-3 ml-2 rounded-2xl bg-white/10 backdrop-blur-lg ring-blue-300 transition-all duration-300 hover:bg-blue-500 cursor-pointer 2xl:flex"
                     onClick={() => router.push("/dashboard/student/chat")}
                   >
-                    <span className="text-xl">ChudAI</span>
+                    <span className="text-xl">Chat AI</span>
                   </div>
                 )}
               </div>
