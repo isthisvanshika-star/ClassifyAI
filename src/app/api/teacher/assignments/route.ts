@@ -272,6 +272,10 @@ export async function PATCH(request: NextRequest) {
         );
       }
     }
+    return NextResponse.json(
+      { success: true, assignment: updatedAssignment },
+      { status: 200 },
+    );
   } catch (error) {
     return NextResponse.json(
       { error: "Internal Server Error" },

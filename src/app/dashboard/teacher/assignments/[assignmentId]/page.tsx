@@ -80,12 +80,13 @@ export default function AssignmentDetailPage() {
       newStatus === "PUBLISHED" ? "Publishing..." : "Reverting to draft...",
     );
     try {
-      const res = await fetch("api/teacher/assignments", {
+      const res = await fetch("/api/teacher/assignments", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           assignmentId,
           teacherId,
+          campusId,
           status: newStatus,
         }),
       });
@@ -97,7 +98,10 @@ export default function AssignmentDetailPage() {
         );
         mutateAssignment();
       } else {
-        showErrorMessage(data.error || "Failed to update status.");
+        const errorMessage = typeof data.error === 'object' 
+    ? Object.values(data.error).flat().join(", ") // Flattens Zod arrays into one string
+    : data.error;
+        showErrorMessage(errorMessage || "Failed to update status.");
       }
     } catch (err) {
       toastDissmisser(toastId);
@@ -136,6 +140,7 @@ export default function AssignmentDetailPage() {
           </h1>
           {assignment.status === "DRAFT" ? (
             <motion.div
+              onClick={() => handleStautsChange("PUBLISHED")}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               className="mt-6 p-[1px] flex justify-center items-center gap-2 bg-gradient-to-r from-violet-500 via-blue-500 to-cyan-500 hover:from-violet-400 hover:via-blue-400 hover:to-cyan-400  text-white font-bold py-2 px-6 rounded-xl transition-all duration-300 cursor-pointer shadow-[0_0_20px_rgba(59,130,246,0.3)] disabled:opacity-50"
@@ -148,7 +153,8 @@ export default function AssignmentDetailPage() {
             </motion.div>
           ) : (
             <button
-              disabled={isStatusLoading || assignment.submissions.lenght > 0}
+              onClick={() => handleStautsChange("DRAFT")}
+              disabled={isStatusLoading || assignment.submissions.length > 0}
               className={`flex items-center gap-2 font-bold py-2 px-6 rounded-xl border transition-all duration-300 ${
                 assignment.submissions.length > 0
                   ? "border-white/5 text-gray-600 cursor-not-allowed"
