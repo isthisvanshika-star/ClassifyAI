@@ -269,3 +269,9 @@ export interface PreselectedClass {
   semesterId: string;
   sectionId: string;
 }
+
+export interface AssignmentHeaderProps {
+  assignment: any;
+  handleStatusChange: (status: "PUBLISHED" | "DRAFT") => void;
+  isStatusLoading: boolean;
+}
