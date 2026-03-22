@@ -274,4 +274,5 @@ export interface AssignmentHeaderProps {
   assignment: any;
   handleStatusChange: (status: "PUBLISHED" | "DRAFT") => void;
   isStatusLoading: boolean;
+  onEditClick: () => void;
 }

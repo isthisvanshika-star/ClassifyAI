@@ -345,21 +345,11 @@ export const getCurrentLocation = (): Promise<{
   });
 };
 
-export const transformUsername = (email: string) => {
-  const prefix = email.split("@")[0].toLowerCase();
-  const charMap: Record<string, string> = {
-    a: "@",
-    i: "!",
-    s: "$",
-    e: "3",
-    o: "0",
-    t: "7",
-    l: "1",
-  };
-  return prefix
-    .split("")
-    .map((char) => charMap[char] || char)
-    .join("");
+export const questionCleaner = (q: string) => {
+  return q
+    .replace(/^\s*(Q\s*\d+[\.\)]\s*)/i, "") // removes Q1. / Q2) etc.
+    .replace(/^\s*(\d+[\.\)]\s*)/, "") // removes 1. / 2) etc.
+    .trim();
 };
 
 export function getCurrentWeekday(

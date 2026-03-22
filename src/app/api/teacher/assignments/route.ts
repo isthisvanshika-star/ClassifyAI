@@ -1,8 +1,9 @@
 import { AssignmentStatus } from "@/generated/prisma";
+import { adminMessaging } from "@/lib/firebase-admin";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { title } from "process";
 import z from "zod";
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -156,6 +157,36 @@ export async function POST(request: NextRequest) {
             await prisma.notification.createMany({
               data: notificationData,
             });
+
+            try {
+              const usersWithTokens = await prisma.user.findMany({
+                where: { id: { in: studentUserIds }, fcmToken: { not: null } },
+                select: { fcmToken: true },
+              });
+
+              const tokens = usersWithTokens
+                .map((u) => u.fcmToken as string)
+                .filter((t) => t.trim() !== "");
+              if (tokens.length > 0) {
+                const message = {
+                  notification: {
+                    title: "Classify AI : New Assignment!",
+                    body: `'${newAssignment.title}' is now available.`,
+                  },
+                  data: {
+                    url: `/student/assignments/${newAssignment.id}`,
+                  },
+                  tokens: tokens,
+                };
+                const response =
+                  await adminMessaging.sendEachForMulticast(message);
+                console.log(
+                  `Push (POST) - Success: ${response.successCount}, Failed: ${response.failureCount}`,
+                );
+              }
+            } catch (fcmError) {
+              console.error("Firebase Push Error (POST): ", fcmError);
+            }
           }
         }
       } catch (notificationError) {
@@ -189,6 +220,7 @@ const updateAssignementSchema = z.object({
     .optional(),
   description: z.string().optional(),
   totalMarks: z.number().int().optional(),
+  dueDate: z.string().datetime().optional(),
 });
 
 export async function PATCH(request: NextRequest) {
@@ -222,6 +254,8 @@ export async function PATCH(request: NextRequest) {
         { status: 403 },
       );
     }
+
+    //! LOCK 1 : Stopping unpublishing if submissions exist
     if (status === "DRAFT" && existingAssignment._count.submissions > 0) {
       return NextResponse.json(
         {
@@ -231,9 +265,26 @@ export async function PATCH(request: NextRequest) {
         { status: 400 },
       );
     }
+
+    //! LOCK 2 : Prevent marks change if submissions exist
+    if (
+      otherData.totalMarks !== undefined &&
+      otherData.totalMarks !== existingAssignment.totalMarks &&
+      existingAssignment._count.submissions > 0
+    ) {
+      return NextResponse.json(
+        { error: "Cannot change Total Marks after student submissions." },
+        { status: 400 },
+      );
+    }
+
+    const datatoUpdate: any = { ...otherData };
+    if (status) datatoUpdate.status = status;
+    if (otherData.dueDate) datatoUpdate.dueDate = new Date(otherData.dueDate);
+
     const updatedAssignment = await prisma.assignment.update({
       where: { id: assignmentId },
-      data: { status, ...otherData },
+      data: datatoUpdate,
     });
     if (status === "PUBLISHED" && existingAssignment.status !== "PUBLISHED") {
       try {
@@ -263,6 +314,33 @@ export async function PATCH(request: NextRequest) {
               },
             }));
             await prisma.notification.createMany({ data: notificationData });
+            try {
+              const studentIds = studentToNotify.map((s) => s.userId);
+              const usersWithTokens = await prisma.user.findMany({
+                where: { id: { in: studentIds }, fcmToken: { not: null } },
+                select: { fcmToken: true },
+              });
+              const tokens = usersWithTokens
+                .map((u) => u.fcmToken as string)
+                .filter((t) => t.trim() !== "");
+              if (tokens.length > 0) {
+                const message = {
+                  title: "Classify AI : Assignment Published!",
+                  body: ` '${updatedAssignment.title}' is now available for you.`,
+                  data: {
+                    url: `/student/assignment/${updatedAssignment.id}`,
+                  },
+                  tokens: tokens,
+                };
+                const fcmResponse =
+                  await adminMessaging.sendEachForMulticast(message);
+                console.log(
+                  `Push (PATCH) - Success: ${fcmResponse.successCount}, Failed: ${fcmResponse.failureCount}`,
+                );
+              }
+            } catch (fcmError) {
+              console.error("Firebase Push Error (PATCH): ", fcmError);
+            }
           }
         }
       } catch (notificationError) {

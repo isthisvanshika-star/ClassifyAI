@@ -4063,6 +4063,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     username: string | null
+    fcmToken: string | null
     avatarUrl: string | null
     phone: string | null
     branch: string | null
@@ -4081,6 +4082,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     username: string | null
+    fcmToken: string | null
     avatarUrl: string | null
     phone: string | null
     branch: string | null
@@ -4099,6 +4101,7 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     username: number
+    fcmToken: number
     avatarUrl: number
     phone: number
     branch: number
@@ -4129,6 +4132,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     username?: true
+    fcmToken?: true
     avatarUrl?: true
     phone?: true
     branch?: true
@@ -4147,6 +4151,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     username?: true
+    fcmToken?: true
     avatarUrl?: true
     phone?: true
     branch?: true
@@ -4165,6 +4170,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     username?: true
+    fcmToken?: true
     avatarUrl?: true
     phone?: true
     branch?: true
@@ -4270,6 +4276,7 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     username: string
+    fcmToken: string | null
     avatarUrl: string | null
     phone: string | null
     branch: string | null
@@ -4307,6 +4314,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     username?: boolean
+    fcmToken?: boolean
     avatarUrl?: boolean
     phone?: boolean
     branch?: boolean
@@ -4338,6 +4346,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     username?: boolean
+    fcmToken?: boolean
     avatarUrl?: boolean
     phone?: boolean
     branch?: boolean
@@ -4357,6 +4366,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     username?: boolean
+    fcmToken?: boolean
     avatarUrl?: boolean
     phone?: boolean
     branch?: boolean
@@ -4376,6 +4386,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     username?: boolean
+    fcmToken?: boolean
     avatarUrl?: boolean
     phone?: boolean
     branch?: boolean
@@ -4385,7 +4396,7 @@ export namespace Prisma {
     campusId?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "passwordHash" | "role" | "createdAt" | "updatedAt" | "username" | "avatarUrl" | "phone" | "branch" | "semester" | "year" | "premiumExpiresAt" | "campusId", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "passwordHash" | "role" | "createdAt" | "updatedAt" | "username" | "fcmToken" | "avatarUrl" | "phone" | "branch" | "semester" | "year" | "premiumExpiresAt" | "campusId", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     campus?: boolean | User$campusArgs<ExtArgs>
     teacherProfile?: boolean | User$teacherProfileArgs<ExtArgs>
@@ -4433,6 +4444,7 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       username: string
+      fcmToken: string | null
       avatarUrl: string | null
       phone: string | null
       branch: string | null
@@ -4883,6 +4895,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
     readonly username: FieldRef<"User", 'String'>
+    readonly fcmToken: FieldRef<"User", 'String'>
     readonly avatarUrl: FieldRef<"User", 'String'>
     readonly phone: FieldRef<"User", 'String'>
     readonly branch: FieldRef<"User", 'String'>
@@ -35977,6 +35990,7 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     username: 'username',
+    fcmToken: 'fcmToken',
     avatarUrl: 'avatarUrl',
     phone: 'phone',
     branch: 'branch',
@@ -36574,6 +36588,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     username?: StringFilter<"User"> | string
+    fcmToken?: StringNullableFilter<"User"> | string | null
     avatarUrl?: StringNullableFilter<"User"> | string | null
     phone?: StringNullableFilter<"User"> | string | null
     branch?: StringNullableFilter<"User"> | string | null
@@ -36604,6 +36619,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     username?: SortOrder
+    fcmToken?: SortOrderInput | SortOrder
     avatarUrl?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     branch?: SortOrderInput | SortOrder
@@ -36637,6 +36653,7 @@ export namespace Prisma {
     role?: EnumRoleFilter<"User"> | $Enums.Role
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    fcmToken?: StringNullableFilter<"User"> | string | null
     avatarUrl?: StringNullableFilter<"User"> | string | null
     phone?: StringNullableFilter<"User"> | string | null
     branch?: StringNullableFilter<"User"> | string | null
@@ -36667,6 +36684,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     username?: SortOrder
+    fcmToken?: SortOrderInput | SortOrder
     avatarUrl?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     branch?: SortOrderInput | SortOrder
@@ -36693,6 +36711,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     username?: StringWithAggregatesFilter<"User"> | string
+    fcmToken?: StringNullableWithAggregatesFilter<"User"> | string | null
     avatarUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
     phone?: StringNullableWithAggregatesFilter<"User"> | string | null
     branch?: StringNullableWithAggregatesFilter<"User"> | string | null
@@ -38734,6 +38753,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -38763,6 +38783,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -38792,6 +38813,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38821,6 +38843,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38850,6 +38873,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -38868,6 +38892,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38885,6 +38910,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -41177,6 +41203,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     username?: SortOrder
+    fcmToken?: SortOrder
     avatarUrl?: SortOrder
     phone?: SortOrder
     branch?: SortOrder
@@ -41200,6 +41227,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     username?: SortOrder
+    fcmToken?: SortOrder
     avatarUrl?: SortOrder
     phone?: SortOrder
     branch?: SortOrder
@@ -41218,6 +41246,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     username?: SortOrder
+    fcmToken?: SortOrder
     avatarUrl?: SortOrder
     phone?: SortOrder
     branch?: SortOrder
@@ -46726,6 +46755,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -46754,6 +46784,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -47022,6 +47053,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -47050,6 +47082,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -47276,6 +47309,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -47304,6 +47338,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -47534,6 +47569,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -47562,6 +47598,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -49125,6 +49162,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -49153,6 +49191,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -49436,6 +49475,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     username?: StringFilter<"User"> | string
+    fcmToken?: StringNullableFilter<"User"> | string | null
     avatarUrl?: StringNullableFilter<"User"> | string | null
     phone?: StringNullableFilter<"User"> | string | null
     branch?: StringNullableFilter<"User"> | string | null
@@ -50450,6 +50490,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -50478,6 +50519,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -50614,6 +50656,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -50642,6 +50685,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -50890,6 +50934,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -50918,6 +50963,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -50962,6 +51008,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -50990,6 +51037,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52158,6 +52206,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -52186,6 +52235,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -52219,6 +52269,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -52247,6 +52298,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -52327,6 +52379,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52355,6 +52408,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52394,6 +52448,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52422,6 +52477,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52466,6 +52522,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -52494,6 +52551,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -52538,6 +52596,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52566,6 +52625,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52594,6 +52654,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -52622,6 +52683,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -52671,6 +52733,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -52699,6 +52762,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -52743,6 +52807,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52771,6 +52836,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52799,6 +52865,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -52827,6 +52894,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -52871,6 +52939,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52899,6 +52968,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52927,6 +52997,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -52955,6 +53026,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -52999,6 +53071,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53027,6 +53100,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54632,6 +54706,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     username: string
+    fcmToken?: string | null
     avatarUrl?: string | null
     phone?: string | null
     branch?: string | null
@@ -54716,6 +54791,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54744,6 +54820,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54772,6 +54849,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55314,6 +55392,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55342,6 +55421,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55370,6 +55450,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     branch?: NullableStringFieldUpdateOperationsInput | string | null

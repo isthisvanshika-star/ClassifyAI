@@ -19,8 +19,8 @@ import FaceVerificationModal from "@/components/student/FaceVerificationModal";
 import DashboardLoader from "@/components/student/DashboardLoader";
 import NotificationBell from "@/components/student/NotificationBell";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBook, faBookOpen, faBullhorn } from "@fortawesome/free-solid-svg-icons";
-import { motion } from "framer-motion";
+import { faBookOpen, faBullhorn } from "@fortawesome/free-solid-svg-icons";
+import NotificationHandler from "@/components/ui/NotificationHandler";
 
 export default function StudentDashboard() {
   const [todayAttendance, setTodayAttendance] = useState<Attendance[]>([]);
@@ -130,6 +130,7 @@ export default function StudentDashboard() {
 
   return (
     <>
+    <NotificationHandler userId={localStorage.getItem("studentId") || ""} />
       {isFirstLogin && studentDetails && (
         <FirstLoginModal
           studentId={studentDetails.id}

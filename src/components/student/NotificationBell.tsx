@@ -12,6 +12,8 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export default function NotificationBell() {
   const [isOpen, setIsOpen] = useState(false);
   const [studentId, setStudentId] = useState<string | null>(null);
+  //*(A. Vanshika) Storing exact milisectond time when the component is mounted.....
+  const mountTime = useRef<number>(Date.now())
   const prevUnreadCount = useRef<number>(0);
   const shownNotifications = useRef<Set<string>>(new Set());
   const bellControls = useAnimation();
@@ -44,18 +46,26 @@ export default function NotificationBell() {
     prevUnreadCount.current = unreadCount;
   }, [unreadCount, bellControls]);
 
+
+
+
   useEffect(() => {
     if (!notifications.length) return;
 
     notifications.forEach((n: any) => {
-      if (!shownNotifications.current.has(n.id)) {
+
+      //* (A. Vanshika) Taking the time where notification was genrated.....
+      const notifTime = new Date(n.createdAt).getTime();
+      
+      //* (A. Vanshika) Showing only those notification that were genrated after the page loads.....
+      if (notifTime > mountTime.current && !shownNotifications.current.has(n.id)){
         shownNotifications.current.add(n.id);
         showNotification({
           id: n.id,
           title: n.title,
           message: n.body,
           link: n.meta?.link,
-        });
+        })
       }
     });
   }, [notifications]);

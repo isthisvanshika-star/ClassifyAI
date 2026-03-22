@@ -7,6 +7,7 @@ import AssignmentAnalytics from "@/components/teacher/assignments/AssignmentAnal
 import SubmissionTable from "@/components/teacher/assignments/SubmissionTable";
 import GradeSubmissionModal from "@/components/teacher/GradeSubmissionModal";
 import { showErrorMessage, showLoadingMessage, showSuccessMessage, toastDissmisser } from "@/lib/helper";
+import CreateAssignmentModal from "@/components/teacher/CreateAssignmentModal";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -17,6 +18,7 @@ export default function AssignmentDetailPage() {
   const [campusId, setCampusId] = useState<string | null>(null);
   const [submissionToGrade, setSubmissionToGrade] = useState<any | null>(null);
   const [isStatusLoading, setIsStatusLoading] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
     setTeacherId(localStorage.getItem("teacherId"));
@@ -63,7 +65,7 @@ export default function AssignmentDetailPage() {
 
   return (
     <main className="min-h-screen p-8 text-white">
-      <AssignmentHeader assignment={assignment} handleStatusChange={handleStatusChange} isStatusLoading={isStatusLoading} />
+      <AssignmentHeader assignment={assignment} handleStatusChange={handleStatusChange}  isStatusLoading={isStatusLoading}  onEditClick={ () => setIsEditModalOpen(true)}/>
       {analyticsData?.analytics && <AssignmentAnalytics analytics={analyticsData.analytics} />}
       <SubmissionTable 
         submissions={assignment.submissions} 
@@ -80,6 +82,20 @@ export default function AssignmentDetailPage() {
           totalMarks={assignment.totalMarks}
         />
       )}
+      {
+        isEditModalOpen && (
+          <CreateAssignmentModal 
+    isOpen={isEditModalOpen}
+    onClose={() => setIsEditModalOpen(false)}
+    initialData={assignment} // We need to handle this prop in the modal
+    mode="edit" 
+    onSuccess={() => {
+      mutateAssignment(); // Refresh data
+      setIsEditModalOpen(false);
+    }}
+  />
+        )
+      }
     </main>
   );
 }

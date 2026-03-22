@@ -10,15 +10,20 @@ import {
   toastDissmisser,
 } from "@/lib/helper";
 import { PlusCircle, Trash2 } from "lucide-react";
+import { set } from "date-fns";
 
 export default function CreateAssignmentModal({
   isOpen,
   onClose,
   onSuccess,
+  initialData,
+  mode = "create",
 }: {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  initialData?: any;
+  mode?: "create" | "edit";
 }) {
   const [title, setTitle] = useState("");
   const [questions, setQuestions] = useState<string[]>([""]); // dynamic list
@@ -31,22 +36,48 @@ export default function CreateAssignmentModal({
   const [teacherSubjects, setTeacherSubjects] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const hasSubmissions =
+    initialData?.submissions?.length > 0 ||
+    initialData?._count?.submissions > 0;
+
   // Reset + fetch subjects when modal opens
   useEffect(() => {
     if (isOpen) {
-      setTitle("");
-      setQuestions([""]);
-      setDueDate("");
-      setTotalMarks("");
-      setStatus("DRAFT");
-      setRubric("");
-
+      if (mode === "edit" && initialData) {
+        setTitle(initialData.title || "");
+        try {
+          const parsedQuestions = JSON.parse(initialData.description);
+          setQuestions(
+            Array.isArray(parsedQuestions)
+              ? parsedQuestions
+              : [initialData.description || ""],
+          );
+        } catch {
+          setQuestions([initialData.description || ""]);
+        }
+        setDueDate(
+          initialData.dueDate
+            ? new Date(initialData.dueDate).toISOString().split("T")[0]
+            : "",
+        );
+        setTotalMarks(initialData.totalMarks?.toString() || "");
+        setStatus(initialData.status || "DRAFT");
+        setRubric(initialData.rubric || "");
+        setSelectedSubject(initialData.subjectId || "");
+      } else {
+        setTitle("");
+        setQuestions([""]);
+        setDueDate("");
+        setTotalMarks("");
+        setStatus("DRAFT");
+        setRubric("");
+      }
       const teacherUserId = localStorage.getItem("teacherId");
       const campusId = localStorage.getItem("CampusID");
       if (teacherUserId && campusId) {
         const fetchSubjects = async () => {
           const res = await fetch(
-            `/api/teacher/subjects?teacherId=${teacherUserId}&campusId=${campusId}`
+            `/api/teacher/subjects?teacherId=${teacherUserId}&campusId=${campusId}`,
           );
           if (res.ok) {
             const data = await res.json();
@@ -59,7 +90,7 @@ export default function CreateAssignmentModal({
         fetchSubjects();
       }
     }
-  }, [isOpen]);
+  }, [isOpen, mode, initialData]);
 
   // Add new question
   const addQuestion = () => {
@@ -83,7 +114,13 @@ export default function CreateAssignmentModal({
     const teacherUserId = localStorage.getItem("teacherId");
     const campusId = localStorage.getItem("CampusID");
 
-    if (!title || !selectedSubject || !teacherUserId || !campusId || !totalMarks) {
+    if (
+      !title ||
+      !selectedSubject ||
+      !teacherUserId ||
+      !campusId ||
+      !totalMarks
+    ) {
       showErrorMessage("Please fill in all required fields.");
       return;
     }
@@ -94,32 +131,40 @@ export default function CreateAssignmentModal({
     }
 
     setIsLoading(true);
-    const toastId = showLoadingMessage("Creating assignment...");
+    const actionText = mode === "create" ? "Creating" : "Updating";
+    const toastId = showLoadingMessage(`${actionText} assignment...`);
     try {
+      const payload = {
+        assignmentId: initialData?.id, // Only needed for PATCH
+        title,
+        description: JSON.stringify(questions),
+        dueDate: dueDate ? new Date(dueDate).toISOString() : null,
+        subjectId: selectedSubject,
+        teacherId: teacherUserId,
+        campusId,
+        totalMarks: parseInt(totalMarks),
+        status,
+        rubric,
+      };
+
       const response = await fetch("/api/teacher/assignments", {
-        method: "POST",
+        method: mode === "create" ? "POST" : "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title,
-          description: JSON.stringify(questions), // send as JSON array
-          dueDate: dueDate ? new Date(dueDate).toISOString() : null,
-          subjectId: selectedSubject,
-          teacherId: teacherUserId,
-          campusId,
-          totalMarks: totalMarks ? parseInt(totalMarks) : null,
-          status,
-          rubric,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
       toastDissmisser(toastId);
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to create assignment.");
+        throw new Error(
+          data.error || `Failed to ${actionText.toLowerCase()} assignment.`,
+        );
       }
 
-      showSuccessMessage("Assignment created successfully!");
+      showSuccessMessage(
+        `Assignment ${mode === "create" ? "created" : "updated"} successfully!`,
+      );
       onSuccess();
       onClose();
     } catch (err: any) {
@@ -149,7 +194,7 @@ export default function CreateAssignmentModal({
           onClick={(e) => e.stopPropagation()}
         >
           <h2 className="text-2xl font-extrabold bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent mb-6">
-            New Assignment
+            {mode === "create" ? "New Assignment" : "Edit Assignment"}
           </h2>
 
           {/* Scrollable form */}
@@ -203,16 +248,19 @@ export default function CreateAssignmentModal({
                   type="number"
                   placeholder="e.g., 100"
                   value={totalMarks}
+                  disabled={hasSubmissions}
                   required
                   onChange={(e) => setTotalMarks(e.target.value)}
-                  className="w-full bg-gray-800/70 p-3 rounded-lg mt-1 focus:ring-2 focus:ring-indigo-500 outline-none transition"
+                  className={`w-full bg-gray-800/70 p-3 rounded-lg mt-1 outline-none transition ${hasSubmissions ? "opacity-50 cursor-not-allowed" : "focus:ring-2 focus:ring-indigo-500"}`}
                 />
               </div>
               <div>
                 <label className="text-sm text-gray-400">Status</label>
                 <select
                   value={status}
-                  onChange={(e) => setStatus(e.target.value as AssignmentStatus)}
+                  onChange={(e) =>
+                    setStatus(e.target.value as AssignmentStatus)
+                  }
                   className="w-full [appearance:none] [&::-ms-expand]:hidden bg-gray-800/70 p-3 rounded-lg mt-1 focus:ring-2 focus:ring-indigo-500 outline-none transition"
                 >
                   <option value="DRAFT">Draft</option>
@@ -222,9 +270,11 @@ export default function CreateAssignmentModal({
             </div>
 
             {/* Rubric */}
-            <label className="text-sm text-gray-400">Grading Criteria / Rubric</label>
+            <label className="text-sm text-gray-400">
+              Grading Criteria / Rubric
+            </label>
             <textarea
-             placeholder="eg. Accuracy – 10 marks, Steps – 5 marks, Presentation – 5 marks"
+              placeholder="eg. Accuracy – 10 marks, Steps – 5 marks, Presentation – 5 marks"
               value={rubric}
               onChange={(e) => setRubric(e.target.value)}
               rows={3}
@@ -233,11 +283,14 @@ export default function CreateAssignmentModal({
 
             {/* Subject */}
             <div>
-              <label className="text-sm text-gray-400">Subject</label>
+              <label className="text-sm text-gray-400">
+                Subject {mode === "edit" && "(Locked)"}
+              </label>
               <select
+                disabled={mode === "edit"}
                 value={selectedSubject}
                 onChange={(e) => setSelectedSubject(e.target.value)}
-                className="w-full [appearance:none] [&::-ms-expand]:hidden bg-gray-800/70 p-3 rounded-lg mt-1 focus:ring-2 focus:ring-indigo-500 outline-none transition"
+                className={`w-full bg-gray-800/70 p-3 rounded-lg mt-1 outline-none transition ${mode === "edit" ? "opacity-50 cursor-not-allowed" : "focus:ring-2 focus:ring-indigo-500"}`}
               >
                 {teacherSubjects.map((ts) => (
                   <option key={ts.id} value={ts.subject.id}>
@@ -253,7 +306,9 @@ export default function CreateAssignmentModal({
 
             {/* Due Date */}
             <div>
-              <label className="text-sm text-gray-400">Due Date (Optional)</label>
+              <label className="text-sm text-gray-400">
+                Due Date (Optional)
+              </label>
               <input
                 type="date"
                 value={dueDate}
@@ -276,7 +331,7 @@ export default function CreateAssignmentModal({
               disabled={isLoading}
               className="py-2 px-5 bg-gradient-to-r from-indigo-600 to-cyan-600 hover:scale-105 transition-transform rounded-lg font-bold shadow-lg disabled:opacity-60"
             >
-              {isLoading ? "Creating..." : "Create Assignment"}
+              {isLoading ? "Saving..." : mode === "create" ? "Create Assignment" : "Save Changes"}
             </button>
           </div>
         </motion.div>
