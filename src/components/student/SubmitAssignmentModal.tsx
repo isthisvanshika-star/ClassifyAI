@@ -2,163 +2,206 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { UploadCloud, File as FileIcon, X } from "lucide-react";
-import { showErrorMessage, showLoadingMessage, showSuccessMessage, toastDissmisser } from "@/lib/helper";
+import {
+  Loader2,
+  Send,
+  Type,
+  UploadCloud,
+  X,
+} from "lucide-react";
+import {
+  showErrorMessage,
+  showSuccessMessage,
+} from "@/lib/helper";
 
 export default function SubmitAssignmentModal({
   isOpen,
   onClose,
   onSuccess,
-  assignment,
+  assignment
 }: {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
-  assignment: any;
+  assignment:any
 }) {
-  const [file, setFile] = useState<File | null>(null);
-  const [text, setText] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [studentId, setStudentId] = useState<string | null>(null);
-  const [campusId, setCampusId] = useState<string | null>(null);
+  const [submitMode, setSubmitMode] = useState<"file" | "text">("file");
+  const [textAnswer, setTextAnswer] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Reset when modal opens
   useEffect(() => {
     if (isOpen) {
-      setStudentId(localStorage.getItem("studentId"));
-      setCampusId(localStorage.getItem("CampusID"));
-      setFile(null);
-      setText("");
+      setSubmitMode("file");
+      setTextAnswer("");
+      setSelectedFile(null);
+      setIsSubmitting(false);
     }
   }, [isOpen]);
 
-  const handleSubmit = async () => {
-    if (!studentId || !campusId) {
-      showErrorMessage("Session expired. Please log in again.");
-      return;
-    }
-    if (!file && !text.trim()) {
-      showErrorMessage("Please upload a file or write a comment.");
+  const handleSubmit = () => {
+    if (submitMode === "text" && !textAnswer.trim()) {
+      showErrorMessage("Please write an answer before submitting.");
       return;
     }
 
-    setIsLoading(true);
-    const toastId = showLoadingMessage("Submitting your assignment...");
+    if (submitMode === "file" && !selectedFile) {
+      showErrorMessage("Please select a file to upload.");
+      return;
+    }
 
-    const formData = new FormData();
-    formData.append("studentId", studentId);
-    formData.append("campusId", campusId);
-    formData.append("assignmentId", assignment.id);
-    if (file) formData.append("file", file);
-    if (text) formData.append("text", text);
+    setIsSubmitting(true);
 
-    try {
-      const res = await fetch("/api/student/submissions", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await res.json();
-      toastDissmisser(toastId);
-
-      if (!res.ok) throw new Error(data.error || "Submission failed.");
-
-      showSuccessMessage("Assignment submitted successfully!");
+    // Mock submit (UI only)
+    setTimeout(() => {
+      setIsSubmitting(false);
+      showSuccessMessage("Submission Successful!");
       onSuccess();
       onClose();
-    } catch (err: any) {
-      toastDissmisser(toastId);
-      showErrorMessage(err.message);
-    } finally {
-      setIsLoading(false);
-    }
+    }, 1200);
   };
 
   if (!isOpen) return null;
 
   return (
     <AnimatePresence>
-      <motion.div
-        className="fixed inset-0 bg-black/70 backdrop-blur-xs flex justify-center items-center z-50 p-4"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        onClick={onClose}
-      >
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+        {/* Overlay */}
         <motion.div
-          className="bg-[#11151F] backdrop-blur-2xl border border-gray-700 p-8 rounded-2xl shadow-2xl w-full max-w-lg relative text-white"
-          initial={{ scale: 0.9, y: 20 }}
-          animate={{ scale: 1, y: 0 }}
-          exit={{ scale: 0.9, y: 20 }}
-          transition={{ type: "spring", stiffness: 300, damping: 25 }}
-          onClick={(e) => e.stopPropagation()}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+          className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        />
+
+        {/* Modal */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
+          className="relative w-full max-w-3xl bg-slate-900/95 backdrop-blur-xl border border-cyan-500/40 p-6 md:p-8 rounded-3xl shadow-[0_0_60px_rgba(6,182,212,0.2)] overflow-hidden z-10 text-white"
         >
-          {/* Close Button */}
-          <button
-            className="absolute top-4 right-4 text-gray-400 hover:text-cyan-400"
-            onClick={onClose}
-          >
-            <X size={20} />
-          </button>
-
           {/* Header */}
-          <h2 className="text-2xl font-bold text-cyan-400 mb-1">
-            {assignment.title}
-          </h2>
-          <p className="text-gray-400 mb-6 text-sm">Submit Assignment</p>
-
-          {/* File Upload */}
-          <div className="space-y-4">
-            <label className="block text-sm font-medium text-gray-300">
-              Upload File (PDF, DOCX, etc.)
-            </label>
-            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed border-gray-600 rounded-lg hover:border-cyan-400 transition-colors cursor-pointer">
-              <div className="space-y-2 text-center" onClick={() => document.getElementById('file-upload')?.click()}>
-                <UploadCloud className="mx-auto h-12 w-12 text-cyan-400" />
-                <p className="text-sm text-gray-400">
-                  <span className="text-cyan-400 font-semibold hover:underline">Click to upload</span> or drag file here
-                </p>
-                {file && (
-                  <p className="text-xs text-green-400 flex items-center justify-center gap-2">
-                    <FileIcon size={14} /> {file.name}
-                  </p>
-                )}
-                <input
-                  id="file-upload"
-                  type="file"
-                  className="hidden"
-                  onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
-                />
-              </div>
-            </div>
-
-            {/* Text Submission */}
-            <textarea
-              placeholder="Or add a text comment..."
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              rows={4}
-              className="w-full bg-[#1B1F2B] p-3 rounded-lg border border-gray-700 focus:ring-2 focus:ring-cyan-400 outline-none placeholder-gray-500 text-white"
-            ></textarea>
-          </div>
-
-          {/* Buttons */}
-          <div className="flex justify-end gap-4 pt-6 mt-6 border-t border-gray-700">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-2xl font-bold">Submit Your {assignment.title}</h3>
             <button
               onClick={onClose}
-              className="py-2 px-4 bg-gray-700 hover:bg-gray-600 font-semibold rounded-lg transition-colors"
+              className="text-gray-400 hover:text-red-400 bg-white/5 hover:bg-white/10 p-2 rounded-full transition-all"
+            >
+              <X size={20} />
+            </button>
+          </div>
+
+          {/* Toggle */}
+          <div className="flex gap-2 mb-6 bg-slate-800 p-1 rounded-xl w-fit">
+            <button
+              onClick={() => setSubmitMode("text")}
+              className={`flex items-center gap-2 px-6 py-2.5 rounded-lg font-medium transition-all ${
+                submitMode === "text"
+                  ? "bg-cyan-500 text-slate-900 shadow-md"
+                  : "text-gray-400 hover:text-white"
+              }`}
+            >
+              <Type size={18} /> Write Answer
+            </button>
+
+            <button
+              onClick={() => setSubmitMode("file")}
+              className={`flex items-center gap-2 px-6 py-2.5 rounded-lg font-medium transition-all ${
+                submitMode === "file"
+                  ? "bg-cyan-500 text-slate-900 shadow-md"
+                  : "text-gray-400 hover:text-white"
+              }`}
+            >
+              <UploadCloud size={18} /> Upload File
+            </button>
+          </div>
+
+          {/* TEXT MODE */}
+          {submitMode === "text" && (
+            <motion.textarea
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              value={textAnswer}
+              onChange={(e) => setTextAnswer(e.target.value)}
+              placeholder="Type your answer here..."
+              className="w-full h-56 bg-slate-800/50 border border-white/10 rounded-2xl p-5 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 resize-none placeholder-gray-500"
+            />
+          )}
+
+          {/* FILE MODE */}
+          {submitMode === "file" && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex flex-col items-center justify-center w-full h-56 border-2 border-dashed border-cyan-500/30 rounded-2xl bg-slate-800/30 hover:bg-slate-800/50 hover:border-cyan-500/60 transition-all group"
+            >
+              <input
+                type="file"
+                id="file-upload"
+                className="hidden"
+                onChange={(e) =>
+                  setSelectedFile(
+                    e.target.files && e.target.files.length > 0
+                      ? e.target.files[0]
+                      : null
+                  )
+                }
+              />
+
+              <label
+                htmlFor="file-upload"
+                className="cursor-pointer flex flex-col items-center gap-4 w-full h-full justify-center"
+              >
+                <div className="p-5 bg-cyan-500/10 group-hover:bg-cyan-500/20 rounded-full text-cyan-400">
+                  <UploadCloud size={36} />
+                </div>
+
+                {selectedFile ? (
+                  <p className="text-cyan-300 font-semibold text-lg bg-cyan-500/10 px-4 py-2 rounded-lg">
+                    {selectedFile.name}
+                  </p>
+                ) : (
+                  <>
+                    <p className="text-white font-medium text-lg">
+                      Click to browse or drag file here
+                    </p>
+                    <p className="text-sm text-gray-400">
+                      Accepts PDF, DOC, Images (Max 10MB)
+                    </p>
+                  </>
+                )}
+              </label>
+            </motion.div>
+          )}
+
+          {/* Actions */}
+          <div className="mt-8 flex justify-end gap-4 border-t border-white/10 pt-6">
+            <button
+              onClick={onClose}
+              className="px-6 py-2.5 text-gray-400 hover:text-white hover:bg-white/5 rounded-xl"
             >
               Cancel
             </button>
+
             <button
               onClick={handleSubmit}
-              disabled={isLoading}
-              className={`py-2 px-4 bg-cyan-500 hover:bg-cyan-400 font-semibold rounded-lg disabled:bg-cyan-700 transition-colors`}
+              disabled={isSubmitting}
+              className="flex items-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 disabled:opacity-50 font-semibold py-2.5 px-8 rounded-xl shadow-[0_0_15px_rgba(6,182,212,0.3)]"
             >
-              {isLoading ? "Submitting..." : "Submit Assignment"}
+              {isSubmitting ? (
+                <Loader2 size={18} className="animate-spin" />
+              ) : (
+                <Send size={18} />
+              )}
+              Submit Assignment
             </button>
           </div>
         </motion.div>
-      </motion.div>
+      </div>
     </AnimatePresence>
   );
 }

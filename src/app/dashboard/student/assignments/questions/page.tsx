@@ -1,7 +1,12 @@
 "use client";
 
-import { questionCleaner } from "@/lib/helper";
-import { motion } from "framer-motion";
+import SubmitAssignmentModal from "@/components/student/SubmitAssignmentModal";
+import {
+  questionCleaner,
+  showErrorMessage,
+  showSuccessMessage,
+} from "@/lib/helper";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Award,
   BookOpen,
@@ -9,6 +14,10 @@ import {
   ChevronLeft,
   ClipboardCheck,
   Loader2,
+  Send,
+  Type,
+  UploadCloud,
+  X,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
@@ -21,7 +30,11 @@ const QuestionContent = () => {
   const router = useRouter();
   const assignmentId = searchParams.get("assignmentId");
 
-  const [studentId, setStudentId] = useState<string | null>(null);
+  const [studentId, setStudentId] = useState<string | null>(
+    typeof window !== "undefined" ? localStorage.getItem("studentId") : null,
+  );
+
+  const [showSubmitForm, setShowSubmitForm] = useState(false);
 
   useEffect(() => {
     setStudentId(localStorage.getItem("studentId"));
@@ -36,6 +49,8 @@ const QuestionContent = () => {
 
   const assignment = data?.assignment;
   const hasSubmitted = data?.hasSubmitted;
+
+
   return (
     <div className="relative min-h-screen p-6 md:p-10 text-white overflow-hidden bg-transparent">
       <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] bg-cyan-500/20 blur-[120px] rounded-full" />
@@ -213,13 +228,25 @@ const QuestionContent = () => {
                 Already Submitted
               </button>
             ) : (
-              <button className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-semibold py-3 px-8 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all transform hover:scale-105">
+              <button
+                onClick={() => setShowSubmitForm(true)}
+                className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-semibold py-3 px-8 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all transform hover:scale-105"
+              >
                 Prepare Submission
               </button>
             )}
           </div>
         </motion.div>
       )}
+      <SubmitAssignmentModal
+        isOpen={showSubmitForm}
+        onClose={() => setShowSubmitForm(false)}
+        onSuccess={() => {
+          setShowSubmitForm(false);
+          // future me revalidate kar sakte ho (SWR mutate)
+        }}
+        assignment={assignment}
+      />
     </div>
   );
 };

@@ -51,7 +51,7 @@ export default function StudentDashboard() {
     const fetchStudentData = async () => {
       try {
         const detailsRes = await fetch(
-          `/api/student/details?studentId=${studentId}&campusId=${campusId}`
+          `/api/student/details?studentId=${studentId}&campusId=${campusId}`,
         );
         const detailsData = await detailsRes.json();
         if (!detailsRes.ok) throw new Error("Failed to fetch user details");
@@ -70,7 +70,7 @@ export default function StudentDashboard() {
     const fetchTodayAttendance = async () => {
       try {
         const res = await fetch(
-          `/api/attendance/today?studentId=${studentId}&campusId=${campusId}`
+          `/api/attendance/today?studentId=${studentId}&campusId=${campusId}`,
         );
         const data = await res.json();
         setTodayAttendance(data || []);
@@ -85,7 +85,7 @@ export default function StudentDashboard() {
     const fetchStats = async () => {
       try {
         const res = await fetch(
-          `/api/attendance/statistics?studentId=${studentId}&campusId=${campusId}`
+          `/api/attendance/statistics?studentId=${studentId}&campusId=${campusId}`,
         );
         const data = await res.json();
         setStats(data);
@@ -96,7 +96,7 @@ export default function StudentDashboard() {
     const fetchPremiumStatus = async () => {
       try {
         const res = await fetch(
-          `/api/student/status?studentId=${studentId}&campusId=${campusId}`
+          `/api/student/status?studentId=${studentId}&campusId=${campusId}`,
         );
         const data = await res.json();
         setPremiumStatus(data);
@@ -130,7 +130,7 @@ export default function StudentDashboard() {
 
   return (
     <>
-    <NotificationHandler userId={localStorage.getItem("studentId") || ""} />
+      <NotificationHandler userId={localStorage.getItem("studentId") || ""} />
       {isFirstLogin && studentDetails && (
         <FirstLoginModal
           studentId={studentDetails.id}
@@ -238,34 +238,40 @@ export default function StudentDashboard() {
             {/* Right Section - Charts and Stats */}
             <div className="flex-1 sm:flex-0 2xl:ml-10 flex flex-col space-y-6 relative">
               <div className="flex flex-row-reverse gap-2">
-                <div
-                  className="relative p-2 rounded-full 2xl:h-[40px] bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-200 backdrop-blur-md flex items-center justify-center cursor-pointer"
-                  title="View Assignments"
-                  onClick={() => { router.push("/dashboard/student/assignments")}}
-                >
-                  <FontAwesomeIcon
-                    icon={faBookOpen}
-                    className="h-6 w-6 text-cyan-300"
-                  />
+                <div className="flex flex-col gap-5">
+                  <NotificationBell />
+                  <div
+                    className="relative p-2 rounded-full gap-2 2xl:h-[40px] bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-200 backdrop-blur-md flex items-center justify-center cursor-pointer"
+                    onClick={() => {
+                      router.push("/dashboard/student/assignments");
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faBookOpen}
+                      className="h-6 w-6 text-cyan-300"
+                    />
+                    <span className="w-[7.5rem] text-sm">View Assignments</span>
+                  </div>
+                  <div
+                    className="relative p-2 gap-2 rounded-full 2xl:h-[40px] bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-200 backdrop-blur-md flex items-center justify-center cursor-pointer"
+                    onClick={() => {
+                      router.push("/dashboard/student/announcements");
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faBullhorn}
+                      className="h-6 w-6 text-cyan-300"
+                    />
+                    <span className="w-[8rem] text-sm">View Annoucements</span>
+                  </div>
                 </div>
-                <div
-                  className="relative p-2 rounded-full 2xl:h-[40px] bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-200 backdrop-blur-md flex items-center justify-center cursor-pointer"
-                  title="View Announcements"
-                  onClick={() => { router.push("/dashboard/student/announcements")}}
-                >
-                  <FontAwesomeIcon
-                    icon={faBullhorn}
-                    className="h-6 w-6 text-cyan-300"
-                  />
-                </div>
-                <NotificationBell />
                 {/* Bar Graph */}
                 <div className="w-full">
                   <BarGraph />
                 </div>
               </div>
               {/* Calendar and Number Cards */}
-              <div className="flex flex-col xl:flex-row gap-4 xl:gap-6">
+              <div className="flex flex-col xl:flex-row gap-4 xl:gap-6 mr-[8rem]">
                 <div className="flex-1">
                   <AppCalendar />
                 </div>
@@ -287,7 +293,7 @@ export default function StudentDashboard() {
                         isNaN(Number.parseInt(stats?.presentPercentage))
                           ? "..."
                           : Number.parseInt(
-                              stats?.presentPercentage
+                              stats?.presentPercentage,
                             ).toString() + "%"
                       }
                     />

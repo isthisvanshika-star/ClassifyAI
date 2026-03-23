@@ -20,7 +20,7 @@ export default function StudentAnnouncementsPage() {
     studentId && campusId
       ? `/api/student/announcements?studentId=${studentId}&campusId=${campusId}`
       : null,
-    fetcher
+    fetcher,
   );
 
   const announcements = data?.announcements || [];
@@ -109,9 +109,9 @@ export default function StudentAnnouncementsPage() {
       <div className="absolute top-4 left-4 z-10">
         <button
           onClick={() => router.push("/dashboard/student")}
-          className="flex items-center justify-center gap-2 rounded-full  text-white hover:text-cyan-300 transition-colors"
+          className="flex items-center justify-center p-3 rounded-full bg-white/5 border border-white/10 backdrop-blur-lg hover:bg-cyan-500/20 hover:border-cyan-400 text-white transition-all duration-300"
         >
-          <ChevronLeft size={40} />
+          <ChevronLeft size={24} />
         </button>
       </div>
     </main>
