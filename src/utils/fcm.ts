@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
-import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBNdRaNU4j1i_JPjiS2Zl1HFheMDiDsSxo",
@@ -14,7 +13,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const messaging = typeof window !== "undefined" ? getMessaging(app) : null;
-export const storage = getStorage(app);
 export const requestForToken = async () => {
   if (!messaging) return;
   try {

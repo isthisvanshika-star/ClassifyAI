@@ -1,12 +1,8 @@
 "use client";
 
 import SubmitAssignmentModal from "@/components/student/SubmitAssignmentModal";
-import {
-  questionCleaner,
-  showErrorMessage,
-  showSuccessMessage,
-} from "@/lib/helper";
-import { AnimatePresence, motion } from "framer-motion";
+import { questionCleaner } from "@/lib/helper";
+import { motion } from "framer-motion";
 import {
   Award,
   BookOpen,
@@ -14,10 +10,6 @@ import {
   ChevronLeft,
   ClipboardCheck,
   Loader2,
-  Send,
-  Type,
-  UploadCloud,
-  X,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
@@ -29,7 +21,7 @@ const QuestionContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const assignmentId = searchParams.get("assignmentId");
-
+  const [mounted, setMounted] = useState<boolean>(false);
   const [studentId, setStudentId] = useState<string | null>(
     typeof window !== "undefined" ? localStorage.getItem("studentId") : null,
   );
@@ -37,6 +29,7 @@ const QuestionContent = () => {
   const [showSubmitForm, setShowSubmitForm] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     setStudentId(localStorage.getItem("studentId"));
   }, []);
 
@@ -50,6 +43,7 @@ const QuestionContent = () => {
   const assignment = data?.assignment;
   const hasSubmitted = data?.hasSubmitted;
 
+  if (!mounted) return;
 
   return (
     <div className="relative min-h-screen p-6 md:p-10 text-white overflow-hidden bg-transparent">
@@ -245,6 +239,7 @@ const QuestionContent = () => {
           setShowSubmitForm(false);
           // future me revalidate kar sakte ho (SWR mutate)
         }}
+        studentId={studentId}
         assignment={assignment}
       />
     </div>

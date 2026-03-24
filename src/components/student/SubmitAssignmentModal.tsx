@@ -2,35 +2,31 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Loader2,
-  Send,
-  Type,
-  UploadCloud,
-  X,
-} from "lucide-react";
-import {
-  showErrorMessage,
-  showSuccessMessage,
-} from "@/lib/helper";
+import { AlertCircle, Loader2, Send, Type, UploadCloud, X } from "lucide-react";
+import { showErrorMessage, showSuccessMessage } from "@/lib/helper";
 
 export default function SubmitAssignmentModal({
   isOpen,
   onClose,
   onSuccess,
-  assignment
+  studentId,
+  assignment,
 }: {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
-  assignment:any
+  studentId: string | null;
+  assignment: any;
 }) {
   const [submitMode, setSubmitMode] = useState<"file" | "text">("file");
   const [textAnswer, setTextAnswer] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Reset when modal opens
+  const isLate = assignment?.dueDate
+    ? new Date() > new Date(assignment.dueDate)
+    : false;
+
   useEffect(() => {
     if (isOpen) {
       setSubmitMode("file");
@@ -40,7 +36,11 @@ export default function SubmitAssignmentModal({
     }
   }, [isOpen]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (studentId === null) {
+      showErrorMessage("Can't find student details!");
+      return;
+    }
     if (submitMode === "text" && !textAnswer.trim()) {
       showErrorMessage("Please write an answer before submitting.");
       return;
@@ -52,14 +52,62 @@ export default function SubmitAssignmentModal({
     }
 
     setIsSubmitting(true);
+    try {
+      let fireUrl = null;
+      if (submitMode === "file" && selectedFile) {
+        const cloudName = "dd2bczbdo";
+        const uploadPreset = "ClassifyAI-pdf";
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+        formData.append("upload_preset", uploadPreset);
+        formData.append(
+          "folder",
+          `classify_ai/assignment/${assignment.id}_${studentId}`,
+        );
+        const uploadRes = await fetch(
+          `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
+          {
+            method: "POST",
+            body: formData,
+          },
+        );
+        const uploadData = await uploadRes.json();
+        if (!uploadRes.ok) {
+          throw new Error(
+            uploadData.error?.message || "Cloudinary upload failed!",
+          );
+        }
+        fireUrl = uploadData.secure_url;
+      }
+      const response = await fetch("/api/student/assignments/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          assignmentId: assignment.id,
+          studentId: studentId,
+          content: submitMode === "text" ? textAnswer : null,
+          fireUrl: submitMode === "file" ? fireUrl : null,
+        }),
+      });
 
-    // Mock submit (UI only)
-    setTimeout(() => {
-      setIsSubmitting(false);
-      showSuccessMessage("Submission Successful!");
-      onSuccess();
+      const result = await response.json();
+      console.log({ result });
+      if (response.ok) {
+        showSuccessMessage("Assignment Submitted !!");
+        onSuccess();
+        window.location.reload();
+      } else {
+        showErrorMessage(
+          result?.error || "Failed to Submit Assignment, try again later!!",
+        );
+        onClose();
+      }
+    } catch (error) {
+      showErrorMessage("Can't Upload this time, try again later");
       onClose();
-    }, 1200);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -86,7 +134,9 @@ export default function SubmitAssignmentModal({
         >
           {/* Header */}
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-2xl font-bold">Submit Your {assignment.title}</h3>
+            <h3 className="text-2xl font-bold">
+              Submit Your {assignment.title}
+            </h3>
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-red-400 bg-white/5 hover:bg-white/10 p-2 rounded-full transition-all"
@@ -94,7 +144,18 @@ export default function SubmitAssignmentModal({
               <X size={20} />
             </button>
           </div>
-
+          {isLate && (
+            <div className="mb-6 bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-xl flex items-start gap-3">
+              <AlertCircle size={20} className="mt-0.5 shrink-0" />
+              <div>
+                <p className="font-semibold">The due date has passed!</p>
+                <p className="text-sm opacity-80">
+                  You can still submit, but your work will be marked as "Late"
+                  to your teacher.
+                </p>
+              </div>
+            </div>
+          )}
           {/* Toggle */}
           <div className="flex gap-2 mb-6 bg-slate-800 p-1 rounded-xl w-fit">
             <button
@@ -147,7 +208,7 @@ export default function SubmitAssignmentModal({
                   setSelectedFile(
                     e.target.files && e.target.files.length > 0
                       ? e.target.files[0]
-                      : null
+                      : null,
                   )
                 }
               />

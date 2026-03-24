@@ -117,7 +117,7 @@ export default function NotificationBell() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="absolute right-0 mt-3 2xl:-right-40 w-80 sm:w-96 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-xl shadow-2xl overflow-hidden z-50"
+            className="absolute right-0 mt-3 2xl:-right-[2rem] w-80 sm:w-96 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-xl shadow-2xl overflow-hidden z-50"
           >
             <div className="flex justify-between items-center p-4 font-semibold text-cyan-300 border-b border-white/10">
               <span>Notifications</span>
