@@ -74,7 +74,6 @@ export default function StudentDashboard() {
         );
         const data = await res.json();
         setTodayAttendance(data || []);
-        console.log({ data });
       } catch (error) {
         console.log("Error fetching today's attendance:", error);
       } finally {

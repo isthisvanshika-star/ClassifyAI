@@ -7,12 +7,12 @@ export async function GET(req: NextRequest) {
     const assignmentId = searchParams.get("assignmentId");
 
     //* (A. Vanshika) For testing purposes.... storing studentId for a temprorary time in local storage and fetching it here to send it to backend for fetching assignment details..... In future.....we will implement proper authentication management for students.
-    const studentId = searchParams.get("studentId"); 
+    const studentId = searchParams.get("studentId");
 
     if (!assignmentId) {
       return NextResponse.json(
         { error: "Assignment ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -21,32 +21,58 @@ export async function GET(req: NextRequest) {
       where: {
         id: assignmentId,
         // Security: Students ko sirf wo assignments dikhne chahiye jo Publish ho chuke hain
-        status: { in: ["PUBLISHED", "CLOSED"] } 
+        status: { in: ["PUBLISHED", "CLOSED"] },
       },
       include: {
         subject: {
           select: {
             name: true,
-            code: true
-          }
-        }
-      }
+            code: true,
+          },
+        },
+      },
     });
 
     if (!assignment) {
       return NextResponse.json(
         { error: "Assignment not found or not published yet." },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
-    return NextResponse.json({ success: true, assignment }, { status: 200 });
+    let hasSubmitted = false;
+    let submissionData = null;
 
+    if (studentId) {
+      const studentProfile = await prisma.student.findFirst({
+        where: {
+          OR: [{ userId: studentId }, { id: studentId }],
+        },
+      });
+
+      if (studentProfile) {
+        const submission = await prisma.submission.findFirst({
+          where: {
+            assignmentId: assignmentId,
+            studentId: studentProfile.id,
+          },
+        });
+        if (submission) {
+          hasSubmitted = true;
+          submissionData = submission;
+        }
+      }
+    }
+
+    return NextResponse.json(
+      { success: true, assignment, hasSubmitted, submissionData },
+      { status: 200 },
+    );
   } catch (error) {
     console.error("Error fetching assignment details:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
