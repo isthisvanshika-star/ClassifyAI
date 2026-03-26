@@ -9,6 +9,7 @@ import {
   NotepadText,
   Upload,
 } from "lucide-react";
+import React from "react";
 
 export const logActivity = async (
   userId: string,
@@ -317,6 +318,27 @@ export async function getCityfromIp(ip: string): Promise<string> {
     return "Unknown"; // Return a safe default on any error
   }
 }
+
+export const openInBrowser = async (e: React.MouseEvent, url: string) => {
+  e.preventDefault();
+  e.stopPropagation(); // Event Bubbling rokne ke liye
+
+  if (typeof window !== "undefined") {
+    const isTauriApp = "__TAURI_INTERNALS__" in window || "__TAURI__" in window;
+
+    if (isTauriApp) {
+      try {
+        const { open } = await import("@tauri-apps/plugin-shell");
+        await open(url);
+      } catch (err) {
+        console.error("Tauri shell plugin error:", err);
+        window.open(url, "_blank");
+      }
+    } else {
+      window.open(url, "_blank");
+    }
+  }
+};
 
 export const getCurrentLocation = (): Promise<{
   latitude: number;
