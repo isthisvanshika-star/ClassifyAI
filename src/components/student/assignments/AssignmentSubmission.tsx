@@ -17,6 +17,7 @@ const AssignmentSubmission = ({
   assignment,
 }: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTextModalOpen, setIsTextModalOpen] = useState(false);
 
   if (!hasSubmitted || !submissionData) return null;
 
@@ -51,12 +52,22 @@ const AssignmentSubmission = ({
         </div>
 
         {submissionData.text && (
-          <div>
+          <div className="h-[47rem] overflow-hidden">
             <h3 className="text-cyan-400 mb-2 flex gap-2">
               <FileText size={18} /> Written Answer
             </h3>
-            <div className="bg-slate-800 p-4 rounded-xl">
-              {submissionData.text}
+
+            <div className="bg-slate-800 overflow-hidden h-[45rem] p-4 rounded-xl relative">
+              <p className="line-clamp-[29]">{submissionData.text}</p>
+              <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-slate-800 to-transparent pointer-events-none" />
+              <button
+                onClick={() => setIsTextModalOpen(true)}
+                className="absolute bottom-4 right-4 text-sm px-4 py-2 rounded-full 
+        bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 
+        hover:bg-cyan-400/20 transition-all"
+              >
+                Show More
+              </button>
             </div>
           </div>
         )}
@@ -130,6 +141,43 @@ const AssignmentSubmission = ({
                   />
                 </div>
               </motion.div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {isTextModalOpen && (
+          <div className="fixed inset-0 z-20 flex items-center justify-center p-4 sm:p-6">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsTextModalOpen(false)}
+              className="absolute inset-0 bg-black/80 backdrop-blur-md"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
+              className="relative w-full max-w-4xl h-[85vh] bg-slate-900 border border-cyan-500/40 rounded-3xl shadow-[0_0_60px_rgba(6,182,212,0.2)] flex flex-col overflow-hidden z-30"
+            >
+              <div className="flex justify-between items-center p-4 border-b border-white/10 bg-slate-900/80 backdrop-blur-xl">
+                <div className="flex items-center gap-2 text-cyan-400">
+                  <FileText size={20} />
+                  <h3 className="font-semibold text-lg">Full Answer</h3>
+                </div>
+
+                <button
+                  onClick={() => setIsTextModalOpen(false)}
+                  className="text-gray-400 hover:text-red-400 bg-white/5 hover:bg-white/10 p-2 rounded-full transition-all"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              <div className="flex-1 overflow-y-auto p-6 text-gray-200 leading-relaxed">
+                {submissionData.text}
+              </div>
             </motion.div>
           </div>
         )}
