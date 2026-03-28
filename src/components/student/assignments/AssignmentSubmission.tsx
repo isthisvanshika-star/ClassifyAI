@@ -19,6 +19,7 @@ const AssignmentSubmission = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
 
+
   if (!hasSubmitted || !submissionData) return null;
 
   return (

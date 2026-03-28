@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import { prisma } from "./prisma";
+import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import {
   BookOpen,
   Home,
@@ -339,6 +340,67 @@ export const openInBrowser = async (e: React.MouseEvent, url: string) => {
     }
   }
 };
+
+//? (A. Vanshika) -- This function places a digital stamp on the PDF....
+export async function stampDigitalApproval(
+  pdfUrl: string,
+  teacherName: string,
+  submissionId: string,
+) {
+  try {
+    const response = await fetch(pdfUrl, { cache: "no-store" });
+    const pdfBuffer = await response.arrayBuffer();
+    const pdfDoc = await PDFDocument.load(pdfBuffer);
+    // Standard font for stamping....
+    const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+    const pages = pdfDoc.getPages();
+    const lastPage = pages[pages.length - 1];
+    const boxX = lastPage.getWidth() - 250;
+    const boxY = 30;
+    lastPage.drawRectangle({
+      x: boxX,
+      y: boxY,
+      width: 220,
+      height: 70,
+      borderColor: rgb(0.2, 0.8, 0.2),
+      borderWidth: 2,
+      color: rgb(0.95, 1, 0.95),
+    });
+    lastPage.drawText("VERIFIED & GRADED", {
+      x: boxX + 10,
+      y: boxY + 50,
+      size: 12,
+      font: helveticaBold,
+      color: rgb(0.1, 0.6, 0.1),
+    });
+    lastPage.drawText(`By: ${teacherName}`, {
+      x: boxX + 10,
+      y: boxY + 35,
+      size: 10,
+      font: helveticaFont,
+    });
+    lastPage.drawText(`Draw: ${new Date().toLocaleDateString()}`, {
+      x: boxX + 10,
+      y: boxY + 20,
+      size: 10,
+      font: helveticaFont,
+    });
+    lastPage.drawText(`Ref: ${submissionId.slice(-6)}`, {
+      x: boxX + 10,
+      y: boxY + 5,
+      size: 8,
+      font: helveticaFont,
+      color: rgb(0.5, 0.5, 0.5),
+    });
+
+    const stampedPdfBytes = await pdfDoc.save();
+    return Buffer.from(stampedPdfBytes);
+  } catch (error) {
+    console.error("Stamping Error:", error);
+    throw new Error("Failed to apply digital stamp on PDF");
+  }
+}
 
 export const getCurrentLocation = (): Promise<{
   latitude: number;

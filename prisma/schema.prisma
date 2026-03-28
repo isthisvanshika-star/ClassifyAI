@@ -6,6 +6,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 /// ---------------------
@@ -326,6 +327,8 @@ model Submission {
   feedback     String?
   gradedBy     String?
   gradedAt     DateTime?
+  aiSummary     String[]
+  aiProbability  Int?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 

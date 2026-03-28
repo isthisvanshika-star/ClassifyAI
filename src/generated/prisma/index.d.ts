@@ -5607,6 +5607,7 @@ export namespace Prisma {
     designation: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    signatureUrl: string | null
   }
 
   export type TeacherMaxAggregateOutputType = {
@@ -5616,6 +5617,7 @@ export namespace Prisma {
     designation: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    signatureUrl: string | null
   }
 
   export type TeacherCountAggregateOutputType = {
@@ -5625,6 +5627,7 @@ export namespace Prisma {
     designation: number
     createdAt: number
     updatedAt: number
+    signatureUrl: number
     _all: number
   }
 
@@ -5636,6 +5639,7 @@ export namespace Prisma {
     designation?: true
     createdAt?: true
     updatedAt?: true
+    signatureUrl?: true
   }
 
   export type TeacherMaxAggregateInputType = {
@@ -5645,6 +5649,7 @@ export namespace Prisma {
     designation?: true
     createdAt?: true
     updatedAt?: true
+    signatureUrl?: true
   }
 
   export type TeacherCountAggregateInputType = {
@@ -5654,6 +5659,7 @@ export namespace Prisma {
     designation?: true
     createdAt?: true
     updatedAt?: true
+    signatureUrl?: true
     _all?: true
   }
 
@@ -5736,6 +5742,7 @@ export namespace Prisma {
     designation: string | null
     createdAt: Date
     updatedAt: Date
+    signatureUrl: string | null
     _count: TeacherCountAggregateOutputType | null
     _min: TeacherMinAggregateOutputType | null
     _max: TeacherMaxAggregateOutputType | null
@@ -5762,6 +5769,7 @@ export namespace Prisma {
     designation?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    signatureUrl?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     teacherSubjects?: boolean | Teacher$teacherSubjectsArgs<ExtArgs>
     classSessions?: boolean | Teacher$classSessionsArgs<ExtArgs>
@@ -5779,6 +5787,7 @@ export namespace Prisma {
     designation?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    signatureUrl?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["teacher"]>
 
@@ -5789,6 +5798,7 @@ export namespace Prisma {
     designation?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    signatureUrl?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["teacher"]>
 
@@ -5799,9 +5809,10 @@ export namespace Prisma {
     designation?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    signatureUrl?: boolean
   }
 
-  export type TeacherOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "department" | "designation" | "createdAt" | "updatedAt", ExtArgs["result"]["teacher"]>
+  export type TeacherOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "department" | "designation" | "createdAt" | "updatedAt" | "signatureUrl", ExtArgs["result"]["teacher"]>
   export type TeacherInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     teacherSubjects?: boolean | Teacher$teacherSubjectsArgs<ExtArgs>
@@ -5837,6 +5848,7 @@ export namespace Prisma {
       designation: string | null
       createdAt: Date
       updatedAt: Date
+      signatureUrl: string | null
     }, ExtArgs["result"]["teacher"]>
     composites: {}
   }
@@ -6273,6 +6285,7 @@ export namespace Prisma {
     readonly designation: FieldRef<"Teacher", 'String'>
     readonly createdAt: FieldRef<"Teacher", 'DateTime'>
     readonly updatedAt: FieldRef<"Teacher", 'DateTime'>
+    readonly signatureUrl: FieldRef<"Teacher", 'String'>
   }
     
 
@@ -22562,10 +22575,12 @@ export namespace Prisma {
 
   export type SubmissionAvgAggregateOutputType = {
     grade: number | null
+    aiProbability: number | null
   }
 
   export type SubmissionSumAggregateOutputType = {
     grade: number | null
+    aiProbability: number | null
   }
 
   export type SubmissionMinAggregateOutputType = {
@@ -22579,6 +22594,7 @@ export namespace Prisma {
     feedback: string | null
     gradedBy: string | null
     gradedAt: Date | null
+    aiProbability: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -22594,6 +22610,7 @@ export namespace Prisma {
     feedback: string | null
     gradedBy: string | null
     gradedAt: Date | null
+    aiProbability: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -22609,6 +22626,8 @@ export namespace Prisma {
     feedback: number
     gradedBy: number
     gradedAt: number
+    aiSummary: number
+    aiProbability: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -22617,10 +22636,12 @@ export namespace Prisma {
 
   export type SubmissionAvgAggregateInputType = {
     grade?: true
+    aiProbability?: true
   }
 
   export type SubmissionSumAggregateInputType = {
     grade?: true
+    aiProbability?: true
   }
 
   export type SubmissionMinAggregateInputType = {
@@ -22634,6 +22655,7 @@ export namespace Prisma {
     feedback?: true
     gradedBy?: true
     gradedAt?: true
+    aiProbability?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -22649,6 +22671,7 @@ export namespace Prisma {
     feedback?: true
     gradedBy?: true
     gradedAt?: true
+    aiProbability?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -22664,6 +22687,8 @@ export namespace Prisma {
     feedback?: true
     gradedBy?: true
     gradedAt?: true
+    aiSummary?: true
+    aiProbability?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -22766,6 +22791,8 @@ export namespace Prisma {
     feedback: string | null
     gradedBy: string | null
     gradedAt: Date | null
+    aiSummary: string[]
+    aiProbability: number | null
     createdAt: Date
     updatedAt: Date
     _count: SubmissionCountAggregateOutputType | null
@@ -22800,6 +22827,8 @@ export namespace Prisma {
     feedback?: boolean
     gradedBy?: boolean
     gradedAt?: boolean
+    aiSummary?: boolean
+    aiProbability?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     assignment?: boolean | AssignmentDefaultArgs<ExtArgs>
@@ -22817,6 +22846,8 @@ export namespace Prisma {
     feedback?: boolean
     gradedBy?: boolean
     gradedAt?: boolean
+    aiSummary?: boolean
+    aiProbability?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     assignment?: boolean | AssignmentDefaultArgs<ExtArgs>
@@ -22834,6 +22865,8 @@ export namespace Prisma {
     feedback?: boolean
     gradedBy?: boolean
     gradedAt?: boolean
+    aiSummary?: boolean
+    aiProbability?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     assignment?: boolean | AssignmentDefaultArgs<ExtArgs>
@@ -22851,11 +22884,13 @@ export namespace Prisma {
     feedback?: boolean
     gradedBy?: boolean
     gradedAt?: boolean
+    aiSummary?: boolean
+    aiProbability?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type SubmissionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "assignmentId" | "studentId" | "submittedAt" | "fileUrl" | "text" | "grade" | "feedback" | "gradedBy" | "gradedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["submission"]>
+  export type SubmissionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "assignmentId" | "studentId" | "submittedAt" | "fileUrl" | "text" | "grade" | "feedback" | "gradedBy" | "gradedAt" | "aiSummary" | "aiProbability" | "createdAt" | "updatedAt", ExtArgs["result"]["submission"]>
   export type SubmissionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     assignment?: boolean | AssignmentDefaultArgs<ExtArgs>
     student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -22886,6 +22921,8 @@ export namespace Prisma {
       feedback: string | null
       gradedBy: string | null
       gradedAt: Date | null
+      aiSummary: string[]
+      aiProbability: number | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["submission"]>
@@ -23323,6 +23360,8 @@ export namespace Prisma {
     readonly feedback: FieldRef<"Submission", 'String'>
     readonly gradedBy: FieldRef<"Submission", 'String'>
     readonly gradedAt: FieldRef<"Submission", 'DateTime'>
+    readonly aiSummary: FieldRef<"Submission", 'String[]'>
+    readonly aiProbability: FieldRef<"Submission", 'Int'>
     readonly createdAt: FieldRef<"Submission", 'DateTime'>
     readonly updatedAt: FieldRef<"Submission", 'DateTime'>
   }
@@ -36009,7 +36048,8 @@ export namespace Prisma {
     department: 'department',
     designation: 'designation',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    signatureUrl: 'signatureUrl'
   };
 
   export type TeacherScalarFieldEnum = (typeof TeacherScalarFieldEnum)[keyof typeof TeacherScalarFieldEnum]
@@ -36217,6 +36257,8 @@ export namespace Prisma {
     feedback: 'feedback',
     gradedBy: 'gradedBy',
     gradedAt: 'gradedAt',
+    aiSummary: 'aiSummary',
+    aiProbability: 'aiProbability',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -36731,6 +36773,7 @@ export namespace Prisma {
     designation?: StringNullableFilter<"Teacher"> | string | null
     createdAt?: DateTimeFilter<"Teacher"> | Date | string
     updatedAt?: DateTimeFilter<"Teacher"> | Date | string
+    signatureUrl?: StringNullableFilter<"Teacher"> | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     teacherSubjects?: TeacherSubjectListRelationFilter
     classSessions?: ClassSessionListRelationFilter
@@ -36747,6 +36790,7 @@ export namespace Prisma {
     designation?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    signatureUrl?: SortOrderInput | SortOrder
     user?: UserOrderByWithRelationInput
     teacherSubjects?: TeacherSubjectOrderByRelationAggregateInput
     classSessions?: ClassSessionOrderByRelationAggregateInput
@@ -36766,6 +36810,7 @@ export namespace Prisma {
     designation?: StringNullableFilter<"Teacher"> | string | null
     createdAt?: DateTimeFilter<"Teacher"> | Date | string
     updatedAt?: DateTimeFilter<"Teacher"> | Date | string
+    signatureUrl?: StringNullableFilter<"Teacher"> | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     teacherSubjects?: TeacherSubjectListRelationFilter
     classSessions?: ClassSessionListRelationFilter
@@ -36782,6 +36827,7 @@ export namespace Prisma {
     designation?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    signatureUrl?: SortOrderInput | SortOrder
     _count?: TeacherCountOrderByAggregateInput
     _max?: TeacherMaxOrderByAggregateInput
     _min?: TeacherMinOrderByAggregateInput
@@ -36797,6 +36843,7 @@ export namespace Prisma {
     designation?: StringNullableWithAggregatesFilter<"Teacher"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Teacher"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Teacher"> | Date | string
+    signatureUrl?: StringNullableWithAggregatesFilter<"Teacher"> | string | null
   }
 
   export type StudentWhereInput = {
@@ -37923,6 +37970,8 @@ export namespace Prisma {
     feedback?: StringNullableFilter<"Submission"> | string | null
     gradedBy?: StringNullableFilter<"Submission"> | string | null
     gradedAt?: DateTimeNullableFilter<"Submission"> | Date | string | null
+    aiSummary?: StringNullableListFilter<"Submission">
+    aiProbability?: IntNullableFilter<"Submission"> | number | null
     createdAt?: DateTimeFilter<"Submission"> | Date | string
     updatedAt?: DateTimeFilter<"Submission"> | Date | string
     assignment?: XOR<AssignmentScalarRelationFilter, AssignmentWhereInput>
@@ -37940,6 +37989,8 @@ export namespace Prisma {
     feedback?: SortOrderInput | SortOrder
     gradedBy?: SortOrderInput | SortOrder
     gradedAt?: SortOrderInput | SortOrder
+    aiSummary?: SortOrder
+    aiProbability?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     assignment?: AssignmentOrderByWithRelationInput
@@ -37960,6 +38011,8 @@ export namespace Prisma {
     feedback?: StringNullableFilter<"Submission"> | string | null
     gradedBy?: StringNullableFilter<"Submission"> | string | null
     gradedAt?: DateTimeNullableFilter<"Submission"> | Date | string | null
+    aiSummary?: StringNullableListFilter<"Submission">
+    aiProbability?: IntNullableFilter<"Submission"> | number | null
     createdAt?: DateTimeFilter<"Submission"> | Date | string
     updatedAt?: DateTimeFilter<"Submission"> | Date | string
     assignment?: XOR<AssignmentScalarRelationFilter, AssignmentWhereInput>
@@ -37977,6 +38030,8 @@ export namespace Prisma {
     feedback?: SortOrderInput | SortOrder
     gradedBy?: SortOrderInput | SortOrder
     gradedAt?: SortOrderInput | SortOrder
+    aiSummary?: SortOrder
+    aiProbability?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: SubmissionCountOrderByAggregateInput
@@ -38000,6 +38055,8 @@ export namespace Prisma {
     feedback?: StringNullableWithAggregatesFilter<"Submission"> | string | null
     gradedBy?: StringNullableWithAggregatesFilter<"Submission"> | string | null
     gradedAt?: DateTimeNullableWithAggregatesFilter<"Submission"> | Date | string | null
+    aiSummary?: StringNullableListFilter<"Submission">
+    aiProbability?: IntNullableWithAggregatesFilter<"Submission"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"Submission"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Submission"> | Date | string
   }
@@ -38926,6 +38983,7 @@ export namespace Prisma {
     designation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    signatureUrl?: string | null
     user: UserCreateNestedOneWithoutTeacherProfileInput
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutTeacherInput
     classSessions?: ClassSessionCreateNestedManyWithoutTeacherInput
@@ -38942,6 +39000,7 @@ export namespace Prisma {
     designation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    signatureUrl?: string | null
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutTeacherInput
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutTeacherInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutTeacherInput
@@ -38956,6 +39015,7 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneRequiredWithoutTeacherProfileNestedInput
     teacherSubjects?: TeacherSubjectUpdateManyWithoutTeacherNestedInput
     classSessions?: ClassSessionUpdateManyWithoutTeacherNestedInput
@@ -38972,6 +39032,7 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutTeacherNestedInput
     classSessions?: ClassSessionUncheckedUpdateManyWithoutTeacherNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutTeacherNestedInput
@@ -38987,6 +39048,7 @@ export namespace Prisma {
     designation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    signatureUrl?: string | null
   }
 
   export type TeacherUpdateManyMutationInput = {
@@ -38995,6 +39057,7 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TeacherUncheckedUpdateManyInput = {
@@ -39004,6 +39067,7 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StudentCreateInput = {
@@ -40165,6 +40229,8 @@ export namespace Prisma {
     feedback?: string | null
     gradedBy?: string | null
     gradedAt?: Date | string | null
+    aiSummary?: SubmissionCreateaiSummaryInput | string[]
+    aiProbability?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     assignment: AssignmentCreateNestedOneWithoutSubmissionsInput
@@ -40182,6 +40248,8 @@ export namespace Prisma {
     feedback?: string | null
     gradedBy?: string | null
     gradedAt?: Date | string | null
+    aiSummary?: SubmissionCreateaiSummaryInput | string[]
+    aiProbability?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -40195,6 +40263,8 @@ export namespace Prisma {
     feedback?: NullableStringFieldUpdateOperationsInput | string | null
     gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
     gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    aiSummary?: SubmissionUpdateaiSummaryInput | string[]
+    aiProbability?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignment?: AssignmentUpdateOneRequiredWithoutSubmissionsNestedInput
@@ -40212,6 +40282,8 @@ export namespace Prisma {
     feedback?: NullableStringFieldUpdateOperationsInput | string | null
     gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
     gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    aiSummary?: SubmissionUpdateaiSummaryInput | string[]
+    aiProbability?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -40227,6 +40299,8 @@ export namespace Prisma {
     feedback?: string | null
     gradedBy?: string | null
     gradedAt?: Date | string | null
+    aiSummary?: SubmissionCreateaiSummaryInput | string[]
+    aiProbability?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -40240,6 +40314,8 @@ export namespace Prisma {
     feedback?: NullableStringFieldUpdateOperationsInput | string | null
     gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
     gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    aiSummary?: SubmissionUpdateaiSummaryInput | string[]
+    aiProbability?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -40255,6 +40331,8 @@ export namespace Prisma {
     feedback?: NullableStringFieldUpdateOperationsInput | string | null
     gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
     gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    aiSummary?: SubmissionUpdateaiSummaryInput | string[]
+    aiProbability?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -41423,6 +41501,7 @@ export namespace Prisma {
     designation?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    signatureUrl?: SortOrder
   }
 
   export type TeacherMaxOrderByAggregateInput = {
@@ -41432,6 +41511,7 @@ export namespace Prisma {
     designation?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    signatureUrl?: SortOrder
   }
 
   export type TeacherMinOrderByAggregateInput = {
@@ -41441,6 +41521,7 @@ export namespace Prisma {
     designation?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    signatureUrl?: SortOrder
   }
 
   export type SemesterNullableScalarRelationFilter = {
@@ -42341,12 +42422,15 @@ export namespace Prisma {
     feedback?: SortOrder
     gradedBy?: SortOrder
     gradedAt?: SortOrder
+    aiSummary?: SortOrder
+    aiProbability?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type SubmissionAvgOrderByAggregateInput = {
     grade?: SortOrder
+    aiProbability?: SortOrder
   }
 
   export type SubmissionMaxOrderByAggregateInput = {
@@ -42360,6 +42444,7 @@ export namespace Prisma {
     feedback?: SortOrder
     gradedBy?: SortOrder
     gradedAt?: SortOrder
+    aiProbability?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -42375,12 +42460,14 @@ export namespace Prisma {
     feedback?: SortOrder
     gradedBy?: SortOrder
     gradedAt?: SortOrder
+    aiProbability?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type SubmissionSumOrderByAggregateInput = {
     grade?: SortOrder
+    aiProbability?: SortOrder
   }
 
   export type AnnouncementCountOrderByAggregateInput = {
@@ -45275,6 +45362,10 @@ export namespace Prisma {
     deleteMany?: SubmissionScalarWhereInput | SubmissionScalarWhereInput[]
   }
 
+  export type SubmissionCreateaiSummaryInput = {
+    set: string[]
+  }
+
   export type AssignmentCreateNestedOneWithoutSubmissionsInput = {
     create?: XOR<AssignmentCreateWithoutSubmissionsInput, AssignmentUncheckedCreateWithoutSubmissionsInput>
     connectOrCreate?: AssignmentCreateOrConnectWithoutSubmissionsInput
@@ -45285,6 +45376,11 @@ export namespace Prisma {
     create?: XOR<StudentCreateWithoutSubmissionsInput, StudentUncheckedCreateWithoutSubmissionsInput>
     connectOrCreate?: StudentCreateOrConnectWithoutSubmissionsInput
     connect?: StudentWhereUniqueInput
+  }
+
+  export type SubmissionUpdateaiSummaryInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type AssignmentUpdateOneRequiredWithoutSubmissionsNestedInput = {
@@ -46082,6 +46178,7 @@ export namespace Prisma {
     designation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    signatureUrl?: string | null
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutTeacherInput
     classSessions?: ClassSessionCreateNestedManyWithoutTeacherInput
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutTeacherInput
@@ -46096,6 +46193,7 @@ export namespace Prisma {
     designation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    signatureUrl?: string | null
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutTeacherInput
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutTeacherInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutTeacherInput
@@ -46445,6 +46543,7 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     teacherSubjects?: TeacherSubjectUpdateManyWithoutTeacherNestedInput
     classSessions?: ClassSessionUpdateManyWithoutTeacherNestedInput
     attendanceTokens?: AttendanceTokenUpdateManyWithoutTeacherNestedInput
@@ -46459,6 +46558,7 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutTeacherNestedInput
     classSessions?: ClassSessionUncheckedUpdateManyWithoutTeacherNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutTeacherNestedInput
@@ -47458,6 +47558,8 @@ export namespace Prisma {
     feedback?: string | null
     gradedBy?: string | null
     gradedAt?: Date | string | null
+    aiSummary?: SubmissionCreateaiSummaryInput | string[]
+    aiProbability?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     assignment: AssignmentCreateNestedOneWithoutSubmissionsInput
@@ -47473,6 +47575,8 @@ export namespace Prisma {
     feedback?: string | null
     gradedBy?: string | null
     gradedAt?: Date | string | null
+    aiSummary?: SubmissionCreateaiSummaryInput | string[]
+    aiProbability?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -47728,6 +47832,8 @@ export namespace Prisma {
     feedback?: StringNullableFilter<"Submission"> | string | null
     gradedBy?: StringNullableFilter<"Submission"> | string | null
     gradedAt?: DateTimeNullableFilter<"Submission"> | Date | string | null
+    aiSummary?: StringNullableListFilter<"Submission">
+    aiProbability?: IntNullableFilter<"Submission"> | number | null
     createdAt?: DateTimeFilter<"Submission"> | Date | string
     updatedAt?: DateTimeFilter<"Submission"> | Date | string
   }
@@ -48891,6 +48997,7 @@ export namespace Prisma {
     designation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    signatureUrl?: string | null
     user: UserCreateNestedOneWithoutTeacherProfileInput
     classSessions?: ClassSessionCreateNestedManyWithoutTeacherInput
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutTeacherInput
@@ -48906,6 +49013,7 @@ export namespace Prisma {
     designation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    signatureUrl?: string | null
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutTeacherInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutTeacherInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
@@ -49024,6 +49132,7 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneRequiredWithoutTeacherProfileNestedInput
     classSessions?: ClassSessionUpdateManyWithoutTeacherNestedInput
     attendanceTokens?: AttendanceTokenUpdateManyWithoutTeacherNestedInput
@@ -49039,6 +49148,7 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     classSessions?: ClassSessionUncheckedUpdateManyWithoutTeacherNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutTeacherNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
@@ -49717,6 +49827,7 @@ export namespace Prisma {
     designation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    signatureUrl?: string | null
     user: UserCreateNestedOneWithoutTeacherProfileInput
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutTeacherInput
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutTeacherInput
@@ -49732,6 +49843,7 @@ export namespace Prisma {
     designation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    signatureUrl?: string | null
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutTeacherInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutTeacherInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
@@ -49939,6 +50051,7 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneRequiredWithoutTeacherProfileNestedInput
     teacherSubjects?: TeacherSubjectUpdateManyWithoutTeacherNestedInput
     attendanceTokens?: AttendanceTokenUpdateManyWithoutTeacherNestedInput
@@ -49954,6 +50067,7 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutTeacherNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutTeacherNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
@@ -50090,6 +50204,7 @@ export namespace Prisma {
     designation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    signatureUrl?: string | null
     user: UserCreateNestedOneWithoutTeacherProfileInput
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutTeacherInput
     classSessions?: ClassSessionCreateNestedManyWithoutTeacherInput
@@ -50105,6 +50220,7 @@ export namespace Prisma {
     designation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    signatureUrl?: string | null
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutTeacherInput
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutTeacherInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutTeacherInput
@@ -50272,6 +50388,7 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneRequiredWithoutTeacherProfileNestedInput
     teacherSubjects?: TeacherSubjectUpdateManyWithoutTeacherNestedInput
     classSessions?: ClassSessionUpdateManyWithoutTeacherNestedInput
@@ -50287,6 +50404,7 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutTeacherNestedInput
     classSessions?: ClassSessionUncheckedUpdateManyWithoutTeacherNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutTeacherNestedInput
@@ -50779,6 +50897,7 @@ export namespace Prisma {
     designation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    signatureUrl?: string | null
     user: UserCreateNestedOneWithoutTeacherProfileInput
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutTeacherInput
     classSessions?: ClassSessionCreateNestedManyWithoutTeacherInput
@@ -50794,6 +50913,7 @@ export namespace Prisma {
     designation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    signatureUrl?: string | null
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutTeacherInput
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutTeacherInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
@@ -50903,6 +51023,7 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneRequiredWithoutTeacherProfileNestedInput
     teacherSubjects?: TeacherSubjectUpdateManyWithoutTeacherNestedInput
     classSessions?: ClassSessionUpdateManyWithoutTeacherNestedInput
@@ -50918,6 +51039,7 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutTeacherNestedInput
     classSessions?: ClassSessionUncheckedUpdateManyWithoutTeacherNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
@@ -51192,6 +51314,7 @@ export namespace Prisma {
     designation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    signatureUrl?: string | null
     user: UserCreateNestedOneWithoutTeacherProfileInput
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutTeacherInput
     classSessions?: ClassSessionCreateNestedManyWithoutTeacherInput
@@ -51207,6 +51330,7 @@ export namespace Prisma {
     designation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    signatureUrl?: string | null
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutTeacherInput
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutTeacherInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutTeacherInput
@@ -51264,6 +51388,8 @@ export namespace Prisma {
     feedback?: string | null
     gradedBy?: string | null
     gradedAt?: Date | string | null
+    aiSummary?: SubmissionCreateaiSummaryInput | string[]
+    aiProbability?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student: StudentCreateNestedOneWithoutSubmissionsInput
@@ -51279,6 +51405,8 @@ export namespace Prisma {
     feedback?: string | null
     gradedBy?: string | null
     gradedAt?: Date | string | null
+    aiSummary?: SubmissionCreateaiSummaryInput | string[]
+    aiProbability?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -51353,6 +51481,7 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneRequiredWithoutTeacherProfileNestedInput
     teacherSubjects?: TeacherSubjectUpdateManyWithoutTeacherNestedInput
     classSessions?: ClassSessionUpdateManyWithoutTeacherNestedInput
@@ -51368,6 +51497,7 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutTeacherNestedInput
     classSessions?: ClassSessionUncheckedUpdateManyWithoutTeacherNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutTeacherNestedInput
@@ -51557,6 +51687,7 @@ export namespace Prisma {
     designation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    signatureUrl?: string | null
     user: UserCreateNestedOneWithoutTeacherProfileInput
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutTeacherInput
     classSessions?: ClassSessionCreateNestedManyWithoutTeacherInput
@@ -51572,6 +51703,7 @@ export namespace Prisma {
     designation?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    signatureUrl?: string | null
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutTeacherInput
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutTeacherInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutTeacherInput
@@ -51637,6 +51769,7 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneRequiredWithoutTeacherProfileNestedInput
     teacherSubjects?: TeacherSubjectUpdateManyWithoutTeacherNestedInput
     classSessions?: ClassSessionUpdateManyWithoutTeacherNestedInput
@@ -51652,6 +51785,7 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    signatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutTeacherNestedInput
     classSessions?: ClassSessionUncheckedUpdateManyWithoutTeacherNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutTeacherNestedInput
@@ -53759,6 +53893,8 @@ export namespace Prisma {
     feedback?: string | null
     gradedBy?: string | null
     gradedAt?: Date | string | null
+    aiSummary?: SubmissionCreateaiSummaryInput | string[]
+    aiProbability?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -53829,6 +53965,8 @@ export namespace Prisma {
     feedback?: NullableStringFieldUpdateOperationsInput | string | null
     gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
     gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    aiSummary?: SubmissionUpdateaiSummaryInput | string[]
+    aiProbability?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignment?: AssignmentUpdateOneRequiredWithoutSubmissionsNestedInput
@@ -53844,6 +53982,8 @@ export namespace Prisma {
     feedback?: NullableStringFieldUpdateOperationsInput | string | null
     gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
     gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    aiSummary?: SubmissionUpdateaiSummaryInput | string[]
+    aiProbability?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -53858,6 +53998,8 @@ export namespace Prisma {
     feedback?: NullableStringFieldUpdateOperationsInput | string | null
     gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
     gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    aiSummary?: SubmissionUpdateaiSummaryInput | string[]
+    aiProbability?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -55162,6 +55304,8 @@ export namespace Prisma {
     feedback?: string | null
     gradedBy?: string | null
     gradedAt?: Date | string | null
+    aiSummary?: SubmissionCreateaiSummaryInput | string[]
+    aiProbability?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -55214,6 +55358,8 @@ export namespace Prisma {
     feedback?: NullableStringFieldUpdateOperationsInput | string | null
     gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
     gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    aiSummary?: SubmissionUpdateaiSummaryInput | string[]
+    aiProbability?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUpdateOneRequiredWithoutSubmissionsNestedInput
@@ -55229,6 +55375,8 @@ export namespace Prisma {
     feedback?: NullableStringFieldUpdateOperationsInput | string | null
     gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
     gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    aiSummary?: SubmissionUpdateaiSummaryInput | string[]
+    aiProbability?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -55243,6 +55391,8 @@ export namespace Prisma {
     feedback?: NullableStringFieldUpdateOperationsInput | string | null
     gradedBy?: NullableStringFieldUpdateOperationsInput | string | null
     gradedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    aiSummary?: SubmissionUpdateaiSummaryInput | string[]
+    aiProbability?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

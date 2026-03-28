@@ -1,21 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
 import {
   openInBrowser,
   showErrorMessage,
   showLoadingMessage,
   showSuccessMessage,
+  toastDissmisser,
 } from "@/lib/helper";
-import {
-  AlertCircle,
-  CheckCircle2,
-  ExternalLink,
-  FileText,
-} from "lucide-react";
+import GradeModalHeader from "./submissions/modal/GradeModalHeader";
+import SubmissionPreview from "./submissions/modal/SubmissionPreview";
+import AIAssistantSection from "./submissions/modal/AIAssistantSection";
+import GradeSection from "./submissions/modal/GradeSection";
+import FeedbackSection from "./submissions/modal/FeedbackSection";
+import ModalFooter from "./submissions/modal/ModalFooter";
 
 export default function GradeSubmissionModal({
   isOpen,
@@ -41,20 +40,93 @@ export default function GradeSubmissionModal({
   const [isLoading, setIsLoading] = useState(false);
   const [isNextLoading, setIsNextLoading] = useState(false);
   const [teacherId, setTeacherId] = useState<string | null>(null);
-
-  const currentIndex = allSubmissions.findIndex((s) => s.id === submission.id);
-  const hasNext = currentIndex < allSubmissions.length - 1;
+  const [gradeMode, setGradeMode] = useState<"manual" | "rubric">("manual");
+  const [feedbackMode, setFeedbackMode] = useState<"text" | "audio">("text");
+  const [rubric, setRubric] = useState({
+    concept: 0,
+    execution: 0,
+    formatting: 0,
+  });
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState<{
+    summary: string[];
+    aiProbability: number;
+  } | null>(null);
+  const [attachSignature, setAttachSignature] = useState(false);
+  const currentIndex =
+    allSubmissions?.findIndex((s) => s.id === submission?.id) ?? -1;
+  const hasNext =
+    currentIndex !== -1 && currentIndex < (allSubmissions?.length || 0) - 1;
 
   const isLate =
-    dueDate && new Date(submission.submittedAt) > new Date(dueDate);
+    dueDate && new Date(submission?.submittedAt) > new Date(dueDate);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && submission) {
       setTeacherId(localStorage.getItem("teacherId"));
       setGrade(submission?.grade?.toString() || "");
       setFeedback(submission?.feedback || "");
+      setGradeMode("manual");
+      setFeedbackMode("text");
+      setRubric({ concept: 0, execution: 0, formatting: 0 });
+      setAttachSignature(true);
+      if (
+        submission.aiSummary?.length > 0 &&
+        submission.aiProbability !== null
+      ) {
+        setAnalysisResult({
+          summary: submission.aiSummary,
+          aiProbability: submission.aiProbability,
+        });
+      } else {
+        setAnalysisResult(null);
+      }
     }
   }, [isOpen, submission]);
+
+  useEffect(() => {
+    if (gradeMode === "rubric") {
+      const total =
+        (rubric.concept || 0) +
+        (rubric.execution || 0) +
+        (rubric.formatting || 0);
+      setGrade(total.toString());
+    }
+  }, [rubric, gradeMode]);
+
+  const runAIAnalysis = async () => {
+    if (!teacherId || !submission.id) {
+      return;
+    }
+    setIsAnalyzing(true);
+    const toastId = showLoadingMessage("AI is analyzing the document....");
+    try {
+      const response = await fetch("/api/teacher/submissions/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          submissionId: submission.id,
+          teacherId: teacherId,
+        }),
+      });
+      const data = await response.json();
+      toastDissmisser(toastId);
+      if (response.ok) {
+        showSuccessMessage("Analysis Completed!");
+        setAnalysisResult({
+          summary: data.summary,
+          aiProbability: data.aiProbability,
+        });
+      } else {
+        showErrorMessage(data.error || "AI Analysis Failed");
+      }
+    } catch (error: any) {
+      toastDissmisser(toastId);
+      showErrorMessage(error.message || "Network Error");
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
 
   const saveGradeToDB = async () => {
     if (!teacherId) throw new Error("Session expired. Please Log in again.");
@@ -73,6 +145,7 @@ export default function GradeSubmissionModal({
         teacherId: teacherId,
         grade: numericGrade,
         feedback,
+        attachSignature,
       }),
     });
     const data = await response.json();
@@ -84,13 +157,15 @@ export default function GradeSubmissionModal({
 
   const handleSave = async () => {
     setIsLoading(true);
-    showLoadingMessage("Saving Grade...");
+    const toastId = showLoadingMessage("Saving Grade...");
     try {
       await saveGradeToDB();
+      toastDissmisser(toastId);
       showSuccessMessage("Grade saved successfully!");
       onSuccess();
       onClose();
     } catch (error: any) {
+      toastDissmisser(toastId);
       showErrorMessage(error.message);
     } finally {
       setIsLoading(false);
@@ -99,17 +174,31 @@ export default function GradeSubmissionModal({
 
   const handleSaveAndNext = async () => {
     setIsNextLoading(true);
-    showLoadingMessage("Saving and movinf to next...");
+    const toastId = showLoadingMessage("Saving and moving to next...");
     try {
       await saveGradeToDB();
+      toastDissmisser(toastId);
       showSuccessMessage("Grade Saved!");
       onSuccess();
-      onNavigate(allSubmissions[currentIndex + 1]);
+      if (hasNext) {
+        onNavigate(allSubmissions[currentIndex + 1]);
+      } else {
+        onClose();
+      }
     } catch (error: any) {
+      toastDissmisser(toastId);
       showErrorMessage(error.message || "Internal Server Error");
     } finally {
       setIsNextLoading(false);
     }
+  };
+
+  const getPlagiarismColor = (probability: number) => {
+    if (probability < 20)
+      return "text-emerald-400 bg-emerald-500/10 border-emerald-500/20";
+    if (probability < 50)
+      return "text-yellow-400 bg-yellow-500/10 border-yellow-500/20";
+    return "text-red-400 bg-red-500/10 border-red-500/20";
   };
 
   if (!isOpen) return null;
@@ -117,122 +206,66 @@ export default function GradeSubmissionModal({
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 bg-black/80 backdrop-blur-sm flex justify-center items-center z-50 p-4"
+        className="fixed inset-0 bg-black/80 backdrop-blur-md flex justify-center items-center z-50 p-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
       >
         <motion.div
-          className="bg-slate-900 border border-indigo-500/30 p-8 rounded-2xl shadow-[0_0_40px_rgba(99,102,241,0.15)] w-full max-w-lg text-white relative overflow-hidden flex flex-col max-h-[90vh]"
+          className="bg-slate-900/80 backdrop-blur-xl border border-cyan-500/20 
+    p-8 rounded-3xl shadow-[0_0_50px_rgba(6,182,212,0.15)] 
+    w-full max-w-[150rem] lg:max-w-[150rem] text-white relative overflow-hidden flex flex-col max-h-[90vh]"
           initial={{ scale: 0.9, y: 20 }}
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 20 }}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-purple-500" />
-          <div className="flex justify-between items-start mb-6">
-            <div>
-              <h2 className="text-2xl font-bold text-indigo-400 mb-1">
-                Grade Submission
-              </h2>
-              <p className="text-gray-400 text-sm font-medium">
-                Student:{" "}
-                <span className="text-white">
-                  {submission?.student?.user?.name}
-                </span>
-              </p>
-            </div>
-            {isLate ? (
-              <span className="flex items-center gap-1 bg-red-500/10 text-red-400 text-xs px-3 py-1.5 rounded-full border border-red-500/20">
-                <AlertCircle size={14} /> Late Submission
-              </span>
-            ) : (
-              <span className="flex items-center gap-1 bg-emerald-500/10 text-emerald-400 text-xs px-3 py-1.5 rounded-full border border-emerald-500/20">
-                <CheckCircle2 size={14} /> On Time
-              </span>
-            )}
-          </div>
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500" />
 
-          <div className="space-y-5 overflow-y-auto pr-2 custom-scrollbar">
-            {submission.fileUrl && (
-              <button
-                onClick={(e) => openInBrowser(e, submission.fileUrl)}
-                className="w-full flex items-center justify-center gap-2 bg-white/5 border border-white/10 hover:border-indigo-400/50 hover:bg-white/10 p-4 rounded-xl text-indigo-300 font-semibold transition-all duration-300 group"
-              >
-                <FileText
-                  size={20}
-                  className="group-hover:scale-110 transition-transform"
-                />
-                View Submitted Document
-                <ExternalLink size={16} className="ml-1 opacity-70" />
-              </button>
-            )}
-            {submission.text && (
-              <div className="bg-slate-800/50 p-4 rounded-xl border border-white/5">
-                <p className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider">
-                  Written Answer:
-                </p>
-                <p className="text-sm text-gray-200 whitespace-pre-wrap">
-                  {submission.text}
-                </p>
-              </div>
-            )}
-
-            <div className="pt-2">
-              <label className="text-sm font-medium text-gray-300 ml-1">
-                Marks Awarded{" "}
-                {totalMarks ? (
-                  <span className="text-gray-500">(Out of {totalMarks})</span>
-                ) : (
-                  ""
-                )}
-              </label>
-              <input
-                type="number"
-                placeholder="e.g. 85"
-                value={grade}
-                onChange={(e) => setGrade(e.target.value)}
-                className="w-full bg-slate-800/80 border border-white/10 p-3 mt-1 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all placeholder-gray-600 font-medium"
+          <GradeModalHeader submission={submission} isLate={isLate} />
+          <div className="flex gap-6 overflow-hidden">
+            <div className="w-1/2 space-y-6 overflow-y-auto pr-2 custom-scrollbar max-h-[65vh]">
+              <SubmissionPreview
+                submission={submission}
+                openInBrowser={openInBrowser}
               />
             </div>
-            <div>
-              <label className="text-sm font-medium text-gray-300 ml-1">
-                Teacher's Feedback (Optional)
-              </label>
-              <textarea
-                placeholder="Write your feedback here..."
-                value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-                rows={3}
-                className="w-full bg-slate-800/80 border border-white/10 p-3 mt-1 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all placeholder-gray-600 text-sm resize-none"
+            <div className="w-1/2 space-y-6 overflow-y-auto pr-2 custom-scrollbar max-h-[65vh]">
+              <GradeSection
+                grade={grade}
+                setGrade={setGrade}
+                gradeMode={gradeMode}
+                setGradeMode={setGradeMode}
+                rubric={rubric}
+                setRubric={setRubric}
+                totalMarks={totalMarks}
+              />
+              <FeedbackSection
+                feedback={feedback}
+                setFeedback={setFeedback}
+                feedbackMode={feedbackMode}
+                setFeedbackMode={setFeedbackMode}
+                attachSignature={attachSignature}
+                setAttachSignature={setAttachSignature}
+                submission={submission}
+              />
+              <AIAssistantSection
+                analysisResult={analysisResult}
+                isAnalyzing={isAnalyzing}
+                runAIAnalysis={runAIAnalysis}
+                getPlagiarismColor={getPlagiarismColor}
               />
             </div>
           </div>
-          <div className="flex justify-end gap-3 pt-6 mt-6 border-t border-white/10">
-            <button
-              onClick={onClose}
-              className="py-2.5 px-4 bg-white/5 hover:bg-white/10 text-gray-300 font-medium rounded-xl transition-colors"
-            >
-              Close
-            </button>
-            <button
-              onClick={handleSave}
-              disabled={isLoading || isNextLoading}
-              className="py-2.5 px-5 bg-indigo-600/20 border border-indigo-500/50 hover:bg-indigo-600/40 text-indigo-300 font-semibold rounded-xl disabled:opacity-50 transition-all"
-            >
-              {isLoading ? "Saving..." : "Save"}
-            </button>
-            {hasNext && (
-              <button
-                onClick={handleSaveAndNext}
-                disabled={isLoading || isNextLoading}
-                className="py-2.5 px-6 bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/25 font-semibold rounded-xl disabled:opacity-50 transition-all flex items-center gap-2"
-              >
-                {isNextLoading ? "Saving..." : "Save & Next"}
-              </button>
-            )}
-          </div>
+          <ModalFooter
+            onClose={onClose}
+            handleSave={handleSave}
+            handleSaveAndNext={handleSaveAndNext}
+            isLoading={isLoading}
+            isNextLoading={isNextLoading}
+            hasNext={hasNext}
+          />
         </motion.div>
       </motion.div>
     </AnimatePresence>

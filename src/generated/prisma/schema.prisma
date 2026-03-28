@@ -50,13 +50,14 @@ model User {
 }
 
 model Teacher {
-  id          String   @id @default(cuid())
-  user        User     @relation("UserToTeacher", fields: [userId], references: [id], onDelete: Cascade)
-  userId      String   @unique
-  department  String?
-  designation String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String   @id @default(cuid())
+  user         User     @relation("UserToTeacher", fields: [userId], references: [id], onDelete: Cascade)
+  userId       String   @unique
+  department   String?
+  designation  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  signatureUrl String?
 
   // relations
   teacherSubjects  TeacherSubject[]
@@ -315,20 +316,22 @@ model Assignment {
 }
 
 model Submission {
-  id           String     @id @default(cuid())
-  assignmentId String
-  assignment   Assignment @relation(fields: [assignmentId], references: [id], map: "fk_submission_assignment")
-  studentId    String
-  student      Student    @relation(fields: [studentId], references: [id], map: "fk_submission_student")
-  submittedAt  DateTime   @default(now())
-  fileUrl      String?
-  text         String?
-  grade        Float?
-  feedback     String?
-  gradedBy     String?
-  gradedAt     DateTime?
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  id            String     @id @default(cuid())
+  assignmentId  String
+  assignment    Assignment @relation(fields: [assignmentId], references: [id], map: "fk_submission_assignment")
+  studentId     String
+  student       Student    @relation(fields: [studentId], references: [id], map: "fk_submission_student")
+  submittedAt   DateTime   @default(now())
+  fileUrl       String?
+  text          String?
+  grade         Float?
+  feedback      String?
+  gradedBy      String?
+  gradedAt      DateTime?
+  aiSummary     String[]
+  aiProbability Int?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 
   @@index([assignmentId], map: "idx_submission_assignment")
 }
