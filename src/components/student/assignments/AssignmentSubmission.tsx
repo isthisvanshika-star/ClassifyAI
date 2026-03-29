@@ -19,8 +19,9 @@ const AssignmentSubmission = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
 
-
   if (!hasSubmitted || !submissionData) return null;
+
+  console.log("Submission Data:", submissionData);
 
   return (
     <>
@@ -74,24 +75,57 @@ const AssignmentSubmission = ({
         )}
 
         {submissionData.fileUrl && (
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="group relative flex mx-auto items-center justify-center gap-3 mt-4 w-full md:w-auto px-6 py-4 rounded-2xl 
-  bg-white/5 backdrop-blur-xl border border-white/10 
-  hover:border-cyan-400/40 transition-all duration-300 
-  shadow-[0_0_20px_rgba(6,182,212,0.1)] hover:shadow-[0_0_25px_rgba(6,182,212,0.25)]"
-          >
-            {/* subtle glow */}
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition duration-300" />
-            <Eye
-              className="text-cyan-400 group-hover:scale-110 transition-transform duration-300 z-10"
-              size={20}
-            />
+          <div className="w-full max-w-xl mx-auto mt-6">
+            <div
+              className="relative rounded-2xl p-5 
+      bg-white/5 backdrop-blur-xl border border-white/10
+      shadow-[0_0_25px_rgba(6,182,212,0.08)] 
+      hover:shadow-[0_0_30px_rgba(6,182,212,0.18)]
+      transition-all duration-300"
+            >
+              {/* glow layer */}
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-blue-500/10 opacity-0 hover:opacity-100 transition duration-300" />
 
-            <span className="text-cyan-300 font-medium tracking-wide z-10">
-              View Uploaded Document
-            </span>
-          </button>
+              {/* Top Section */}
+              <div className="flex items-center justify-between z-10 relative">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-xl bg-cyan-500/10">
+                    <Eye className="text-cyan-400" size={20} />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-400">Submission File</p>
+                    <p className="text-cyan-300 font-semibold">
+                      Uploaded Document
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="px-4 py-2 rounded-xl text-sm font-medium
+          bg-gradient-to-r from-cyan-500 to-blue-500 
+          hover:from-cyan-400 hover:to-blue-400
+          text-white transition-all duration-300 shadow-md"
+                >
+                  View
+                </button>
+              </div>
+              <div className="my-4 h-px bg-white/10" />
+              <div className="z-10 relative">
+                <p className="text-sm text-gray-400 mb-1">{submissionData.feedback ? `${submissionData.gradedBy}'s` : "No"} Feedback</p>
+
+                {submissionData.feedback ? (
+                  <p className="text-gray-200 italic text-sm leading-relaxed">
+                    {submissionData.feedback}
+                  </p>
+                ) : (
+                  <p className="text-gray-500 text-sm italic">
+                    No feedback provided yet
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
         )}
       </motion.div>
       <AnimatePresence>
@@ -136,7 +170,11 @@ const AssignmentSubmission = ({
                 </div>
                 <div className="flex-1 w-full h-full bg-slate-800/50 p-2 sm:p-4">
                   <iframe
-                    src={submissionData.fileUrl}
+                    src={
+                      submissionData.fileUrl.endsWith(".pdf")
+                        ? submissionData.fileUrl
+                        : `https://docs.google.com/gview?url=${submissionData.fileUrl}&embedded=true`
+                    }
                     className="w-full h-full rounded-xl border border-white/10 bg-white"
                     title="Submitted Document"
                   />

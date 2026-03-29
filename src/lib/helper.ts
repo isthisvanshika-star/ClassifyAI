@@ -348,12 +348,13 @@ export async function stampDigitalApproval(
   submissionId: string,
 ) {
   try {
-    const response = await fetch(pdfUrl, { cache: "no-store" });
+    const response = await fetch(pdfUrl);
     const pdfBuffer = await response.arrayBuffer();
+
     const pdfDoc = await PDFDocument.load(pdfBuffer);
-    // Standard font for stamping....
     const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
     const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+
     const pages = pdfDoc.getPages();
     const lastPage = pages[pages.length - 1];
     const boxX = lastPage.getWidth() - 250;
@@ -380,7 +381,7 @@ export async function stampDigitalApproval(
       size: 10,
       font: helveticaFont,
     });
-    lastPage.drawText(`Draw: ${new Date().toLocaleDateString()}`, {
+    lastPage.drawText(`Date: ${new Date().toLocaleDateString()}`, {
       x: boxX + 10,
       y: boxY + 20,
       size: 10,
@@ -393,7 +394,26 @@ export async function stampDigitalApproval(
       font: helveticaFont,
       color: rgb(0.5, 0.5, 0.5),
     });
-
+    const circleX = boxX + 185;
+    const circleY = boxY + 35;
+    lastPage.drawCircle({
+      x: circleX,
+      y: circleY,
+      size: 16,
+      color: rgb(0.1, 0.7, 0.1),
+    });
+    lastPage.drawLine({
+      start: { x: circleX - 6, y: circleY },
+      end: { x: circleX - 2, y: circleY - 5 },
+      thickness: 3,
+      color: rgb(1, 1, 1),
+    });
+    lastPage.drawLine({
+      start: { x: circleX - 2, y: circleY - 5 },
+      end: { x: circleX + 7, y: circleY + 6 },
+      thickness: 3,
+      color: rgb(1, 1, 1),
+    });
     const stampedPdfBytes = await pdfDoc.save();
     return Buffer.from(stampedPdfBytes);
   } catch (error) {
@@ -401,7 +421,6 @@ export async function stampDigitalApproval(
     throw new Error("Failed to apply digital stamp on PDF");
   }
 }
-
 export const getCurrentLocation = (): Promise<{
   latitude: number;
   longitude: number;

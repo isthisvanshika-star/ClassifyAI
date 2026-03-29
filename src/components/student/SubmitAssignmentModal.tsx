@@ -60,10 +60,10 @@ export default function SubmitAssignmentModal({
         const formData = new FormData();
         formData.append("file", selectedFile);
         formData.append("upload_preset", uploadPreset);
-        formData.append(
-          "folder",
-          `classify_ai/assignment/${assignment.id}_${studentId}`,
-        );
+        // formData.append(
+        //   "folder",
+        //   `classify_ai/assignment/${assignment.id}_${studentId}`,
+        // );
         const uploadRes = await fetch(
           `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
           {
