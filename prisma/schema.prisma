@@ -331,6 +331,7 @@ model Submission {
   aiProbability  Int?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
+  audioFeedbackUrl String?
 
   @@index([assignmentId], map: "idx_submission_assignment")
 }

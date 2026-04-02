@@ -12,6 +12,7 @@ const gradeSubmissionSchema = z.object({
     grade: z.number().min(0),
     feedback: z.string().optional(),
     attachSignature: z.boolean().optional(),
+    audioFeedbackUrl : z.string().nullable().optional()
 });
 
 export async function GET(req: NextRequest) {
@@ -59,7 +60,7 @@ export async function PATCH(req: NextRequest) {
         if (!validation.success) {
             return NextResponse.json({ error: validation.error.flatten().fieldErrors }, { status: 400 });
         }
-        const { submissionId, teacherId, grade, feedback, attachSignature } = validation.data;
+        const { submissionId, teacherId, grade, feedback, attachSignature, audioFeedbackUrl } = validation.data;
 
 
 
@@ -96,6 +97,7 @@ export async function PATCH(req: NextRequest) {
             data: {
                 grade,
                 feedback,
+                audioFeedbackUrl,
                 fileUrl: updatedFileURL,
                 gradedBy: teacherProfile.user.name,
                 gradedAt: new Date(),

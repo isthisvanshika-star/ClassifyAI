@@ -276,3 +276,7 @@ export interface AssignmentHeaderProps {
   isStatusLoading: boolean;
   onEditClick: () => void;
 }
+
+export interface AudioRecorderProps {
+  onAudioReady: (blob: Blob| null) => void;
+}

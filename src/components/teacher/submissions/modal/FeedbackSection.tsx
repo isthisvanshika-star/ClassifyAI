@@ -1,4 +1,6 @@
 import { AlignLeft, Mic, PenLine } from "lucide-react";
+import AudioRecorder from "./AudioRecorder";
+import { useState } from "react";
 
 export default function FeedbackSection({
   feedback,
@@ -8,6 +10,7 @@ export default function FeedbackSection({
   attachSignature,
   setAttachSignature,
   submission,
+  setAudioBlob
 }: any) {
   return (
     <div className="bg-slate-800/40 p-4 rounded-xl border border-white/5">
@@ -52,23 +55,7 @@ export default function FeedbackSection({
           placeholder-gray-600 text-sm resize-none"
         />
       ) : (
-        <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-cyan-500/20 rounded-xl bg-slate-800/50">
-          <button
-            className="w-16 h-16 bg-cyan-500/10 text-cyan-400 rounded-full flex items-center justify-center 
-            hover:bg-cyan-500 hover:text-black transition-all 
-            shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(6,182,212,0.6)]"
-          >
-            <Mic size={28} />
-          </button>
-
-          <p className="mt-3 text-sm text-gray-300 font-medium">
-            Click to start recording
-          </p>
-
-          <p className="text-xs text-gray-500 mt-1">
-            Audio grading coming soon
-          </p>
-        </div>
+       <AudioRecorder onAudioReady={blob => setAudioBlob(blob)}/>
       )}
 
       {submission?.fileUrl && submission.fileUrl.endsWith(".pdf") && (

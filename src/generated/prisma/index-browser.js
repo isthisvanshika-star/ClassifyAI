@@ -145,8 +145,7 @@ exports.Prisma.TeacherScalarFieldEnum = {
   department: 'department',
   designation: 'designation',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  signatureUrl: 'signatureUrl'
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.StudentScalarFieldEnum = {
@@ -315,7 +314,8 @@ exports.Prisma.SubmissionScalarFieldEnum = {
   aiSummary: 'aiSummary',
   aiProbability: 'aiProbability',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  audioFeedbackUrl: 'audioFeedbackUrl'
 };
 
 exports.Prisma.AnnouncementScalarFieldEnum = {
