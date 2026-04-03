@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import useSWR from "swr";
-import { Book, Trophy, TrendingUp, Users } from "lucide-react";
+import { Book, Trophy, TrendingUp, Users, Download } from "lucide-react";
 import { motion } from "framer-motion";
+import { showErrorMessage, showLoadingMessage, showSuccessMessage, toastDissmisser } from "@/lib/helper";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-// Reusable Stat Card
 const StatCard = ({
   title,
   value,
@@ -35,7 +35,7 @@ const StatCard = ({
 export default function TeacherAnalyticsPage() {
   const [teacherId, setTeacherId] = useState<string | null>(null);
   const [campusId, setCampusId] = useState<string | null>(null);
-
+  const [exportLoading, setExportLoading] = useState<boolean>(false);
   useEffect(() => {
     setTeacherId(localStorage.getItem("teacherId"));
     setCampusId(localStorage.getItem("CampusID"));
@@ -47,6 +47,51 @@ export default function TeacherAnalyticsPage() {
       : null,
     fetcher
   );
+
+ const handleExport = async () => {
+ const toastId = showLoadingMessage("Preparing your export...");
+  setExportLoading(true);
+  if (!teacherId) return;
+
+  try {
+    const res = await fetch(`/api/teacher/analytics/export?teacherId=${teacherId}`);
+
+    if (!res.ok) {
+      toastDissmisser(toastId);
+      showErrorMessage("Failed to export data. Please try again.");
+      setExportLoading(false);
+      throw new Error("Failed to download file");
+    }
+    const blob = await res.blob();
+    const contentDisposition = res.headers.get("Content-Disposition");
+    let fileName = "export.csv";
+
+    if (contentDisposition) {
+      const match = contentDisposition.match(/filename="(.+)"/);
+      if (match) fileName = match[1];
+    }
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+    toastDissmisser(toastId);
+    showSuccessMessage("Export successful.");
+    setExportLoading(false);
+  } catch (err) {
+      toastDissmisser(toastId);
+      showErrorMessage("An error occurred during export. Please try again.");
+    setExportLoading(false);
+    console.error("Download error:", err);
+  }finally{
+    setExportLoading(false);
+  }
+};
 
   const analytics = data?.analytics;
 
@@ -117,19 +162,39 @@ export default function TeacherAnalyticsPage() {
 
   return (
     <main className="min-h-screen bg-transparent text-white p-8">
-      <motion.header
-        initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="mb-10"
-      >
-        <h1 className="text-4xl 2xl:h-[2.6rem] font-extrabold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-          Assignment Analytics
-        </h1>
-        <p className="mt-2 text-gray-400">
-          An overview of performance across all your assignments.
-        </p>
-      </motion.header>
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
+        <motion.header
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <h1 className="text-4xl 2xl:h-[2.6rem] font-extrabold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            Assignment Analytics
+          </h1>
+          <p className="mt-2 text-gray-400">
+            An overview of performance across all your assignments.
+          </p>
+        </motion.header>
+
+        {/* EXPORT BUTTON */}
+        <motion.button
+          onClick={handleExport}
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 px-6 py-3 rounded-xl font-bold text-white shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all"
+        >
+          {exportLoading? (
+            <span className="animate-pulse">Exporting...</span>
+          ) : (
+            <>
+              <Download size={20} />
+              Export to Excel
+            </>
+          )}
+        </motion.button>
+      </div>
 
       {/* --- STATS GRID --- */}
       <motion.div
