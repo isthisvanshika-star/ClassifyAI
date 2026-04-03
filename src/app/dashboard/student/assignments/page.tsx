@@ -55,9 +55,6 @@ const AssignmentCardSkeleton = () => (
 export default function StudentAssignmentsPage() {
   const [studentId, setStudentId] = useState<string | null>(null);
   const [campusId, setCampusId] = useState<string | null>(null);
-  const [selectedAssignment, setSelectedAssignment] = useState<any | null>(
-    null,
-  );
   const router = useRouter();
   useEffect(() => {
     setStudentId(localStorage.getItem("studentId"));

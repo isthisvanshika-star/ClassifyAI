@@ -7,6 +7,8 @@ import {
   ExternalLink,
   Eye,
   FileText,
+  MessageSquare,
+  Mic,
   X,
 } from "lucide-react";
 import { useState } from "react";
@@ -68,7 +70,7 @@ const AssignmentSubmission = ({
         bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 
         hover:bg-cyan-400/20 transition-all"
               >
-                Show More
+                Read Full Answer
               </button>
             </div>
           </div>
@@ -110,20 +112,81 @@ const AssignmentSubmission = ({
                   View
                 </button>
               </div>
-              <div className="my-4 h-px bg-white/10" />
-              <div className="z-10 relative">
-                <p className="text-sm text-gray-400 mb-1">{submissionData.feedback ? `${submissionData.gradedBy}'s` : "No"} Feedback</p>
+{submissionData.grade !== null &&
+  submissionData.grade !== undefined && (
+    <div className="mt-6 pt-6 border-t border-white/10">
+      <div className="flex items-center justify-between mb-5">
+        <h3 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-cyan-400">
+          <Award size={18} />
+          Teacher Evaluation
+        </h3>
+        <div className="px-3 py-1 rounded-full text-xs font-semibold 
+          bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-blue-500/20 
+          border border-cyan-400/30 text-cyan-300 shadow-sm backdrop-blur-md">
+          Grade: {submissionData.grade}
+        </div>
+      </div>
 
-                {submissionData.feedback ? (
-                  <p className="text-gray-200 italic text-sm leading-relaxed">
-                    {submissionData.feedback}
-                  </p>
-                ) : (
-                  <p className="text-gray-500 text-sm italic">
-                    No feedback provided yet
-                  </p>
-                )}
-              </div>
+      <div className="flex flex-col gap-4">
+        {submissionData.feedback ? (
+          <div className="relative group 
+            bg-white/5 backdrop-blur-xl 
+            border border-white/10 
+            p-5 rounded-2xl 
+            transition-all duration-300
+            hover:border-cyan-400/30 hover:shadow-lg hover:shadow-cyan-500/10">
+            <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-300 blur-xl bg-cyan-500/10"></div>
+
+            <div className="flex items-center gap-2 text-cyan-300 mb-3 text-sm font-semibold">
+              <MessageSquare size={16} />
+              Remarks by{" "}
+              <span className="text-white">
+                {submissionData.gradedBy || "Teacher"}
+              </span>
+            </div>
+
+            <p className="text-gray-300 text-sm leading-relaxed italic relative z-10">
+              “{submissionData.feedback}”
+            </p>
+          </div>
+        ) : (
+          <div className="text-center py-6 rounded-xl 
+            bg-white/5 border border-white/10 text-gray-500 text-sm italic">
+            No written feedback provided.
+          </div>
+        )}
+        {submissionData.audioFeedbackUrl && (
+          <div className="relative group 
+            bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-blue-500/10 
+            border border-cyan-400/20 
+            backdrop-blur-xl 
+            p-5 rounded-2xl 
+            transition-all duration-300
+            hover:border-cyan-400/40 hover:shadow-lg hover:shadow-cyan-500/20">
+            <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-300 blur-xl bg-purple-500/10"></div>
+
+            <div className="flex items-center gap-2 text-purple-300 mb-3 text-sm font-semibold">
+              <Mic size={16} className="animate-pulse" />
+              Voice Feedback
+            </div>
+
+            <audio
+              src={submissionData.audioFeedbackUrl}
+              controls
+              className="w-full h-10 rounded-lg outline-none opacity-90
+              [&::-webkit-media-controls-panel]:bg-[#020617]
+              [&::-webkit-media-controls-play-button]:text-white
+              [&::-webkit-media-controls-current-time-display]:text-white
+              [&::-webkit-media-controls-time-remaining-display]:text-gray-400"
+            />
+            <p className="text-[10px] text-gray-500 mt-2 tracking-wide">
+              Tap to listen • Recorded by {submissionData.gradedBy || "Teacher"}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+)}
             </div>
           </div>
         )}

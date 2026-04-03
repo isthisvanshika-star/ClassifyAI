@@ -48,7 +48,7 @@ export default function GradeSubmissionModal({
     formatting: 0,
   });
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [audioBlob, setAudioBlob] = useState<Blob|null>(null)
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [analysisResult, setAnalysisResult] = useState<{
     summary: string[];
     aiProbability: number;
@@ -141,8 +141,7 @@ export default function GradeSubmissionModal({
     }
 
     //? (A. Vanshika) Audio uploading to cloudinary....
-    //! TEST THE UPLOADING SYSTEM 
-    if(feedbackMode === "audio" && audioBlob){
+    if (feedbackMode === "audio" && audioBlob) {
       const toastId = showLoadingMessage("Uploading audio note....");
       try {
         const formData = new FormData();
@@ -150,11 +149,16 @@ export default function GradeSubmissionModal({
         formData.append("file", audioBlob, "feedback.webm");
         //? (A. Vanshika) Uploading to cloudinary....
         formData.append("upload_preset", "ClassifyAI-pdf");
-        const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/dd2bczbdo/video/upload`,{method: "POST", body: formData});
+        const uploadRes = await fetch(
+          `https://api.cloudinary.com/v1_1/dd2bczbdo/video/upload`,
+          { method: "POST", body: formData },
+        );
         const uploadData = await uploadRes.json();
-        if(!uploadRes.ok)throw new Error(uploadData.error.message || "Audio upload failed");
+        if (!uploadRes.ok)
+          throw new Error(uploadData.error.message || "Audio upload failed");
         finalAudioUrl = uploadData.secure_url;
         toastDissmisser(toastId);
+        showSuccessMessage("Audio Uploaded");
       } catch (error) {
         toastDissmisser(toastId);
         throw new Error("Failed to upload audio feedback.");
@@ -168,8 +172,8 @@ export default function GradeSubmissionModal({
         submissionId: submission.id,
         teacherId: teacherId,
         grade: numericGrade,
-        feedback: feedbackMode === "text"? feedback : "",
-        audioFeedbackUrl : finalAudioUrl,
+        feedback: feedbackMode === "text" ? feedback : "",
+        audioFeedbackUrl: finalAudioUrl,
         attachSignature,
       }),
     });
@@ -274,7 +278,7 @@ export default function GradeSubmissionModal({
                 attachSignature={attachSignature}
                 setAttachSignature={setAttachSignature}
                 submission={submission}
-                setAudioBlob = {setAudioBlob}
+                setAudioBlob={setAudioBlob}
               />
               <AIAssistantSection
                 analysisResult={analysisResult}
