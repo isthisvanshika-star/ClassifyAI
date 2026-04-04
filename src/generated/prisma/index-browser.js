@@ -336,6 +336,9 @@ exports.Prisma.ResourceScalarFieldEnum = {
   title: 'title',
   description: 'description',
   url: 'url',
+  resourceType: 'resourceType',
+  fileExtension: 'fileExtension',
+  aiSummary: 'aiSummary',
   uploadedBy: 'uploadedBy',
   subjectId: 'subjectId',
   assignmentId: 'assignmentId',
@@ -492,6 +495,13 @@ exports.AssignmentStatus = exports.$Enums.AssignmentStatus = {
   DRAFT: 'DRAFT',
   PUBLISHED: 'PUBLISHED',
   CLOSED: 'CLOSED'
+};
+
+exports.ResourceType = exports.$Enums.ResourceType = {
+  NOTES: 'NOTES',
+  PYQ: 'PYQ',
+  SYLLABUS: 'SYLLABUS',
+  VIDEO_LINK: 'VIDEO_LINK'
 };
 
 exports.Prisma.ModelName = {

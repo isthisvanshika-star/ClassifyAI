@@ -352,10 +352,15 @@ model Announcement {
 }
 
 model Resource {
-  id             String        @id @default(cuid())
-  title          String
-  description    String?
-  url            String
+  id          String  @id @default(cuid())
+  title       String
+  description String?
+  url         String
+
+  resourceType  ResourceType @default(NOTES)
+  fileExtension String?
+  aiSummary     String[]
+
   uploadedBy     String?
   subjectId      String?
   subject        Subject?      @relation(fields: [subjectId], references: [id], map: "fk_resource_subject")
@@ -510,4 +515,11 @@ enum AssignmentStatus {
   DRAFT
   PUBLISHED
   CLOSED
+}
+
+enum ResourceType {
+  NOTES
+  PYQ
+  SYLLABUS
+  VIDEO_LINK
 }

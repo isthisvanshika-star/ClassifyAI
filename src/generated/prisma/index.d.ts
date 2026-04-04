@@ -212,6 +212,16 @@ export const AssignmentStatus: {
 
 export type AssignmentStatus = (typeof AssignmentStatus)[keyof typeof AssignmentStatus]
 
+
+export const ResourceType: {
+  NOTES: 'NOTES',
+  PYQ: 'PYQ',
+  SYLLABUS: 'SYLLABUS',
+  VIDEO_LINK: 'VIDEO_LINK'
+};
+
+export type ResourceType = (typeof ResourceType)[keyof typeof ResourceType]
+
 }
 
 export type Role = $Enums.Role
@@ -237,6 +247,10 @@ export const AttendanceMode: typeof $Enums.AttendanceMode
 export type AssignmentStatus = $Enums.AssignmentStatus
 
 export const AssignmentStatus: typeof $Enums.AssignmentStatus
+
+export type ResourceType = $Enums.ResourceType
+
+export const ResourceType: typeof $Enums.ResourceType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -24980,6 +24994,8 @@ export namespace Prisma {
     title: string | null
     description: string | null
     url: string | null
+    resourceType: $Enums.ResourceType | null
+    fileExtension: string | null
     uploadedBy: string | null
     subjectId: string | null
     assignmentId: string | null
@@ -24994,6 +25010,8 @@ export namespace Prisma {
     title: string | null
     description: string | null
     url: string | null
+    resourceType: $Enums.ResourceType | null
+    fileExtension: string | null
     uploadedBy: string | null
     subjectId: string | null
     assignmentId: string | null
@@ -25008,6 +25026,9 @@ export namespace Prisma {
     title: number
     description: number
     url: number
+    resourceType: number
+    fileExtension: number
+    aiSummary: number
     uploadedBy: number
     subjectId: number
     assignmentId: number
@@ -25024,6 +25045,8 @@ export namespace Prisma {
     title?: true
     description?: true
     url?: true
+    resourceType?: true
+    fileExtension?: true
     uploadedBy?: true
     subjectId?: true
     assignmentId?: true
@@ -25038,6 +25061,8 @@ export namespace Prisma {
     title?: true
     description?: true
     url?: true
+    resourceType?: true
+    fileExtension?: true
     uploadedBy?: true
     subjectId?: true
     assignmentId?: true
@@ -25052,6 +25077,9 @@ export namespace Prisma {
     title?: true
     description?: true
     url?: true
+    resourceType?: true
+    fileExtension?: true
+    aiSummary?: true
     uploadedBy?: true
     subjectId?: true
     assignmentId?: true
@@ -25139,6 +25167,9 @@ export namespace Prisma {
     title: string
     description: string | null
     url: string
+    resourceType: $Enums.ResourceType
+    fileExtension: string | null
+    aiSummary: string[]
     uploadedBy: string | null
     subjectId: string | null
     assignmentId: string | null
@@ -25170,6 +25201,9 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     url?: boolean
+    resourceType?: boolean
+    fileExtension?: boolean
+    aiSummary?: boolean
     uploadedBy?: boolean
     subjectId?: boolean
     assignmentId?: boolean
@@ -25188,6 +25222,9 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     url?: boolean
+    resourceType?: boolean
+    fileExtension?: boolean
+    aiSummary?: boolean
     uploadedBy?: boolean
     subjectId?: boolean
     assignmentId?: boolean
@@ -25206,6 +25243,9 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     url?: boolean
+    resourceType?: boolean
+    fileExtension?: boolean
+    aiSummary?: boolean
     uploadedBy?: boolean
     subjectId?: boolean
     assignmentId?: boolean
@@ -25224,6 +25264,9 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     url?: boolean
+    resourceType?: boolean
+    fileExtension?: boolean
+    aiSummary?: boolean
     uploadedBy?: boolean
     subjectId?: boolean
     assignmentId?: boolean
@@ -25233,7 +25276,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ResourceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "url" | "uploadedBy" | "subjectId" | "assignmentId" | "announcementId" | "messageId" | "createdAt" | "updatedAt", ExtArgs["result"]["resource"]>
+  export type ResourceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "url" | "resourceType" | "fileExtension" | "aiSummary" | "uploadedBy" | "subjectId" | "assignmentId" | "announcementId" | "messageId" | "createdAt" | "updatedAt", ExtArgs["result"]["resource"]>
   export type ResourceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subject?: boolean | Resource$subjectArgs<ExtArgs>
     assignment?: boolean | Resource$assignmentArgs<ExtArgs>
@@ -25266,6 +25309,9 @@ export namespace Prisma {
       title: string
       description: string | null
       url: string
+      resourceType: $Enums.ResourceType
+      fileExtension: string | null
+      aiSummary: string[]
       uploadedBy: string | null
       subjectId: string | null
       assignmentId: string | null
@@ -25704,6 +25750,9 @@ export namespace Prisma {
     readonly title: FieldRef<"Resource", 'String'>
     readonly description: FieldRef<"Resource", 'String'>
     readonly url: FieldRef<"Resource", 'String'>
+    readonly resourceType: FieldRef<"Resource", 'ResourceType'>
+    readonly fileExtension: FieldRef<"Resource", 'String'>
+    readonly aiSummary: FieldRef<"Resource", 'String[]'>
     readonly uploadedBy: FieldRef<"Resource", 'String'>
     readonly subjectId: FieldRef<"Resource", 'String'>
     readonly assignmentId: FieldRef<"Resource", 'String'>
@@ -36287,6 +36336,9 @@ export namespace Prisma {
     title: 'title',
     description: 'description',
     url: 'url',
+    resourceType: 'resourceType',
+    fileExtension: 'fileExtension',
+    aiSummary: 'aiSummary',
     uploadedBy: 'uploadedBy',
     subjectId: 'subjectId',
     assignmentId: 'assignmentId',
@@ -36598,6 +36650,20 @@ export namespace Prisma {
    * Reference to a field of type 'AssignmentStatus[]'
    */
   export type ListEnumAssignmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssignmentStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ResourceType'
+   */
+  export type EnumResourceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResourceType'>
+    
+
+
+  /**
+   * Reference to a field of type 'ResourceType[]'
+   */
+  export type ListEnumResourceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResourceType[]'>
     
 
 
@@ -38154,6 +38220,9 @@ export namespace Prisma {
     title?: StringFilter<"Resource"> | string
     description?: StringNullableFilter<"Resource"> | string | null
     url?: StringFilter<"Resource"> | string
+    resourceType?: EnumResourceTypeFilter<"Resource"> | $Enums.ResourceType
+    fileExtension?: StringNullableFilter<"Resource"> | string | null
+    aiSummary?: StringNullableListFilter<"Resource">
     uploadedBy?: StringNullableFilter<"Resource"> | string | null
     subjectId?: StringNullableFilter<"Resource"> | string | null
     assignmentId?: StringNullableFilter<"Resource"> | string | null
@@ -38172,6 +38241,9 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrderInput | SortOrder
     url?: SortOrder
+    resourceType?: SortOrder
+    fileExtension?: SortOrderInput | SortOrder
+    aiSummary?: SortOrder
     uploadedBy?: SortOrderInput | SortOrder
     subjectId?: SortOrderInput | SortOrder
     assignmentId?: SortOrderInput | SortOrder
@@ -38193,6 +38265,9 @@ export namespace Prisma {
     title?: StringFilter<"Resource"> | string
     description?: StringNullableFilter<"Resource"> | string | null
     url?: StringFilter<"Resource"> | string
+    resourceType?: EnumResourceTypeFilter<"Resource"> | $Enums.ResourceType
+    fileExtension?: StringNullableFilter<"Resource"> | string | null
+    aiSummary?: StringNullableListFilter<"Resource">
     uploadedBy?: StringNullableFilter<"Resource"> | string | null
     subjectId?: StringNullableFilter<"Resource"> | string | null
     assignmentId?: StringNullableFilter<"Resource"> | string | null
@@ -38211,6 +38286,9 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrderInput | SortOrder
     url?: SortOrder
+    resourceType?: SortOrder
+    fileExtension?: SortOrderInput | SortOrder
+    aiSummary?: SortOrder
     uploadedBy?: SortOrderInput | SortOrder
     subjectId?: SortOrderInput | SortOrder
     assignmentId?: SortOrderInput | SortOrder
@@ -38231,6 +38309,9 @@ export namespace Prisma {
     title?: StringWithAggregatesFilter<"Resource"> | string
     description?: StringNullableWithAggregatesFilter<"Resource"> | string | null
     url?: StringWithAggregatesFilter<"Resource"> | string
+    resourceType?: EnumResourceTypeWithAggregatesFilter<"Resource"> | $Enums.ResourceType
+    fileExtension?: StringNullableWithAggregatesFilter<"Resource"> | string | null
+    aiSummary?: StringNullableListFilter<"Resource">
     uploadedBy?: StringNullableWithAggregatesFilter<"Resource"> | string | null
     subjectId?: StringNullableWithAggregatesFilter<"Resource"> | string | null
     assignmentId?: StringNullableWithAggregatesFilter<"Resource"> | string | null
@@ -40436,6 +40517,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     url: string
+    resourceType?: $Enums.ResourceType
+    fileExtension?: string | null
+    aiSummary?: ResourceCreateaiSummaryInput | string[]
     uploadedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -40450,6 +40534,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     url: string
+    resourceType?: $Enums.ResourceType
+    fileExtension?: string | null
+    aiSummary?: ResourceCreateaiSummaryInput | string[]
     uploadedBy?: string | null
     subjectId?: string | null
     assignmentId?: string | null
@@ -40464,6 +40551,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
+    resourceType?: EnumResourceTypeFieldUpdateOperationsInput | $Enums.ResourceType
+    fileExtension?: NullableStringFieldUpdateOperationsInput | string | null
+    aiSummary?: ResourceUpdateaiSummaryInput | string[]
     uploadedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -40478,6 +40568,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
+    resourceType?: EnumResourceTypeFieldUpdateOperationsInput | $Enums.ResourceType
+    fileExtension?: NullableStringFieldUpdateOperationsInput | string | null
+    aiSummary?: ResourceUpdateaiSummaryInput | string[]
     uploadedBy?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: NullableStringFieldUpdateOperationsInput | string | null
     assignmentId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -40492,6 +40585,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     url: string
+    resourceType?: $Enums.ResourceType
+    fileExtension?: string | null
+    aiSummary?: ResourceCreateaiSummaryInput | string[]
     uploadedBy?: string | null
     subjectId?: string | null
     assignmentId?: string | null
@@ -40506,6 +40602,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
+    resourceType?: EnumResourceTypeFieldUpdateOperationsInput | $Enums.ResourceType
+    fileExtension?: NullableStringFieldUpdateOperationsInput | string | null
+    aiSummary?: ResourceUpdateaiSummaryInput | string[]
     uploadedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -40516,6 +40615,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
+    resourceType?: EnumResourceTypeFieldUpdateOperationsInput | $Enums.ResourceType
+    fileExtension?: NullableStringFieldUpdateOperationsInput | string | null
+    aiSummary?: ResourceUpdateaiSummaryInput | string[]
     uploadedBy?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: NullableStringFieldUpdateOperationsInput | string | null
     assignmentId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -42517,6 +42619,13 @@ export namespace Prisma {
     targetSemester?: SortOrder
   }
 
+  export type EnumResourceTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.ResourceType | EnumResourceTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ResourceType[] | ListEnumResourceTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ResourceType[] | ListEnumResourceTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumResourceTypeFilter<$PrismaModel> | $Enums.ResourceType
+  }
+
   export type AssignmentNullableScalarRelationFilter = {
     is?: AssignmentWhereInput | null
     isNot?: AssignmentWhereInput | null
@@ -42537,6 +42646,9 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     url?: SortOrder
+    resourceType?: SortOrder
+    fileExtension?: SortOrder
+    aiSummary?: SortOrder
     uploadedBy?: SortOrder
     subjectId?: SortOrder
     assignmentId?: SortOrder
@@ -42551,6 +42663,8 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     url?: SortOrder
+    resourceType?: SortOrder
+    fileExtension?: SortOrder
     uploadedBy?: SortOrder
     subjectId?: SortOrder
     assignmentId?: SortOrder
@@ -42565,6 +42679,8 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     url?: SortOrder
+    resourceType?: SortOrder
+    fileExtension?: SortOrder
     uploadedBy?: SortOrder
     subjectId?: SortOrder
     assignmentId?: SortOrder
@@ -42572,6 +42688,16 @@ export namespace Prisma {
     messageId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type EnumResourceTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ResourceType | EnumResourceTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ResourceType[] | ListEnumResourceTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ResourceType[] | ListEnumResourceTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumResourceTypeWithAggregatesFilter<$PrismaModel> | $Enums.ResourceType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumResourceTypeFilter<$PrismaModel>
+    _max?: NestedEnumResourceTypeFilter<$PrismaModel>
   }
 
   export type ExamCountOrderByAggregateInput = {
@@ -45455,6 +45581,10 @@ export namespace Prisma {
     deleteMany?: ResourceScalarWhereInput | ResourceScalarWhereInput[]
   }
 
+  export type ResourceCreateaiSummaryInput = {
+    set: string[]
+  }
+
   export type SubjectCreateNestedOneWithoutResourcesInput = {
     create?: XOR<SubjectCreateWithoutResourcesInput, SubjectUncheckedCreateWithoutResourcesInput>
     connectOrCreate?: SubjectCreateOrConnectWithoutResourcesInput
@@ -45477,6 +45607,15 @@ export namespace Prisma {
     create?: XOR<MessageCreateWithoutAttachmentsInput, MessageUncheckedCreateWithoutAttachmentsInput>
     connectOrCreate?: MessageCreateOrConnectWithoutAttachmentsInput
     connect?: MessageWhereUniqueInput
+  }
+
+  export type EnumResourceTypeFieldUpdateOperationsInput = {
+    set?: $Enums.ResourceType
+  }
+
+  export type ResourceUpdateaiSummaryInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type SubjectUpdateOneWithoutResourcesNestedInput = {
@@ -46104,6 +46243,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAssignmentStatusFilter<$PrismaModel>
     _max?: NestedEnumAssignmentStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumResourceTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.ResourceType | EnumResourceTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ResourceType[] | ListEnumResourceTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ResourceType[] | ListEnumResourceTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumResourceTypeFilter<$PrismaModel> | $Enums.ResourceType
+  }
+
+  export type NestedEnumResourceTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ResourceType | EnumResourceTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ResourceType[] | ListEnumResourceTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ResourceType[] | ListEnumResourceTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumResourceTypeWithAggregatesFilter<$PrismaModel> | $Enums.ResourceType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumResourceTypeFilter<$PrismaModel>
+    _max?: NestedEnumResourceTypeFilter<$PrismaModel>
   }
   export type NestedJsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -48668,6 +48824,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     url: string
+    resourceType?: $Enums.ResourceType
+    fileExtension?: string | null
+    aiSummary?: ResourceCreateaiSummaryInput | string[]
     uploadedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -48681,6 +48840,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     url: string
+    resourceType?: $Enums.ResourceType
+    fileExtension?: string | null
+    aiSummary?: ResourceCreateaiSummaryInput | string[]
     uploadedBy?: string | null
     assignmentId?: string | null
     announcementId?: string | null
@@ -48920,6 +49082,9 @@ export namespace Prisma {
     title?: StringFilter<"Resource"> | string
     description?: StringNullableFilter<"Resource"> | string | null
     url?: StringFilter<"Resource"> | string
+    resourceType?: EnumResourceTypeFilter<"Resource"> | $Enums.ResourceType
+    fileExtension?: StringNullableFilter<"Resource"> | string | null
+    aiSummary?: StringNullableListFilter<"Resource">
     uploadedBy?: StringNullableFilter<"Resource"> | string | null
     subjectId?: StringNullableFilter<"Resource"> | string | null
     assignmentId?: StringNullableFilter<"Resource"> | string | null
@@ -51329,6 +51494,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     url: string
+    resourceType?: $Enums.ResourceType
+    fileExtension?: string | null
+    aiSummary?: ResourceCreateaiSummaryInput | string[]
     uploadedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51342,6 +51510,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     url: string
+    resourceType?: $Enums.ResourceType
+    fileExtension?: string | null
+    aiSummary?: ResourceCreateaiSummaryInput | string[]
     uploadedBy?: string | null
     subjectId?: string | null
     announcementId?: string | null
@@ -51700,6 +51871,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     url: string
+    resourceType?: $Enums.ResourceType
+    fileExtension?: string | null
+    aiSummary?: ResourceCreateaiSummaryInput | string[]
     uploadedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51713,6 +51887,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     url: string
+    resourceType?: $Enums.ResourceType
+    fileExtension?: string | null
+    aiSummary?: ResourceCreateaiSummaryInput | string[]
     uploadedBy?: string | null
     subjectId?: string | null
     assignmentId?: string | null
@@ -52439,6 +52616,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     url: string
+    resourceType?: $Enums.ResourceType
+    fileExtension?: string | null
+    aiSummary?: ResourceCreateaiSummaryInput | string[]
     uploadedBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -52452,6 +52632,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     url: string
+    resourceType?: $Enums.ResourceType
+    fileExtension?: string | null
+    aiSummary?: ResourceCreateaiSummaryInput | string[]
     uploadedBy?: string | null
     subjectId?: string | null
     assignmentId?: string | null
@@ -54506,6 +54689,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     url: string
+    resourceType?: $Enums.ResourceType
+    fileExtension?: string | null
+    aiSummary?: ResourceCreateaiSummaryInput | string[]
     uploadedBy?: string | null
     assignmentId?: string | null
     announcementId?: string | null
@@ -54682,6 +54868,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
+    resourceType?: EnumResourceTypeFieldUpdateOperationsInput | $Enums.ResourceType
+    fileExtension?: NullableStringFieldUpdateOperationsInput | string | null
+    aiSummary?: ResourceUpdateaiSummaryInput | string[]
     uploadedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54695,6 +54884,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
+    resourceType?: EnumResourceTypeFieldUpdateOperationsInput | $Enums.ResourceType
+    fileExtension?: NullableStringFieldUpdateOperationsInput | string | null
+    aiSummary?: ResourceUpdateaiSummaryInput | string[]
     uploadedBy?: NullableStringFieldUpdateOperationsInput | string | null
     assignmentId?: NullableStringFieldUpdateOperationsInput | string | null
     announcementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54708,6 +54900,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
+    resourceType?: EnumResourceTypeFieldUpdateOperationsInput | $Enums.ResourceType
+    fileExtension?: NullableStringFieldUpdateOperationsInput | string | null
+    aiSummary?: ResourceUpdateaiSummaryInput | string[]
     uploadedBy?: NullableStringFieldUpdateOperationsInput | string | null
     assignmentId?: NullableStringFieldUpdateOperationsInput | string | null
     announcementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55267,6 +55462,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     url: string
+    resourceType?: $Enums.ResourceType
+    fileExtension?: string | null
+    aiSummary?: ResourceCreateaiSummaryInput | string[]
     uploadedBy?: string | null
     subjectId?: string | null
     announcementId?: string | null
@@ -55297,6 +55495,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
+    resourceType?: EnumResourceTypeFieldUpdateOperationsInput | $Enums.ResourceType
+    fileExtension?: NullableStringFieldUpdateOperationsInput | string | null
+    aiSummary?: ResourceUpdateaiSummaryInput | string[]
     uploadedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -55310,6 +55511,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
+    resourceType?: EnumResourceTypeFieldUpdateOperationsInput | $Enums.ResourceType
+    fileExtension?: NullableStringFieldUpdateOperationsInput | string | null
+    aiSummary?: ResourceUpdateaiSummaryInput | string[]
     uploadedBy?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: NullableStringFieldUpdateOperationsInput | string | null
     announcementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55323,6 +55527,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
+    resourceType?: EnumResourceTypeFieldUpdateOperationsInput | $Enums.ResourceType
+    fileExtension?: NullableStringFieldUpdateOperationsInput | string | null
+    aiSummary?: ResourceUpdateaiSummaryInput | string[]
     uploadedBy?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: NullableStringFieldUpdateOperationsInput | string | null
     announcementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55387,6 +55594,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     url: string
+    resourceType?: $Enums.ResourceType
+    fileExtension?: string | null
+    aiSummary?: ResourceCreateaiSummaryInput | string[]
     uploadedBy?: string | null
     subjectId?: string | null
     assignmentId?: string | null
@@ -55400,6 +55610,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
+    resourceType?: EnumResourceTypeFieldUpdateOperationsInput | $Enums.ResourceType
+    fileExtension?: NullableStringFieldUpdateOperationsInput | string | null
+    aiSummary?: ResourceUpdateaiSummaryInput | string[]
     uploadedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -55413,6 +55626,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
+    resourceType?: EnumResourceTypeFieldUpdateOperationsInput | $Enums.ResourceType
+    fileExtension?: NullableStringFieldUpdateOperationsInput | string | null
+    aiSummary?: ResourceUpdateaiSummaryInput | string[]
     uploadedBy?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: NullableStringFieldUpdateOperationsInput | string | null
     assignmentId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55426,6 +55642,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
+    resourceType?: EnumResourceTypeFieldUpdateOperationsInput | $Enums.ResourceType
+    fileExtension?: NullableStringFieldUpdateOperationsInput | string | null
+    aiSummary?: ResourceUpdateaiSummaryInput | string[]
     uploadedBy?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: NullableStringFieldUpdateOperationsInput | string | null
     assignmentId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55471,6 +55690,9 @@ export namespace Prisma {
     title: string
     description?: string | null
     url: string
+    resourceType?: $Enums.ResourceType
+    fileExtension?: string | null
+    aiSummary?: ResourceCreateaiSummaryInput | string[]
     uploadedBy?: string | null
     subjectId?: string | null
     assignmentId?: string | null
@@ -55484,6 +55706,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
+    resourceType?: EnumResourceTypeFieldUpdateOperationsInput | $Enums.ResourceType
+    fileExtension?: NullableStringFieldUpdateOperationsInput | string | null
+    aiSummary?: ResourceUpdateaiSummaryInput | string[]
     uploadedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -55497,6 +55722,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
+    resourceType?: EnumResourceTypeFieldUpdateOperationsInput | $Enums.ResourceType
+    fileExtension?: NullableStringFieldUpdateOperationsInput | string | null
+    aiSummary?: ResourceUpdateaiSummaryInput | string[]
     uploadedBy?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: NullableStringFieldUpdateOperationsInput | string | null
     assignmentId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55510,6 +55738,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
+    resourceType?: EnumResourceTypeFieldUpdateOperationsInput | $Enums.ResourceType
+    fileExtension?: NullableStringFieldUpdateOperationsInput | string | null
+    aiSummary?: ResourceUpdateaiSummaryInput | string[]
     uploadedBy?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: NullableStringFieldUpdateOperationsInput | string | null
     assignmentId?: NullableStringFieldUpdateOperationsInput | string | null

@@ -6,7 +6,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-    url      = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 /// ---------------------
@@ -14,15 +14,15 @@ datasource db {
 /// ---------------------
 
 model User {
-  id           String   @id @default(cuid())
-  name         String
-  email        String   @unique
-  passwordHash String? // nullable when OAuth-only users
-  role         Role
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now()) @updatedAt
-  username String @unique
-  fcmToken String?
+  id               String    @id @default(cuid())
+  name             String
+  email            String    @unique
+  passwordHash     String? // nullable when OAuth-only users
+  role             Role
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @default(now()) @updatedAt
+  username         String    @unique
+  fcmToken         String?
   // Profile fields
   avatarUrl        String?
   phone            String?
@@ -315,22 +315,22 @@ model Assignment {
 }
 
 model Submission {
-  id           String     @id @default(cuid())
-  assignmentId String
-  assignment   Assignment @relation(fields: [assignmentId], references: [id], map: "fk_submission_assignment")
-  studentId    String
-  student      Student    @relation(fields: [studentId], references: [id], map: "fk_submission_student")
-  submittedAt  DateTime   @default(now())
-  fileUrl      String?
-  text         String?
-  grade        Float?
-  feedback     String?
-  gradedBy     String?
-  gradedAt     DateTime?
-  aiSummary     String[]
-  aiProbability  Int?
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  id               String     @id @default(cuid())
+  assignmentId     String
+  assignment       Assignment @relation(fields: [assignmentId], references: [id], map: "fk_submission_assignment")
+  studentId        String
+  student          Student    @relation(fields: [studentId], references: [id], map: "fk_submission_student")
+  submittedAt      DateTime   @default(now())
+  fileUrl          String?
+  text             String?
+  grade            Float?
+  feedback         String?
+  gradedBy         String?
+  gradedAt         DateTime?
+  aiSummary        String[]
+  aiProbability    Int?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
   audioFeedbackUrl String?
 
   @@index([assignmentId], map: "idx_submission_assignment")
@@ -352,10 +352,15 @@ model Announcement {
 }
 
 model Resource {
-  id             String        @id @default(cuid())
-  title          String
-  description    String?
-  url            String
+  id          String  @id @default(cuid())
+  title       String
+  description String?
+  url         String
+
+  resourceType  ResourceType @default(NOTES)
+  fileExtension String?
+  aiSummary     String[]
+
   uploadedBy     String?
   subjectId      String?
   subject        Subject?      @relation(fields: [subjectId], references: [id], map: "fk_resource_subject")
@@ -510,4 +515,11 @@ enum AssignmentStatus {
   DRAFT
   PUBLISHED
   CLOSED
+}
+
+enum ResourceType {
+  NOTES
+  PYQ
+  SYLLABUS
+  VIDEO_LINK
 }
