@@ -1,9 +1,29 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
-import { UploadCloud, File as FileIcon, X } from "lucide-react";
+import {
+  UploadCloud,
+  File as FileIcon,
+  X,
+  BookOpen,
+  FileQuestion,
+  FileText,
+  Video,
+} from "lucide-react";
+import {
+  showErrorMessage,
+  showLoadingMessage,
+  showSuccessMessage,
+  toastDissmisser,
+} from "@/lib/helper";
+
+const resourceTypes = [
+  { id: "NOTES", label: "Notes", icon: <BookOpen size={16} /> },
+  { id: "PYQ", label: "PYQs", icon: <FileQuestion size={16} /> },
+  { id: "SYLLABUS", label: "Syllabus", icon: <FileText size={16} /> },
+  { id: "VIDEO_LINK", label: "Video", icon: <Video size={16} /> },
+];
 
 export default function UploadResourceModal({
   isOpen,
@@ -17,23 +37,26 @@ export default function UploadResourceModal({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
+  const [resourceType, setResourceType] = useState("NOTES");
   const [file, setFile] = useState<File | null>(null);
   const [teacherSubjects, setTeacherSubjects] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Fetch the teacher's subjects to populate the dropdown
   useEffect(() => {
     if (isOpen) {
       setTitle("");
       setDescription("");
       setSelectedSubject("");
+      setResourceType("NOTES");
       setFile(null);
 
       const teacherId = localStorage.getItem("teacherId");
       const campusId = localStorage.getItem("CampusID");
 
       if (teacherId && campusId) {
-        fetch(`/api/teacher/subjects?teacherId=${teacherId}&campusId=${campusId}`)
+        fetch(
+          `/api/teacher/subjects?teacherId=${teacherId}&campusId=${campusId}`,
+        )
           .then((res) => res.json())
           .then((data) => {
             setTeacherSubjects(data);
@@ -48,17 +71,27 @@ export default function UploadResourceModal({
     const campusId = localStorage.getItem("CampusID");
 
     if (!file || !title || !selectedSubject || !teacherId || !campusId) {
-      toast.error("Please fill in all fields and select a file.");
+      showErrorMessage("Please fill all required fields.");
       return;
     }
 
     setIsLoading(true);
-    const toastId = toast.loading("Uploading resource...");
+
+    const isAIEligible =
+      file.type.endsWith(".pdf") &&
+      (resourceType === "NOTES" || resourceType === "PYQ");
+
+    const toastId = showLoadingMessage(
+      isAIEligible
+        ? "Uploading & generating AI summary..."
+        : "Uploading resource...",
+    );
 
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
     formData.append("subjectId", selectedSubject);
+    formData.append("resourceType", resourceType);
     formData.append("teacherId", teacherId);
     formData.append("campusId", campusId);
     formData.append("file", file);
@@ -70,16 +103,16 @@ export default function UploadResourceModal({
       });
 
       const data = await res.json();
-      toast.dismiss(toastId);
+      toastDissmisser(toastId);
 
-      if (!res.ok) throw new Error(data.error || "Failed to upload resource.");
+      if (!res.ok) throw new Error(data.error);
 
-      toast.success("Resource uploaded successfully!");
+      showSuccessMessage("Uploaded successfully");
       onSuccess();
       onClose();
     } catch (err: any) {
-      toast.dismiss(toastId);
-      toast.error(err.message);
+      toastDissmisser(toastId);
+      showErrorMessage(err.message);
     } finally {
       setIsLoading(false);
     }
@@ -90,125 +123,133 @@ export default function UploadResourceModal({
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-50 p-4"
+        className="fixed inset-0 bg-black/80 backdrop-blur-md flex justify-center items-center z-50"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
       >
         <motion.div
-          className="relative w-full max-w-lg bg-white/10 border border-white/20 backdrop-blur-2xl rounded-2xl shadow-[0_0_30px_rgba(56,189,248,0.2)] text-white p-8"
-          initial={{ scale: 0.9, y: 30 }}
+          className="w-full max-w-xl rounded-3xl p-8 text-white
+          bg-gradient-to-br from-white/10 to-white/5 
+          border border-white/20 backdrop-blur-2xl
+          shadow-[0_0_50px_rgba(56,189,248,0.15)]"
+          initial={{ scale: 0.9, y: 40 }}
           animate={{ scale: 1, y: 0 }}
-          exit={{ scale: 0.9, y: 30 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
+          exit={{ scale: 0.9, y: 40 }}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Header */}
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-3xl font-extrabold bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-500 bg-clip-text text-transparent">
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-violet-500 bg-clip-text text-transparent">
               Upload Resource
             </h2>
             <button
               onClick={onClose}
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition"
+              className="p-2 rounded-full hover:bg-white/10 transition"
             >
               <X size={20} />
             </button>
           </div>
-
-          {/* Form */}
-          <div className="space-y-5">
+          <div className="grid grid-cols-2 gap-3 mb-5">
+            {resourceTypes.map((type) => (
+              <button
+                key={type.id}
+                onClick={() => setResourceType(type.id)}
+                className={`flex items-center justify-center gap-2 py-2 rounded-xl text-sm transition-all
+                  ${
+                    resourceType === type.id
+                      ? "bg-cyan-500/20 border border-cyan-400 text-cyan-300 shadow-lg"
+                      : "bg-white/5 border border-white/10 hover:bg-white/10 text-gray-400"
+                  }`}
+              >
+                {type.icon} {type.label}
+              </button>
+            ))}
+          </div>
+          <div className="space-y-4">
             <input
               type="text"
-              placeholder="Enter Resource Title"
+              placeholder="Resource title..."
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full bg-white/10 border border-white/20 p-3 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition"
+              className="input-style"
             />
 
             <textarea
-              placeholder="Description (optional)"
+              placeholder="Optional description..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              rows={3}
-              className="w-full bg-white/10 border border-white/20 p-3 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition"
-            ></textarea>
+              className="input-style h-24"
+            />
 
-            <div>
-              <label className="text-sm text-gray-300 mb-1 block">
-                Linked Subject
-              </label>
-              <select
-                value={selectedSubject}
-                onChange={(e) => setSelectedSubject(e.target.value)}
-                className="w-full bg-white/10 border border-white/20 p-3 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-              >
-                {teacherSubjects.map((ts) => (
-                  <option key={ts.subject.id} value={ts.subject.id}>
-                    {ts.subject.name} ({ts.semester.name}, {ts.section.name})
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* File Upload */}
-            <div>
-              <label className="text-sm text-gray-300 mb-2 block">
-                Resource File
-              </label>
-              <div className="relative border-2 border-dashed border-white/20 rounded-xl p-6 text-center hover:border-cyan-400 transition">
-                <UploadCloud className="mx-auto h-12 w-12 text-cyan-400" />
-                <p className="text-sm text-gray-400 mt-2">
-                  Drag & drop or{" "}
-                  <label
-                    htmlFor="file-upload"
-                    className="text-blue-400 cursor-pointer hover:underline"
-                  >
-                    browse files
-                  </label>
-                </p>
-                <input
-                  id="file-upload"
-                  name="file"
-                  type="file"
-                  className="sr-only"
-                  onChange={(e) =>
-                    setFile(e.target.files ? e.target.files[0] : null)
-                  }
-                />
-
-                {file && (
-                  <div className="mt-4 flex items-center justify-center gap-2 text-cyan-300 text-sm bg-white/5 py-2 px-3 rounded-lg border border-cyan-500/30">
-                    <FileIcon size={16} />
-                    <span className="truncate max-w-[200px]">{file.name}</span>
-                    <button
-                      onClick={() => setFile(null)}
-                      className="text-red-400 hover:text-red-300"
+            <select
+              value={selectedSubject}
+              onChange={(e) => setSelectedSubject(e.target.value)}
+              className="input-style"
+            >
+              {teacherSubjects.map((ts) => (
+                <option key={ts.subject.id} value={ts.subject.id}>
+                  {ts.subject.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mt-6">
+            <div
+              className={`relative border-2 border-dashed rounded-2xl p-6 text-center transition
+              ${
+                file
+                  ? "border-green-400/50 bg-green-400/5"
+                  : "border-white/20 hover:border-cyan-400"
+              }`}
+            >
+              {!file ? (
+                <>
+                  <UploadCloud className="mx-auto text-cyan-400 mb-2" />
+                  <p className="text-sm text-gray-400">
+                    Drag & drop or{" "}
+                    <label
+                      htmlFor="file"
+                      className="text-blue-400 cursor-pointer"
                     >
-                      <X size={14} />
-                    </button>
-                  </div>
-                )}
-              </div>
+                      browse
+                    </label>
+                  </p>
+                </>
+              ) : (
+                <div className="flex flex-col items-center gap-2">
+                  <FileIcon />
+                  <span className="text-sm truncate">{file.name}</span>
+                  <button
+                    onClick={() => setFile(null)}
+                    className="text-xs text-red-400"
+                  >
+                    Remove
+                  </button>
+                </div>
+              )}
+              <input
+                id="file"
+                type="file"
+                className="hidden"
+                onChange={(e) => setFile(e.target.files?.[0] || null)}
+              />
             </div>
           </div>
-
-          {/* Footer Actions */}
-          <div className="flex justify-end gap-4 pt-8 mt-6 border-t border-white/10">
+          <div className="flex justify-end gap-3 mt-8">
             <button
               onClick={onClose}
-              className="px-4 py-2 rounded-lg font-semibold bg-white/10 hover:bg-white/20 transition"
+              className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20"
             >
               Cancel
             </button>
+
             <button
               onClick={handleSubmit}
               disabled={isLoading}
-              className="relative overflow-hidden group px-5 py-2 rounded-lg font-semibold bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-500 hover:scale-105 transition-transform disabled:opacity-50"
+              className="px-5 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-violet-500 hover:scale-105 transition"
             >
-              {isLoading ? "Uploading..." : "Upload Resource"}
-              <span className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-cyan-400/30 opacity-0 group-hover:opacity-100 blur-md transition"></span>
+              {isLoading ? "Uploading..." : "Upload"}
             </button>
           </div>
         </motion.div>

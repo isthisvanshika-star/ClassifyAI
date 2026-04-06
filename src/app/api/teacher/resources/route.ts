@@ -2,8 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 import z from "zod";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-const pdfParse = require("pdf-parse");
+import { extractText } from "unpdf";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -12,8 +11,6 @@ cloudinary.config({
   secure: true,
 });
 
-//? (A. Vanshika) Adding Gemini AI API integration for 5 points summary....
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
 export async function GET(req: NextRequest) {
   try {
@@ -55,7 +52,7 @@ export async function GET(req: NextRequest) {
     );
   }
 }
-
+//? (A. Vanshika) Adding Gemini AI API integration for 5 points summary....
 //? (A. Vanshika) POST Route {Upgraded with AI summary}....
 
 export async function POST(req: NextRequest) {
@@ -90,12 +87,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const fileBuffer = await file.arrayBuffer();
+     const fileBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(fileBuffer);
+    const fileExtension = file.name.split(".").pop()?.toLowerCase() || "unknown";
 
-    const originalFileName = file.name || "";
-    const fileExtension =
-      originalFileName.split(".").pop()?.toLowerCase() || "unknown";
 
     const uploadResult = await new Promise<any>((resolve, reject) => {
       cloudinary.uploader
@@ -117,45 +112,50 @@ export async function POST(req: NextRequest) {
       fileExtension === "pdf" &&
       (resourceType === "NOTES" || resourceType === "PYQ")
     ) {
-      if (buffer.length > 10 * 1024 * 1024) {
-        console.log("Large PDF detected, skipping AI summary");
-      } else {
-        try {
-          console.log("Extracting text from PDF Buffer...");
-          const pdfData = await pdfParse(buffer);
-          const extractedText = pdfData.text
-            .replace(/\s+/g, " ")
-            .trim()
-            .substring(0, 15000);
-
-          if (extractedText.trim().length > 0) {
-            console.log("Asking Gemini for a 5-point summary...");
-            const model = genAI.getGenerativeModel({
-              model: "gemini-1.5-flash",
-            });
-
-            const prompt = `You are an expert college professor. Read the following text extracted from a document. Provide a concise, 5-point bulleted summary of the most important concepts. Keep each point under 2 sentences. DO NOT use markdown like ** or *, just return the 5 plain text points separated by the '|' character. 
-          Text: ${extractedText}`;
-
-            const result = await model.generateContent(prompt);
-            const aiResponse = result.response.text();
-
-            aiSummary = aiResponse
-              .split("|")
-              .map((point) => point.trim())
-              .filter((point) => point.length > 0)
-              .slice(0, 5);
-
-            console.log("AI Summary Generated!", aiSummary);
-          }
-        } catch (aiError) {
-          console.error(
-            "AI Parsing failed, saving resource without summary.",
-            aiError,
+      try {
+        const { text } = await extractText(new Uint8Array(buffer), {
+          mergePages: true,
+        });
+        const pdfText = text.slice(0, 8000);
+        if (pdfText.trim().length >= 50) {
+          const response = await fetch(
+            "https://openrouter.ai/api/v1/chat/completions",
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+                "Content-Type": "application/json",
+                "HTTP-Referer": "http://localhost:3000",
+                "X-Title": "Campus Resource Summarizer",
+              },
+              body: JSON.stringify({
+                model: "openrouter/free",
+                messages: [
+                  {
+                    role: "user",
+                    content: `You are an expert college professor. Read this document and give EXACTLY 5 short bullet point summaries. Return plain text separated by "|" with no other text.\n\nDocument:\n${pdfText}`,
+                  },
+                ],
+                max_tokens: 500,
+              }),
+            },
           );
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(`AI failed: ${response.status}`);
+          }
+          const aiText = data.choices?.[0]?.message?.content ?? "";
+          aiSummary = aiText
+            .split("|")
+            .map((p: string) => p.trim())
+            .filter((p: string) => p.length > 0)
+            .slice(0, 5);
         }
+      } catch (error) {
+        console.error("AI summary generation failed:", error);
       }
     }
+
     const newResource = await prisma.resource.create({
       data: {
         title,

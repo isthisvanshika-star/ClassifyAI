@@ -7,13 +7,11 @@ import { X, FileText, Download } from "lucide-react";
 interface ResourcePreviewModalProps {
   isOpen: boolean;
   onClose: () => void;
-  resource:
-    | {
-        title: string;
-        description?: string;
-        previewUrl: string;
-      }
-    | null;
+  resource: {
+    title: string;
+    description?: string;
+    url: string;
+  } | null;
 }
 
 export default function ResourcePreviewModal({
@@ -21,24 +19,22 @@ export default function ResourcePreviewModal({
   onClose,
   resource,
 }: ResourcePreviewModalProps) {
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [onClose]);
+
   if (!isOpen || !resource) return null;
 
-  const fileUrl = resource.previewUrl || "";
+  const fileUrl = resource.url || "";
   const lowerUrl = fileUrl.toLowerCase();
-
   const isPDF = lowerUrl.endsWith(".pdf");
   const isImage = /\.(png|jpe?g|gif|webp|svg)$/i.test(lowerUrl);
   const isVideo = /\.(mp4|webm|ogg)$/i.test(lowerUrl);
   const isAudio = /\.(mp3|wav|ogg)$/i.test(lowerUrl);
   const isText =
     /\.(txt|csv|json|md)$/i.test(lowerUrl) || lowerUrl.startsWith("data:text");
-
-  // Close on ESC
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, [onClose]);
 
   return (
     <AnimatePresence>
@@ -87,7 +83,9 @@ export default function ResourcePreviewModal({
             <div className="border border-white/10 rounded-xl overflow-hidden bg-black/40 shadow-inner">
               {isPDF ? (
                 <iframe
-                  src={`${fileUrl}#toolbar=0&navpanes=0`}
+                  src={`https://docs.google.com/gview?url=${encodeURIComponent(
+                    fileUrl,
+                  )}&embedded=true`}
                   className="w-full h-[75vh]"
                   title={resource.title}
                 />

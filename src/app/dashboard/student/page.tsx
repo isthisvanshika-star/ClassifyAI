@@ -19,8 +19,13 @@ import FaceVerificationModal from "@/components/student/FaceVerificationModal";
 import DashboardLoader from "@/components/student/DashboardLoader";
 import NotificationBell from "@/components/student/NotificationBell";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookOpen, faBullhorn } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBookOpen,
+  faBullhorn,
+  faFile,
+} from "@fortawesome/free-solid-svg-icons";
 import NotificationHandler from "@/components/ui/NotificationHandler";
+import SideButtons from "@/components/student/SideButtons";
 
 export default function StudentDashboard() {
   const [todayAttendance, setTodayAttendance] = useState<Attendance[]>([]);
@@ -239,30 +244,21 @@ export default function StudentDashboard() {
               <div className="flex flex-row-reverse gap-2">
                 <div className="flex flex-col gap-5">
                   <NotificationBell />
-                  <div
-                    className="relative p-2 rounded-full gap-2 2xl:h-[40px] bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-200 backdrop-blur-md flex items-center justify-center cursor-pointer"
-                    onClick={() => {
-                      router.push("/dashboard/student/assignments");
-                    }}
-                  >
-                    <FontAwesomeIcon
-                      icon={faBookOpen}
-                      className="h-6 w-6 text-cyan-300"
-                    />
-                    <span className="w-[7.5rem] text-sm">View Assignments</span>
-                  </div>
-                  <div
-                    className="relative p-2 gap-2 rounded-full 2xl:h-[40px] bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-200 backdrop-blur-md flex items-center justify-center cursor-pointer"
-                    onClick={() => {
-                      router.push("/dashboard/student/announcements");
-                    }}
-                  >
-                    <FontAwesomeIcon
-                      icon={faBullhorn}
-                      className="h-6 w-6 text-cyan-300"
-                    />
-                    <span className="w-[8rem] text-sm">View Annoucements</span>
-                  </div>
+                  <SideButtons
+                    faIcon={faBookOpen}
+                    title="View Assignments"
+                    link="/dashboard/student/assignments"
+                  />
+                  <SideButtons
+                    faIcon={faBullhorn}
+                    title="View Annoucements"
+                    link="/dashboard/student/announcements"
+                  />
+                  <SideButtons
+                    faIcon={faBookOpen}
+                    title="View Resources"
+                    link="/dashboard/student/resources"
+                  />
                 </div>
                 {/* Bar Graph */}
                 <div className="w-full">

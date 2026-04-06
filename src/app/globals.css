@@ -268,3 +268,8 @@ input[type="number"] {
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome/Safari */
 }
+
+.input-style {
+  @apply w-full bg-white/10 border border-white/20 p-3 rounded-xl text-gray-200 
+  placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition;
+}
