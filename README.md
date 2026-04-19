@@ -2,7 +2,7 @@
 
 > **A Next-Generation, AI-Powered Campus Management Desktop Application**
 
-Classify AI is a comprehensive, highly secure, and intelligent Enterprise Resource Planning (ERP) platform built for modern educational institutions. Designed as a high-performance **Desktop App using Next.js and Tauri**, it bridges the gap between administrators, teachers, and students with cutting-edge technologies like **Geo-fenced Facial Recognition**, **AI Study Planners**, and **Multi-tier Role-Based Access Control (RBAC)**.
+Classify AI is an AI-powered Academic Operating System (AOS) that redefines how educational institutions operate. Designed as a high-performance **Desktop App using Next.js and Tauri**, it replaces outdated ERP systems with a unified, intelligent platform connecting students, teachers, and administrators with cutting-edge technologies like **Geo-fenced Facial Recognition**, **AI Study Planners**, and **Multi-tier Role-Based Access Control (RBAC)**, it transforms campuses into fully digital, automated, and insight-driven environments.
 
 ---
 
@@ -90,7 +90,11 @@ _This command will start the Next.js frontend and compile the Rust backend, open
 
 ---
 ## 🔮 Future Roadmap
-* **[ ] Real-Time Campus Chat:** A secure, instant messaging system for student-teacher communication.
+* **[ ]Real-Time Campus Chat (Secure Communication Layer):** A highly secure, real-time messaging system designed specifically for structured academic communication between students, teachers, and campus staff.
+  * **Role-Based Messaging (RBAC):** Controlled communication (Student ↔ Teacher, Teacher ↔ Class, Admin ↔ All).
+  * **End-to-End Encryption (E2EE):** Ensures complete privacy and data protection.
+  * **Smart Channels:** Class-wise, subject-wise, and announcement-based chat rooms.
+  * **Read Receipts & Activity Tracking:** See who has read important academic messages.
 * **[ ] Custom LLM Integration:** Deploying a personalized, locally-aware AI model trained specifically on campus data to provide hyper-contextual assistance.
 ---
  <u>_Built with ❤️ for modern education._</u>
