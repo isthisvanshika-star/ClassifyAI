@@ -10,6 +10,8 @@ import { Tektur } from "next/font/google";
 import AdminSidebar from "@/components/assistant/AdminSidebar";
 import Logo from "@/components/assistant/Logo";
 import RecentAttendancePage from "@/components/assistant/RecentAttendance";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBullhorn } from "@fortawesome/free-solid-svg-icons";
 
 const tektur = Tektur({
   subsets: ["latin"],
@@ -24,7 +26,9 @@ export default function AdminLayout({
   const [expanded, setExpanded] = useState<"upcoming" | "recent" | null>(null);
 
   return (
-    <div className={`relative min-h-screen w-full ${tektur.className} ${styles.scrollbarHide}`}>
+    <div
+      className={`relative min-h-screen w-full ${tektur.className} ${styles.scrollbarHide}`}
+    >
       <div className="absolute inset-0 bg-black/90 z-0" />
       <div className="relative z-10 flex flex-col lg:flex-row min-h-screen w-full">
         {/* LEFT SIDEBAR */}
@@ -45,7 +49,7 @@ export default function AdminLayout({
         {/* RIGHT SIDEBAR */}
         <div className="w-full lg:w-80 lg:h-screen lg:flex-shrink-0 overflow-y-auto lg:border-l lg:border-neutral-800">
           <div className="text-white p-4 h-full flex flex-col gap-4 overflow-hidden max-w-full">
-            <div className="flex justify-center lg:justify-end mb-4">
+            <div className="flex justify-center lg:justify-end gap-4 mb-4 ">
               <ProfileCard />
             </div>
             <AnimatePresence mode="wait">

@@ -13,6 +13,7 @@ import {
   faGear,
   faArrowRightFromBracket,
   faChartSimple,
+  faBullhorn,
 } from "@fortawesome/free-solid-svg-icons";
 
 // --- FONT SETUP ---
@@ -25,8 +26,17 @@ const tektur = Tektur({
 const links = [
   { href: "/dashboard/assistant", icon: faChartSimple, label: "Dashboard" },
   { href: "/dashboard/assistant/users", icon: faUsers, label: "Manage Users" },
-  { href: "/dashboard/assistant/events", icon: faCalendarDays, label: "Events" },
+  {
+    href: "/dashboard/assistant/events",
+    icon: faCalendarDays,
+    label: "Events",
+  },
   { href: "/dashboard/assistant/premium", icon: faCrown, label: "Premium" },
+  {
+    href: "/dashboard/assistant/announcements",
+    icon: faBullhorn,
+    label: "Announcements",
+  },
   { href: "/dashboard/assistant/settings", icon: faGear, label: "Settings" },
   {
     href: "/dashboard/assistant/logout",
@@ -50,7 +60,7 @@ const AssistantSidebar = () => {
       transition={{ duration: 0.5, type: "spring" }}
       className={`bg-gradient-to-t from-orange-900 via-gray-900 to-black text-gray-300
                     flex flex-row items-center justify-around p-2 rounded-xl
-                    lg:flex-col lg:justify-start lg:w-48 lg:min-h-[42vw] lg:gap-40 lg:rounded-full lg:p-4
+                    lg:flex-col lg:justify-start lg:w-48 lg:min-h-[46vw] lg:gap-40 lg:rounded-full lg:p-4
                     ${tektur.className}`}
     >
       <motion.h1
