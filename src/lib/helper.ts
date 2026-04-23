@@ -546,3 +546,12 @@ export const verificationEmailHTML = (code: string) => `
   </body>
   </html>
 `;
+
+export const TABS = [
+  { id: "ALL", label: "All Files" },
+  { id: "NOTES", label: "Study Notes" },
+  { id: "PYQ", label: "PYQs" },
+  { id: "SYLLABUS", label: "Syllabus" },
+  { id: "VIDEO_LINK", label: "Videos" },
+  { id: "PREDICTOR", label: "AI Predictor" },
+];

@@ -120,10 +120,10 @@ export type Expiration = {
   id: string;
   name: string;
   email: string;
-  plan: 'PREMIUM' | 'PRO' | 'ULTIMATE';
+  plan: "PREMIUM" | "PRO" | "ULTIMATE";
   startDate: string;
   endDate: string | null;
-  status: 'ACTIVE' | 'EXPIRED';
+  status: "ACTIVE" | "EXPIRED";
 };
 
 export type Activity = {
@@ -165,7 +165,7 @@ export type PendingClass = {
   endTime: string;
 };
 
-export  interface TeacherDetails {
+export interface TeacherDetails {
   id: string;
   name: string;
   email: string;
@@ -215,7 +215,6 @@ export type Section = {
   name: string;
 };
 
-
 export type TeacherDetailsDashboard = {
   name: string;
   email: string;
@@ -254,9 +253,9 @@ export type AssignmentStatus = "DRAFT" | "PUBLISHED" | "CLOSED";
 
 export type TeacherClassSession = {
   id: string;
-  subject: {id: string, name: string; code?: string; };
-  section: { id: string, name: string; };
-  semester: { id: string, name: string; };
+  subject: { id: string; name: string; code?: string };
+  section: { id: string; name: string };
+  semester: { id: string; name: string };
   weekday: string;
   startTime: string;
   endTime: string;
@@ -278,5 +277,15 @@ export interface AssignmentHeaderProps {
 }
 
 export interface AudioRecorderProps {
-  onAudioReady: (blob: Blob| null) => void;
+  onAudioReady: (blob: Blob | null) => void;
+}
+
+interface StudentSubject {
+  id: string;
+  name: string;
+}
+
+export interface SubjectSelectorProps {
+  subjects: StudentSubject[];
+  onSelect: (subject: Subject) => void;
 }

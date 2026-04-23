@@ -40,7 +40,6 @@ export default function GradeSubmissionModal({
         toast.error("Please enter a valid grade.");
         return;
     }
- //seting loading state to true
     setIsLoading(true);
     const toastId = toast.loading("Saving grade...");
     try {
