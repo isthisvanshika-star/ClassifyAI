@@ -47,6 +47,7 @@ model User {
   messagesReceived Message[]        @relation("MessageReceiver")
   notifications    Notification[]
   sessions         Session[]
+  announcements    Announcement[]   @relation("AnnouncementAssistant")
 }
 
 model Teacher {
@@ -340,8 +341,10 @@ model Announcement {
   id             String     @id @default(cuid())
   title          String
   message        String
-  authorId       String
-  author         Teacher    @relation("AnnouncementAuthor", fields: [authorId], references: [id], map: "fk_announcement_author")
+  authorId       String?
+  author         Teacher?   @relation("AnnouncementAuthor", fields: [authorId], references: [id], map: "fk_announcement_author")
+  assistantId    String?
+  assistant      User?      @relation("AnnouncementAssistant", fields: [assistantId], references: [id], map: "fk_announcement_assistant")
   targetAll      Boolean    @default(false)
   targetSemester Int?
   targetSection  String?

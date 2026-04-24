@@ -3338,6 +3338,7 @@ export namespace Prisma {
     messagesReceived: number
     notifications: number
     sessions: number
+    announcements: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3350,6 +3351,7 @@ export namespace Prisma {
     messagesReceived?: boolean | UserCountOutputTypeCountMessagesReceivedArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
+    announcements?: boolean | UserCountOutputTypeCountAnnouncementsArgs
   }
 
   // Custom InputTypes
@@ -3424,6 +3426,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SessionWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAnnouncementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AnnouncementWhereInput
   }
 
 
@@ -4348,6 +4357,7 @@ export namespace Prisma {
     messagesReceived?: boolean | User$messagesReceivedArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
+    announcements?: boolean | User$announcementsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -4424,6 +4434,7 @@ export namespace Prisma {
     messagesReceived?: boolean | User$messagesReceivedArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
+    announcements?: boolean | User$announcementsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4448,6 +4459,7 @@ export namespace Prisma {
       messagesReceived: Prisma.$MessagePayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       sessions: Prisma.$SessionPayload<ExtArgs>[]
+      announcements: Prisma.$AnnouncementPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4872,6 +4884,7 @@ export namespace Prisma {
     messagesReceived<T extends User$messagesReceivedArgs<ExtArgs> = {}>(args?: Subset<T, User$messagesReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    announcements<T extends User$announcementsArgs<ExtArgs> = {}>(args?: Subset<T, User$announcementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5583,6 +5596,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
+  }
+
+  /**
+   * User.announcements
+   */
+  export type User$announcementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Announcement
+     */
+    select?: AnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Announcement
+     */
+    omit?: AnnouncementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnnouncementInclude<ExtArgs> | null
+    where?: AnnouncementWhereInput
+    orderBy?: AnnouncementOrderByWithRelationInput | AnnouncementOrderByWithRelationInput[]
+    cursor?: AnnouncementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AnnouncementScalarFieldEnum | AnnouncementScalarFieldEnum[]
   }
 
   /**
@@ -23817,6 +23854,7 @@ export namespace Prisma {
     title: string | null
     message: string | null
     authorId: string | null
+    assistantId: string | null
     targetAll: boolean | null
     targetSemester: number | null
     targetSection: string | null
@@ -23830,6 +23868,7 @@ export namespace Prisma {
     title: string | null
     message: string | null
     authorId: string | null
+    assistantId: string | null
     targetAll: boolean | null
     targetSemester: number | null
     targetSection: string | null
@@ -23843,6 +23882,7 @@ export namespace Prisma {
     title: number
     message: number
     authorId: number
+    assistantId: number
     targetAll: number
     targetSemester: number
     targetSection: number
@@ -23866,6 +23906,7 @@ export namespace Prisma {
     title?: true
     message?: true
     authorId?: true
+    assistantId?: true
     targetAll?: true
     targetSemester?: true
     targetSection?: true
@@ -23879,6 +23920,7 @@ export namespace Prisma {
     title?: true
     message?: true
     authorId?: true
+    assistantId?: true
     targetAll?: true
     targetSemester?: true
     targetSection?: true
@@ -23892,6 +23934,7 @@ export namespace Prisma {
     title?: true
     message?: true
     authorId?: true
+    assistantId?: true
     targetAll?: true
     targetSemester?: true
     targetSection?: true
@@ -23991,7 +24034,8 @@ export namespace Prisma {
     id: string
     title: string
     message: string
-    authorId: string
+    authorId: string | null
+    assistantId: string | null
     targetAll: boolean
     targetSemester: number | null
     targetSection: string | null
@@ -24024,13 +24068,15 @@ export namespace Prisma {
     title?: boolean
     message?: boolean
     authorId?: boolean
+    assistantId?: boolean
     targetAll?: boolean
     targetSemester?: boolean
     targetSection?: boolean
     createdAt?: boolean
     expiresAt?: boolean
     isActive?: boolean
-    author?: boolean | TeacherDefaultArgs<ExtArgs>
+    author?: boolean | Announcement$authorArgs<ExtArgs>
+    assistant?: boolean | Announcement$assistantArgs<ExtArgs>
     attachments?: boolean | Announcement$attachmentsArgs<ExtArgs>
     _count?: boolean | AnnouncementCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["announcement"]>
@@ -24040,13 +24086,15 @@ export namespace Prisma {
     title?: boolean
     message?: boolean
     authorId?: boolean
+    assistantId?: boolean
     targetAll?: boolean
     targetSemester?: boolean
     targetSection?: boolean
     createdAt?: boolean
     expiresAt?: boolean
     isActive?: boolean
-    author?: boolean | TeacherDefaultArgs<ExtArgs>
+    author?: boolean | Announcement$authorArgs<ExtArgs>
+    assistant?: boolean | Announcement$assistantArgs<ExtArgs>
   }, ExtArgs["result"]["announcement"]>
 
   export type AnnouncementSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -24054,13 +24102,15 @@ export namespace Prisma {
     title?: boolean
     message?: boolean
     authorId?: boolean
+    assistantId?: boolean
     targetAll?: boolean
     targetSemester?: boolean
     targetSection?: boolean
     createdAt?: boolean
     expiresAt?: boolean
     isActive?: boolean
-    author?: boolean | TeacherDefaultArgs<ExtArgs>
+    author?: boolean | Announcement$authorArgs<ExtArgs>
+    assistant?: boolean | Announcement$assistantArgs<ExtArgs>
   }, ExtArgs["result"]["announcement"]>
 
   export type AnnouncementSelectScalar = {
@@ -24068,6 +24118,7 @@ export namespace Prisma {
     title?: boolean
     message?: boolean
     authorId?: boolean
+    assistantId?: boolean
     targetAll?: boolean
     targetSemester?: boolean
     targetSection?: boolean
@@ -24076,30 +24127,35 @@ export namespace Prisma {
     isActive?: boolean
   }
 
-  export type AnnouncementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "message" | "authorId" | "targetAll" | "targetSemester" | "targetSection" | "createdAt" | "expiresAt" | "isActive", ExtArgs["result"]["announcement"]>
+  export type AnnouncementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "message" | "authorId" | "assistantId" | "targetAll" | "targetSemester" | "targetSection" | "createdAt" | "expiresAt" | "isActive", ExtArgs["result"]["announcement"]>
   export type AnnouncementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    author?: boolean | TeacherDefaultArgs<ExtArgs>
+    author?: boolean | Announcement$authorArgs<ExtArgs>
+    assistant?: boolean | Announcement$assistantArgs<ExtArgs>
     attachments?: boolean | Announcement$attachmentsArgs<ExtArgs>
     _count?: boolean | AnnouncementCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type AnnouncementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    author?: boolean | TeacherDefaultArgs<ExtArgs>
+    author?: boolean | Announcement$authorArgs<ExtArgs>
+    assistant?: boolean | Announcement$assistantArgs<ExtArgs>
   }
   export type AnnouncementIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    author?: boolean | TeacherDefaultArgs<ExtArgs>
+    author?: boolean | Announcement$authorArgs<ExtArgs>
+    assistant?: boolean | Announcement$assistantArgs<ExtArgs>
   }
 
   export type $AnnouncementPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Announcement"
     objects: {
-      author: Prisma.$TeacherPayload<ExtArgs>
+      author: Prisma.$TeacherPayload<ExtArgs> | null
+      assistant: Prisma.$UserPayload<ExtArgs> | null
       attachments: Prisma.$ResourcePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       title: string
       message: string
-      authorId: string
+      authorId: string | null
+      assistantId: string | null
       targetAll: boolean
       targetSemester: number | null
       targetSection: string | null
@@ -24500,7 +24556,8 @@ export namespace Prisma {
    */
   export interface Prisma__AnnouncementClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    author<T extends TeacherDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TeacherDefaultArgs<ExtArgs>>): Prisma__TeacherClient<$Result.GetResult<Prisma.$TeacherPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    author<T extends Announcement$authorArgs<ExtArgs> = {}>(args?: Subset<T, Announcement$authorArgs<ExtArgs>>): Prisma__TeacherClient<$Result.GetResult<Prisma.$TeacherPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    assistant<T extends Announcement$assistantArgs<ExtArgs> = {}>(args?: Subset<T, Announcement$assistantArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     attachments<T extends Announcement$attachmentsArgs<ExtArgs> = {}>(args?: Subset<T, Announcement$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -24535,6 +24592,7 @@ export namespace Prisma {
     readonly title: FieldRef<"Announcement", 'String'>
     readonly message: FieldRef<"Announcement", 'String'>
     readonly authorId: FieldRef<"Announcement", 'String'>
+    readonly assistantId: FieldRef<"Announcement", 'String'>
     readonly targetAll: FieldRef<"Announcement", 'Boolean'>
     readonly targetSemester: FieldRef<"Announcement", 'Int'>
     readonly targetSection: FieldRef<"Announcement", 'String'>
@@ -24934,6 +24992,44 @@ export namespace Prisma {
      * Limit how many Announcements to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Announcement.author
+   */
+  export type Announcement$authorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Teacher
+     */
+    select?: TeacherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Teacher
+     */
+    omit?: TeacherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeacherInclude<ExtArgs> | null
+    where?: TeacherWhereInput
+  }
+
+  /**
+   * Announcement.assistant
+   */
+  export type Announcement$assistantArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -36320,6 +36416,7 @@ export namespace Prisma {
     title: 'title',
     message: 'message',
     authorId: 'authorId',
+    assistantId: 'assistantId',
     targetAll: 'targetAll',
     targetSemester: 'targetSemester',
     targetSection: 'targetSection',
@@ -36716,6 +36813,7 @@ export namespace Prisma {
     messagesReceived?: MessageListRelationFilter
     notifications?: NotificationListRelationFilter
     sessions?: SessionListRelationFilter
+    announcements?: AnnouncementListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -36747,6 +36845,7 @@ export namespace Prisma {
     messagesReceived?: MessageOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
+    announcements?: AnnouncementOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -36781,6 +36880,7 @@ export namespace Prisma {
     messagesReceived?: MessageListRelationFilter
     notifications?: NotificationListRelationFilter
     sessions?: SessionListRelationFilter
+    announcements?: AnnouncementListRelationFilter
   }, "id" | "email" | "username">
 
   export type UserOrderByWithAggregationInput = {
@@ -38134,14 +38234,16 @@ export namespace Prisma {
     id?: StringFilter<"Announcement"> | string
     title?: StringFilter<"Announcement"> | string
     message?: StringFilter<"Announcement"> | string
-    authorId?: StringFilter<"Announcement"> | string
+    authorId?: StringNullableFilter<"Announcement"> | string | null
+    assistantId?: StringNullableFilter<"Announcement"> | string | null
     targetAll?: BoolFilter<"Announcement"> | boolean
     targetSemester?: IntNullableFilter<"Announcement"> | number | null
     targetSection?: StringNullableFilter<"Announcement"> | string | null
     createdAt?: DateTimeFilter<"Announcement"> | Date | string
     expiresAt?: DateTimeNullableFilter<"Announcement"> | Date | string | null
     isActive?: BoolFilter<"Announcement"> | boolean
-    author?: XOR<TeacherScalarRelationFilter, TeacherWhereInput>
+    author?: XOR<TeacherNullableScalarRelationFilter, TeacherWhereInput> | null
+    assistant?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     attachments?: ResourceListRelationFilter
   }
 
@@ -38149,7 +38251,8 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     message?: SortOrder
-    authorId?: SortOrder
+    authorId?: SortOrderInput | SortOrder
+    assistantId?: SortOrderInput | SortOrder
     targetAll?: SortOrder
     targetSemester?: SortOrderInput | SortOrder
     targetSection?: SortOrderInput | SortOrder
@@ -38157,6 +38260,7 @@ export namespace Prisma {
     expiresAt?: SortOrderInput | SortOrder
     isActive?: SortOrder
     author?: TeacherOrderByWithRelationInput
+    assistant?: UserOrderByWithRelationInput
     attachments?: ResourceOrderByRelationAggregateInput
   }
 
@@ -38167,14 +38271,16 @@ export namespace Prisma {
     NOT?: AnnouncementWhereInput | AnnouncementWhereInput[]
     title?: StringFilter<"Announcement"> | string
     message?: StringFilter<"Announcement"> | string
-    authorId?: StringFilter<"Announcement"> | string
+    authorId?: StringNullableFilter<"Announcement"> | string | null
+    assistantId?: StringNullableFilter<"Announcement"> | string | null
     targetAll?: BoolFilter<"Announcement"> | boolean
     targetSemester?: IntNullableFilter<"Announcement"> | number | null
     targetSection?: StringNullableFilter<"Announcement"> | string | null
     createdAt?: DateTimeFilter<"Announcement"> | Date | string
     expiresAt?: DateTimeNullableFilter<"Announcement"> | Date | string | null
     isActive?: BoolFilter<"Announcement"> | boolean
-    author?: XOR<TeacherScalarRelationFilter, TeacherWhereInput>
+    author?: XOR<TeacherNullableScalarRelationFilter, TeacherWhereInput> | null
+    assistant?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     attachments?: ResourceListRelationFilter
   }, "id">
 
@@ -38182,7 +38288,8 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     message?: SortOrder
-    authorId?: SortOrder
+    authorId?: SortOrderInput | SortOrder
+    assistantId?: SortOrderInput | SortOrder
     targetAll?: SortOrder
     targetSemester?: SortOrderInput | SortOrder
     targetSection?: SortOrderInput | SortOrder
@@ -38203,7 +38310,8 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Announcement"> | string
     title?: StringWithAggregatesFilter<"Announcement"> | string
     message?: StringWithAggregatesFilter<"Announcement"> | string
-    authorId?: StringWithAggregatesFilter<"Announcement"> | string
+    authorId?: StringNullableWithAggregatesFilter<"Announcement"> | string | null
+    assistantId?: StringNullableWithAggregatesFilter<"Announcement"> | string | null
     targetAll?: BoolWithAggregatesFilter<"Announcement"> | boolean
     targetSemester?: IntNullableWithAggregatesFilter<"Announcement"> | number | null
     targetSection?: StringNullableWithAggregatesFilter<"Announcement"> | string | null
@@ -38910,6 +39018,7 @@ export namespace Prisma {
     messagesReceived?: MessageCreateNestedManyWithoutReceiverInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementCreateNestedManyWithoutAssistantInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -38940,6 +39049,7 @@ export namespace Prisma {
     messagesReceived?: MessageUncheckedCreateNestedManyWithoutReceiverInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutAssistantInput
   }
 
   export type UserUpdateInput = {
@@ -38970,6 +39080,7 @@ export namespace Prisma {
     messagesReceived?: MessageUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUpdateManyWithoutAssistantNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -39000,6 +39111,7 @@ export namespace Prisma {
     messagesReceived?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutAssistantNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -40428,7 +40540,8 @@ export namespace Prisma {
     createdAt?: Date | string
     expiresAt?: Date | string | null
     isActive?: boolean
-    author: TeacherCreateNestedOneWithoutAnnouncementsInput
+    author?: TeacherCreateNestedOneWithoutAnnouncementsInput
+    assistant?: UserCreateNestedOneWithoutAnnouncementsInput
     attachments?: ResourceCreateNestedManyWithoutAnnouncementInput
   }
 
@@ -40436,7 +40549,8 @@ export namespace Prisma {
     id?: string
     title: string
     message: string
-    authorId: string
+    authorId?: string | null
+    assistantId?: string | null
     targetAll?: boolean
     targetSemester?: number | null
     targetSection?: string | null
@@ -40456,7 +40570,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    author?: TeacherUpdateOneRequiredWithoutAnnouncementsNestedInput
+    author?: TeacherUpdateOneWithoutAnnouncementsNestedInput
+    assistant?: UserUpdateOneWithoutAnnouncementsNestedInput
     attachments?: ResourceUpdateManyWithoutAnnouncementNestedInput
   }
 
@@ -40464,7 +40579,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
-    authorId?: StringFieldUpdateOperationsInput | string
+    authorId?: NullableStringFieldUpdateOperationsInput | string | null
+    assistantId?: NullableStringFieldUpdateOperationsInput | string | null
     targetAll?: BoolFieldUpdateOperationsInput | boolean
     targetSemester?: NullableIntFieldUpdateOperationsInput | number | null
     targetSection?: NullableStringFieldUpdateOperationsInput | string | null
@@ -40478,7 +40594,8 @@ export namespace Prisma {
     id?: string
     title: string
     message: string
-    authorId: string
+    authorId?: string | null
+    assistantId?: string | null
     targetAll?: boolean
     targetSemester?: number | null
     targetSection?: string | null
@@ -40503,7 +40620,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
-    authorId?: StringFieldUpdateOperationsInput | string
+    authorId?: NullableStringFieldUpdateOperationsInput | string | null
+    assistantId?: NullableStringFieldUpdateOperationsInput | string | null
     targetAll?: BoolFieldUpdateOperationsInput | boolean
     targetSemester?: NullableIntFieldUpdateOperationsInput | number | null
     targetSection?: NullableStringFieldUpdateOperationsInput | string | null
@@ -41337,6 +41455,12 @@ export namespace Prisma {
     none?: SessionWhereInput
   }
 
+  export type AnnouncementListRelationFilter = {
+    every?: AnnouncementWhereInput
+    some?: AnnouncementWhereInput
+    none?: AnnouncementWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -41371,6 +41495,10 @@ export namespace Prisma {
   }
 
   export type SessionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AnnouncementOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -41554,12 +41682,6 @@ export namespace Prisma {
     none?: AttendanceTokenWhereInput
   }
 
-  export type AnnouncementListRelationFilter = {
-    every?: AnnouncementWhereInput
-    some?: AnnouncementWhereInput
-    none?: AnnouncementWhereInput
-  }
-
   export type AssignmentListRelationFilter = {
     every?: AssignmentWhereInput
     some?: AssignmentWhereInput
@@ -41581,10 +41703,6 @@ export namespace Prisma {
   }
 
   export type AttendanceTokenOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type AnnouncementOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -42577,6 +42695,7 @@ export namespace Prisma {
     title?: SortOrder
     message?: SortOrder
     authorId?: SortOrder
+    assistantId?: SortOrder
     targetAll?: SortOrder
     targetSemester?: SortOrder
     targetSection?: SortOrder
@@ -42594,6 +42713,7 @@ export namespace Prisma {
     title?: SortOrder
     message?: SortOrder
     authorId?: SortOrder
+    assistantId?: SortOrder
     targetAll?: SortOrder
     targetSemester?: SortOrder
     targetSection?: SortOrder
@@ -42607,6 +42727,7 @@ export namespace Prisma {
     title?: SortOrder
     message?: SortOrder
     authorId?: SortOrder
+    assistantId?: SortOrder
     targetAll?: SortOrder
     targetSemester?: SortOrder
     targetSection?: SortOrder
@@ -43103,6 +43224,13 @@ export namespace Prisma {
     connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
   }
 
+  export type AnnouncementCreateNestedManyWithoutAssistantInput = {
+    create?: XOR<AnnouncementCreateWithoutAssistantInput, AnnouncementUncheckedCreateWithoutAssistantInput> | AnnouncementCreateWithoutAssistantInput[] | AnnouncementUncheckedCreateWithoutAssistantInput[]
+    connectOrCreate?: AnnouncementCreateOrConnectWithoutAssistantInput | AnnouncementCreateOrConnectWithoutAssistantInput[]
+    createMany?: AnnouncementCreateManyAssistantInputEnvelope
+    connect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+  }
+
   export type TeacherUncheckedCreateNestedOneWithoutUserInput = {
     create?: XOR<TeacherCreateWithoutUserInput, TeacherUncheckedCreateWithoutUserInput>
     connectOrCreate?: TeacherCreateOrConnectWithoutUserInput
@@ -43175,6 +43303,13 @@ export namespace Prisma {
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
     createMany?: SessionCreateManyUserInputEnvelope
     connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+  }
+
+  export type AnnouncementUncheckedCreateNestedManyWithoutAssistantInput = {
+    create?: XOR<AnnouncementCreateWithoutAssistantInput, AnnouncementUncheckedCreateWithoutAssistantInput> | AnnouncementCreateWithoutAssistantInput[] | AnnouncementUncheckedCreateWithoutAssistantInput[]
+    connectOrCreate?: AnnouncementCreateOrConnectWithoutAssistantInput | AnnouncementCreateOrConnectWithoutAssistantInput[]
+    createMany?: AnnouncementCreateManyAssistantInputEnvelope
+    connect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -43360,6 +43495,20 @@ export namespace Prisma {
     deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
   }
 
+  export type AnnouncementUpdateManyWithoutAssistantNestedInput = {
+    create?: XOR<AnnouncementCreateWithoutAssistantInput, AnnouncementUncheckedCreateWithoutAssistantInput> | AnnouncementCreateWithoutAssistantInput[] | AnnouncementUncheckedCreateWithoutAssistantInput[]
+    connectOrCreate?: AnnouncementCreateOrConnectWithoutAssistantInput | AnnouncementCreateOrConnectWithoutAssistantInput[]
+    upsert?: AnnouncementUpsertWithWhereUniqueWithoutAssistantInput | AnnouncementUpsertWithWhereUniqueWithoutAssistantInput[]
+    createMany?: AnnouncementCreateManyAssistantInputEnvelope
+    set?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    disconnect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    delete?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    connect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    update?: AnnouncementUpdateWithWhereUniqueWithoutAssistantInput | AnnouncementUpdateWithWhereUniqueWithoutAssistantInput[]
+    updateMany?: AnnouncementUpdateManyWithWhereWithoutAssistantInput | AnnouncementUpdateManyWithWhereWithoutAssistantInput[]
+    deleteMany?: AnnouncementScalarWhereInput | AnnouncementScalarWhereInput[]
+  }
+
   export type TeacherUncheckedUpdateOneWithoutUserNestedInput = {
     create?: XOR<TeacherCreateWithoutUserInput, TeacherUncheckedCreateWithoutUserInput>
     connectOrCreate?: TeacherCreateOrConnectWithoutUserInput
@@ -43503,6 +43652,20 @@ export namespace Prisma {
     update?: SessionUpdateWithWhereUniqueWithoutUserInput | SessionUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: SessionUpdateManyWithWhereWithoutUserInput | SessionUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
+  }
+
+  export type AnnouncementUncheckedUpdateManyWithoutAssistantNestedInput = {
+    create?: XOR<AnnouncementCreateWithoutAssistantInput, AnnouncementUncheckedCreateWithoutAssistantInput> | AnnouncementCreateWithoutAssistantInput[] | AnnouncementUncheckedCreateWithoutAssistantInput[]
+    connectOrCreate?: AnnouncementCreateOrConnectWithoutAssistantInput | AnnouncementCreateOrConnectWithoutAssistantInput[]
+    upsert?: AnnouncementUpsertWithWhereUniqueWithoutAssistantInput | AnnouncementUpsertWithWhereUniqueWithoutAssistantInput[]
+    createMany?: AnnouncementCreateManyAssistantInputEnvelope
+    set?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    disconnect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    delete?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    connect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    update?: AnnouncementUpdateWithWhereUniqueWithoutAssistantInput | AnnouncementUpdateWithWhereUniqueWithoutAssistantInput[]
+    updateMany?: AnnouncementUpdateManyWithWhereWithoutAssistantInput | AnnouncementUpdateManyWithWhereWithoutAssistantInput[]
+    deleteMany?: AnnouncementScalarWhereInput | AnnouncementScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutTeacherProfileInput = {
@@ -45531,6 +45694,12 @@ export namespace Prisma {
     connect?: TeacherWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutAnnouncementsInput = {
+    create?: XOR<UserCreateWithoutAnnouncementsInput, UserUncheckedCreateWithoutAnnouncementsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAnnouncementsInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type ResourceCreateNestedManyWithoutAnnouncementInput = {
     create?: XOR<ResourceCreateWithoutAnnouncementInput, ResourceUncheckedCreateWithoutAnnouncementInput> | ResourceCreateWithoutAnnouncementInput[] | ResourceUncheckedCreateWithoutAnnouncementInput[]
     connectOrCreate?: ResourceCreateOrConnectWithoutAnnouncementInput | ResourceCreateOrConnectWithoutAnnouncementInput[]
@@ -45545,12 +45714,24 @@ export namespace Prisma {
     connect?: ResourceWhereUniqueInput | ResourceWhereUniqueInput[]
   }
 
-  export type TeacherUpdateOneRequiredWithoutAnnouncementsNestedInput = {
+  export type TeacherUpdateOneWithoutAnnouncementsNestedInput = {
     create?: XOR<TeacherCreateWithoutAnnouncementsInput, TeacherUncheckedCreateWithoutAnnouncementsInput>
     connectOrCreate?: TeacherCreateOrConnectWithoutAnnouncementsInput
     upsert?: TeacherUpsertWithoutAnnouncementsInput
+    disconnect?: TeacherWhereInput | boolean
+    delete?: TeacherWhereInput | boolean
     connect?: TeacherWhereUniqueInput
     update?: XOR<XOR<TeacherUpdateToOneWithWhereWithoutAnnouncementsInput, TeacherUpdateWithoutAnnouncementsInput>, TeacherUncheckedUpdateWithoutAnnouncementsInput>
+  }
+
+  export type UserUpdateOneWithoutAnnouncementsNestedInput = {
+    create?: XOR<UserCreateWithoutAnnouncementsInput, UserUncheckedCreateWithoutAnnouncementsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAnnouncementsInput
+    upsert?: UserUpsertWithoutAnnouncementsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAnnouncementsInput, UserUpdateWithoutAnnouncementsInput>, UserUncheckedUpdateWithoutAnnouncementsInput>
   }
 
   export type ResourceUpdateManyWithoutAnnouncementNestedInput = {
@@ -46631,6 +46812,44 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type AnnouncementCreateWithoutAssistantInput = {
+    id?: string
+    title: string
+    message: string
+    targetAll?: boolean
+    targetSemester?: number | null
+    targetSection?: string | null
+    createdAt?: Date | string
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    author?: TeacherCreateNestedOneWithoutAnnouncementsInput
+    attachments?: ResourceCreateNestedManyWithoutAnnouncementInput
+  }
+
+  export type AnnouncementUncheckedCreateWithoutAssistantInput = {
+    id?: string
+    title: string
+    message: string
+    authorId?: string | null
+    targetAll?: boolean
+    targetSemester?: number | null
+    targetSection?: string | null
+    createdAt?: Date | string
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    attachments?: ResourceUncheckedCreateNestedManyWithoutAnnouncementInput
+  }
+
+  export type AnnouncementCreateOrConnectWithoutAssistantInput = {
+    where: AnnouncementWhereUniqueInput
+    create: XOR<AnnouncementCreateWithoutAssistantInput, AnnouncementUncheckedCreateWithoutAssistantInput>
+  }
+
+  export type AnnouncementCreateManyAssistantInputEnvelope = {
+    data: AnnouncementCreateManyAssistantInput | AnnouncementCreateManyAssistantInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CampusUpsertWithoutUsersInput = {
     update: XOR<CampusUpdateWithoutUsersInput, CampusUncheckedUpdateWithoutUsersInput>
     create: XOR<CampusCreateWithoutUsersInput, CampusUncheckedCreateWithoutUsersInput>
@@ -46998,6 +47217,39 @@ export namespace Prisma {
     expiresAt?: DateTimeFilter<"Session"> | Date | string
   }
 
+  export type AnnouncementUpsertWithWhereUniqueWithoutAssistantInput = {
+    where: AnnouncementWhereUniqueInput
+    update: XOR<AnnouncementUpdateWithoutAssistantInput, AnnouncementUncheckedUpdateWithoutAssistantInput>
+    create: XOR<AnnouncementCreateWithoutAssistantInput, AnnouncementUncheckedCreateWithoutAssistantInput>
+  }
+
+  export type AnnouncementUpdateWithWhereUniqueWithoutAssistantInput = {
+    where: AnnouncementWhereUniqueInput
+    data: XOR<AnnouncementUpdateWithoutAssistantInput, AnnouncementUncheckedUpdateWithoutAssistantInput>
+  }
+
+  export type AnnouncementUpdateManyWithWhereWithoutAssistantInput = {
+    where: AnnouncementScalarWhereInput
+    data: XOR<AnnouncementUpdateManyMutationInput, AnnouncementUncheckedUpdateManyWithoutAssistantInput>
+  }
+
+  export type AnnouncementScalarWhereInput = {
+    AND?: AnnouncementScalarWhereInput | AnnouncementScalarWhereInput[]
+    OR?: AnnouncementScalarWhereInput[]
+    NOT?: AnnouncementScalarWhereInput | AnnouncementScalarWhereInput[]
+    id?: StringFilter<"Announcement"> | string
+    title?: StringFilter<"Announcement"> | string
+    message?: StringFilter<"Announcement"> | string
+    authorId?: StringNullableFilter<"Announcement"> | string | null
+    assistantId?: StringNullableFilter<"Announcement"> | string | null
+    targetAll?: BoolFilter<"Announcement"> | boolean
+    targetSemester?: IntNullableFilter<"Announcement"> | number | null
+    targetSection?: StringNullableFilter<"Announcement"> | string | null
+    createdAt?: DateTimeFilter<"Announcement"> | Date | string
+    expiresAt?: DateTimeNullableFilter<"Announcement"> | Date | string | null
+    isActive?: BoolFilter<"Announcement"> | boolean
+  }
+
   export type UserCreateWithoutTeacherProfileInput = {
     id?: string
     name: string
@@ -47025,6 +47277,7 @@ export namespace Prisma {
     messagesReceived?: MessageCreateNestedManyWithoutReceiverInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementCreateNestedManyWithoutAssistantInput
   }
 
   export type UserUncheckedCreateWithoutTeacherProfileInput = {
@@ -47054,6 +47307,7 @@ export namespace Prisma {
     messagesReceived?: MessageUncheckedCreateNestedManyWithoutReceiverInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutAssistantInput
   }
 
   export type UserCreateOrConnectWithoutTeacherProfileInput = {
@@ -47185,6 +47439,7 @@ export namespace Prisma {
     createdAt?: Date | string
     expiresAt?: Date | string | null
     isActive?: boolean
+    assistant?: UserCreateNestedOneWithoutAnnouncementsInput
     attachments?: ResourceCreateNestedManyWithoutAnnouncementInput
   }
 
@@ -47192,6 +47447,7 @@ export namespace Prisma {
     id?: string
     title: string
     message: string
+    assistantId?: string | null
     targetAll?: boolean
     targetSemester?: number | null
     targetSection?: string | null
@@ -47323,6 +47579,7 @@ export namespace Prisma {
     messagesReceived?: MessageUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUpdateManyWithoutAssistantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTeacherProfileInput = {
@@ -47352,6 +47609,7 @@ export namespace Prisma {
     messagesReceived?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutAssistantNestedInput
   }
 
   export type TeacherSubjectUpsertWithWhereUniqueWithoutTeacherInput = {
@@ -47471,22 +47729,6 @@ export namespace Prisma {
     data: XOR<AnnouncementUpdateManyMutationInput, AnnouncementUncheckedUpdateManyWithoutAuthorInput>
   }
 
-  export type AnnouncementScalarWhereInput = {
-    AND?: AnnouncementScalarWhereInput | AnnouncementScalarWhereInput[]
-    OR?: AnnouncementScalarWhereInput[]
-    NOT?: AnnouncementScalarWhereInput | AnnouncementScalarWhereInput[]
-    id?: StringFilter<"Announcement"> | string
-    title?: StringFilter<"Announcement"> | string
-    message?: StringFilter<"Announcement"> | string
-    authorId?: StringFilter<"Announcement"> | string
-    targetAll?: BoolFilter<"Announcement"> | boolean
-    targetSemester?: IntNullableFilter<"Announcement"> | number | null
-    targetSection?: StringNullableFilter<"Announcement"> | string | null
-    createdAt?: DateTimeFilter<"Announcement"> | Date | string
-    expiresAt?: DateTimeNullableFilter<"Announcement"> | Date | string | null
-    isActive?: BoolFilter<"Announcement"> | boolean
-  }
-
   export type AssignmentUpsertWithWhereUniqueWithoutTeacherInput = {
     where: AssignmentWhereUniqueInput
     update: XOR<AssignmentUpdateWithoutTeacherInput, AssignmentUncheckedUpdateWithoutTeacherInput>
@@ -47579,6 +47821,7 @@ export namespace Prisma {
     messagesReceived?: MessageCreateNestedManyWithoutReceiverInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementCreateNestedManyWithoutAssistantInput
   }
 
   export type UserUncheckedCreateWithoutStudentProfileInput = {
@@ -47608,6 +47851,7 @@ export namespace Prisma {
     messagesReceived?: MessageUncheckedCreateNestedManyWithoutReceiverInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutAssistantInput
   }
 
   export type UserCreateOrConnectWithoutStudentProfileInput = {
@@ -47845,6 +48089,7 @@ export namespace Prisma {
     messagesReceived?: MessageUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUpdateManyWithoutAssistantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentProfileInput = {
@@ -47874,6 +48119,7 @@ export namespace Prisma {
     messagesReceived?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutAssistantNestedInput
   }
 
   export type SemesterUpsertWithoutStudentsInput = {
@@ -49450,6 +49696,7 @@ export namespace Prisma {
     messagesReceived?: MessageCreateNestedManyWithoutReceiverInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementCreateNestedManyWithoutAssistantInput
   }
 
   export type UserUncheckedCreateWithoutCampusInput = {
@@ -49479,6 +49726,7 @@ export namespace Prisma {
     messagesReceived?: MessageUncheckedCreateNestedManyWithoutReceiverInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutAssistantInput
   }
 
   export type UserCreateOrConnectWithoutCampusInput = {
@@ -50778,6 +51026,7 @@ export namespace Prisma {
     messagesReceived?: MessageCreateNestedManyWithoutReceiverInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementCreateNestedManyWithoutAssistantInput
   }
 
   export type UserUncheckedCreateWithoutAttendanceInput = {
@@ -50807,6 +51056,7 @@ export namespace Prisma {
     messagesReceived?: MessageUncheckedCreateNestedManyWithoutReceiverInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutAssistantInput
   }
 
   export type UserCreateOrConnectWithoutAttendanceInput = {
@@ -50944,6 +51194,7 @@ export namespace Prisma {
     messagesReceived?: MessageUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUpdateManyWithoutAssistantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAttendanceInput = {
@@ -50973,6 +51224,7 @@ export namespace Prisma {
     messagesReceived?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutAssistantNestedInput
   }
 
   export type StudentCreateWithoutAttendanceTokensInput = {
@@ -51222,6 +51474,7 @@ export namespace Prisma {
     messagesSent?: MessageCreateNestedManyWithoutSenderInput
     messagesReceived?: MessageCreateNestedManyWithoutReceiverInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementCreateNestedManyWithoutAssistantInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -51251,6 +51504,7 @@ export namespace Prisma {
     messagesSent?: MessageUncheckedCreateNestedManyWithoutSenderInput
     messagesReceived?: MessageUncheckedCreateNestedManyWithoutReceiverInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutAssistantInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -51296,6 +51550,7 @@ export namespace Prisma {
     messagesSent?: MessageUpdateManyWithoutSenderNestedInput
     messagesReceived?: MessageUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUpdateManyWithoutAssistantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -51325,6 +51580,7 @@ export namespace Prisma {
     messagesSent?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     messagesReceived?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutAssistantNestedInput
   }
 
   export type CampusCreateWithoutEventsInput = {
@@ -51866,6 +52122,71 @@ export namespace Prisma {
     create: XOR<TeacherCreateWithoutAnnouncementsInput, TeacherUncheckedCreateWithoutAnnouncementsInput>
   }
 
+  export type UserCreateWithoutAnnouncementsInput = {
+    id?: string
+    name: string
+    email: string
+    passwordHash?: string | null
+    role: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    username: string
+    fcmToken?: string | null
+    avatarUrl?: string | null
+    phone?: string | null
+    branch?: string | null
+    semester?: number | null
+    year?: number | null
+    premiumExpiresAt?: Date | string | null
+    campus?: CampusCreateNestedOneWithoutUsersInput
+    teacherProfile?: TeacherCreateNestedOneWithoutUserInput
+    studentProfile?: StudentCreateNestedOneWithoutUserInput
+    attendance?: AttendanceCreateNestedManyWithoutUserInput
+    premiumFeatures?: PremiumFeatureCreateNestedManyWithoutUsersInput
+    googleTokens?: GoogleTokenCreateNestedManyWithoutUserInput
+    recentActivities?: RecentActivityCreateNestedManyWithoutUserInput
+    supportRequests?: SupportRequestCreateNestedManyWithoutUserInput
+    messagesSent?: MessageCreateNestedManyWithoutSenderInput
+    messagesReceived?: MessageCreateNestedManyWithoutReceiverInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutAnnouncementsInput = {
+    id?: string
+    name: string
+    email: string
+    passwordHash?: string | null
+    role: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    username: string
+    fcmToken?: string | null
+    avatarUrl?: string | null
+    phone?: string | null
+    branch?: string | null
+    semester?: number | null
+    year?: number | null
+    premiumExpiresAt?: Date | string | null
+    campusId?: string | null
+    teacherProfile?: TeacherUncheckedCreateNestedOneWithoutUserInput
+    studentProfile?: StudentUncheckedCreateNestedOneWithoutUserInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutUserInput
+    premiumFeatures?: PremiumFeatureUncheckedCreateNestedManyWithoutUsersInput
+    googleTokens?: GoogleTokenUncheckedCreateNestedManyWithoutUserInput
+    recentActivities?: RecentActivityUncheckedCreateNestedManyWithoutUserInput
+    supportRequests?: SupportRequestUncheckedCreateNestedManyWithoutUserInput
+    messagesSent?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    messagesReceived?: MessageUncheckedCreateNestedManyWithoutReceiverInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutAnnouncementsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAnnouncementsInput, UserUncheckedCreateWithoutAnnouncementsInput>
+  }
+
   export type ResourceCreateWithoutAnnouncementInput = {
     id?: string
     title: string
@@ -51945,6 +52266,77 @@ export namespace Prisma {
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutTeacherNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutTeacherNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutTeacherNestedInput
+  }
+
+  export type UserUpsertWithoutAnnouncementsInput = {
+    update: XOR<UserUpdateWithoutAnnouncementsInput, UserUncheckedUpdateWithoutAnnouncementsInput>
+    create: XOR<UserCreateWithoutAnnouncementsInput, UserUncheckedCreateWithoutAnnouncementsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAnnouncementsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAnnouncementsInput, UserUncheckedUpdateWithoutAnnouncementsInput>
+  }
+
+  export type UserUpdateWithoutAnnouncementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    branch?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableIntFieldUpdateOperationsInput | number | null
+    year?: NullableIntFieldUpdateOperationsInput | number | null
+    premiumExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    campus?: CampusUpdateOneWithoutUsersNestedInput
+    teacherProfile?: TeacherUpdateOneWithoutUserNestedInput
+    studentProfile?: StudentUpdateOneWithoutUserNestedInput
+    attendance?: AttendanceUpdateManyWithoutUserNestedInput
+    premiumFeatures?: PremiumFeatureUpdateManyWithoutUsersNestedInput
+    googleTokens?: GoogleTokenUpdateManyWithoutUserNestedInput
+    recentActivities?: RecentActivityUpdateManyWithoutUserNestedInput
+    supportRequests?: SupportRequestUpdateManyWithoutUserNestedInput
+    messagesSent?: MessageUpdateManyWithoutSenderNestedInput
+    messagesReceived?: MessageUpdateManyWithoutReceiverNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAnnouncementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    username?: StringFieldUpdateOperationsInput | string
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    branch?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableIntFieldUpdateOperationsInput | number | null
+    year?: NullableIntFieldUpdateOperationsInput | number | null
+    premiumExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    campusId?: NullableStringFieldUpdateOperationsInput | string | null
+    teacherProfile?: TeacherUncheckedUpdateOneWithoutUserNestedInput
+    studentProfile?: StudentUncheckedUpdateOneWithoutUserNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutUserNestedInput
+    premiumFeatures?: PremiumFeatureUncheckedUpdateManyWithoutUsersNestedInput
+    googleTokens?: GoogleTokenUncheckedUpdateManyWithoutUserNestedInput
+    recentActivities?: RecentActivityUncheckedUpdateManyWithoutUserNestedInput
+    supportRequests?: SupportRequestUncheckedUpdateManyWithoutUserNestedInput
+    messagesSent?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    messagesReceived?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ResourceUpsertWithWhereUniqueWithoutAnnouncementInput = {
@@ -52045,14 +52437,16 @@ export namespace Prisma {
     createdAt?: Date | string
     expiresAt?: Date | string | null
     isActive?: boolean
-    author: TeacherCreateNestedOneWithoutAnnouncementsInput
+    author?: TeacherCreateNestedOneWithoutAnnouncementsInput
+    assistant?: UserCreateNestedOneWithoutAnnouncementsInput
   }
 
   export type AnnouncementUncheckedCreateWithoutAttachmentsInput = {
     id?: string
     title: string
     message: string
-    authorId: string
+    authorId?: string | null
+    assistantId?: string | null
     targetAll?: boolean
     targetSemester?: number | null
     targetSection?: string | null
@@ -52194,14 +52588,16 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    author?: TeacherUpdateOneRequiredWithoutAnnouncementsNestedInput
+    author?: TeacherUpdateOneWithoutAnnouncementsNestedInput
+    assistant?: UserUpdateOneWithoutAnnouncementsNestedInput
   }
 
   export type AnnouncementUncheckedUpdateWithoutAttachmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
-    authorId?: StringFieldUpdateOperationsInput | string
+    authorId?: NullableStringFieldUpdateOperationsInput | string | null
+    assistantId?: NullableStringFieldUpdateOperationsInput | string | null
     targetAll?: BoolFieldUpdateOperationsInput | boolean
     targetSemester?: NullableIntFieldUpdateOperationsInput | number | null
     targetSection?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52512,6 +52908,7 @@ export namespace Prisma {
     messagesReceived?: MessageCreateNestedManyWithoutReceiverInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementCreateNestedManyWithoutAssistantInput
   }
 
   export type UserUncheckedCreateWithoutMessagesSentInput = {
@@ -52541,6 +52938,7 @@ export namespace Prisma {
     messagesReceived?: MessageUncheckedCreateNestedManyWithoutReceiverInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutAssistantInput
   }
 
   export type UserCreateOrConnectWithoutMessagesSentInput = {
@@ -52575,6 +52973,7 @@ export namespace Prisma {
     messagesSent?: MessageCreateNestedManyWithoutSenderInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementCreateNestedManyWithoutAssistantInput
   }
 
   export type UserUncheckedCreateWithoutMessagesReceivedInput = {
@@ -52604,6 +53003,7 @@ export namespace Prisma {
     messagesSent?: MessageUncheckedCreateNestedManyWithoutSenderInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutAssistantInput
   }
 
   export type UserCreateOrConnectWithoutMessagesReceivedInput = {
@@ -52691,6 +53091,7 @@ export namespace Prisma {
     messagesReceived?: MessageUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUpdateManyWithoutAssistantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMessagesSentInput = {
@@ -52720,6 +53121,7 @@ export namespace Prisma {
     messagesReceived?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutAssistantNestedInput
   }
 
   export type UserUpsertWithoutMessagesReceivedInput = {
@@ -52760,6 +53162,7 @@ export namespace Prisma {
     messagesSent?: MessageUpdateManyWithoutSenderNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUpdateManyWithoutAssistantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMessagesReceivedInput = {
@@ -52789,6 +53192,7 @@ export namespace Prisma {
     messagesSent?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutAssistantNestedInput
   }
 
   export type ResourceUpsertWithWhereUniqueWithoutMessageInput = {
@@ -52834,6 +53238,7 @@ export namespace Prisma {
     messagesSent?: MessageCreateNestedManyWithoutSenderInput
     messagesReceived?: MessageCreateNestedManyWithoutReceiverInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementCreateNestedManyWithoutAssistantInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -52863,6 +53268,7 @@ export namespace Prisma {
     messagesSent?: MessageUncheckedCreateNestedManyWithoutSenderInput
     messagesReceived?: MessageUncheckedCreateNestedManyWithoutReceiverInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutAssistantInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -52908,6 +53314,7 @@ export namespace Prisma {
     messagesSent?: MessageUpdateManyWithoutSenderNestedInput
     messagesReceived?: MessageUpdateManyWithoutReceiverNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUpdateManyWithoutAssistantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -52937,6 +53344,7 @@ export namespace Prisma {
     messagesSent?: MessageUncheckedUpdateManyWithoutSenderNestedInput
     messagesReceived?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutAssistantNestedInput
   }
 
   export type UserCreateWithoutPremiumFeaturesInput = {
@@ -52966,6 +53374,7 @@ export namespace Prisma {
     messagesReceived?: MessageCreateNestedManyWithoutReceiverInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementCreateNestedManyWithoutAssistantInput
   }
 
   export type UserUncheckedCreateWithoutPremiumFeaturesInput = {
@@ -52995,6 +53404,7 @@ export namespace Prisma {
     messagesReceived?: MessageUncheckedCreateNestedManyWithoutReceiverInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutAssistantInput
   }
 
   export type UserCreateOrConnectWithoutPremiumFeaturesInput = {
@@ -53045,6 +53455,7 @@ export namespace Prisma {
     messagesReceived?: MessageCreateNestedManyWithoutReceiverInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementCreateNestedManyWithoutAssistantInput
   }
 
   export type UserUncheckedCreateWithoutGoogleTokensInput = {
@@ -53074,6 +53485,7 @@ export namespace Prisma {
     messagesReceived?: MessageUncheckedCreateNestedManyWithoutReceiverInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutAssistantInput
   }
 
   export type UserCreateOrConnectWithoutGoogleTokensInput = {
@@ -53119,6 +53531,7 @@ export namespace Prisma {
     messagesReceived?: MessageUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUpdateManyWithoutAssistantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGoogleTokensInput = {
@@ -53148,6 +53561,7 @@ export namespace Prisma {
     messagesReceived?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutAssistantNestedInput
   }
 
   export type UserCreateWithoutRecentActivitiesInput = {
@@ -53177,6 +53591,7 @@ export namespace Prisma {
     messagesReceived?: MessageCreateNestedManyWithoutReceiverInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementCreateNestedManyWithoutAssistantInput
   }
 
   export type UserUncheckedCreateWithoutRecentActivitiesInput = {
@@ -53206,6 +53621,7 @@ export namespace Prisma {
     messagesReceived?: MessageUncheckedCreateNestedManyWithoutReceiverInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutAssistantInput
   }
 
   export type UserCreateOrConnectWithoutRecentActivitiesInput = {
@@ -53251,6 +53667,7 @@ export namespace Prisma {
     messagesReceived?: MessageUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUpdateManyWithoutAssistantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRecentActivitiesInput = {
@@ -53280,6 +53697,7 @@ export namespace Prisma {
     messagesReceived?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutAssistantNestedInput
   }
 
   export type UserCreateWithoutSupportRequestsInput = {
@@ -53309,6 +53727,7 @@ export namespace Prisma {
     messagesReceived?: MessageCreateNestedManyWithoutReceiverInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementCreateNestedManyWithoutAssistantInput
   }
 
   export type UserUncheckedCreateWithoutSupportRequestsInput = {
@@ -53338,6 +53757,7 @@ export namespace Prisma {
     messagesReceived?: MessageUncheckedCreateNestedManyWithoutReceiverInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutAssistantInput
   }
 
   export type UserCreateOrConnectWithoutSupportRequestsInput = {
@@ -53383,6 +53803,7 @@ export namespace Prisma {
     messagesReceived?: MessageUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUpdateManyWithoutAssistantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSupportRequestsInput = {
@@ -53412,6 +53833,7 @@ export namespace Prisma {
     messagesReceived?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutAssistantNestedInput
   }
 
   export type AttendanceCreateManyUserInput = {
@@ -53480,6 +53902,19 @@ export namespace Prisma {
     id?: string
     sessionToken: string
     expiresAt: Date | string
+  }
+
+  export type AnnouncementCreateManyAssistantInput = {
+    id?: string
+    title: string
+    message: string
+    authorId?: string | null
+    targetAll?: boolean
+    targetSemester?: number | null
+    targetSection?: string | null
+    createdAt?: Date | string
+    expiresAt?: Date | string | null
+    isActive?: boolean
   }
 
   export type AttendanceUpdateWithoutUserInput = {
@@ -53711,6 +54146,47 @@ export namespace Prisma {
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type AnnouncementUpdateWithoutAssistantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    targetAll?: BoolFieldUpdateOperationsInput | boolean
+    targetSemester?: NullableIntFieldUpdateOperationsInput | number | null
+    targetSection?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    author?: TeacherUpdateOneWithoutAnnouncementsNestedInput
+    attachments?: ResourceUpdateManyWithoutAnnouncementNestedInput
+  }
+
+  export type AnnouncementUncheckedUpdateWithoutAssistantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    authorId?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAll?: BoolFieldUpdateOperationsInput | boolean
+    targetSemester?: NullableIntFieldUpdateOperationsInput | number | null
+    targetSection?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    attachments?: ResourceUncheckedUpdateManyWithoutAnnouncementNestedInput
+  }
+
+  export type AnnouncementUncheckedUpdateManyWithoutAssistantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    authorId?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAll?: BoolFieldUpdateOperationsInput | boolean
+    targetSemester?: NullableIntFieldUpdateOperationsInput | number | null
+    targetSection?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+  }
+
   export type TeacherSubjectCreateManyTeacherInput = {
     id?: string
     subjectId: string
@@ -53756,6 +54232,7 @@ export namespace Prisma {
     id?: string
     title: string
     message: string
+    assistantId?: string | null
     targetAll?: boolean
     targetSemester?: number | null
     targetSection?: string | null
@@ -53924,6 +54401,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    assistant?: UserUpdateOneWithoutAnnouncementsNestedInput
     attachments?: ResourceUpdateManyWithoutAnnouncementNestedInput
   }
 
@@ -53931,6 +54409,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
+    assistantId?: NullableStringFieldUpdateOperationsInput | string | null
     targetAll?: BoolFieldUpdateOperationsInput | boolean
     targetSemester?: NullableIntFieldUpdateOperationsInput | number | null
     targetSection?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53944,6 +54423,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
+    assistantId?: NullableStringFieldUpdateOperationsInput | string | null
     targetAll?: BoolFieldUpdateOperationsInput | boolean
     targetSemester?: NullableIntFieldUpdateOperationsInput | number | null
     targetSection?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55127,6 +55607,7 @@ export namespace Prisma {
     messagesReceived?: MessageUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUpdateManyWithoutAssistantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCampusInput = {
@@ -55156,6 +55637,7 @@ export namespace Prisma {
     messagesReceived?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutAssistantNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutCampusInput = {
@@ -55776,6 +56258,7 @@ export namespace Prisma {
     messagesReceived?: MessageUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUpdateManyWithoutAssistantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPremiumFeaturesInput = {
@@ -55805,6 +56288,7 @@ export namespace Prisma {
     messagesReceived?: MessageUncheckedUpdateManyWithoutReceiverNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutAssistantNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutPremiumFeaturesInput = {

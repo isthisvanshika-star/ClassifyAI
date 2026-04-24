@@ -323,6 +323,7 @@ exports.Prisma.AnnouncementScalarFieldEnum = {
   title: 'title',
   message: 'message',
   authorId: 'authorId',
+  assistantId: 'assistantId',
   targetAll: 'targetAll',
   targetSemester: 'targetSemester',
   targetSection: 'targetSection',

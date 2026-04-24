@@ -4,8 +4,9 @@ import { getTimeAgo, showErrorMessage } from "@/lib/helper";
 import { Tektur } from "next/font/google";
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Trash } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
 import ConfirmModal from "@/components/ui/ConfirmModal";
+import CreateAnnouncementModal from "@/components/assistant/announcements/CreateAnnouncements";
 
 const tektur = Tektur({
   subsets: ["latin"],
@@ -15,6 +16,8 @@ const tektur = Tektur({
 const Page = () => {
   const [announcements, setAnnouncements] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [announcementModalOpen, setAnnouncementModalOpen] =
+    useState<boolean>(false);
   const [campusId, setCampusId] = useState<string>();
   const [assistantId, setAssistantId] = useState<string>();
   const [selectedAnnouncement, setSelectedAnnouncement] = useState<any>(null);
@@ -63,9 +66,12 @@ const Page = () => {
       const previous = announcements;
       setAnnouncements((prev) => prev.filter((a) => a.id !== id));
 
-      const res = await fetch(`/api/assistant/announcements/${id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `/api/assistant/announcements?announcementId=${id}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (!res.ok) {
         setAnnouncements(previous);
@@ -77,22 +83,30 @@ const Page = () => {
       setSelectedAnnouncement(null);
     }
   };
-
   return (
     <motion.div
       className={`min-h-screen px-4 lg:px-10 py-6 space-y-8 text-white ${tektur.className} bg-gradient-to-br from-black via-[#0a0a0a] to-black`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      <div className="text-center">
-        <h1
-          className={`text-4xl font-semibold tracking-wide text-orange-300 ${tektur.className}`}
+      <div className="flex items-center justify-between">
+        <div className="text-center flex-1">
+          <h1
+            className={`text-4xl font-semibold tracking-wide text-orange-300 ${tektur.className}`}
+          >
+            Announcements
+          </h1>
+          <p className="text-sm text-gray-400 mt-2">
+            Stay updated with latest campus updates
+          </p>
+        </div>
+        <button
+          className="flex items-center gap-2 rounded-xl border-2 border-orange-700 px-4 py-2 cursor-pointer hover:bg-orange-700/20 transition"
+          onClick={() => setAnnouncementModalOpen(true)}
         >
-          Announcements
-        </h1>
-        <p className="text-sm text-gray-400 mt-2">
-          Stay updated with latest campus updates
-        </p>
+          <Plus size={18} />
+          Create
+        </button>
       </div>
       {isLoading ? (
         <div className="flex justify-center items-center mt-40">
@@ -151,6 +165,14 @@ const Page = () => {
           </motion.div>
         </AnimatePresence>
       )}
+
+      <CreateAnnouncementModal
+        isOpen={!!announcementModalOpen}
+        onClose={() => setAnnouncementModalOpen(false)}
+        mode="create"
+        onSuccess={fetchAnnouncements}
+        initialData={null}
+      />
       <ConfirmModal
         isOpen={!!selectedAnnouncement}
         onClose={() => setSelectedAnnouncement(null)}
