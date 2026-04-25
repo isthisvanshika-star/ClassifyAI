@@ -1,6 +1,6 @@
 "use client";
 
-import { getTimeAgo, showErrorMessage } from "@/lib/helper";
+import { getTimeAgo, showErrorMessage, showSuccessMessage } from "@/lib/helper";
 import { Tektur } from "next/font/google";
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -77,6 +77,7 @@ const Page = () => {
         setAnnouncements(previous);
         showErrorMessage("Failed to delete announcement");
       }
+      showSuccessMessage("Announcement deleted successfully");
     } catch (err) {
       showErrorMessage("Something went wrong");
     } finally {

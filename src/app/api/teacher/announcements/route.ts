@@ -16,7 +16,7 @@ const createAnnouncementSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters."),
   message: z.string().min(1, "Message is required."),
   targetAll: z.coerce.boolean().default(false),
-  targetSemester: z.coerce.number().optional().nullable(), 
+  targetSemester: z.coerce.number().optional().nullable(),
   targetSection: z.string().optional().nullable(),
   teacherId: z.string(),
   campusId: z.string(),
@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
     if (!teacherId || !campusId) {
       return NextResponse.json(
         { error: "Teacher ID and Campus ID are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
     const teacherProfile = await prisma.teacher.findFirst({
@@ -52,21 +52,50 @@ export async function GET(req: NextRequest) {
     if (!teacherProfile) {
       return NextResponse.json(
         { error: "Teacher not found on this campus." },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     const announcements = await prisma.announcement.findMany({
-      where: { authorId: teacherProfile.id },
+      where: {
+        OR: [{ authorId: teacherProfile.id }, { assistant: { campusId } }],
+      },
+      include: {
+        author: {
+          include: { user: { select: { name: true, avatarUrl: true } } },
+        },
+        assistant: {
+          select: { name: true, avatarUrl: true },
+        },
+      },
       orderBy: { createdAt: "desc" },
     });
+    const data = announcements.map((a) => {
+      const rawName = a.author?.user.name ?? a.assistant?.name ?? "Unknown";
+      const authorName = rawName.includes("Classifyai") ? "Assistant" : rawName;
 
-    return NextResponse.json({ success: true, announcements });
+      return {
+        id: a.id,
+        title: a.title,
+        message: a.message,
+        targetAll: a.targetAll,
+        targetSemester: a.targetSemester,
+        targetSection: a.targetSection,
+        createdAt: a.createdAt,
+        expiresAt: a.expiresAt,
+        isActive: a.isActive,
+        authorName,
+        authorAvatar:
+          a.author?.user.avatarUrl ?? a.assistant?.avatarUrl ?? null,
+      };
+    });
+
+    return NextResponse.json({ success: true, announcements: data });
   } catch (error) {
     console.error("Error fetching announcements:", error);
     return NextResponse.json(
       { error: "Failed to fetch announcements." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -91,7 +120,7 @@ export async function POST(req: NextRequest) {
     if (!validation.success) {
       return NextResponse.json(
         { error: validation.error.flatten().fieldErrors },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -111,7 +140,7 @@ export async function POST(req: NextRequest) {
     if (!teacherProfile) {
       return NextResponse.json(
         { error: "Invalid teacher for this campus." },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -124,13 +153,13 @@ export async function POST(req: NextRequest) {
           .upload_stream(
             {
               folder: "announcements_attachments",
-              access_mode:"public",
+              access_mode: "public",
               resource_type: "auto",
             },
             (error, result) => {
               if (error) reject(error);
               else resolve(result);
-            }
+            },
           )
           .end(buffer);
       });
@@ -179,25 +208,25 @@ export async function POST(req: NextRequest) {
           `New Announcement: ${title}`,
           message.substring(0, 100) + (message.length > 100 ? "...." : ""),
           { link: `/dashboard/student/announcement/${newAnnouncement.id}` },
-          { id: teacherId, name: teacherProfile.user.name }
+          { id: teacherId, name: teacherProfile.user.name },
         );
       }
     } catch (notificationError) {
       console.error(
         "Announcement created but failed to create notifications:",
-        notificationError
+        notificationError,
       );
     }
 
     return NextResponse.json(
       { success: true, announcement: newAnnouncement },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.error("Error creating announcement:", error);
     return NextResponse.json(
       { error: "Failed to create announcement." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -214,7 +243,7 @@ export async function DELETE(req: NextRequest) {
     if (!validation.success) {
       return NextResponse.json(
         { error: validation.error.flatten().fieldErrors },
-        { status: 400 }
+        { status: 400 },
       );
     }
     const { announcementId, teacherId } = validation.data;
@@ -225,7 +254,7 @@ export async function DELETE(req: NextRequest) {
     if (!teacherProfile) {
       return NextResponse.json(
         { error: "Teacher profile not found." },
-        { status: 404 }
+        { status: 404 },
       );
     }
     const announcement = await prisma.announcement.findUnique({
@@ -235,7 +264,7 @@ export async function DELETE(req: NextRequest) {
     if (!announcement || announcement.authorId !== teacherProfile.id) {
       return NextResponse.json(
         { error: "You are not authorized to delete this announcement." },
-        { status: 403 }
+        { status: 403 },
       );
     }
     await prisma.announcement.delete({
@@ -250,7 +279,7 @@ export async function DELETE(req: NextRequest) {
     console.error("Error deleting announcement:", error);
     return NextResponse.json(
       { error: "Failed to delete announcement." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -264,7 +293,7 @@ export async function PATCH(req: NextRequest) {
     if (!validation.success) {
       return NextResponse.json(
         { error: validation.error.flatten().fieldErrors },
-        { status: 400 }
+        { status: 400 },
       );
     }
     const { announcementId, teacherId, ...dataToUpdate } = validation.data;
@@ -276,7 +305,7 @@ export async function PATCH(req: NextRequest) {
     if (!teacherProfile) {
       return NextResponse.json(
         { error: "Teacher profile not found." },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -288,7 +317,7 @@ export async function PATCH(req: NextRequest) {
     if (!announcement || announcement.authorId !== teacherProfile.id) {
       return NextResponse.json(
         { error: "You are not authorized to edit this announcement." },
-        { status: 403 }
+        { status: 403 },
       );
     }
     const updatedAnnouncement = await prisma.announcement.update({
@@ -304,7 +333,7 @@ export async function PATCH(req: NextRequest) {
     console.error("Error updating announcement:", error);
     return NextResponse.json(
       { error: "Failed to update announcement." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

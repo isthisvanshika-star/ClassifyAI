@@ -16,10 +16,10 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export default function AnnouncementsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [announcementToDelete, setAnnouncementToDelete] = useState<any | null>(
-    null
+    null,
   );
   const [announcementToEdit, setAnnouncementToEdit] = useState<any | null>(
-    null
+    null,
   ); // 1. ADD state for editing
   const [isDeleting, setIsDeleting] = useState(false);
   const [teacherId, setTeacherId] = useState<string | null>(null);
@@ -51,7 +51,7 @@ export default function AnnouncementsPage() {
       if (!res.ok) throw new Error(data.error || "Failed to delete.");
 
       showSuccessMessage("Announcement deleted successfully.");
-      mutate(); // Re-fetch announcements
+      mutate();
       setAnnouncementToDelete(null);
     } catch (err: any) {
       showErrorMessage(err.message);
@@ -64,15 +64,13 @@ export default function AnnouncementsPage() {
     teacherId && campusId
       ? `/api/teacher/announcements?teacherId=${teacherId}&campusId=${campusId}`
       : null,
-    fetcher
+    fetcher,
   );
 
   const announcements = data?.announcements || [];
-
   return (
     <>
       <div className="flex flex-col h-full bg-transparent text-white p-8">
-        {/* Header - fixed at top */}
         <header className="flex justify-between items-center mb-6 shrink-0">
           <div>
             <h1 className="text-4xl font-extrabold bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(0,255,255,0.3)]">
@@ -121,7 +119,7 @@ export default function AnnouncementsPage() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.05 }}
-                      className="bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-2xl shadow-[0_4px_30px_rgba(0,0,0,0.1)] hover:shadow-[0_0_25px_rgba(0,255,255,0.3)] transition-all duration-300"
+                      className= "relative  bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-2xl shadow-[0_4px_30px_rgba(0,0,0,0.1)] hover:shadow-[0_0_25px_rgba(0,255,255,0.3)] transition-all duration-300"
                     >
                       <div className="flex justify-between items-start gap-4">
                         <div>
@@ -131,7 +129,7 @@ export default function AnnouncementsPage() {
                           <p className="text-xs text-gray-400 mt-1">
                             <span className="text-cyan-400">Posted on:</span>{" "}
                             {new Date(
-                              announcement.createdAt
+                              announcement.createdAt,
                             ).toLocaleDateString()}
                           </p>
                         </div>
@@ -151,21 +149,23 @@ export default function AnnouncementsPage() {
                       </p>
                       <div className="flex justify-end gap-2">
                         {/* Edit Button */}
-                        <button
-                          onClick={() => setAnnouncementToEdit(announcement)}
-                          className="cursor-pointer relative group p-[2px] rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 hover:scale-110 transition-transform duration-300"
-                          aria-label="Edit announcement"
-                        >
-                          <div className="rounded-full bg-[#0f172a]/90 p-2 group-hover:bg-[#1e293b]/90 backdrop-blur-md transition-colors duration-300">
-                            <Edit
-                              size={18}
-                              className="text-cyan-300 group-hover:text-white transition-colors duration-300 drop-shadow-[0_0_6px_rgba(34,211,238,0.8)]"
-                            />
-                          </div>
-                        </button>
+                        {!announcement.authorName.includes("Classify") && (
+                          <button
+                            onClick={() => setAnnouncementToEdit(announcement)}
+                            className="cursor-pointer relative group p-[2px] rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 hover:scale-110 transition-transform duration-300"
+                            aria-label="Edit announcement"
+                          >
+                            <div className="rounded-full bg-[#0f172a]/90 p-2 group-hover:bg-[#1e293b]/90 backdrop-blur-md transition-colors duration-300">
+                              <Edit
+                                size={18}
+                                className="text-cyan-300 group-hover:text-white transition-colors duration-300 drop-shadow-[0_0_6px_rgba(34,211,238,0.8)]"
+                              />
+                            </div>
+                          </button>
+                        )}
 
                         {/* Delete Button */}
-                        <button
+                       {!announcement.authorName.includes("Classify") && (<button
                           onClick={() => setAnnouncementToDelete(announcement)}
                           className="cursor-pointer relative group p-[2px] rounded-full bg-gradient-to-r from-pink-500 via-rose-500 to-red-500 hover:scale-110 transition-transform duration-300"
                           aria-label="Delete announcement"
@@ -176,8 +176,12 @@ export default function AnnouncementsPage() {
                               className="text-rose-400 group-hover:text-white transition-colors duration-300 drop-shadow-[0_0_6px_rgba(244,63,94,0.8)]"
                             />
                           </div>
-                        </button>
+                        </button>)
+                        }
                       </div>
+                      {announcement.authorName.includes("Classify") &&(<span className="absolute bottom-3 right-4 text-[10px] text-gray-400 italic">
+                      posted by ClassifyAI-Assistant
+                      </span>)}
                     </motion.div>
                   ))}
                 </div>

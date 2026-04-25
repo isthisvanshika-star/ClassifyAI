@@ -35,16 +35,24 @@ export async function GET(request: NextRequest) {
       );
     }
     const announcements = await prisma.announcement.findMany({
-      where: { author: { user: { campusId } } },
+      where: {
+        OR: [{ author: { user: { campusId } } }, { assistant: { campusId } }],
+      },
       include: {
         author: {
           include: { user: { select: { name: true, avatarUrl: true } } },
+        },
+        assistant: {
+          select: { name: true, avatarUrl: true },
         },
       },
       orderBy: { createdAt: "desc" },
     });
     //?(A. Vanshika) Flatten author name into each announcement for easier frontend use....
-    const data = announcements.map((a) => ({
+    const data = announcements.map((a) => {
+      const rawName = a.author?.user.name ?? a.assistant?.name ?? "Unknown";
+     const authorName = rawName.includes("Classify") ? "Campus-Assistant" : rawName;
+      return{
       id: a.id,
       title: a.title,
       message: a.message,
@@ -54,9 +62,9 @@ export async function GET(request: NextRequest) {
       createdAt: a.createdAt,
       expiresAt: a.expiresAt,
       isActive: a.isActive,
-      authorName: a.author?.user.name,
-      authorAvatar: a.author?.user.avatarUrl,
-    }));
+      authorName,
+      authorAvatar: a.author?.user.avatarUrl ?? a.assistant?.avatarUrl ?? null,
+  }});
     return NextResponse.json({ success: true, data: data });
   } catch (error) {
     console.error("Error fetching announcements:", error);
@@ -96,7 +104,7 @@ export async function DELETE(req: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const aId = searchParams.get("assistantId");
+    const aId = searchParams.get("assistantId")?.trim();
     if (!aId)
       return NextResponse.json(
         { success: false, error: "Id did not provided" },
