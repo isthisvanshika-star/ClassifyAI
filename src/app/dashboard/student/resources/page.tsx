@@ -75,9 +75,13 @@ export default function StudentStudyVault() {
   };
 
   const subjects = [
-    ...new Map(resources.map((r: any) => [r.subject?.id, r.subject])).values(),
+    ...new Map(
+      resources.map((r: any) => [
+        r.subject?.id,
+        { id: r.subjectId, name: r.subject?.name },
+      ]),
+    ).values(),
   ].filter(Boolean);
-
   const router = useRouter();
 
   return (
@@ -111,17 +115,23 @@ export default function StudentStudyVault() {
                 Choose a subject to run AI predictions on its PYQs.
               </p>
               <div className="flex flex-wrap gap-3 justify-center">
-                {subjects.map((subject: any, index: number) => (
-                  <button
-                    key={subject.id || index}
-                    onClick={() =>
-                      setSelectedSubject({ id: subject.id, name: subject.name })
-                    }
-                    className="px-5 py-2 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 hover:bg-violet-500/20 transition font-semibold text-sm"
-                  >
-                    {subject.name}
-                  </button>
-                ))}
+                {subjects.map((subject: any, index: number) => {
+                  console.log(subject);
+                  return (
+                    <button
+                      key={subject.id || index}
+                      onClick={() =>
+                        setSelectedSubject({
+                          id: subject.id,
+                          name: subject.name,
+                        })
+                      }
+                      className="px-5 py-2 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 hover:bg-violet-500/20 transition font-semibold text-sm"
+                    >
+                      {subject.name}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           ) : (
