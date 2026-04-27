@@ -60,7 +60,7 @@ export default function CampusList() {
             </div>
           </div>
           {/* This button can later link to a detailed management page */}
-          <Link href={`/admin/campuses/${campus.id}`}>
+          <Link href={`/dashboard/admin/campuses/${campus.id}`}>
             <div className="text-sm bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-1 px-3 rounded-md cursor-pointer">
               Manage
             </div>

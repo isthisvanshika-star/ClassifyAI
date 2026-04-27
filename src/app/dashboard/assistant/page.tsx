@@ -16,12 +16,6 @@ const tektur = Tektur({
   weight: ["400", "500", "600", "700"],
 });
 
-// ============================================================================
-//   1. THE NEW "GATEKEEPER" MODAL COMPONENT
-// ============================================================================
-/**
- * A modal that covers the screen to verify the admin's setup status before allowing access.
- */
 function VerificationGatekeeper({
   status,
   onRedirect,
@@ -83,12 +77,6 @@ function VerificationGatekeeper({
   );
 }
 
-// ============================================================================
-//   2. YOUR ORIGINAL DASHBOARD UI, NOW AS A SEPARATE COMPONENT
-// ============================================================================
-/**
- * Renders the main content of the dashboard once verification is complete.
- */
 const DashboardContent = () => {
   const [summary, setSummary] = useState<{
     totalStudents: number;
@@ -187,9 +175,6 @@ const DashboardContent = () => {
   );
 };
 
-// ============================================================================
-//   3. THE MAIN PAGE COMPONENT THAT MANAGES THE FLOW
-// ============================================================================
 export default function AdminDashboardPage() {
   const router = useRouter();
   const [verificationStatus, setVerificationStatus] = useState<
@@ -199,7 +184,6 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     const assistantID = localStorage.getItem("assistantId");
 
-    // Safety check: if no ID at all, just go to login
     if (!assistantID) {
       router.replace("/auth/login");
       return;
@@ -219,12 +203,10 @@ export default function AdminDashboardPage() {
           }
           throw new Error(data.error || "Failed to verify admin status.");
         }
-        // Check for campus setup complettion (V.A.)
         const isNotConfigured = !data?.campus?.logoUrl;
         if (!data?.campusId || isNotConfigured) {
           setVerificationStatus("needs_setup");
         } else {
-          // Store campusId just in case components need it immediately
           localStorage.setItem("CampusID", data.campusId);
           setVerificationStatus("complete");
         }
@@ -239,9 +221,6 @@ export default function AdminDashboardPage() {
 
   return (
     <>
-      {/* FIX: Use AnimatePresence or a simple conditional to ensure 
-          DashboardContent ONLY renders when verification is successful.
-      */}
       {verificationStatus === "complete" && <DashboardContent />}
 
       <AnimatePresence>

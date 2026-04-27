@@ -580,3 +580,27 @@ export function getTimeAgo(dateString: string) {
   return "Just now";
 }
 
+export const transformUsername = async (email: string): Promise<string> => {
+  let base = email.split("@")[0];
+  base = base
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "_") 
+    .replace(/_+/g, "_") 
+    .replace(/^_|_$/g, ""); 
+  if (!base) base = "user";
+
+  let username = base;
+  let counter = 1;
+  while (true) {
+    const existing = await prisma.user.findUnique({
+      where: { username },
+    });
+
+    if (!existing) break;
+
+    username = `${base}_${counter}`;
+    counter++;
+  }
+
+  return username;
+};

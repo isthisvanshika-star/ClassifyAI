@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
         { status: 409 },
       );
     }
-    const secureUsername = transformUsername(data.adminEmail);
+    const secureUsername = await transformUsername(data.adminEmail);
     const slug = data.campusName
       .toLowerCase()
       .trim()

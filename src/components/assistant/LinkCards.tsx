@@ -41,7 +41,9 @@ const LinkCards = ({
     year: "",
     semester: "",
     section: "",
+    designation: "",
   });
+  const [hodTeaches, setHodTeaches] = useState(true);
   const campusId =
     typeof window !== "undefined" ? localStorage.getItem("campusId") : null;
 
@@ -73,7 +75,7 @@ const LinkCards = ({
     campusId
       ? `/api/assistant/recent-user?role=${forRole.toUpperCase()}&campusId=${campusId}`
       : null,
-    fetcher
+    fetcher,
   );
 
   const handleSendOtp = async () => {
@@ -138,6 +140,18 @@ const LinkCards = ({
       return;
     }
 
+    if(forRole === "teacher" && modalOpen === "add"){
+      if(!formData.designation){
+        setMessage({type: "error", text: "Please select designation"})
+        return;
+      }
+      if((formData.designation !== "HOD" || hodTeaches) && assignedSubjects.length === 0){
+        setMessage({type: "error", text: "Please assign at least one subject"})
+        return;
+      }
+
+    }
+
     setLoading(true);
     const res = await fetch(`/api/assistant/signup`, {
       method: "POST",
@@ -151,7 +165,8 @@ const LinkCards = ({
         year: forRole === "student" ? formData.year : undefined,
         semester: formData.semester,
         section: formData.section,
-        assignedSubjects: forRole === "teacher" ? assignedSubjects : undefined,
+        designation: forRole === "teacher" ? formData.designation : undefined, 
+        assignedSubjects: forRole === "teacher" && (formData.designation === "HOD" || hodTeaches) ? assignedSubjects : [],
         adminID: assistantId,
       }),
     });
@@ -189,13 +204,21 @@ const LinkCards = ({
       year: "",
       semester: "",
       section: "",
+      designation: "",
     });
     setOtp("");
     setStep("form");
     setEmailVerified(false);
     setCurrentSubject({ name: "", code: "", description: "" });
     setAssignedSubjects([]);
+    setHodTeaches(false);
   };
+
+  useEffect(() => {
+    if (formData.designation === "HOD") {
+      setHodTeaches(true); // default = YES
+    }
+  }, [formData.designation]);
 
   return (
     <>
@@ -339,121 +362,197 @@ const LinkCards = ({
                   </div>
                 )}
 
-                {forRole === "teacher" && modalOpen === "add" && (
-                  <div className="space-y-4 my-4 border-t border-b border-orange-400/50 py-4">
-                    <p className="text-sm font-semibold">
-                      Assign Semester & Section
-                    </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <input
-                        type="text"
-                        placeholder="Semester (e.g., Semester 3)"
-                        value={formData.semester}
-                        onChange={(e) =>
-                          setFormData({ ...formData, semester: e.target.value })
-                        }
-                        className={`${tektur.className} w-full ring ring-orange-400 outline-none p-2 rounded`}
-                      />
-                      <input
-                        type="text"
-                        placeholder="Section (e.g., Section A)"
-                        value={formData.section}
-                        onChange={(e) =>
-                          setFormData({ ...formData, section: e.target.value })
-                        }
-                        className={`${tektur.className} w-full ring ring-orange-400 outline-none p-2 rounded`}
-                      />
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <label className="block text-sm font-semibold">
-                          Add Subjects
-                        </label>
+                {forRole === "teacher" &&
+                  modalOpen === "add" &&
+                  (formData.designation !== "HOD" || hodTeaches) && (
+                    <div className="space-y-4 my-4 border-t border-b border-orange-400/50 py-4">
+                      <p className="text-sm font-semibold">
+                        Assign Semester & Section
+                      </p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <input
                           type="text"
-                          placeholder="Subject Name"
-                          value={currentSubject.name}
+                          placeholder="Semester (e.g., Semester 3)"
+                          value={formData.semester}
                           onChange={(e) =>
-                            setCurrentSubject({
-                              ...currentSubject,
-                              name: e.target.value,
+                            setFormData({
+                              ...formData,
+                              semester: e.target.value,
                             })
                           }
                           className={`${tektur.className} w-full ring ring-orange-400 outline-none p-2 rounded`}
                         />
                         <input
                           type="text"
-                          placeholder="Code"
-                          required
-                          value={currentSubject.code}
+                          placeholder="Section (e.g., Section A)"
+                          value={formData.section}
                           onChange={(e) =>
-                            setCurrentSubject({
-                              ...currentSubject,
-                              code: e.target.value,
+                            setFormData({
+                              ...formData,
+                              section: e.target.value,
                             })
                           }
                           className={`${tektur.className} w-full ring ring-orange-400 outline-none p-2 rounded`}
                         />
-                        <textarea
-                          placeholder="Description"
-                          value={currentSubject.description}
-                          onChange={(e) =>
-                            setCurrentSubject({
-                              ...currentSubject,
-                              description: e.target.value,
-                            })
-                          }
-                          rows={2}
-                          className={`${tektur.className} w-full ring ring-orange-400 outline-none p-2 rounded`}
-                        ></textarea>
-                        <button
-                          type="button"
-                          onClick={handleAddSubject}
-                          className="w-full bg-orange-500 text-white p-2 rounded hover:bg-orange-600 font-bold text-lg flex items-center justify-center gap-2"
-                        >
-                          <span className="text-xl">+</span> Add Subject
-                        </button>
                       </div>
-                      <div>
-                        <label className="block text-sm font-semibold mb-1">
-                          Assigned Subjects ({assignedSubjects.length})
-                        </label>
-                        <div className="border rounded-md h-full min-h-[150px] overflow-y-auto p-2 space-y-1">
-                          {assignedSubjects.length > 0 ? (
-                            assignedSubjects.map((sub, index) => (
+
+                      <select
+                        value={formData.designation}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            designation: e.target.value,
+                          })
+                        }
+                        className={`${tektur.className} w-full ring appearance-none text-black/60 ring-orange-400 outline-none p-2 rounded`}
+                      >
+                        <option value="" className="bg-orange-800/80">
+                          Select Designation
+                        </option>
+                        <option
+                          value="Professor"
+                          className="text-black bg-orange-800/80"
+                        >
+                          Professor
+                        </option>
+                        <option
+                          value="Associate Professor"
+                          className="text-black bg-orange-800/80"
+                        >
+                          Associate Professor
+                        </option>
+                        <option
+                          value="Assistant Professor"
+                          className="text-black bg-orange-800/80"
+                        >
+                          Assistant Professor
+                        </option>
+                        <option
+                          value="Lecturer"
+                          className="text-black bg-orange-800/80"
+                        >
+                          Lecturer
+                        </option>
+                        <option
+                          value="HOD"
+                          className="text-black bg-orange-800/80 rounded-b-4xl"
+                        >
+                          HOD
+                        </option>
+                      </select>
+                        {formData.designation === "HOD" && (
+                          <div className="mt-3 flex items-center gap-4">
+                            <p className="text-sm mb-2">
+                              Does HOD teach subjects?
+                            </p>
+
+                            <div
+                              onClick={() => setHodTeaches(!hodTeaches)}
+                              className={`w-10 -mt-2 h-5 flex items-center rounded-full p-1 cursor-pointer transition-all duration-300 ${
+                                hodTeaches ? "bg-orange-500" : "bg-gray-400"
+                              }`}
+                            >
                               <div
-                                key={index}
-                                className="flex justify-between items-start bg-orange-100/50 p-2 rounded text-sm"
+                                className={`bg-white/80 w-6 h-6 rounded-full shadow-md transform transition-all duration-300 flex items-center justify-center text-[10px] font-bold ${
+                                  hodTeaches ? "translate-x-4" : "translate-x-0"
+                                }`}
                               >
-                                <div className="flex-grow">
-                                  <p className="font-semibold">
-                                    {sub.name} {sub.code && `(${sub.code})`}
-                                  </p>
-                                  <p className="text-xs text-gray-700 italic pr-2">
-                                    {sub.description}
-                                  </p>
-                                </div>
-                                <button
-                                  type="button"
-                                  onClick={() => handleRemoveSubject(index)}
-                                  className="text-red-500 font-bold px-2 flex-shrink-0"
-                                >
-                                  ×
-                                </button>
+                                {hodTeaches ? "Yes" : "No"}
                               </div>
-                            ))
-                          ) : (
-                            <div className="flex items-center justify-center h-full">
-                              <p className="text-xs text-gray-500">
-                                No subjects added yet.
-                              </p>
                             </div>
-                          )}
+                          </div>
+                        )}
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <label className="block text-sm font-semibold">
+                            Add Subjects
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Subject Name"
+                            value={currentSubject.name}
+                            onChange={(e) =>
+                              setCurrentSubject({
+                                ...currentSubject,
+                                name: e.target.value,
+                              })
+                            }
+                            className={`${tektur.className} w-full ring ring-orange-400 outline-none p-2 rounded`}
+                          />
+                          <input
+                            type="text"
+                            placeholder="Code"
+                            required
+                            value={currentSubject.code}
+                            onChange={(e) =>
+                              setCurrentSubject({
+                                ...currentSubject,
+                                code: e.target.value,
+                              })
+                            }
+                            className={`${tektur.className} w-full ring ring-orange-400 outline-none p-2 rounded`}
+                          />
+                          <textarea
+                            placeholder="Description"
+                            value={currentSubject.description}
+                            onChange={(e) =>
+                              setCurrentSubject({
+                                ...currentSubject,
+                                description: e.target.value,
+                              })
+                            }
+                            rows={2}
+                            className={`${tektur.className} w-full ring ring-orange-400 outline-none p-2 rounded`}
+                          ></textarea>
+                          <button
+                            type="button"
+                            onClick={handleAddSubject}
+                            className="w-full bg-orange-500 text-white p-2 rounded hover:bg-orange-600 font-bold text-lg flex items-center justify-center gap-2"
+                          >
+                            <span className="text-xl">+</span> Add Subject
+                          </button>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-semibold mb-1">
+                            Assigned Subjects ({assignedSubjects.length})
+                          </label>
+                          <div className="border rounded-md h-full min-h-[150px] overflow-y-auto p-2 space-y-1">
+                            {assignedSubjects.length > 0 ? (
+                              assignedSubjects.map((sub, index) => (
+                                <div
+                                  key={index}
+                                  className="flex justify-between items-start bg-orange-100/50 p-2 rounded text-sm"
+                                >
+                                  <div className="flex-grow">
+                                    <p className="font-semibold">
+                                      {sub.name} {sub.code && `(${sub.code})`}
+                                    </p>
+                                    <p className="text-xs text-gray-700 italic pr-2">
+                                      {sub.description}
+                                    </p>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRemoveSubject(index)}
+                                    className="text-red-500 font-bold px-2 flex-shrink-0"
+                                  >
+                                    ×
+                                  </button>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="flex items-center justify-center h-full">
+                                <p className="text-xs text-gray-500">
+                                  No subjects added yet.
+                                </p>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
                 {modalOpen === "add" && step === "otp" && (
                   <input
