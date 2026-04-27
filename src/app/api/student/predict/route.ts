@@ -22,10 +22,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Not enough data." }, { status: 404 });
     }
     const compiledData = pyqs
-      .map((pyq, i) => {
-        `Paper ${i + 1} (${pyq.title}):\n${pyq.aiSummary.join("\n")}`;
-      })
-      .join("\n\n");
+      .map((pyq, i) => `Paper ${i + 1} (${pyq.title}):\n${pyq.aiSummary.join("\n")}`).join("\n\n");
 
     console.log(`Analyzing ${pyqs.length} PYQs for ${subject.name}....`);
     const prompt = `

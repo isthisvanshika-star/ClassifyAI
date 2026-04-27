@@ -289,3 +289,22 @@ export interface SubjectSelectorProps {
   subjects: StudentSubject[];
   onSelect: (subject: Subject) => void;
 }
+
+export interface Prediction {
+  topic: string;
+  probability: number;
+  weightage: "High" | "Medium" | "Low";
+  reason: string;
+}
+ 
+export interface AnswerSection {
+  heading: string;
+  content: string;
+}
+ 
+export interface Answer {
+  summary: string;
+  sections: AnswerSection[];
+  keyPoints: string[];
+  sourcedFromNotes: boolean;
+}
