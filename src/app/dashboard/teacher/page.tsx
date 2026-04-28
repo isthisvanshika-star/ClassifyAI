@@ -23,7 +23,6 @@ export default function TeacherDashboardPage() {
   const [details, setDetails] = useState<TeacherDetails | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // State to control which modal is open
   const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
   const [activeSessionToken, setActiveSessionToken] = useState<string | null>(
     null
@@ -93,7 +92,7 @@ export default function TeacherDashboardPage() {
 
   const handleFinalizeClose = () => {
     setIsFinalizeModalOpen(false);
-    setActiveSessionToken(null); // Fully end the session
+    setActiveSessionToken(null); 
   };
 
   const todayWeekday = new Date()
@@ -111,10 +110,9 @@ export default function TeacherDashboardPage() {
           teacherDepartment={details?.teacherProfile?.department || "Department"}
           onGenerateQrClick={() => setIsGenerateModalOpen(true)}
         />
-        {/* The on-page timer will appear here when a session is active */}
         {activeSessionToken && (
           <ActiveSessionTracker
-            durationInSeconds={300} // 5 minutes
+            durationInSeconds={300} 
             onTimerEnd={handleTimerEnd}
           />
         )}
@@ -135,8 +133,8 @@ export default function TeacherDashboardPage() {
           isOpen={isGenerateModalOpen}
           onClose={() => setIsGenerateModalOpen(false)}
           onSuccess={(token) => {
-            setIsGenerateModalOpen(false); // Close the first dialog
-            setActiveSessionToken(token); // Set token to open the second dialog
+            setIsGenerateModalOpen(false);
+            setActiveSessionToken(token);
           }}
         />
         {isFinalizeModalOpen && activeSessionToken && (
