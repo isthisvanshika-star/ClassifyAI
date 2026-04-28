@@ -6,13 +6,32 @@ export default function TeacherLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-screen">
-      <div className=" mt-52">
-      <img src="/logo-nobg.png" className="2xl:ml-5 2xl:top-[63rem] 2xl:-left-[0rem] absolute 2xl:mb-5 2xl:w-40 2xl:h-11" alt="Background Image"/>
-      <Sidebar />
+    <div className="flex h-screen bg-transparent  text-white">
+      
+      {/* ✅ SIDEBAR */}
+      <div className="relative mt-60">
+        <Sidebar />
+
+        {/* Logo */}
+        <img
+          src="/logo-nobg.png"
+          className="absolute bottom-5 left-6 w-32 opacity-80"
+          alt="Logo"
+        />
       </div>
-       <div className="flex flex-col items-center 2xl:-ml-[5rem] justify-center flex-1">
-        <main className="w-[90rem] z-0  h-[55rem]  bg-white/5 rounded-lg backdrop-blur-xl border border-white/10 p-1 flex flex-col shadow-lg">{children}</main>
+
+      {/* ✅ MAIN CONTENT */}
+      <div className="flex-1 overflow-y-auto">
+        
+        {/* Container */}
+        <div className="p-6 max-w-[1600px] mx-auto">
+          
+          {/* Glass Wrapper */}
+          <main className="w-full min-h-[calc(100vh-3rem)] bg-white/5 rounded-2xl backdrop-blur-xl border border-white/10 p-6 shadow-lg">
+            {children}
+          </main>
+
+        </div>
       </div>
     </div>
   );

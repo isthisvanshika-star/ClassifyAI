@@ -176,7 +176,7 @@ export interface TeacherDetails {
   teacherProfile: {
     designation: string | null;
     department: string | null;
-  } | null,
+  } | null;
   branch: string | null;
   semester: number | null;
   year: number | null;
@@ -300,15 +300,60 @@ export interface Prediction {
   weightage: "High" | "Medium" | "Low";
   reason: string;
 }
- 
+
 export interface AnswerSection {
   heading: string;
   content: string;
 }
- 
+
 export interface Answer {
   summary: string;
   sections: AnswerSection[];
   keyPoints: string[];
   sourcedFromNotes: boolean;
 }
+
+export type SubjectStat = {
+  subjectId: string;
+  subjectName: string;
+  subjectCode: string | null;
+  present: number;
+  total: number;
+};
+
+export type StudentEntry = {
+  studentId: string;
+  userId: string;
+  name: string;
+  rollNumber: string | null;
+  subjects: Map<string, SubjectStat>;
+};
+
+export type AggEntry = {
+  userId: string;
+  name: string;
+  worstSubject: string;
+  worstPct: number;
+  subjectStats: Map<string, { name: string; present: number; total: number }>;
+};
+
+export type TeacherEntry = {
+  teacherId: string;
+  userId: string;
+  name: string;
+  subjects: Map<
+    string,
+    {
+      subjectName: string;
+      resourceCount: number;
+    }
+  >;
+};
+
+export type AggTeacher = {
+  userId: string;
+  name: string;
+  totalResources: number;
+  assignedSubjects: number;
+  subjectsWithResources: number;
+};
