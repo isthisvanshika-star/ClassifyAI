@@ -19,9 +19,6 @@ export default function CampusList() {
   // useSWR handles fetching, caching, loading, and error states automatically
   const { data: campuses, error, isLoading } = useSWR<Campus[]>('/api/campus', fetcher);
 
-  console.log(campuses)
-  console.log(error)
-
   if (isLoading) {
     return (
       <div className="text-center">

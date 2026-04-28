@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import React, { use } from "react";
 import useSWR from "swr";
 
@@ -8,83 +9,84 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const Page = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id: campusId } = use(params);
 
-  // 🔥 Dashboard Data
   const { data: dashboard, isLoading: loadingDashboard } = useSWR(
-    `/api/admin/campus/${campusId}/dashboard`,
-    fetcher
+    `/api/admin/campus/dashboard?id=${campusId}`,
+    fetcher,
   );
 
-  // 🔥 Campus Details
-  const { data: campus } = useSWR(
-    `/api/admin/campus/${campusId}`,
-    fetcher
-  );
+  const { data: campus } = useSWR(`/api/admin/campus?id=${campusId}`, fetcher);
 
-  // 🔥 Extra Data (optional but useful)
   const { data: students } = useSWR(
     `/api/admin/campus/student?campusId=${campusId}`,
-    fetcher
+    fetcher,
   );
 
   const { data: teachers } = useSWR(
     `/api/admin/campus/teacher?campusId=${campusId}`,
-    fetcher
+    fetcher,
   );
 
   const { data: subjects } = useSWR(
     `/api/admin/campus/subject?campusId=${campusId}`,
-    fetcher
+    fetcher,
   );
-
+  const router = useRouter();
   return (
     <div className="relative min-h-screen text-white">
-      {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-neutral-950 via-neutral-800 to-neutral-950 z-0" />
-
-      {/* Content */}
       <main className="relative z-10 p-6 md:p-10 space-y-6">
-        
-        {/* Header */}
+        <button
+          onClick={() => router.push("/dashboard/admin")}
+          className="flex items-center gap-2 bg-gray-700 hover:bg-gray-800 px-4 py-2 rounded-lg font-medium transition"
+        >← Back
+        </button>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-bold">
-              {campus?.name || "Campus Dashboard"}
-            </h1>
-            <p className="text-sm text-gray-400">
-              {campus?.city || "Loading..."} •{" "}
-              <span className="text-indigo-400">{campusId}</span>
-            </p>
+          <div className="flex items-center gap-4">
+            <div className="w-30 h-30 rounded-full bg-white flex items-center justify-center overflow-hidden border border-white/10">
+              <img
+                src={campus?.logoUrl || "/default-campus-logo.png"}
+                alt="Campus Logo"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src =
+                    "/default-campus-logo.png";
+                }}
+              />
+            </div>
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold">
+                {campus?.name || "Campus Dashboard"}
+              </h1>
+              <p className="text-base text-gray-400">
+                {campus?.hindiName || ""}
+              </p>
+            </div>
           </div>
 
           <button className="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg font-semibold">
             Edit Campus
           </button>
         </div>
-
-        {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {loadingDashboard ? (
             <p className="text-gray-400">Loading stats...</p>
           ) : (
             [
-              { title: "Students", value: dashboard?.students || 0 },
-              { title: "Teachers", value: dashboard?.teachers || 0 },
-              { title: "Subjects", value: dashboard?.subjects || 0 },
+              { title: "Students", value: students?.length || 0 },
+              { title: "Teachers", value: teachers?.length || 0 },
+              { title: "Subjects", value: subjects?.length || 0 },
             ].map((card, i) => (
               <div
                 key={i}
                 className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-5 hover:bg-white/10 transition"
               >
                 <p className="text-sm text-gray-400">{card.title}</p>
-                <h2 className="text-2xl font-bold mt-1">
-                  {card.value}
-                </h2>
+                <h2 className="text-2xl font-bold mt-1">{card.value}</h2>
               </div>
             ))
           )}
         </div>
 
-        {/* Actions */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-indigo-600/20 hover:bg-indigo-600/30 transition p-5 rounded-xl cursor-pointer">
             <h3 className="font-semibold text-lg">Manage Students</h3>
@@ -107,8 +109,6 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
             </p>
           </div>
         </div>
-
-        {/* Recent Activity */}
         <div className="bg-white/5 border border-white/10 rounded-xl p-5">
           <h3 className="font-semibold text-lg mb-3">Recent Activity</h3>
 
@@ -127,9 +127,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-gray-400">
-              No recent activity yet...
-            </p>
+            <p className="text-sm text-gray-400">No recent activity yet...</p>
           )}
         </div>
       </main>

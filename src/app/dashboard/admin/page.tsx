@@ -20,26 +20,31 @@ export default function SuperAdminDashboardPage() {
 
   return (
     <>
-      {/* Background Layer */}
       <main className="absolute inset-0 bg-gradient-to-br from-neutral-950 via-neutral-800 to-neutral-950 bg-cover bg-center z-0" />
-
-      {/* Content Layer */}
       <main className="relative min-h-screen p-6 md:p-10 text-white backdrop-blur-sm">
-        {/* Header */}
-        <header className="mb-12">
-          <h1
-            className={`text-4xl font-bold bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-500 bg-clip-text text-transparent drop-shadow-xl ${tektur.className}`}
+        <header className="mb-12 flex items-center justify-between">
+          <div>
+            <h1
+              className={`text-4xl font-bold bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-500 bg-clip-text text-transparent drop-shadow-xl ${tektur.className}`}
+            >
+              Admin Dashboard
+            </h1>
+            <p className="mt-2 text-gray-400">
+              Manage colleges and platform-wide assistants
+            </p>
+          </div>
+          <button
+            onClick={() => {
+              localStorage.removeItem("adminId");
+              window.location.href = "/auth/login";
+            }}
+          className="bg-red-500/20 border cursor-pointer border-red-500/30 hover:bg-red-600/30 text-red-300 px-5 py-2 rounded-lg backdrop-blur-md transition"
           >
-             Admin Dashboard
-          </h1>
-          <p className="mt-2 text-gray-400">
-            Manage colleges and platform-wide assistants
-          </p>
+            ⎋ Logout
+          </button>
         </header>
 
-        {/* Dashboard Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Onboard College Section */}
           <section className="bg-white/5 border border-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all">
             <h2 className="text-2xl font-semibold mb-3 text-indigo-300">
               Onboard a New College
@@ -57,8 +62,6 @@ export default function SuperAdminDashboardPage() {
               + Create New Assistant
             </button>
           </section>
-
-          {/* Manage Campuses Section */}
           <section className="bg-white/5 border border-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all">
             <h2 className="text-2xl font-semibold mb-3 text-indigo-300">
               Manage Campuses
@@ -72,8 +75,6 @@ export default function SuperAdminDashboardPage() {
           </section>
         </div>
       </main>
-
-      {/* Modal */}
       <CreateAssistantDialog
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
