@@ -101,11 +101,14 @@ export default function TeacherDashboardPage() {
     .toUpperCase();
   const todaysClasses = classes.filter((cls) => cls.weekday === todayWeekday);
   const todaysAttendanceSessions = attendance.filter((att) => att.weekday === todayWeekday);
+  console.log({details})
   return (
     <>
       <main className=" text-white p-8 overflow-hidden">
         <DashboardHeader
           teacherName={details?.name || "Teacher"}
+          teacherDesignation={details?.teacherProfile?.designation || "Teacher"}
+          teacherDepartment={details?.teacherProfile?.department || "Department"}
           onGenerateQrClick={() => setIsGenerateModalOpen(true)}
         />
         {/* The on-page timer will appear here when a session is active */}

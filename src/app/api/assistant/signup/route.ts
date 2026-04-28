@@ -17,14 +17,20 @@ const signupSchema = z.object({
   year: z.string().optional(),
   semester: z.string().optional(),
   section: z.string().optional(),
+  department: z.string().optional(),
   designation: z
-    .enum([
-      "PROFESSOR",
-      "ASSOCIATE_PROFESSOR",
-      "ASSISTANT_PROFESSOR",
-      "LECTURER",
-      "HOD",
-    ])
+    .preprocess(
+      (val) => (val === "" ? undefined : val),
+      z
+        .enum([
+          "PROFESSOR",
+          "ASSOCIATE_PROFESSOR",
+          "ASSISTANT_PROFESSOR",
+          "LECTURER",
+          "HOD",
+        ])
+        .optional(),
+    )
     .optional(),
   assignedSubjects: z
     .array(
@@ -32,7 +38,7 @@ const signupSchema = z.object({
         name: z.string().min(1),
         code: z.string().optional(),
         description: z.string().optional(),
-      })
+      }),
     )
     .optional(),
   adminID: z.string(),
@@ -57,7 +63,7 @@ export async function POST(req: NextRequest) {
     ) {
       return NextResponse.json(
         { error: "Invalid or unconfigured admin account." },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -72,14 +78,14 @@ export async function POST(req: NextRequest) {
             error:
               "You do not have permission to create another Assistant account.",
           },
-          { status: 403 }
+          { status: 403 },
         );
       }
 
       if (!campusId) {
         return NextResponse.json(
           { error: "Admin is not associated with a campus." },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -87,7 +93,14 @@ export async function POST(req: NextRequest) {
       if (data.role === "TEACHER" && !data.designation) {
         return NextResponse.json(
           { error: "Designation is required for teachers" },
-          { status: 400 }
+          { status: 400 },
+        );
+      }
+
+      if(data.role === "TEACHER" && !data.department) {
+        return NextResponse.json(
+          { error: "Department is required for teachers" },
+          { status: 400 },
         );
       }
 
@@ -99,7 +112,7 @@ export async function POST(req: NextRequest) {
       if (existingUser) {
         return NextResponse.json(
           { error: "User already exists in this campus" },
-          { status: 409 }
+          { status: 409 },
         );
       }
 
@@ -116,7 +129,8 @@ export async function POST(req: NextRequest) {
             : undefined,
 
           // Student fields
-          branch: data.role === "STUDENT" ? data.branch ?? undefined : undefined,
+          branch:
+            data.role === "STUDENT" ? (data.branch ?? undefined) : undefined,
           year:
             data.role === "STUDENT" && data.year
               ? Number(data.year)
@@ -134,16 +148,15 @@ export async function POST(req: NextRequest) {
           data: {
             userId: newUser.id,
             designation: data.designation,
+            department: data.department,
           },
         });
 
         // ✅ Correct subject logic
         const shouldAssignSubjects =
           data.role === "TEACHER" &&
-          (
-            data.designation !== "HOD" ||
-            (data.designation === "HOD" && data.assignedSubjects?.length)
-          );
+          (data.designation !== "HOD" ||
+            (data.designation === "HOD" && data.assignedSubjects?.length));
 
         if (
           shouldAssignSubjects &&
@@ -179,7 +192,7 @@ export async function POST(req: NextRequest) {
                 });
 
                 return newSubject.id;
-              })
+              }),
             );
 
             await prisma.teacherSubject.createMany({
@@ -250,7 +263,7 @@ export async function POST(req: NextRequest) {
       await logActivity(
         newUser.id,
         newUser.name,
-        `${newUser.name} added by admin`
+        `${newUser.name} added by admin`,
       );
 
       return NextResponse.json(newUser, { status: 201 });
@@ -269,7 +282,7 @@ export async function POST(req: NextRequest) {
       await logActivity(
         existingUser.id,
         existingUser.name,
-        `${existingUser.name} removed by admin`
+        `${existingUser.name} removed by admin`,
       );
 
       await prisma.recentActivity.deleteMany({
@@ -309,7 +322,7 @@ export async function POST(req: NextRequest) {
     console.error("Signup Error:", err);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

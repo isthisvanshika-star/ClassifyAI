@@ -173,6 +173,10 @@ export interface TeacherDetails {
   isPremium: boolean;
   premiumExpiresAt: string | null;
   premiumFeatures: string[];
+  teacherProfile: {
+    designation: string | null;
+    department: string | null;
+  } | null,
   branch: string | null;
   semester: number | null;
   year: number | null;

@@ -4,8 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-
-    // 1. Get both teacherId (which is a userId) and campusId from the URL
     const teacherId = searchParams.get("teacherId");
     const campusId = searchParams.get("campusId");
 
@@ -15,9 +13,6 @@ export async function GET(req: NextRequest) {
         { status: 400 }
       );
     }
-
-    // 2. Update the query to be a secure, scoped findFirst.
-    // This finds a user only if their ID and campusId both match.
     const details = await prisma.user.findFirst({
       where: {
         id: teacherId,
@@ -25,6 +20,12 @@ export async function GET(req: NextRequest) {
       },
       include: {
         premiumFeatures: true,
+        teacherProfile: {
+          select:{
+            designation: true,
+            department: true,
+          }
+        },
       },
     });
 

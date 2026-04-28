@@ -42,6 +42,7 @@ const LinkCards = ({
     semester: "",
     section: "",
     designation: "",
+    department: "",
   });
   const [hodTeaches, setHodTeaches] = useState(true);
   const campusId =
@@ -140,16 +141,21 @@ const LinkCards = ({
       return;
     }
 
-    if(forRole === "teacher" && modalOpen === "add"){
-      if(!formData.designation){
-        setMessage({type: "error", text: "Please select designation"})
+    if (forRole === "teacher" && modalOpen === "add") {
+      if (!formData.designation) {
+        setMessage({ type: "error", text: "Please select designation" });
         return;
       }
-      if((formData.designation !== "HOD" || hodTeaches) && assignedSubjects.length === 0){
-        setMessage({type: "error", text: "Please assign at least one subject"})
+      if (
+        (formData.designation !== "HOD" || hodTeaches) &&
+        assignedSubjects.length === 0
+      ) {
+        setMessage({
+          type: "error",
+          text: "Please assign at least one subject",
+        });
         return;
       }
-
     }
 
     setLoading(true);
@@ -165,8 +171,16 @@ const LinkCards = ({
         year: forRole === "student" ? formData.year : undefined,
         semester: formData.semester,
         section: formData.section,
-        designation: forRole === "teacher" ? formData.designation : undefined, 
-        assignedSubjects: forRole === "teacher" && (formData.designation === "HOD" || hodTeaches) ? assignedSubjects : [],
+        department: modalOpen === "add" ? formData.department : undefined,
+        designation:
+          modalOpen === "add" && forRole === "teacher"
+            ? formData.designation
+            : undefined,
+        assignedSubjects:
+          forRole === "teacher" &&
+          (formData.designation === "HOD" || hodTeaches)
+            ? assignedSubjects
+            : [],
         adminID: assistantId,
       }),
     });
@@ -205,6 +219,7 @@ const LinkCards = ({
       semester: "",
       section: "",
       designation: "",
+      department: "",
     });
     setOtp("");
     setStep("form");
@@ -312,6 +327,83 @@ const LinkCards = ({
                   className={`${tektur.className} w-full ring ring-orange-400 outline-none p-2 rounded mb-2`}
                   disabled={loading}
                 />
+                <input
+                  type="text"
+                  placeholder="Department (e.g., EEE)"
+                  value={formData.department}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      department: e.target.value,
+                    })
+                  }
+                  className={`${tektur.className} w-full ring ring-orange-400 outline-none p-2 rounded`}
+                />
+
+                <select
+                  value={formData.designation}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      designation: e.target.value,
+                    })
+                  }
+                  className={`${tektur.className} w-full ring appearance-none mt-2 text-black/60 ring-orange-400 outline-none p-2 rounded`}
+                >
+                  <option value="" className="bg-orange-800/80">
+                    Select Designation
+                  </option>
+                  <option
+                    value="PROFESSOR"
+                    className="text-black bg-orange-800/80"
+                  >
+                    Professor
+                  </option>
+                  <option
+                    value="ASSOCIATE_PROFESSOR"
+                    className="text-black bg-orange-800/80"
+                  >
+                    Associate Professor
+                  </option>
+                  <option
+                    value="ASSISTANT_PROFESSOR"
+                    className="text-black bg-orange-800/80"
+                  >
+                    Assistant Professor
+                  </option>
+                  <option
+                    value="LECTURER"
+                    className="text-black bg-orange-800/80"
+                  >
+                    Lecturer
+                  </option>
+                  <option
+                    value="HOD"
+                    className="text-black bg-orange-800/80 rounded-b-4xl"
+                  >
+                    HOD
+                  </option>
+                </select>
+                {formData.designation === "HOD" && (
+                  <div className="mt-3 flex items-center gap-4">
+                    <p className="text-sm mb-2">Does HOD teach subjects?</p>
+
+                    <div
+                      onClick={() => setHodTeaches(!hodTeaches)}
+                      className={`w-10 -mt-2 h-5 flex items-center rounded-full p-1 cursor-pointer transition-all duration-300 ${
+                        hodTeaches ? "bg-orange-500" : "bg-gray-400"
+                      }`}
+                    >
+                      <div
+                        className={`bg-white/80 w-6 h-6 rounded-full shadow-md transform transition-all duration-300 flex items-center justify-center text-[10px] font-bold ${
+                          hodTeaches ? "translate-x-4" : "-translate-x-3"
+                        }`}
+                      >
+                        {hodTeaches ? "Yes" : "No"}
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {forRole === "student" && modalOpen === "add" && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
@@ -395,73 +487,6 @@ const LinkCards = ({
                           className={`${tektur.className} w-full ring ring-orange-400 outline-none p-2 rounded`}
                         />
                       </div>
-
-                      <select
-                        value={formData.designation}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            designation: e.target.value,
-                          })
-                        }
-                        className={`${tektur.className} w-full ring appearance-none text-black/60 ring-orange-400 outline-none p-2 rounded`}
-                      >
-                        <option value="" className="bg-orange-800/80">
-                          Select Designation
-                        </option>
-                        <option
-                          value="Professor"
-                          className="text-black bg-orange-800/80"
-                        >
-                          Professor
-                        </option>
-                        <option
-                          value="Associate Professor"
-                          className="text-black bg-orange-800/80"
-                        >
-                          Associate Professor
-                        </option>
-                        <option
-                          value="Assistant Professor"
-                          className="text-black bg-orange-800/80"
-                        >
-                          Assistant Professor
-                        </option>
-                        <option
-                          value="Lecturer"
-                          className="text-black bg-orange-800/80"
-                        >
-                          Lecturer
-                        </option>
-                        <option
-                          value="HOD"
-                          className="text-black bg-orange-800/80 rounded-b-4xl"
-                        >
-                          HOD
-                        </option>
-                      </select>
-                        {formData.designation === "HOD" && (
-                          <div className="mt-3 flex items-center gap-4">
-                            <p className="text-sm mb-2">
-                              Does HOD teach subjects?
-                            </p>
-
-                            <div
-                              onClick={() => setHodTeaches(!hodTeaches)}
-                              className={`w-10 -mt-2 h-5 flex items-center rounded-full p-1 cursor-pointer transition-all duration-300 ${
-                                hodTeaches ? "bg-orange-500" : "bg-gray-400"
-                              }`}
-                            >
-                              <div
-                                className={`bg-white/80 w-6 h-6 rounded-full shadow-md transform transition-all duration-300 flex items-center justify-center text-[10px] font-bold ${
-                                  hodTeaches ? "translate-x-4" : "translate-x-0"
-                                }`}
-                              >
-                                {hodTeaches ? "Yes" : "No"}
-                              </div>
-                            </div>
-                          </div>
-                        )}
 
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
                         <div className="space-y-2">
