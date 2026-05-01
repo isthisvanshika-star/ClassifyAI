@@ -344,9 +344,10 @@ exports.Prisma.ResourceScalarFieldEnum = {
   subjectId: 'subjectId',
   assignmentId: 'assignmentId',
   announcementId: 'announcementId',
-  messageId: 'messageId',
+  chatMessageId: 'chatMessageId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  messageId: 'messageId'
 };
 
 exports.Prisma.ExamScalarFieldEnum = {
@@ -366,15 +367,6 @@ exports.Prisma.GradeScalarFieldEnum = {
   marks: 'marks',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-};
-
-exports.Prisma.MessageScalarFieldEnum = {
-  id: 'id',
-  senderId: 'senderId',
-  receiverId: 'receiverId',
-  content: 'content',
-  read: 'read',
-  createdAt: 'createdAt'
 };
 
 exports.Prisma.NotificationScalarFieldEnum = {
@@ -429,6 +421,40 @@ exports.Prisma.PlanConfigScalarFieldEnum = {
   features: 'features',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ConversationScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  name: 'name',
+  campusId: 'campusId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ConversationParticipantScalarFieldEnum = {
+  id: 'id',
+  conversationId: 'conversationId',
+  userId: 'userId',
+  publicKey: 'publicKey',
+  lastReadAt: 'lastReadAt',
+  joinedAt: 'joinedAt'
+};
+
+exports.Prisma.MessageScalarFieldEnum = {
+  id: 'id',
+  conversationId: 'conversationId',
+  senderId: 'senderId',
+  encryptedContent: 'encryptedContent',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.MessageKeyScalarFieldEnum = {
+  id: 'id',
+  messageId: 'messageId',
+  recipientId: 'recipientId',
+  encryptedKey: 'encryptedKey'
 };
 
 exports.Prisma.SortOrder = {
@@ -505,6 +531,11 @@ exports.ResourceType = exports.$Enums.ResourceType = {
   VIDEO_LINK: 'VIDEO_LINK'
 };
 
+exports.ConversationType = exports.$Enums.ConversationType = {
+  DIRECT: 'DIRECT',
+  GROUP: 'GROUP'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Teacher: 'Teacher',
@@ -526,13 +557,16 @@ exports.Prisma.ModelName = {
   Resource: 'Resource',
   Exam: 'Exam',
   Grade: 'Grade',
-  Message: 'Message',
   Notification: 'Notification',
   PremiumFeature: 'PremiumFeature',
   GoogleToken: 'GoogleToken',
   RecentActivity: 'RecentActivity',
   SupportRequest: 'SupportRequest',
-  PlanConfig: 'PlanConfig'
+  PlanConfig: 'PlanConfig',
+  Conversation: 'Conversation',
+  ConversationParticipant: 'ConversationParticipant',
+  Message: 'Message',
+  MessageKey: 'MessageKey'
 };
 
 /**

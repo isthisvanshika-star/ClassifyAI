@@ -43,11 +43,13 @@ model User {
   googleTokens     GoogleToken[]
   recentActivities RecentActivity[]
   supportRequests  SupportRequest[]
-  messagesSent     Message[]        @relation("MessageSender")
-  messagesReceived Message[]        @relation("MessageReceiver")
   notifications    Notification[]
   sessions         Session[]
-  announcements  Announcement[] @relation("AnnouncementAssistant")
+  announcements    Announcement[]   @relation("AnnouncementAssistant")
+
+  conversations    ConversationParticipant[] @relation("UserConversations")
+  chatMessagesSent Message[]                 @relation("ChatMessageSender")
+  messageKeys      MessageKey[]              @relation("UserMessageKeys")
 }
 
 model Teacher {
@@ -342,8 +344,8 @@ model Announcement {
   title          String
   message        String
   authorId       String?
-  author         Teacher?    @relation("AnnouncementAuthor", fields: [authorId], references: [id], map: "fk_announcement_author")
-   assistantId    String?
+  author         Teacher?   @relation("AnnouncementAuthor", fields: [authorId], references: [id], map: "fk_announcement_author")
+  assistantId    String?
   assistant      User?      @relation("AnnouncementAssistant", fields: [assistantId], references: [id], map: "fk_announcement_assistant")
   targetAll      Boolean    @default(false)
   targetSemester Int?
@@ -371,10 +373,13 @@ model Resource {
   assignment     Assignment?   @relation(fields: [assignmentId], references: [id], map: "fk_resource_assignment")
   announcementId String?
   announcement   Announcement? @relation(fields: [announcementId], references: [id], map: "fk_resource_announcement")
-  messageId      String?
-  message        Message?      @relation(fields: [messageId], references: [id], map: "fk_resource_message")
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  chatMessageId  String?
+  chatMessage    Message?      @relation("MessageAttachments", fields: [chatMessageId], references: [id], map: "fk_resource_chatmessage")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  message   Message? @relation(fields: [messageId], references: [id])
+  messageId String?
 }
 
 model Exam {
@@ -401,18 +406,6 @@ model Grade {
   updatedAt DateTime @updatedAt
 
   @@unique([examId, studentId], map: "uq_grade_exam_student")
-}
-
-model Message {
-  id          String     @id @default(cuid())
-  senderId    String
-  sender      User       @relation("MessageSender", fields: [senderId], references: [id], map: "fk_message_sender")
-  receiverId  String
-  receiver    User       @relation("MessageReceiver", fields: [receiverId], references: [id], map: "fk_message_receiver")
-  content     String
-  attachments Resource[]
-  read        Boolean    @default(false)
-  createdAt   DateTime   @default(now())
 }
 
 model Notification {
@@ -474,6 +467,58 @@ model PlanConfig {
   updatedAt DateTime @updatedAt
 }
 
+model Conversation {
+  id        String           @id @default(cuid())
+  type      ConversationType
+  name      String? // for group chats
+  campusId  String
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @default(now()) @updatedAt
+
+  participants ConversationParticipant[]
+  messages     Message[]
+}
+
+model ConversationParticipant {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation("UserConversations", fields: [userId], references: [id], onDelete: Cascade)
+  publicKey      String // RSA public key for E2E encryption
+  lastReadAt     DateTime? // for read receipts
+  joinedAt       DateTime     @default(now())
+
+  @@unique([conversationId, userId])
+}
+
+model Message {
+  id               String       @id @default(cuid())
+  conversationId   String
+  conversation     Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId         String
+  sender           User         @relation("ChatMessageSender", fields: [senderId], references: [id])
+  encryptedContent String
+  attachments      Resource[]   @relation("MessageAttachments")
+  encryptedKeys    MessageKey[]
+  deletedAt        DateTime?
+  createdAt        DateTime     @default(now())
+  resources        Resource[]
+
+  @@index([conversationId, createdAt])
+}
+
+model MessageKey {
+  id           String  @id @default(cuid())
+  messageId    String
+  message      Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  recipientId  String
+  recipient    User    @relation("UserMessageKeys", fields: [recipientId], references: [id])
+  encryptedKey String
+
+  @@unique([messageId, recipientId])
+}
+
 /// ---------------------
 /// Enums
 /// ---------------------
@@ -525,4 +570,9 @@ enum ResourceType {
   PYQ
   SYLLABUS
   VIDEO_LINK
+}
+
+enum ConversationType {
+  DIRECT
+  GROUP
 }
