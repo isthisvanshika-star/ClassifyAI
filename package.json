@@ -59,6 +59,8 @@
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^5.4.296",
     "prisma": "^6.15.0",
+    "pusher": "^5.3.3",
+    "pusher-js": "^8.5.0",
     "qrcode": "^1.5.4",
     "razorpay": "^2.9.6",
     "react": "^19.0.0",

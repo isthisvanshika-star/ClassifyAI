@@ -357,3 +357,8 @@ export type AggTeacher = {
   assignedSubjects: number;
   subjectsWithResources: number;
 };
+
+export interface KeyPair {
+  publicKey: string;   
+  privateKey: string;
+}

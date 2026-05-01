@@ -604,3 +604,36 @@ export const transformUsername = async (email: string): Promise<string> => {
 
   return username;
 };
+
+export async function importPublicKey(base64Key: string): Promise<CryptoKey> {
+  return window.crypto.subtle.importKey(
+    "spki",
+    base64ToBuffer(base64Key),
+    { name: "RSA-OAEP", hash: "SHA-256" },
+    false,
+    ["encrypt"]
+  );
+}
+
+export async function importPrivateKey(base64Key: string): Promise<CryptoKey> {
+  return window.crypto.subtle.importKey(
+    "pkcs8",
+    base64ToBuffer(base64Key),
+    { name: "RSA-OAEP", hash: "SHA-256" },
+    false,
+    ["decrypt"]
+  );
+}
+
+export function bufferToBase64(buffer: ArrayBuffer): string {
+  return btoa(String.fromCharCode(...new Uint8Array(buffer)));
+}
+
+ export function base64ToBuffer(base64: string): ArrayBuffer {
+  const binary = atob(base64);
+  const buffer = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    buffer[i] = binary.charCodeAt(i);
+  }
+  return buffer.buffer;
+}
