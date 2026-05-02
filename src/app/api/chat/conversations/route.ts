@@ -1,0 +1,146 @@
+import { prisma } from "@/lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
+import z from "zod";
+
+const createConversationSchema = z.object({
+  type: z.enum(["DIRECT", "GROUP"]),
+  name: z.string().optional(), // required for GROUP
+  campusId: z.string(),
+  creatorId: z.string(),
+  participantIds: z.array(z.string()).min(1),
+});
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const data = createConversationSchema.parse(body);
+    if (data.type === "GROUP" && !data.name) {
+      return NextResponse.json(
+        { error: "Group name is required" },
+        { status: 400 },
+      );
+    }
+    //? For DIRECT chats, ensure exactly 1 other participant is provided.....
+    if (data.type === "DIRECT") {
+      if (data.participantIds.length !== 1) {
+        return NextResponse.json(
+          { error: "Direct chat requires exactly 1 other participant" },
+          { status: 400 },
+        );
+      }
+      const allIds = [data.creatorId, data.participantIds[0]].sort();
+
+      //? check if direct conversation already exists between these two....
+      const existing = await prisma.conversation.findFirst({
+        where: {
+          type: "DIRECT",
+          campusId: data.campusId,
+          participants: {
+            every: { userId: { in: allIds } },
+          },
+        },
+        include: { participants: true },
+      });
+      //?  return existing instead of creating duplicate....
+      if (existing && existing.participants.length === 2) {
+        return NextResponse.json(existing, { status: 200 });
+      }
+    }
+    //?  all participant IDs including creator....
+    const allParticipantIds = [data.creatorId, ...data.participantIds];
+
+    const conversation = await prisma.conversation.create({
+      data: {
+        type: data.type,
+        name: data.name,
+        campusId: data.campusId,
+        participants: {
+          create: allParticipantIds.map((userId) => ({
+            userId,
+            publicKey: "", // will be updated when user registers their key
+          })),
+        },
+      },
+      include: {
+        participants: {
+          include: {
+            user: {
+              select: { id: true, name: true, avatarUrl: true, role: true },
+            },
+          },
+        },
+      },
+    });
+
+    return NextResponse.json(conversation, { status: 201 });
+  } catch (error) {
+    console.error("Create conversation error:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function GET(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const userId = searchParams.get("userId");
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: "userId is required" },
+        { status: 400 },
+      );
+    }
+
+    const conversations = await prisma.conversation.findMany({
+      where: {
+        participants: { some: { userId } },
+      },
+      include: {
+        participants: {
+          include: {
+            user: {
+              select: { id: true, name: true, avatarUrl: true, role: true },
+            },
+          },
+        },
+        messages: {
+          orderBy: { createdAt: "desc" },
+          take: 1, // last message preview
+          include: {
+            encryptedKeys: {
+              where: { recipientId: userId },
+              select: { encryptedKey: true },
+            },
+          },
+        },
+      },
+      orderBy: { updatedAt: "desc" },
+    });
+    //? attach unread count per conversation....
+    const withUnread = await Promise.all(
+      conversations.map(async (conv) => {
+        const participant = conv.participants.find((p) => p.userId === userId);
+        const unreadCount = await prisma.message.count({
+          where: {
+            conversationId: conv.id,
+            createdAt: { gt: participant?.lastReadAt ?? new Date(0) },
+            senderId: { not: userId },
+            deletedAt: null,
+          },
+        });
+        return { ...conv, unreadCount };
+      }),
+    );
+
+    return NextResponse.json(withUnread);
+  } catch (error) {
+    console.error("Get conversations error:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
+  }
+}
