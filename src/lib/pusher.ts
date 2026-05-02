@@ -1,4 +1,4 @@
-import PusherServer from 'pusher';
+import PusherServer from "pusher";
 import PusherClient from "pusher-js";
 
 export const pusherServer = new PusherServer({
@@ -24,7 +24,7 @@ export function getPusherClient(userId: string): PusherClient {
             "x-user-id": userId,
           },
         },
-      }
+      },
     );
   }
   return pusherClientInstance;
@@ -43,7 +43,7 @@ export const Channels = {
 
 export const Events = {
   NEW_MESSAGE: "new-message",
-  TYPING_START: "client-typing-start",  // client- prefix = no server roundtrip
+  TYPING_START: "client-typing-start",
   TYPING_STOP: "client-typing-stop",
   READ_RECEIPT: "read-receipt",
   NEW_NOTIFICATION: "new-notification",

@@ -359,6 +359,23 @@ export type AggTeacher = {
 };
 
 export interface KeyPair {
-  publicKey: string;   
+  publicKey: string;
+  privateKey: string;
+}
+
+export interface Message {
+  id: string;
+  senderId: string;
+  sender: { id: string; name: string; avatarUrl: string | null };
+  encryptedContent: string;
+  encryptedKeys: { encryptedKey: string }[];
+  attachments: any[];
+  createdAt: string;
+  decryptedContent?: string;
+}
+
+export interface UseChatOptions {
+  userId: string;
+  conversationId: string;
   privateKey: string;
 }

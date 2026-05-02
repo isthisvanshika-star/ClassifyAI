@@ -18,11 +18,11 @@ import FirstLoginModal from "@/components/student/FirstLoginModal";
 import FaceVerificationModal from "@/components/student/FaceVerificationModal";
 import DashboardLoader from "@/components/student/DashboardLoader";
 import NotificationBell from "@/components/student/NotificationBell";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBookOpen,
   faBullhorn,
   faFile,
+  faMessage,
 } from "@fortawesome/free-solid-svg-icons";
 import NotificationHandler from "@/components/ui/NotificationHandler";
 import SideButtons from "@/components/student/SideButtons";
@@ -258,6 +258,11 @@ export default function StudentDashboard() {
                     faIcon={faBookOpen}
                     title="View Resources"
                     link="/dashboard/student/resources"
+                  />
+                  <SideButtons
+                    faIcon={faMessage}
+                    title="View Messages"
+                    link="/chat"
                   />
                 </div>
                 {/* Bar Graph */}

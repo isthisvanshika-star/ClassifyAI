@@ -584,9 +584,9 @@ export const transformUsername = async (email: string): Promise<string> => {
   let base = email.split("@")[0];
   base = base
     .toLowerCase()
-    .replace(/[^a-z0-9]/g, "_") 
-    .replace(/_+/g, "_") 
-    .replace(/^_|_$/g, ""); 
+    .replace(/[^a-z0-9]/g, "_")
+    .replace(/_+/g, "_")
+    .replace(/^_|_$/g, "");
   if (!base) base = "user";
 
   let username = base;
@@ -611,7 +611,7 @@ export async function importPublicKey(base64Key: string): Promise<CryptoKey> {
     base64ToBuffer(base64Key),
     { name: "RSA-OAEP", hash: "SHA-256" },
     false,
-    ["encrypt"]
+    ["encrypt"],
   );
 }
 
@@ -621,7 +621,7 @@ export async function importPrivateKey(base64Key: string): Promise<CryptoKey> {
     base64ToBuffer(base64Key),
     { name: "RSA-OAEP", hash: "SHA-256" },
     false,
-    ["decrypt"]
+    ["decrypt"],
   );
 }
 
@@ -629,7 +629,7 @@ export function bufferToBase64(buffer: ArrayBuffer): string {
   return btoa(String.fromCharCode(...new Uint8Array(buffer)));
 }
 
- export function base64ToBuffer(base64: string): ArrayBuffer {
+export function base64ToBuffer(base64: string): ArrayBuffer {
   const binary = atob(base64);
   const buffer = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i++) {
