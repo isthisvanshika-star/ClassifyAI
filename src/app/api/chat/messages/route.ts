@@ -80,11 +80,6 @@ export async function POST(req: NextRequest) {
       message,
     );
 
-    console.log(
-      "📤 Pusher triggered for channel:",
-      Channels.conversation(data.conversationId),
-    );
-
     const recipients = participants.filter((p) => p.userId !== data.senderId);
 
     await Promise.all(

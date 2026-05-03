@@ -8,10 +8,6 @@ export async function POST(request: NextRequest) {
     const params = new URLSearchParams(body);
     const userId =
       request.headers.get("x-user-id") || params.get("userId") || null;
-    console.log("Pusher auth:", {
-      userId,
-      channel: params.get("channel_name"),
-    });
     if (!userId) {
       return NextResponse.json("Unauthorized", { status: 401 });
     }
@@ -34,7 +30,6 @@ export async function POST(request: NextRequest) {
         },
       });
       if (!participant) {
-        console.log("User not a participant:", { conversationId, userId });
         return NextResponse.json({ error: "Forbidden" }, { status: 403 });
       }
       const authResponse = pusherServer.authorizeChannel(socketId, channel);

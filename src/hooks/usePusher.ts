@@ -26,15 +26,12 @@ export function usePusher({
 
     const pusher = getPusherClient(userId);
     const channelName = Channels.conversation(conversationId);
-    console.log("📡 Subscribing to channel:", channelName);
     const channel = pusher.subscribe(channelName);
     channelRef.current = channel;
-    channel.bind("pusher:subscription_succeeded", () => {
-      console.log("✅ Subscribed successfully to:", channelName); // ← add
-    });
+
 
     channel.bind("pusher:subscription_error", (err: any) => {
-      console.error("❌ Subscription error:", err); // ← add
+      console.error("Subscription error:", err); // ← add
     });
 
     channel.bind(Events.NEW_MESSAGE, onNewMessage);
