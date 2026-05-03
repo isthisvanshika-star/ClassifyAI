@@ -9,6 +9,7 @@
     "core:default",
     "shell:allow-open",
     "notification:default",
-    "notification:allow-request-permission"
+    "notification:allow-request-permission",
+    "store:default"
   ]
 }

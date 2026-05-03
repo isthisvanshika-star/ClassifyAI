@@ -202,3 +202,53 @@ export async function GET(
     );
   }
 }
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } },
+) {
+  try {
+    const { messageId, userId } = await req.json();
+
+    if (!messageId || !userId) {
+      return NextResponse.json(
+        { error: "messageId and userId are required" },
+        { status: 400 },
+      );
+    }
+
+    const message = await prisma.message.findUnique({
+      where: { id: messageId },
+      select: { senderId: true },
+    });
+
+    if (!message) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+
+    //? only sender can delete their own message....
+    if (message.senderId !== userId) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    await prisma.message.update({
+      where: { id: messageId },
+      data: { deletedAt: new Date() },
+    });
+
+    //? notify others in real time....
+    await pusherServer.trigger(
+      Channels.conversation(params.id),
+      "message-deleted",
+      { messageId },
+    );
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Delete message error:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
+  }
+}

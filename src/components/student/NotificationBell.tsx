@@ -6,6 +6,7 @@ import { Bell, CheckCheck } from "lucide-react";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import toast from "react-hot-toast";
 import { showNotification } from "@/lib/helper";
+import { getPusherClient, Channels, Events } from "@/lib/pusher";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -13,7 +14,7 @@ export default function NotificationBell() {
   const [isOpen, setIsOpen] = useState(false);
   const [studentId, setStudentId] = useState<string | null>(null);
   //*(A. Vanshika) Storing exact milisectond time when the component is mounted.....
-  const mountTime = useRef<number>(Date.now())
+  const mountTime = useRef<number>(Date.now());
   const prevUnreadCount = useRef<number>(0);
   const shownNotifications = useRef<Set<string>>(new Set());
   const bellControls = useAnimation();
@@ -28,7 +29,7 @@ export default function NotificationBell() {
     {
       refreshInterval: 10000,
       revalidateOnFocus: true,
-    }
+    },
   );
 
   const notifications = data?.notifications || [];
@@ -46,26 +47,39 @@ export default function NotificationBell() {
     prevUnreadCount.current = unreadCount;
   }, [unreadCount, bellControls]);
 
-
-
+  useEffect(() => {
+    if (!studentId) return;
+    const pusher = getPusherClient(studentId);
+    const channel = pusher.subscribe(Channels.notifications(studentId));
+    channel.bind(Events.NEW_NOTIFICATION, () => {
+      //*(A. Vanshika)  trigger SWR revalidation — picks up new notification from DB.....
+      mutate(`/api/student/notifications?studentId=${studentId}`);
+    });
+    return () => {
+      channel.unbind_all();
+      pusher.unsubscribe(Channels.notifications(studentId));
+    };
+  }, [studentId]);
 
   useEffect(() => {
     if (!notifications.length) return;
 
     notifications.forEach((n: any) => {
-
       //* (A. Vanshika) Taking the time where notification was genrated.....
       const notifTime = new Date(n.createdAt).getTime();
-      
+
       //* (A. Vanshika) Showing only those notification that were genrated after the page loads.....
-      if (notifTime > mountTime.current && !shownNotifications.current.has(n.id)){
+      if (
+        notifTime > mountTime.current &&
+        !shownNotifications.current.has(n.id)
+      ) {
         shownNotifications.current.add(n.id);
         showNotification({
           id: n.id,
           title: n.title,
           message: n.body,
           link: n.meta?.link,
-        })
+        });
       }
     });
   }, [notifications]);
@@ -138,7 +152,7 @@ export default function NotificationBell() {
                   .sort(
                     (a: any, b: any) =>
                       new Date(b.createdAt).getTime() -
-                      new Date(a.createdAt).getTime()
+                      new Date(a.createdAt).getTime(),
                   )
                   .slice(0, 3)
                   .map((n: any) => (

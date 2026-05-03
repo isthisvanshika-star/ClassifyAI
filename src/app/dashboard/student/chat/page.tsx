@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { ChevronLeft, SendHorizonal } from "lucide-react";
 import { Bot, UserRound } from "lucide-react";
 import Image from "next/image";
-import Logo from "@/components/apps/Logo";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";

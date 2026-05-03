@@ -6,6 +6,7 @@ import MessageInput from "./MessageInput";
 import TypingIndicator from "./TypingIndicator";
 import { generateKeyPair } from "@/lib/crypto";
 import { formatDistanceToNow } from "date-fns";
+import { secureGet, secureSet } from "@/lib/tauri-store";
 
 interface MessageThreadProps {
   userId: string;
@@ -34,13 +35,13 @@ export default function MessageThread({
 
   useEffect(() => {
     const registerKey = async () => {
-      const stored = localStorage.getItem(`publicKey_${userId}`);
-      if (stored) return;
+      const existingPublicKey = await secureGet(`publicKey_${userId}`);
+      if (existingPublicKey) return;
 
       const { publicKey, privateKey: newPrivateKey } = await generateKeyPair();
 
-      localStorage.setItem(`privateKey_${userId}`, newPrivateKey);
-      localStorage.setItem(`publicKey_${userId}`, publicKey);
+      await secureSet(`privateKey_${userId}`, newPrivateKey);
+      await secureSet(`publicKey_${userId}`, publicKey);
 
       await fetch("/api/chat/keys/register", {
         method: "POST",
@@ -147,6 +148,7 @@ export default function MessageThread({
         onSend={sendMessage}
         onTypingStart={sendTypingStart}
         onTypingStop={sendTypingStop}
+        userId={userId}
       />
     </div>
   );

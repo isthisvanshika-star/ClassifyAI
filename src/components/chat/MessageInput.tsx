@@ -7,12 +7,14 @@ interface MessageInputProps {
   onSend: (text: string, attachmentIds?: string[]) => Promise<void>;
   onTypingStart: () => void;
   onTypingStop: () => void;
+  userId: string;
 }
 
 export default function MessageInput({
   onSend,
   onTypingStart,
   onTypingStop,
+  userId,
 }: MessageInputProps) {
   const [text, setText] = useState("");
   const [isSending, setIsSending] = useState(false);
@@ -92,14 +94,14 @@ export default function MessageInput({
       const data = await res.json();
 
       // save as Resource in DB
-      const resourceRes = await fetch("/api/resources", {
+      const resourceRes = await fetch("/api/chat/attachments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title: file.name,
           url: data.secure_url,
           fileExtension: file.name.split(".").pop(),
-          resourceType: "NOTES",
+          uploadedBy: userId, // ← pass userId as prop to MessageInput
         }),
       });
       const resource = await resourceRes.json();
