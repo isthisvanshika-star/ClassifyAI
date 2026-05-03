@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 const sendMessageSchema = z.object({
+  conversationId: z.string(),
   senderId: z.string(),
   encryptedContent: z.string(),
   encryptedKeys: z.array(
@@ -15,21 +16,15 @@ const sendMessageSchema = z.object({
   attachmentIds: z.array(z.string()).optional(),
 });
 
-//? SEND MESSAGE....
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function POST(req: NextRequest) {
   try {
-    const conversationId = params.id;
     const body = await req.json();
     const data = sendMessageSchema.parse(body);
 
-    //? verify sender is a participant....
     const participant = await prisma.conversationParticipant.findUnique({
       where: {
         conversationId_userId: {
-          conversationId,
+          conversationId: data.conversationId,
           userId: data.senderId,
         },
       },
@@ -39,11 +34,10 @@ export async function POST(
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    //? create message + all encrypted keys in one transaction....
     const message = await prisma.$transaction(async (tx) => {
       const newMessage = await tx.message.create({
         data: {
-          conversationId,
+          conversationId: data.conversationId,
           senderId: data.senderId,
           encryptedContent: data.encryptedContent,
           encryptedKeys: {
@@ -52,7 +46,6 @@ export async function POST(
               encryptedKey,
             })),
           },
-          //? link existing uploaded resources....
           ...(data.attachmentIds?.length && {
             attachments: {
               connect: data.attachmentIds.map((id) => ({ id })),
@@ -68,29 +61,30 @@ export async function POST(
         },
       });
 
-      //? bump conversation updatedAt for sorting....
       await tx.conversation.update({
-        where: { id: conversationId },
+        where: { id: data.conversationId },
         data: { updatedAt: new Date() },
       });
 
       return newMessage;
     });
 
-    //? get all participants to notify....
     const participants = await prisma.conversationParticipant.findMany({
-      where: { conversationId },
+      where: { conversationId: data.conversationId },
       select: { userId: true },
     });
 
-    //? trigger Pusher for real-time delivery....
     await pusherServer.trigger(
-      Channels.conversation(conversationId),
+      Channels.conversation(data.conversationId),
       Events.NEW_MESSAGE,
       message,
     );
 
-    //? save notification for each recipient + trigger their notification channel....
+    console.log(
+      "📤 Pusher triggered for channel:",
+      Channels.conversation(data.conversationId),
+    );
+
     const recipients = participants.filter((p) => p.userId !== data.senderId);
 
     await Promise.all(
@@ -101,21 +95,20 @@ export async function POST(
             title: "New Message",
             body: `${message.sender.name} sent you a message`,
             meta: {
-              conversationId,
+              conversationId: data.conversationId,
               messageId: message.id,
-              link: `/chat/${conversationId}`,
+              link: `/chat?conversationId=${data.conversationId}`,
             },
           },
         });
 
-        //? ping the user's private notification channel....
         await pusherServer.trigger(
           Channels.notifications(userId),
           Events.NEW_NOTIFICATION,
           {
             title: "New Message",
             body: `${message.sender.name} sent you a message`,
-            link: `/chat/${conversationId}`,
+            link: `/chat?conversationId=${data.conversationId}`,
           },
         );
       }),
@@ -131,31 +124,24 @@ export async function POST(
   }
 }
 
-//? GET MESSAGES WITH DECRYPTION INFO....
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
+    const conversationId = searchParams.get("conversationId");
     const userId = searchParams.get("userId");
-    const cursor = searchParams.get("cursor"); // for pagination
+    const cursor = searchParams.get("cursor");
     const limit = 30;
 
-    if (!userId) {
+    if (!conversationId || !userId) {
       return NextResponse.json(
-        { error: "userId is required" },
+        { error: "conversationId and userId are required" },
         { status: 400 },
       );
     }
 
-    //? verify participant....
     const participant = await prisma.conversationParticipant.findUnique({
       where: {
-        conversationId_userId: {
-          conversationId: params.id,
-          userId,
-        },
+        conversationId_userId: { conversationId, userId },
       },
     });
 
@@ -165,7 +151,7 @@ export async function GET(
 
     const messages = await prisma.message.findMany({
       where: {
-        conversationId: params.id,
+        conversationId,
         deletedAt: null,
         ...(cursor && { createdAt: { lt: new Date(cursor) } }),
       },
@@ -175,10 +161,9 @@ export async function GET(
         sender: {
           select: { id: true, name: true, avatarUrl: true },
         },
-        //? only return this user's encrypted key — not others....
         encryptedKeys: {
           where: { recipientId: userId },
-          select: { encryptedKey: true },
+          select: { encryptedKey: true, recipientId: true },
         },
         attachments: true,
       },
@@ -190,7 +175,6 @@ export async function GET(
         : null;
 
     return NextResponse.json({
-      //? older first....
       messages: messages.reverse(),
       nextCursor,
     });
@@ -202,17 +186,16 @@ export async function GET(
     );
   }
 }
-
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function DELETE(req: NextRequest) {
   try {
-    const { messageId, userId } = await req.json();
+    const { searchParams } = new URL(req.url);
+    const messageId = searchParams.get("messageId");
+    const userId = searchParams.get("userId");
+    const conversationId = searchParams.get("conversationId");
 
-    if (!messageId || !userId) {
+    if (!messageId || !userId || !conversationId) {
       return NextResponse.json(
-        { error: "messageId and userId are required" },
+        { error: "messageId, userId and conversationId are required" },
         { status: 400 },
       );
     }
@@ -226,7 +209,6 @@ export async function DELETE(
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    //? only sender can delete their own message....
     if (message.senderId !== userId) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
@@ -236,16 +218,15 @@ export async function DELETE(
       data: { deletedAt: new Date() },
     });
 
-    //? notify others in real time....
     await pusherServer.trigger(
-      Channels.conversation(params.id),
+      Channels.conversation(conversationId),
       "message-deleted",
       { messageId },
     );
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error("Delete message error:", error);
+  } catch (err) {
+    console.error("Delete message error:", err);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 },

@@ -7,6 +7,8 @@ import TypingIndicator from "./TypingIndicator";
 import { generateKeyPair } from "@/lib/crypto";
 import { formatDistanceToNow } from "date-fns";
 import { secureGet, secureSet } from "@/lib/tauri-store";
+import { AnimatePresence, motion } from "framer-motion";
+import { X } from "lucide-react";
 
 interface MessageThreadProps {
   userId: string;
@@ -25,6 +27,9 @@ export default function MessageThread({
     messages,
     isLoading,
     typingUsers,
+    readByUsers,
+    chatError,
+    setChatError,
     sendMessage,
     loadMore,
     hasMore,
@@ -70,7 +75,7 @@ export default function MessageThread({
   }
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden">
+    <div className="flex-1 flex flex-col overflow-hidden relative">
       {hasMore && (
         <div className="flex justify-center py-2 border-b border-white/10">
           <button
@@ -128,11 +133,28 @@ export default function MessageThread({
               )}
 
               {/* Timestamp */}
-              <span className="text-[10px] text-gray-600 px-1">
-                {formatDistanceToNow(new Date(msg.createdAt), {
-                  addSuffix: true,
-                })}
-              </span>
+              <div className="flex items-center gap-1 px-1">
+                <span className="text-[10px] text-gray-600">
+                  {formatDistanceToNow(new Date(msg.createdAt), {
+                    addSuffix: true,
+                  })}
+                </span>
+                {isOwn && (
+                  <span className="text-[10px]">
+                    {Object.entries(readByUsers).some(
+                      ([readerId]) => readerId !== userId,
+                    ) ? (
+                      <span className="text-cyan-400" title="Read">
+                        ✓✓
+                      </span>
+                    ) : (
+                      <span className="text-gray-500" title="Sent">
+                        ✓
+                      </span>
+                    )}
+                  </span>
+                )}
+              </div>
             </div>
           );
         })}
@@ -142,6 +164,33 @@ export default function MessageThread({
 
         <div ref={bottomRef} />
       </div>
+      {/* Encryption error popup */}
+      <AnimatePresence>
+        {chatError && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="absolute bottom-24 left-1/2 -translate-x-1/2 w-[90%] max-w-md z-50"
+          >
+            <div className="flex items-start gap-3 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-2xl backdrop-blur-lg shadow-xl">
+              <span className="text-yellow-400 text-xl shrink-0">🔐</span>
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-yellow-300">
+                  Encryption Not Ready
+                </p>
+                <p className="text-xs text-yellow-200/70 mt-1">{chatError}</p>
+              </div>
+              <button
+                onClick={() => setChatError(null)}
+                className="text-yellow-500 hover:text-yellow-300 transition shrink-0"
+              >
+                <X size={16} />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ── Input ── */}
       <MessageInput

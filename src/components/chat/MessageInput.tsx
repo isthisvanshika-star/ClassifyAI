@@ -62,6 +62,7 @@ export default function MessageInput({
       );
       setText("");
       setAttachments([]);
+    } catch (error: any) {
     } finally {
       setIsSending(false);
     }

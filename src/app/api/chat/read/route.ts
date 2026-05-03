@@ -2,33 +2,26 @@ import { prisma } from "@/lib/prisma";
 import { pusherServer, Channels, Events } from "@/lib/pusher";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function PATCH(req: NextRequest) {
   try {
-    const { userId } = await req.json();
+    const { conversationId, userId } = await req.json();
 
-    if (!userId) {
+    if (!conversationId || !userId) {
       return NextResponse.json(
-        { error: "userId is required" },
+        { error: "conversationId and userId are required" },
         { status: 400 },
       );
     }
 
     await prisma.conversationParticipant.update({
       where: {
-        conversationId_userId: {
-          conversationId: params.id,
-          userId,
-        },
+        conversationId_userId: { conversationId, userId },
       },
       data: { lastReadAt: new Date() },
     });
 
-    //? notify other participants of read receipt....
     await pusherServer.trigger(
-      Channels.conversation(params.id),
+      Channels.conversation(conversationId),
       Events.READ_RECEIPT,
       { userId, readAt: new Date().toISOString() },
     );

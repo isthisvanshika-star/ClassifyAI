@@ -1,23 +1,21 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
+    const conversationId = searchParams.get("conversationId");
     const userId = searchParams.get("userId");
 
-    if (!userId) {
+    if (!conversationId || !userId) {
       return NextResponse.json(
-        { error: "userId is required" },
-        { status: 400 }
+        { error: "conversationId and userId are required" },
+        { status: 400 },
       );
     }
 
     const conversation = await prisma.conversation.findUnique({
-      where: { id: params.id },
+      where: { id: conversationId },
       include: {
         participants: {
           include: {
@@ -33,7 +31,6 @@ export async function GET(
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    //? verify requester is a participant....
     const isMember = conversation.participants.some((p) => p.userId === userId);
     if (!isMember) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -44,7 +41,7 @@ export async function GET(
     console.error("Get conversation error:", err);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

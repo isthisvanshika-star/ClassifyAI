@@ -22,12 +22,20 @@ export function usePusher({
   const channelRef = useRef<Channel | null>(null);
 
   useEffect(() => {
-    if (!userId || !conversationId) return;
+    if (!userId || !conversationId || userId.trim() === "") return;
 
     const pusher = getPusherClient(userId);
     const channelName = Channels.conversation(conversationId);
+    console.log("📡 Subscribing to channel:", channelName);
     const channel = pusher.subscribe(channelName);
     channelRef.current = channel;
+    channel.bind("pusher:subscription_succeeded", () => {
+      console.log("✅ Subscribed successfully to:", channelName); // ← add
+    });
+
+    channel.bind("pusher:subscription_error", (err: any) => {
+      console.error("❌ Subscription error:", err); // ← add
+    });
 
     channel.bind(Events.NEW_MESSAGE, onNewMessage);
     if (onTypingStart) channel.bind(Events.TYPING_START, onTypingStart);
@@ -42,11 +50,21 @@ export function usePusher({
 
   //? trigger typing events directly from client (no server roundtrip)....
   const sendTypingStart = () => {
-    channelRef.current?.trigger(Events.TYPING_START, { userId });
+    if (!conversationId || !userId) return;
+    fetch("/api/chat/typing", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ conversationId, userId, isTyping: true }),
+    });
   };
 
   const sendTypingStop = () => {
-    channelRef.current?.trigger(Events.TYPING_STOP, { userId });
+    if (!conversationId || !userId) return;
+    fetch("/api/chat/typing", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ conversationId, userId, isTyping: false }),
+    });
   };
 
   return { sendTypingStart, sendTypingStop };

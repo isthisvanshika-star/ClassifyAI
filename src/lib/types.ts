@@ -366,12 +366,25 @@ export interface KeyPair {
 export interface Message {
   id: string;
   senderId: string;
+  conversationId: string;
   sender: { id: string; name: string; avatarUrl: string | null };
   encryptedContent: string;
-  encryptedKeys: { encryptedKey: string }[];
+  encryptedKeys: { encryptedKey: string, recipientId?: string }[];
   attachments: any[];
+  deletedAt: string | null;
   createdAt: string;
   decryptedContent?: string;
+}
+
+export interface UseChatOptions {
+  userId: string;
+  conversationId: string;
+  privateKey: string;
+}
+
+export interface ReadReceipt {
+  userId: string;
+  readAt: string;
 }
 
 export interface UseChatOptions {

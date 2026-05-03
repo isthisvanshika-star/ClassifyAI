@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, use, useRef } from "react";
 import { usePusher } from "./usePusher";
 import { encryptMessage, decryptMessage } from "@/lib/crypto";
-import { Message, UseChatOptions } from "@/lib/types";
+import { Message, UseChatOptions, ReadReceipt } from "@/lib/types";
+import { set } from "date-fns";
 
 export function useChat({
   userId,
@@ -13,13 +14,23 @@ export function useChat({
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
-  const [typingUsers, setTypingUsers] = useState<Set<string>>(new Set());
+  const [typingUsers, setTypingUsers] = useState<Map<string, string>>(
+    new Map(),
+  );
+  const [chatError, setChatError] = useState<string | null>(null);
+  const [readByUsers, setReadByUsers] = useState<Record<string, string>>({});
+
+  const participantNamesRef = useRef<Record<string, string>>({});
 
   //? decrypt a single message....
   const decrypt = useCallback(
     async (msg: Message): Promise<Message> => {
       try {
-        const encryptedKey = msg.encryptedKeys?.[0]?.encryptedKey;
+        const myKey = msg.encryptedKeys?.find(
+          (k: any) => k.recipientId === userId,
+        );
+
+        const encryptedKey = myKey?.encryptedKey;
         if (!encryptedKey) return { ...msg, decryptedContent: "[encrypted]" };
 
         const decryptedContent = await decryptMessage(
@@ -32,7 +43,7 @@ export function useChat({
         return { ...msg, decryptedContent: "[could not decrypt]" };
       }
     },
-    [privateKey],
+    [privateKey, userId],
   );
 
   //? load initial messages....
@@ -40,7 +51,7 @@ export function useChat({
     async (cursor?: string) => {
       setIsLoading(true);
       try {
-        const url = `/api/chat/conversations/${conversationId}/messages?userId=${userId}${
+        const url = `/api/chat/messages?conversationId=${conversationId}&userId=${userId}${
           cursor ? `&cursor=${cursor}` : ""
         }`;
         const res = await fetch(url);
@@ -66,15 +77,15 @@ export function useChat({
       const conversation = conversations.find(
         (c: any) => c.id === conversationId,
       );
-
       const recipientPublicKeys = conversation.participants
         .filter((p: any) => p.userId !== userId && p.publicKey)
         .map((p: any) => ({ userId: p.userId, publicKey: p.publicKey }));
 
       if (recipientPublicKeys.length === 0) {
-        throw new Error(
-          "Recipient hasn't set up their keys yet. Try again later.",
+        setChatError(
+          "The other person needs to open the app first to set up encryption keys.",
         );
+        return;
       }
 
       //? also include sender's own public key (so they can decrypt their own messages)....
@@ -93,10 +104,11 @@ export function useChat({
         recipientPublicKeys,
       );
 
-      await fetch(`/api/chat/conversations/${conversationId}/messages`, {
+      await fetch(`/api/chat/messages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          conversationId,
           senderId: userId,
           encryptedContent,
           encryptedKeys,
@@ -109,10 +121,10 @@ export function useChat({
 
   //? mark conversation as read....
   const markAsRead = useCallback(async () => {
-    await fetch(`/api/chat/conversations/${conversationId}/read`, {
+    await fetch(`/api/chat/read`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId }),
+      body: JSON.stringify({ conversationId, userId }),
     });
   }, [conversationId, userId]);
 
@@ -130,14 +142,20 @@ export function useChat({
       setMessages((prev) => [...prev, decrypted]);
     },
     onTypingStart: ({ userId: typingId }) => {
-      setTypingUsers((prev) => new Set(prev).add(typingId));
+      if (typingId === userId) return;
+      const name = participantNamesRef.current[typingId] ?? "Someone";
+      setTypingUsers((prev) => new Map(prev).set(typingId, name));
     },
     onTypingStop: ({ userId: typingId }) => {
+      if (typingId === userId) return;
       setTypingUsers((prev) => {
-        const next = new Set(prev);
+        const next = new Map(prev);
         next.delete(typingId);
         return next;
       });
+    },
+    onReadReceipt: ({ userId: readerId, readAt }: ReadReceipt) => {
+      setReadByUsers((prev) => ({ ...prev, [readerId]: readAt }));
     },
   });
 
@@ -150,6 +168,9 @@ export function useChat({
     messages,
     isLoading,
     typingUsers,
+    readByUsers,
+    chatError,
+    setChatError,
     sendMessage,
     loadMore,
     hasMore: !!nextCursor,

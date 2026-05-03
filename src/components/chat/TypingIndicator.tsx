@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 
 interface TypingIndicatorProps {
-  typingUsers: Set<string>;
+  typingUsers: Map<string, string>;
 }
 
 export default function TypingIndicator({ typingUsers }: TypingIndicatorProps) {

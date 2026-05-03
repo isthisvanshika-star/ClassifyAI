@@ -4,7 +4,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
-    const userId = request.headers.get("x-user-id");
+    const body = await request.text();
+    const params = new URLSearchParams(body);
+    const userId =
+      request.headers.get("x-user-id") || params.get("userId") || null;
+    console.log("Pusher auth:", {
+      userId,
+      channel: params.get("channel_name"),
+    });
     if (!userId) {
       return NextResponse.json("Unauthorized", { status: 401 });
     }
@@ -16,13 +23,42 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    const body = await request.text();
-    const params = new URLSearchParams(body);
     const socketId = params.get("socket_id")!;
     const channel = params.get("channel_name")!;
 
-    if (channel.startsWith("presence-")) {
+    if (channel.startsWith("private-chat-")) {
+      const conversationId = channel.replace("private-chat-", "");
+      const participant = await prisma.conversationParticipant.findUnique({
+        where: {
+          conversationId_userId: { conversationId, userId: user.id },
+        },
+      });
+      if (!participant) {
+        console.log("User not a participant:", { conversationId, userId });
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      }
       const authResponse = pusherServer.authorizeChannel(socketId, channel);
+      return NextResponse.json(authResponse);
+    }
+
+    if (channel.startsWith("presence-")) {
+      const conversationId = channel.replace("presence-group-", "");
+      const participant = await prisma.conversationParticipant.findUnique({
+        where: {
+          conversationId_userId: {
+            conversationId,
+            userId: user.id,
+          },
+        },
+      });
+
+            if (!participant) {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      }
+        const authResponse = pusherServer.authorizeChannel(socketId, channel, {
+        user_id: user.id,
+        user_info: { name: user.name },
+      });
       return NextResponse.json(authResponse);
     }
     return NextResponse.json(
