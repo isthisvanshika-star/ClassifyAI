@@ -1,8 +1,9 @@
+//* Pdf parse ko hta diya
 import { prisma } from "@/lib/prisma";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
-const pdfParse = require("pdf-parse");
+// const pdfParse = require("pdf-parse");
 
 const genAi = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 const model = genAi.getGenerativeModel({
