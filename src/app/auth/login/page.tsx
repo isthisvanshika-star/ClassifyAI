@@ -35,11 +35,13 @@ const Page = () => {
       body: JSON.stringify({ email, name }),
     });
 
-    const data = await res.json();
+    const data = await res.json(); 
 
     if (res.ok) {
       localStorage.setItem(`${data.user.role.toLowerCase()}Id`, data.user.id);
       localStorage.setItem("CampusID", data.user.campusId || "");
+      localStorage.setItem("userRole", data.user.role);
+      localStorage.setItem("userId", data.user.id);
       showSuccessMessage("Login Successful");
       router.push(`/dashboard/${data.user.role.toLowerCase()}`);
     } else {
