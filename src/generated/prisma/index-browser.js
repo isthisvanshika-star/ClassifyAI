@@ -429,7 +429,8 @@ exports.Prisma.ConversationScalarFieldEnum = {
   name: 'name',
   campusId: 'campusId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  isTeacherOnly: 'isTeacherOnly'
 };
 
 exports.Prisma.ConversationParticipantScalarFieldEnum = {

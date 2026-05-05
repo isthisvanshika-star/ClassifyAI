@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { pusherServer, Channels, Events } from "@/lib/pusher";
 import { NextRequest, NextResponse } from "next/server";
+import { canDM } from "@/lib/rbac";
+import { Role } from "@/generated/prisma";
 import { z } from "zod";
 
 const sendMessageSchema = z.object({
@@ -32,6 +34,34 @@ export async function POST(req: NextRequest) {
 
     if (!participant) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    const conversation = await prisma.conversation.findUnique({
+      where: { id: data.conversationId },
+      select: {
+        type: true,
+        isTeacherOnly: true,
+        participants: {
+          select: { userId: true, user: { select: { role: true } } },
+        },
+      },
+    });
+    if (!conversation) {
+      return NextResponse.json(
+        { error: "Conversation not found" },
+        { status: 404 },
+      );
+    }
+    if (conversation.isTeacherOnly) {
+      const senderRole = conversation.participants.find(
+        (p) => p.userId === data.senderId,
+      )?.user.role;
+      if (senderRole! == "TEACHER") {
+        return NextResponse.json(
+          { error: "Only teachers can send messages in this group" },
+          { status: 403 },
+        );
+      }
     }
 
     const message = await prisma.$transaction(async (tx) => {

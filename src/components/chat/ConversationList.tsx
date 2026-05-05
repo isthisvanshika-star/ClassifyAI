@@ -109,7 +109,7 @@ export default function ConversationList({
                 </div>
 
                 <p className="text-xs text-gray-500 truncate mt-0.5">
-                  {lastMessage ? "🔒 Encrypted message" : "No messages yet"}
+                  {lastMessage ? " Encrypted message" : "No messages yet"}
                 </p>
               </div>
 

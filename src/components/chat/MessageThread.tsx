@@ -40,15 +40,10 @@ export default function MessageThread({
 
   useEffect(() => {
     const registerKey = async () => {
-      const existingPublicKey = await secureGet(`publicKey_${userId}`);
-      if (existingPublicKey) return;
+      const publicKey = await secureGet(`publicKey_${userId}`);
+      if (!publicKey) return;
 
-      const { publicKey, privateKey: newPrivateKey } = await generateKeyPair();
-
-      await secureSet(`privateKey_${userId}`, newPrivateKey);
-      await secureSet(`publicKey_${userId}`, publicKey);
-
-      await fetch("/api/chat/keys/register", {
+      await fetch("/api/chat/keys", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, conversationId, publicKey }),

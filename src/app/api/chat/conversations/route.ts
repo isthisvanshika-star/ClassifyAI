@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { canDM, canCreateGroup, validateGroupParticipants } from "@/lib/rbac";
+import { Role } from "@/generated/prisma";
 import z from "zod";
 
 const createConversationSchema = z.object({
@@ -8,18 +10,80 @@ const createConversationSchema = z.object({
   campusId: z.string(),
   creatorId: z.string(),
   participantIds: z.array(z.string()).min(1),
+  isTeacherOnly: z.boolean().optional().default(false),
 });
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const data = createConversationSchema.parse(body);
+
     if (data.type === "GROUP" && !data.name) {
       return NextResponse.json(
         { error: "Group name is required" },
         { status: 400 },
       );
     }
+
+    const creator = await prisma.user.findUnique({
+      where: { id: data.creatorId },
+      select: { role: true },
+    });
+
+    if (!creator) {
+      return NextResponse.json({ error: "Creator not found" }, { status: 404 });
+    }
+
+    const creatorRole = creator.role as Role;
+
+    if (data.type === "DIRECT") {
+      const targetUser = await prisma.user.findUnique({
+        where: { id: data.participantIds[0] },
+        select: { role: true },
+      });
+      if (!targetUser) {
+        return NextResponse.json(
+          {
+            error: "Target user not found",
+          },
+          { status: 404 },
+        );
+      }
+      if (!canDM(creatorRole, targetUser.role as Role)) {
+        return NextResponse.json(
+          {
+            error: `${creatorRole} is not  allowed to send direct messages to ${targetUser.role}`,
+          },
+          { status: 403 },
+        );
+      }
+    }
+
+    if (data.type === "GROUP") {
+      if (!canCreateGroup(creatorRole)) {
+        return NextResponse.json(
+          {
+            error: `${creatorRole} is allowed to create groups`,
+          },
+          { status: 403 },
+        );
+      }
+      const participants = await prisma.user.findMany({
+        where: { id: { in: data.participantIds } },
+        select: { role: true },
+      });
+      const participantRoles = participants.map((p) => p.role as Role);
+      const { valid, reason } = validateGroupParticipants(
+        creatorRole,
+        participantRoles,
+        data.isTeacherOnly ?? false,
+      );
+
+      if (!valid) {
+        return NextResponse.json({ error: reason }, { status: 403 });
+      }
+    }
+
     //? For DIRECT chats, ensure exactly 1 other participant is provided.....
     if (data.type === "DIRECT") {
       if (data.participantIds.length !== 1) {
@@ -54,10 +118,11 @@ export async function POST(req: NextRequest) {
         type: data.type,
         name: data.name,
         campusId: data.campusId,
+        isTeacherOnly: data.isTeacherOnly ?? false,
         participants: {
           create: allParticipantIds.map((userId) => ({
             userId,
-            publicKey: "", // will be updated when user registers their key
+            publicKey: "", //? will be updated when user registers their key
           })),
         },
       },

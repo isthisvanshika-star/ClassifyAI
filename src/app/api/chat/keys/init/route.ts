@@ -9,13 +9,13 @@ export async function POST(req: NextRequest) {
     if (!userId || !publicKey) {
       return NextResponse.json(
         { error: "userId and publicKey are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     // update ALL conversations this user is part of in one query
     await prisma.conversationParticipant.updateMany({
-      where: { userId },
+      where: { userId, publicKey: "" },
       data: { publicKey },
     });
 
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     console.error("Key init error:", err);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

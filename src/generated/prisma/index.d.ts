@@ -35479,6 +35479,7 @@ export namespace Prisma {
     campusId: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    isTeacherOnly: boolean | null
   }
 
   export type ConversationMaxAggregateOutputType = {
@@ -35488,6 +35489,7 @@ export namespace Prisma {
     campusId: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    isTeacherOnly: boolean | null
   }
 
   export type ConversationCountAggregateOutputType = {
@@ -35497,6 +35499,7 @@ export namespace Prisma {
     campusId: number
     createdAt: number
     updatedAt: number
+    isTeacherOnly: number
     _all: number
   }
 
@@ -35508,6 +35511,7 @@ export namespace Prisma {
     campusId?: true
     createdAt?: true
     updatedAt?: true
+    isTeacherOnly?: true
   }
 
   export type ConversationMaxAggregateInputType = {
@@ -35517,6 +35521,7 @@ export namespace Prisma {
     campusId?: true
     createdAt?: true
     updatedAt?: true
+    isTeacherOnly?: true
   }
 
   export type ConversationCountAggregateInputType = {
@@ -35526,6 +35531,7 @@ export namespace Prisma {
     campusId?: true
     createdAt?: true
     updatedAt?: true
+    isTeacherOnly?: true
     _all?: true
   }
 
@@ -35608,6 +35614,7 @@ export namespace Prisma {
     campusId: string
     createdAt: Date
     updatedAt: Date
+    isTeacherOnly: boolean
     _count: ConversationCountAggregateOutputType | null
     _min: ConversationMinAggregateOutputType | null
     _max: ConversationMaxAggregateOutputType | null
@@ -35634,6 +35641,7 @@ export namespace Prisma {
     campusId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    isTeacherOnly?: boolean
     participants?: boolean | Conversation$participantsArgs<ExtArgs>
     messages?: boolean | Conversation$messagesArgs<ExtArgs>
     _count?: boolean | ConversationCountOutputTypeDefaultArgs<ExtArgs>
@@ -35646,6 +35654,7 @@ export namespace Prisma {
     campusId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    isTeacherOnly?: boolean
   }, ExtArgs["result"]["conversation"]>
 
   export type ConversationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -35655,6 +35664,7 @@ export namespace Prisma {
     campusId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    isTeacherOnly?: boolean
   }, ExtArgs["result"]["conversation"]>
 
   export type ConversationSelectScalar = {
@@ -35664,9 +35674,10 @@ export namespace Prisma {
     campusId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    isTeacherOnly?: boolean
   }
 
-  export type ConversationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "name" | "campusId" | "createdAt" | "updatedAt", ExtArgs["result"]["conversation"]>
+  export type ConversationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "name" | "campusId" | "createdAt" | "updatedAt" | "isTeacherOnly", ExtArgs["result"]["conversation"]>
   export type ConversationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     participants?: boolean | Conversation$participantsArgs<ExtArgs>
     messages?: boolean | Conversation$messagesArgs<ExtArgs>
@@ -35688,6 +35699,7 @@ export namespace Prisma {
       campusId: string
       createdAt: Date
       updatedAt: Date
+      isTeacherOnly: boolean
     }, ExtArgs["result"]["conversation"]>
     composites: {}
   }
@@ -36119,6 +36131,7 @@ export namespace Prisma {
     readonly campusId: FieldRef<"Conversation", 'String'>
     readonly createdAt: FieldRef<"Conversation", 'DateTime'>
     readonly updatedAt: FieldRef<"Conversation", 'DateTime'>
+    readonly isTeacherOnly: FieldRef<"Conversation", 'Boolean'>
   }
     
 
@@ -40271,7 +40284,8 @@ export namespace Prisma {
     name: 'name',
     campusId: 'campusId',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    isTeacherOnly: 'isTeacherOnly'
   };
 
   export type ConversationScalarFieldEnum = (typeof ConversationScalarFieldEnum)[keyof typeof ConversationScalarFieldEnum]
@@ -42713,6 +42727,7 @@ export namespace Prisma {
     campusId?: StringFilter<"Conversation"> | string
     createdAt?: DateTimeFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeFilter<"Conversation"> | Date | string
+    isTeacherOnly?: BoolFilter<"Conversation"> | boolean
     participants?: ConversationParticipantListRelationFilter
     messages?: MessageListRelationFilter
   }
@@ -42724,6 +42739,7 @@ export namespace Prisma {
     campusId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    isTeacherOnly?: SortOrder
     participants?: ConversationParticipantOrderByRelationAggregateInput
     messages?: MessageOrderByRelationAggregateInput
   }
@@ -42738,6 +42754,7 @@ export namespace Prisma {
     campusId?: StringFilter<"Conversation"> | string
     createdAt?: DateTimeFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeFilter<"Conversation"> | Date | string
+    isTeacherOnly?: BoolFilter<"Conversation"> | boolean
     participants?: ConversationParticipantListRelationFilter
     messages?: MessageListRelationFilter
   }, "id">
@@ -42749,6 +42766,7 @@ export namespace Prisma {
     campusId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    isTeacherOnly?: SortOrder
     _count?: ConversationCountOrderByAggregateInput
     _max?: ConversationMaxOrderByAggregateInput
     _min?: ConversationMinOrderByAggregateInput
@@ -42764,6 +42782,7 @@ export namespace Prisma {
     campusId?: StringWithAggregatesFilter<"Conversation"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Conversation"> | Date | string
+    isTeacherOnly?: BoolWithAggregatesFilter<"Conversation"> | boolean
   }
 
   export type ConversationParticipantWhereInput = {
@@ -45240,6 +45259,7 @@ export namespace Prisma {
     campusId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    isTeacherOnly?: boolean
     participants?: ConversationParticipantCreateNestedManyWithoutConversationInput
     messages?: MessageCreateNestedManyWithoutConversationInput
   }
@@ -45251,6 +45271,7 @@ export namespace Prisma {
     campusId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    isTeacherOnly?: boolean
     participants?: ConversationParticipantUncheckedCreateNestedManyWithoutConversationInput
     messages?: MessageUncheckedCreateNestedManyWithoutConversationInput
   }
@@ -45262,6 +45283,7 @@ export namespace Prisma {
     campusId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
     participants?: ConversationParticipantUpdateManyWithoutConversationNestedInput
     messages?: MessageUpdateManyWithoutConversationNestedInput
   }
@@ -45273,6 +45295,7 @@ export namespace Prisma {
     campusId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
     participants?: ConversationParticipantUncheckedUpdateManyWithoutConversationNestedInput
     messages?: MessageUncheckedUpdateManyWithoutConversationNestedInput
   }
@@ -45284,6 +45307,7 @@ export namespace Prisma {
     campusId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    isTeacherOnly?: boolean
   }
 
   export type ConversationUpdateManyMutationInput = {
@@ -45293,6 +45317,7 @@ export namespace Prisma {
     campusId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ConversationUncheckedUpdateManyInput = {
@@ -45302,6 +45327,7 @@ export namespace Prisma {
     campusId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ConversationParticipantCreateInput = {
@@ -47317,6 +47343,7 @@ export namespace Prisma {
     campusId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    isTeacherOnly?: SortOrder
   }
 
   export type ConversationMaxOrderByAggregateInput = {
@@ -47326,6 +47353,7 @@ export namespace Prisma {
     campusId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    isTeacherOnly?: SortOrder
   }
 
   export type ConversationMinOrderByAggregateInput = {
@@ -47335,6 +47363,7 @@ export namespace Prisma {
     campusId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    isTeacherOnly?: SortOrder
   }
 
   export type EnumConversationTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -58381,6 +58410,7 @@ export namespace Prisma {
     campusId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    isTeacherOnly?: boolean
     messages?: MessageCreateNestedManyWithoutConversationInput
   }
 
@@ -58391,6 +58421,7 @@ export namespace Prisma {
     campusId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    isTeacherOnly?: boolean
     messages?: MessageUncheckedCreateNestedManyWithoutConversationInput
   }
 
@@ -58484,6 +58515,7 @@ export namespace Prisma {
     campusId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
     messages?: MessageUpdateManyWithoutConversationNestedInput
   }
 
@@ -58494,6 +58526,7 @@ export namespace Prisma {
     campusId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
     messages?: MessageUncheckedUpdateManyWithoutConversationNestedInput
   }
 
@@ -58577,6 +58610,7 @@ export namespace Prisma {
     campusId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    isTeacherOnly?: boolean
     participants?: ConversationParticipantCreateNestedManyWithoutConversationInput
   }
 
@@ -58587,6 +58621,7 @@ export namespace Prisma {
     campusId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    isTeacherOnly?: boolean
     participants?: ConversationParticipantUncheckedCreateNestedManyWithoutConversationInput
   }
 
@@ -58790,6 +58825,7 @@ export namespace Prisma {
     campusId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
     participants?: ConversationParticipantUpdateManyWithoutConversationNestedInput
   }
 
@@ -58800,6 +58836,7 @@ export namespace Prisma {
     campusId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
     participants?: ConversationParticipantUncheckedUpdateManyWithoutConversationNestedInput
   }
 

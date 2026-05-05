@@ -392,3 +392,10 @@ export interface UseChatOptions {
   conversationId: string;
   privateKey: string;
 }
+export interface NewConversationDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  userId: string;
+  campusId: string;
+  onCreated: (conversationId: string) => void;
+}

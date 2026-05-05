@@ -468,12 +468,13 @@ model PlanConfig {
 }
 
 model Conversation {
-  id        String           @id @default(cuid())
-  type      ConversationType
-  name      String? // for group chats
-  campusId  String
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @default(now()) @updatedAt
+  id            String           @id @default(cuid())
+  type          ConversationType
+  name          String? // for group chats
+  campusId      String
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @default(now()) @updatedAt
+  isTeacherOnly Boolean          @default(false)
 
   participants ConversationParticipant[]
   messages     Message[]

@@ -1,20 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Search, Users, User } from "lucide-react";
+import { X, Search, Users, User, Lock } from "lucide-react";
 import useSWR from "swr";
 import { mutate } from "swr";
+import { NewConversationDialogProps } from "@/lib/types";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
-
-interface NewConversationDialogProps {
-  isOpen: boolean;
-  onClose: () => void;
-  userId: string;
-  campusId: string;
-  onCreated: (conversationId: string) => void;
-}
 
 export default function NewConversationDialog({
   isOpen,
@@ -27,17 +20,23 @@ export default function NewConversationDialog({
   const [search, setSearch] = useState("");
   const [groupName, setGroupName] = useState("");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [isCreating, setIsCreating] = useState(false);
+  const [isTeacherOnly, setIsTeacherOnly] = useState<boolean>(false);
+  const [isCreating, setIsCreating] = useState<boolean>(false);
+  const [userRole, setUserRole] = useState("");
 
-  const { data: users } = useSWR(
-    campusId ? `/api/users?campusId=${campusId}` : null,
-    fetcher
-  );
+  useEffect(() => {
+    setUserRole(localStorage.getItem("userRole") || "");
+  }, []);
 
-  const filtered = users?.filter(
-    (u: any) =>
-      u.id !== userId &&
-      u.name.toLowerCase().includes(search.toLowerCase())
+  const usersUrl =
+    campusId && userId
+      ? `/api/users?campusId=${campusId}&requesterId=${userId}&forGroup=${mode === "GROUP"}${isTeacherOnly ? "&teacherOnly=true" : ""}`
+      : null;
+
+  const { data: users } = useSWR(usersUrl, fetcher);
+
+  const filtered = users?.filter((u: any) =>
+    u.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   const toggleSelect = (id: string) => {
@@ -46,7 +45,7 @@ export default function NewConversationDialog({
       return;
     }
     setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
     );
   };
 
@@ -65,13 +64,18 @@ export default function NewConversationDialog({
           campusId,
           creatorId: userId,
           participantIds: selectedIds,
+          isTeacherOnly: mode === "GROUP" ? isTeacherOnly : false,
         }),
       });
 
-      const conversation = await res.json();
+      const data = await res.json();
+      if (!res.ok) {
+        console.error("Create conversation error: ", data.error);
+        return;
+      }
       mutate(`/api/chat/conversations?userId=${userId}`);
-      onCreated(conversation.id);
-      onClose();
+      onCreated(data.id);
+      handleClose();
     } finally {
       setIsCreating(false);
     }
@@ -82,8 +86,13 @@ export default function NewConversationDialog({
     setGroupName("");
     setSelectedIds([]);
     setMode("DIRECT");
+    setIsTeacherOnly(false);
     onClose();
   };
+
+  const canCreateTeacherOnly = userRole === "TEACHER";
+
+  const canCreateGroup = ["STUDENT", "TEACHER", "ASSISTANT"].includes(userRole);
 
   if (!isOpen) return null;
 
@@ -109,9 +118,7 @@ export default function NewConversationDialog({
 
           {/* Header */}
           <div className="flex items-center justify-between mb-5 relative">
-            <h2
-              className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent"
-            >
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent">
               New Conversation
             </h2>
 
@@ -135,34 +142,58 @@ export default function NewConversationDialog({
               }}
             />
 
-            {(["DIRECT", "GROUP"] as const).map((m) => (
-              <button
-                key={m}
-                onClick={() => {
-                  setMode(m);
-                  setSelectedIds([]);
-                }}
-                className="relative z-10 flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium"
-              >
-                {m === "DIRECT" ? <User size={15} /> : <Users size={15} />}
-                {m === "DIRECT" ? "Direct" : "Group"}
-              </button>
-            ))}
+            {(["DIRECT", "GROUP"] as const).map((m) => {
+              if (m === "GROUP" && !canCreateGroup) return null;
+              const isActive = mode === m;
+              return (
+                <button
+                  key={m}
+                  onClick={() => {
+                    setMode(m);
+                    setSelectedIds([]);
+                  }}
+                  className={`relative z-10 flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium ${isActive ? "bg-indigo-500 text-white" : "bg-white/5 text-gray-400 hover:bg-white/10"}`}
+                >
+                  {m === "DIRECT" ? <User size={15} /> : <Users size={15} />}
+                  {m === "DIRECT" ? "Direct" : "Group"}
+                </button>
+              );
+            })}
           </div>
 
           {/* Group name */}
           <AnimatePresence>
             {mode === "GROUP" && (
-              <motion.input
-                initial={{ opacity: 0, y: -5 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                type="text"
-                placeholder="Group name"
-                value={groupName}
-                onChange={(e) => setGroupName(e.target.value)}
-                className="w-full bg-neutral-900/70 border border-white/10 p-3 rounded-xl text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
+              <>
+                <motion.input
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  type="text"
+                  placeholder="Group name"
+                  value={groupName}
+                  onChange={(e) => setGroupName(e.target.value)}
+                  className="w-full bg-neutral-900/70 border border-white/10 p-3 rounded-xl text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+                {canCreateTeacherOnly && (
+                  <button
+                    onClick={() => {
+                      setIsTeacherOnly((prev) => !prev);
+                      setSelectedIds([]);
+                    }}
+                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm transition border ${
+                      isTeacherOnly
+                        ? "bg-violet-500/20 border-violet-500/40 text-violet-300"
+                        : " border-white/10 text-gray-400"
+                    }`}
+                  >
+                    <Lock size={15} />
+                    {isTeacherOnly
+                      ? "Teacher-Only Group (locked)"
+                      : "Make Teacher-Only Group"}
+                  </button>
+                )}
+              </>
             )}
           </AnimatePresence>
 
