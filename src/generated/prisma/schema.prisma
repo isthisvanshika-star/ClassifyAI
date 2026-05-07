@@ -68,6 +68,7 @@ model Teacher {
   announcements    Announcement[]    @relation("AnnouncementAuthor")
   assignments      Assignment[]
   TimetableEntry   TimetableEntry[]
+  Conversation     Conversation[]
 }
 
 model Student {
@@ -101,6 +102,7 @@ model Semester {
   classSessions   ClassSession[]   @relation("SemesterSessions")
   students        Student[]        @relation("StudentSemester")
   TimetableEntry  TimetableEntry[]
+  Conversation    Conversation[]
 
   @@unique([name, campusId]) // A semester name should be unique within a campus
 }
@@ -116,6 +118,7 @@ model Section {
   classSessions   ClassSession[]   @relation("SectionSessions")
   students        Student[]        @relation("StudentSection")
   TimetableEntry  TimetableEntry[]
+  Conversation    Conversation[]
 
   @@unique([name, campusId])
 }
@@ -137,6 +140,7 @@ model Subject {
   exams            Exam[]
   attendanceTokens AttendanceToken[]
   TimetableEntry   TimetableEntry[]
+  Conversation     Conversation[]
 
   @@unique([code, campusId])
 }
@@ -476,8 +480,26 @@ model Conversation {
   updatedAt     DateTime         @default(now()) @updatedAt
   isTeacherOnly Boolean          @default(false)
 
+  pinnedMessageId String?
+  pinnedMessage   Message? @relation("PinnedMessage", fields: [pinnedMessageId], references: [id])
+
+  isSystemGenerated Boolean      @default(false)
+  systemType        ChannelType?
+
+  subjectId String?
+  subject   Subject? @relation(fields: [subjectId], references: [id])
+
+  semesterId String?
+  semester   Semester? @relation(fields: [semesterId], references: [id])
+
+  sectionId String?
+  section   Section? @relation(fields: [sectionId], references: [id])
+
+  teacherId String?
+  teacher   Teacher? @relation(fields: [teacherId], references: [id])
+
   participants ConversationParticipant[]
-  messages     Message[]
+  messages     Message[]                 @relation("ConversationMessages")
 }
 
 model ConversationParticipant {
@@ -494,16 +516,17 @@ model ConversationParticipant {
 }
 
 model Message {
-  id               String       @id @default(cuid())
+  id               String         @id @default(cuid())
   conversationId   String
-  conversation     Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversation     Conversation   @relation("ConversationMessages", fields: [conversationId], references: [id], onDelete: Cascade)
   senderId         String
-  sender           User         @relation("ChatMessageSender", fields: [senderId], references: [id])
+  sender           User           @relation("ChatMessageSender", fields: [senderId], references: [id])
   encryptedContent String
-  attachments      Resource[]   @relation("MessageAttachments")
+  attachments      Resource[]     @relation("MessageAttachments")
   encryptedKeys    MessageKey[]
   deletedAt        DateTime?
-  createdAt        DateTime     @default(now())
+  createdAt        DateTime       @default(now())
+  pinnedIn         Conversation[] @relation("PinnedMessage")
   resources        Resource[]
 
   @@index([conversationId, createdAt])
@@ -576,4 +599,10 @@ enum ResourceType {
 enum ConversationType {
   DIRECT
   GROUP
+}
+
+enum ChannelType {
+  SUBJECT
+  SECTION
+  TEACHER
 }

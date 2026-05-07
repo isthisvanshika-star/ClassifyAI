@@ -430,7 +430,14 @@ exports.Prisma.ConversationScalarFieldEnum = {
   campusId: 'campusId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  isTeacherOnly: 'isTeacherOnly'
+  isTeacherOnly: 'isTeacherOnly',
+  pinnedMessageId: 'pinnedMessageId',
+  isSystemGenerated: 'isSystemGenerated',
+  systemType: 'systemType',
+  subjectId: 'subjectId',
+  semesterId: 'semesterId',
+  sectionId: 'sectionId',
+  teacherId: 'teacherId'
 };
 
 exports.Prisma.ConversationParticipantScalarFieldEnum = {
@@ -535,6 +542,12 @@ exports.ResourceType = exports.$Enums.ResourceType = {
 exports.ConversationType = exports.$Enums.ConversationType = {
   DIRECT: 'DIRECT',
   GROUP: 'GROUP'
+};
+
+exports.ChannelType = exports.$Enums.ChannelType = {
+  SUBJECT: 'SUBJECT',
+  SECTION: 'SECTION',
+  TEACHER: 'TEACHER'
 };
 
 exports.Prisma.ModelName = {

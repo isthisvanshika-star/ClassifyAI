@@ -245,6 +245,15 @@ export const ConversationType: {
 
 export type ConversationType = (typeof ConversationType)[keyof typeof ConversationType]
 
+
+export const ChannelType: {
+  SUBJECT: 'SUBJECT',
+  SECTION: 'SECTION',
+  TEACHER: 'TEACHER'
+};
+
+export type ChannelType = (typeof ChannelType)[keyof typeof ChannelType]
+
 }
 
 export type Role = $Enums.Role
@@ -278,6 +287,10 @@ export const ResourceType: typeof $Enums.ResourceType
 export type ConversationType = $Enums.ConversationType
 
 export const ConversationType: typeof $Enums.ConversationType
+
+export type ChannelType = $Enums.ChannelType
+
+export const ChannelType: typeof $Enums.ChannelType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -3741,6 +3754,7 @@ export namespace Prisma {
     announcements: number
     assignments: number
     TimetableEntry: number
+    Conversation: number
   }
 
   export type TeacherCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3750,6 +3764,7 @@ export namespace Prisma {
     announcements?: boolean | TeacherCountOutputTypeCountAnnouncementsArgs
     assignments?: boolean | TeacherCountOutputTypeCountAssignmentsArgs
     TimetableEntry?: boolean | TeacherCountOutputTypeCountTimetableEntryArgs
+    Conversation?: boolean | TeacherCountOutputTypeCountConversationArgs
   }
 
   // Custom InputTypes
@@ -3803,6 +3818,13 @@ export namespace Prisma {
    */
   export type TeacherCountOutputTypeCountTimetableEntryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TimetableEntryWhereInput
+  }
+
+  /**
+   * TeacherCountOutputType without action
+   */
+  export type TeacherCountOutputTypeCountConversationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ConversationWhereInput
   }
 
 
@@ -3873,6 +3895,7 @@ export namespace Prisma {
     classSessions: number
     students: number
     TimetableEntry: number
+    Conversation: number
   }
 
   export type SemesterCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3880,6 +3903,7 @@ export namespace Prisma {
     classSessions?: boolean | SemesterCountOutputTypeCountClassSessionsArgs
     students?: boolean | SemesterCountOutputTypeCountStudentsArgs
     TimetableEntry?: boolean | SemesterCountOutputTypeCountTimetableEntryArgs
+    Conversation?: boolean | SemesterCountOutputTypeCountConversationArgs
   }
 
   // Custom InputTypes
@@ -3921,6 +3945,13 @@ export namespace Prisma {
     where?: TimetableEntryWhereInput
   }
 
+  /**
+   * SemesterCountOutputType without action
+   */
+  export type SemesterCountOutputTypeCountConversationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ConversationWhereInput
+  }
+
 
   /**
    * Count Type SectionCountOutputType
@@ -3931,6 +3962,7 @@ export namespace Prisma {
     classSessions: number
     students: number
     TimetableEntry: number
+    Conversation: number
   }
 
   export type SectionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3938,6 +3970,7 @@ export namespace Prisma {
     classSessions?: boolean | SectionCountOutputTypeCountClassSessionsArgs
     students?: boolean | SectionCountOutputTypeCountStudentsArgs
     TimetableEntry?: boolean | SectionCountOutputTypeCountTimetableEntryArgs
+    Conversation?: boolean | SectionCountOutputTypeCountConversationArgs
   }
 
   // Custom InputTypes
@@ -3979,6 +4012,13 @@ export namespace Prisma {
     where?: TimetableEntryWhereInput
   }
 
+  /**
+   * SectionCountOutputType without action
+   */
+  export type SectionCountOutputTypeCountConversationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ConversationWhereInput
+  }
+
 
   /**
    * Count Type SubjectCountOutputType
@@ -3992,6 +4032,7 @@ export namespace Prisma {
     exams: number
     attendanceTokens: number
     TimetableEntry: number
+    Conversation: number
   }
 
   export type SubjectCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4002,6 +4043,7 @@ export namespace Prisma {
     exams?: boolean | SubjectCountOutputTypeCountExamsArgs
     attendanceTokens?: boolean | SubjectCountOutputTypeCountAttendanceTokensArgs
     TimetableEntry?: boolean | SubjectCountOutputTypeCountTimetableEntryArgs
+    Conversation?: boolean | SubjectCountOutputTypeCountConversationArgs
   }
 
   // Custom InputTypes
@@ -4062,6 +4104,13 @@ export namespace Prisma {
    */
   export type SubjectCountOutputTypeCountTimetableEntryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TimetableEntryWhereInput
+  }
+
+  /**
+   * SubjectCountOutputType without action
+   */
+  export type SubjectCountOutputTypeCountConversationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ConversationWhereInput
   }
 
 
@@ -4361,12 +4410,14 @@ export namespace Prisma {
   export type MessageCountOutputType = {
     attachments: number
     encryptedKeys: number
+    pinnedIn: number
     resources: number
   }
 
   export type MessageCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     attachments?: boolean | MessageCountOutputTypeCountAttachmentsArgs
     encryptedKeys?: boolean | MessageCountOutputTypeCountEncryptedKeysArgs
+    pinnedIn?: boolean | MessageCountOutputTypeCountPinnedInArgs
     resources?: boolean | MessageCountOutputTypeCountResourcesArgs
   }
 
@@ -4393,6 +4444,13 @@ export namespace Prisma {
    */
   export type MessageCountOutputTypeCountEncryptedKeysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MessageKeyWhereInput
+  }
+
+  /**
+   * MessageCountOutputType without action
+   */
+  export type MessageCountOutputTypeCountPinnedInArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ConversationWhereInput
   }
 
   /**
@@ -6200,6 +6258,7 @@ export namespace Prisma {
     announcements?: boolean | Teacher$announcementsArgs<ExtArgs>
     assignments?: boolean | Teacher$assignmentsArgs<ExtArgs>
     TimetableEntry?: boolean | Teacher$TimetableEntryArgs<ExtArgs>
+    Conversation?: boolean | Teacher$ConversationArgs<ExtArgs>
     _count?: boolean | TeacherCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["teacher"]>
 
@@ -6241,6 +6300,7 @@ export namespace Prisma {
     announcements?: boolean | Teacher$announcementsArgs<ExtArgs>
     assignments?: boolean | Teacher$assignmentsArgs<ExtArgs>
     TimetableEntry?: boolean | Teacher$TimetableEntryArgs<ExtArgs>
+    Conversation?: boolean | Teacher$ConversationArgs<ExtArgs>
     _count?: boolean | TeacherCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TeacherIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6260,6 +6320,7 @@ export namespace Prisma {
       announcements: Prisma.$AnnouncementPayload<ExtArgs>[]
       assignments: Prisma.$AssignmentPayload<ExtArgs>[]
       TimetableEntry: Prisma.$TimetableEntryPayload<ExtArgs>[]
+      Conversation: Prisma.$ConversationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6669,6 +6730,7 @@ export namespace Prisma {
     announcements<T extends Teacher$announcementsArgs<ExtArgs> = {}>(args?: Subset<T, Teacher$announcementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     assignments<T extends Teacher$assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, Teacher$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     TimetableEntry<T extends Teacher$TimetableEntryArgs<ExtArgs> = {}>(args?: Subset<T, Teacher$TimetableEntryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TimetableEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Conversation<T extends Teacher$ConversationArgs<ExtArgs> = {}>(args?: Subset<T, Teacher$ConversationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7241,6 +7303,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: TimetableEntryScalarFieldEnum | TimetableEntryScalarFieldEnum[]
+  }
+
+  /**
+   * Teacher.Conversation
+   */
+  export type Teacher$ConversationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Conversation
+     */
+    select?: ConversationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Conversation
+     */
+    omit?: ConversationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationInclude<ExtArgs> | null
+    where?: ConversationWhereInput
+    orderBy?: ConversationOrderByWithRelationInput | ConversationOrderByWithRelationInput[]
+    cursor?: ConversationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ConversationScalarFieldEnum | ConversationScalarFieldEnum[]
   }
 
   /**
@@ -8717,6 +8803,7 @@ export namespace Prisma {
     classSessions?: boolean | Semester$classSessionsArgs<ExtArgs>
     students?: boolean | Semester$studentsArgs<ExtArgs>
     TimetableEntry?: boolean | Semester$TimetableEntryArgs<ExtArgs>
+    Conversation?: boolean | Semester$ConversationArgs<ExtArgs>
     _count?: boolean | SemesterCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["semester"]>
 
@@ -8753,6 +8840,7 @@ export namespace Prisma {
     classSessions?: boolean | Semester$classSessionsArgs<ExtArgs>
     students?: boolean | Semester$studentsArgs<ExtArgs>
     TimetableEntry?: boolean | Semester$TimetableEntryArgs<ExtArgs>
+    Conversation?: boolean | Semester$ConversationArgs<ExtArgs>
     _count?: boolean | SemesterCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SemesterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8770,6 +8858,7 @@ export namespace Prisma {
       classSessions: Prisma.$ClassSessionPayload<ExtArgs>[]
       students: Prisma.$StudentPayload<ExtArgs>[]
       TimetableEntry: Prisma.$TimetableEntryPayload<ExtArgs>[]
+      Conversation: Prisma.$ConversationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9176,6 +9265,7 @@ export namespace Prisma {
     classSessions<T extends Semester$classSessionsArgs<ExtArgs> = {}>(args?: Subset<T, Semester$classSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     students<T extends Semester$studentsArgs<ExtArgs> = {}>(args?: Subset<T, Semester$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     TimetableEntry<T extends Semester$TimetableEntryArgs<ExtArgs> = {}>(args?: Subset<T, Semester$TimetableEntryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TimetableEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Conversation<T extends Semester$ConversationArgs<ExtArgs> = {}>(args?: Subset<T, Semester$ConversationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9702,6 +9792,30 @@ export namespace Prisma {
   }
 
   /**
+   * Semester.Conversation
+   */
+  export type Semester$ConversationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Conversation
+     */
+    select?: ConversationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Conversation
+     */
+    omit?: ConversationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationInclude<ExtArgs> | null
+    where?: ConversationWhereInput
+    orderBy?: ConversationOrderByWithRelationInput | ConversationOrderByWithRelationInput[]
+    cursor?: ConversationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ConversationScalarFieldEnum | ConversationScalarFieldEnum[]
+  }
+
+  /**
    * Semester without action
    */
   export type SemesterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9881,6 +9995,7 @@ export namespace Prisma {
     classSessions?: boolean | Section$classSessionsArgs<ExtArgs>
     students?: boolean | Section$studentsArgs<ExtArgs>
     TimetableEntry?: boolean | Section$TimetableEntryArgs<ExtArgs>
+    Conversation?: boolean | Section$ConversationArgs<ExtArgs>
     _count?: boolean | SectionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["section"]>
 
@@ -9914,6 +10029,7 @@ export namespace Prisma {
     classSessions?: boolean | Section$classSessionsArgs<ExtArgs>
     students?: boolean | Section$studentsArgs<ExtArgs>
     TimetableEntry?: boolean | Section$TimetableEntryArgs<ExtArgs>
+    Conversation?: boolean | Section$ConversationArgs<ExtArgs>
     _count?: boolean | SectionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SectionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9931,6 +10047,7 @@ export namespace Prisma {
       classSessions: Prisma.$ClassSessionPayload<ExtArgs>[]
       students: Prisma.$StudentPayload<ExtArgs>[]
       TimetableEntry: Prisma.$TimetableEntryPayload<ExtArgs>[]
+      Conversation: Prisma.$ConversationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -10336,6 +10453,7 @@ export namespace Prisma {
     classSessions<T extends Section$classSessionsArgs<ExtArgs> = {}>(args?: Subset<T, Section$classSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     students<T extends Section$studentsArgs<ExtArgs> = {}>(args?: Subset<T, Section$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     TimetableEntry<T extends Section$TimetableEntryArgs<ExtArgs> = {}>(args?: Subset<T, Section$TimetableEntryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TimetableEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Conversation<T extends Section$ConversationArgs<ExtArgs> = {}>(args?: Subset<T, Section$ConversationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10861,6 +10979,30 @@ export namespace Prisma {
   }
 
   /**
+   * Section.Conversation
+   */
+  export type Section$ConversationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Conversation
+     */
+    select?: ConversationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Conversation
+     */
+    omit?: ConversationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationInclude<ExtArgs> | null
+    where?: ConversationWhereInput
+    orderBy?: ConversationOrderByWithRelationInput | ConversationOrderByWithRelationInput[]
+    cursor?: ConversationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ConversationScalarFieldEnum | ConversationScalarFieldEnum[]
+  }
+
+  /**
    * Section without action
    */
   export type SectionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11067,6 +11209,7 @@ export namespace Prisma {
     exams?: boolean | Subject$examsArgs<ExtArgs>
     attendanceTokens?: boolean | Subject$attendanceTokensArgs<ExtArgs>
     TimetableEntry?: boolean | Subject$TimetableEntryArgs<ExtArgs>
+    Conversation?: boolean | Subject$ConversationArgs<ExtArgs>
     _count?: boolean | SubjectCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["subject"]>
 
@@ -11112,6 +11255,7 @@ export namespace Prisma {
     exams?: boolean | Subject$examsArgs<ExtArgs>
     attendanceTokens?: boolean | Subject$attendanceTokensArgs<ExtArgs>
     TimetableEntry?: boolean | Subject$TimetableEntryArgs<ExtArgs>
+    Conversation?: boolean | Subject$ConversationArgs<ExtArgs>
     _count?: boolean | SubjectCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SubjectIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11132,6 +11276,7 @@ export namespace Prisma {
       exams: Prisma.$ExamPayload<ExtArgs>[]
       attendanceTokens: Prisma.$AttendanceTokenPayload<ExtArgs>[]
       TimetableEntry: Prisma.$TimetableEntryPayload<ExtArgs>[]
+      Conversation: Prisma.$ConversationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -11543,6 +11688,7 @@ export namespace Prisma {
     exams<T extends Subject$examsArgs<ExtArgs> = {}>(args?: Subset<T, Subject$examsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     attendanceTokens<T extends Subject$attendanceTokensArgs<ExtArgs> = {}>(args?: Subset<T, Subject$attendanceTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendanceTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     TimetableEntry<T extends Subject$TimetableEntryArgs<ExtArgs> = {}>(args?: Subset<T, Subject$TimetableEntryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TimetableEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Conversation<T extends Subject$ConversationArgs<ExtArgs> = {}>(args?: Subset<T, Subject$ConversationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12140,6 +12286,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: TimetableEntryScalarFieldEnum | TimetableEntryScalarFieldEnum[]
+  }
+
+  /**
+   * Subject.Conversation
+   */
+  export type Subject$ConversationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Conversation
+     */
+    select?: ConversationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Conversation
+     */
+    omit?: ConversationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationInclude<ExtArgs> | null
+    where?: ConversationWhereInput
+    orderBy?: ConversationOrderByWithRelationInput | ConversationOrderByWithRelationInput[]
+    cursor?: ConversationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ConversationScalarFieldEnum | ConversationScalarFieldEnum[]
   }
 
   /**
@@ -35480,6 +35650,13 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     isTeacherOnly: boolean | null
+    pinnedMessageId: string | null
+    isSystemGenerated: boolean | null
+    systemType: $Enums.ChannelType | null
+    subjectId: string | null
+    semesterId: string | null
+    sectionId: string | null
+    teacherId: string | null
   }
 
   export type ConversationMaxAggregateOutputType = {
@@ -35490,6 +35667,13 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     isTeacherOnly: boolean | null
+    pinnedMessageId: string | null
+    isSystemGenerated: boolean | null
+    systemType: $Enums.ChannelType | null
+    subjectId: string | null
+    semesterId: string | null
+    sectionId: string | null
+    teacherId: string | null
   }
 
   export type ConversationCountAggregateOutputType = {
@@ -35500,6 +35684,13 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     isTeacherOnly: number
+    pinnedMessageId: number
+    isSystemGenerated: number
+    systemType: number
+    subjectId: number
+    semesterId: number
+    sectionId: number
+    teacherId: number
     _all: number
   }
 
@@ -35512,6 +35703,13 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     isTeacherOnly?: true
+    pinnedMessageId?: true
+    isSystemGenerated?: true
+    systemType?: true
+    subjectId?: true
+    semesterId?: true
+    sectionId?: true
+    teacherId?: true
   }
 
   export type ConversationMaxAggregateInputType = {
@@ -35522,6 +35720,13 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     isTeacherOnly?: true
+    pinnedMessageId?: true
+    isSystemGenerated?: true
+    systemType?: true
+    subjectId?: true
+    semesterId?: true
+    sectionId?: true
+    teacherId?: true
   }
 
   export type ConversationCountAggregateInputType = {
@@ -35532,6 +35737,13 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     isTeacherOnly?: true
+    pinnedMessageId?: true
+    isSystemGenerated?: true
+    systemType?: true
+    subjectId?: true
+    semesterId?: true
+    sectionId?: true
+    teacherId?: true
     _all?: true
   }
 
@@ -35615,6 +35827,13 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     isTeacherOnly: boolean
+    pinnedMessageId: string | null
+    isSystemGenerated: boolean
+    systemType: $Enums.ChannelType | null
+    subjectId: string | null
+    semesterId: string | null
+    sectionId: string | null
+    teacherId: string | null
     _count: ConversationCountAggregateOutputType | null
     _min: ConversationMinAggregateOutputType | null
     _max: ConversationMaxAggregateOutputType | null
@@ -35642,6 +35861,18 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     isTeacherOnly?: boolean
+    pinnedMessageId?: boolean
+    isSystemGenerated?: boolean
+    systemType?: boolean
+    subjectId?: boolean
+    semesterId?: boolean
+    sectionId?: boolean
+    teacherId?: boolean
+    pinnedMessage?: boolean | Conversation$pinnedMessageArgs<ExtArgs>
+    subject?: boolean | Conversation$subjectArgs<ExtArgs>
+    semester?: boolean | Conversation$semesterArgs<ExtArgs>
+    section?: boolean | Conversation$sectionArgs<ExtArgs>
+    teacher?: boolean | Conversation$teacherArgs<ExtArgs>
     participants?: boolean | Conversation$participantsArgs<ExtArgs>
     messages?: boolean | Conversation$messagesArgs<ExtArgs>
     _count?: boolean | ConversationCountOutputTypeDefaultArgs<ExtArgs>
@@ -35655,6 +35886,18 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     isTeacherOnly?: boolean
+    pinnedMessageId?: boolean
+    isSystemGenerated?: boolean
+    systemType?: boolean
+    subjectId?: boolean
+    semesterId?: boolean
+    sectionId?: boolean
+    teacherId?: boolean
+    pinnedMessage?: boolean | Conversation$pinnedMessageArgs<ExtArgs>
+    subject?: boolean | Conversation$subjectArgs<ExtArgs>
+    semester?: boolean | Conversation$semesterArgs<ExtArgs>
+    section?: boolean | Conversation$sectionArgs<ExtArgs>
+    teacher?: boolean | Conversation$teacherArgs<ExtArgs>
   }, ExtArgs["result"]["conversation"]>
 
   export type ConversationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -35665,6 +35908,18 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     isTeacherOnly?: boolean
+    pinnedMessageId?: boolean
+    isSystemGenerated?: boolean
+    systemType?: boolean
+    subjectId?: boolean
+    semesterId?: boolean
+    sectionId?: boolean
+    teacherId?: boolean
+    pinnedMessage?: boolean | Conversation$pinnedMessageArgs<ExtArgs>
+    subject?: boolean | Conversation$subjectArgs<ExtArgs>
+    semester?: boolean | Conversation$semesterArgs<ExtArgs>
+    section?: boolean | Conversation$sectionArgs<ExtArgs>
+    teacher?: boolean | Conversation$teacherArgs<ExtArgs>
   }, ExtArgs["result"]["conversation"]>
 
   export type ConversationSelectScalar = {
@@ -35675,20 +35930,49 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     isTeacherOnly?: boolean
+    pinnedMessageId?: boolean
+    isSystemGenerated?: boolean
+    systemType?: boolean
+    subjectId?: boolean
+    semesterId?: boolean
+    sectionId?: boolean
+    teacherId?: boolean
   }
 
-  export type ConversationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "name" | "campusId" | "createdAt" | "updatedAt" | "isTeacherOnly", ExtArgs["result"]["conversation"]>
+  export type ConversationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "name" | "campusId" | "createdAt" | "updatedAt" | "isTeacherOnly" | "pinnedMessageId" | "isSystemGenerated" | "systemType" | "subjectId" | "semesterId" | "sectionId" | "teacherId", ExtArgs["result"]["conversation"]>
   export type ConversationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    pinnedMessage?: boolean | Conversation$pinnedMessageArgs<ExtArgs>
+    subject?: boolean | Conversation$subjectArgs<ExtArgs>
+    semester?: boolean | Conversation$semesterArgs<ExtArgs>
+    section?: boolean | Conversation$sectionArgs<ExtArgs>
+    teacher?: boolean | Conversation$teacherArgs<ExtArgs>
     participants?: boolean | Conversation$participantsArgs<ExtArgs>
     messages?: boolean | Conversation$messagesArgs<ExtArgs>
     _count?: boolean | ConversationCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type ConversationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type ConversationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ConversationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    pinnedMessage?: boolean | Conversation$pinnedMessageArgs<ExtArgs>
+    subject?: boolean | Conversation$subjectArgs<ExtArgs>
+    semester?: boolean | Conversation$semesterArgs<ExtArgs>
+    section?: boolean | Conversation$sectionArgs<ExtArgs>
+    teacher?: boolean | Conversation$teacherArgs<ExtArgs>
+  }
+  export type ConversationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    pinnedMessage?: boolean | Conversation$pinnedMessageArgs<ExtArgs>
+    subject?: boolean | Conversation$subjectArgs<ExtArgs>
+    semester?: boolean | Conversation$semesterArgs<ExtArgs>
+    section?: boolean | Conversation$sectionArgs<ExtArgs>
+    teacher?: boolean | Conversation$teacherArgs<ExtArgs>
+  }
 
   export type $ConversationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Conversation"
     objects: {
+      pinnedMessage: Prisma.$MessagePayload<ExtArgs> | null
+      subject: Prisma.$SubjectPayload<ExtArgs> | null
+      semester: Prisma.$SemesterPayload<ExtArgs> | null
+      section: Prisma.$SectionPayload<ExtArgs> | null
+      teacher: Prisma.$TeacherPayload<ExtArgs> | null
       participants: Prisma.$ConversationParticipantPayload<ExtArgs>[]
       messages: Prisma.$MessagePayload<ExtArgs>[]
     }
@@ -35700,6 +35984,13 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       isTeacherOnly: boolean
+      pinnedMessageId: string | null
+      isSystemGenerated: boolean
+      systemType: $Enums.ChannelType | null
+      subjectId: string | null
+      semesterId: string | null
+      sectionId: string | null
+      teacherId: string | null
     }, ExtArgs["result"]["conversation"]>
     composites: {}
   }
@@ -36094,6 +36385,11 @@ export namespace Prisma {
    */
   export interface Prisma__ConversationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    pinnedMessage<T extends Conversation$pinnedMessageArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$pinnedMessageArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    subject<T extends Conversation$subjectArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$subjectArgs<ExtArgs>>): Prisma__SubjectClient<$Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    semester<T extends Conversation$semesterArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$semesterArgs<ExtArgs>>): Prisma__SemesterClient<$Result.GetResult<Prisma.$SemesterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    section<T extends Conversation$sectionArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$sectionArgs<ExtArgs>>): Prisma__SectionClient<$Result.GetResult<Prisma.$SectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    teacher<T extends Conversation$teacherArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$teacherArgs<ExtArgs>>): Prisma__TeacherClient<$Result.GetResult<Prisma.$TeacherPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     participants<T extends Conversation$participantsArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$participantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     messages<T extends Conversation$messagesArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -36132,6 +36428,13 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Conversation", 'DateTime'>
     readonly updatedAt: FieldRef<"Conversation", 'DateTime'>
     readonly isTeacherOnly: FieldRef<"Conversation", 'Boolean'>
+    readonly pinnedMessageId: FieldRef<"Conversation", 'String'>
+    readonly isSystemGenerated: FieldRef<"Conversation", 'Boolean'>
+    readonly systemType: FieldRef<"Conversation", 'ChannelType'>
+    readonly subjectId: FieldRef<"Conversation", 'String'>
+    readonly semesterId: FieldRef<"Conversation", 'String'>
+    readonly sectionId: FieldRef<"Conversation", 'String'>
+    readonly teacherId: FieldRef<"Conversation", 'String'>
   }
     
 
@@ -36381,6 +36684,10 @@ export namespace Prisma {
      */
     data: ConversationCreateManyInput | ConversationCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -36451,6 +36758,10 @@ export namespace Prisma {
      * Limit how many Conversations to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -36517,6 +36828,101 @@ export namespace Prisma {
      * Limit how many Conversations to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Conversation.pinnedMessage
+   */
+  export type Conversation$pinnedMessageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageInclude<ExtArgs> | null
+    where?: MessageWhereInput
+  }
+
+  /**
+   * Conversation.subject
+   */
+  export type Conversation$subjectArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Subject
+     */
+    select?: SubjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Subject
+     */
+    omit?: SubjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubjectInclude<ExtArgs> | null
+    where?: SubjectWhereInput
+  }
+
+  /**
+   * Conversation.semester
+   */
+  export type Conversation$semesterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Semester
+     */
+    select?: SemesterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Semester
+     */
+    omit?: SemesterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SemesterInclude<ExtArgs> | null
+    where?: SemesterWhereInput
+  }
+
+  /**
+   * Conversation.section
+   */
+  export type Conversation$sectionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Section
+     */
+    select?: SectionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Section
+     */
+    omit?: SectionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SectionInclude<ExtArgs> | null
+    where?: SectionWhereInput
+  }
+
+  /**
+   * Conversation.teacher
+   */
+  export type Conversation$teacherArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Teacher
+     */
+    select?: TeacherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Teacher
+     */
+    omit?: TeacherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeacherInclude<ExtArgs> | null
+    where?: TeacherWhereInput
   }
 
   /**
@@ -37841,6 +38247,7 @@ export namespace Prisma {
     sender?: boolean | UserDefaultArgs<ExtArgs>
     attachments?: boolean | Message$attachmentsArgs<ExtArgs>
     encryptedKeys?: boolean | Message$encryptedKeysArgs<ExtArgs>
+    pinnedIn?: boolean | Message$pinnedInArgs<ExtArgs>
     resources?: boolean | Message$resourcesArgs<ExtArgs>
     _count?: boolean | MessageCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
@@ -37882,6 +38289,7 @@ export namespace Prisma {
     sender?: boolean | UserDefaultArgs<ExtArgs>
     attachments?: boolean | Message$attachmentsArgs<ExtArgs>
     encryptedKeys?: boolean | Message$encryptedKeysArgs<ExtArgs>
+    pinnedIn?: boolean | Message$pinnedInArgs<ExtArgs>
     resources?: boolean | Message$resourcesArgs<ExtArgs>
     _count?: boolean | MessageCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -37901,6 +38309,7 @@ export namespace Prisma {
       sender: Prisma.$UserPayload<ExtArgs>
       attachments: Prisma.$ResourcePayload<ExtArgs>[]
       encryptedKeys: Prisma.$MessageKeyPayload<ExtArgs>[]
+      pinnedIn: Prisma.$ConversationPayload<ExtArgs>[]
       resources: Prisma.$ResourcePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -38308,6 +38717,7 @@ export namespace Prisma {
     sender<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     attachments<T extends Message$attachmentsArgs<ExtArgs> = {}>(args?: Subset<T, Message$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     encryptedKeys<T extends Message$encryptedKeysArgs<ExtArgs> = {}>(args?: Subset<T, Message$encryptedKeysArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessageKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pinnedIn<T extends Message$pinnedInArgs<ExtArgs> = {}>(args?: Subset<T, Message$pinnedInArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     resources<T extends Message$resourcesArgs<ExtArgs> = {}>(args?: Subset<T, Message$resourcesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -38785,6 +39195,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MessageKeyScalarFieldEnum | MessageKeyScalarFieldEnum[]
+  }
+
+  /**
+   * Message.pinnedIn
+   */
+  export type Message$pinnedInArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Conversation
+     */
+    select?: ConversationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Conversation
+     */
+    omit?: ConversationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationInclude<ExtArgs> | null
+    where?: ConversationWhereInput
+    orderBy?: ConversationOrderByWithRelationInput | ConversationOrderByWithRelationInput[]
+    cursor?: ConversationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ConversationScalarFieldEnum | ConversationScalarFieldEnum[]
   }
 
   /**
@@ -40285,7 +40719,14 @@ export namespace Prisma {
     campusId: 'campusId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    isTeacherOnly: 'isTeacherOnly'
+    isTeacherOnly: 'isTeacherOnly',
+    pinnedMessageId: 'pinnedMessageId',
+    isSystemGenerated: 'isSystemGenerated',
+    systemType: 'systemType',
+    subjectId: 'subjectId',
+    semesterId: 'semesterId',
+    sectionId: 'sectionId',
+    teacherId: 'teacherId'
   };
 
   export type ConversationScalarFieldEnum = (typeof ConversationScalarFieldEnum)[keyof typeof ConversationScalarFieldEnum]
@@ -40558,6 +40999,20 @@ export namespace Prisma {
    */
   export type ListEnumConversationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ConversationType[]'>
     
+
+
+  /**
+   * Reference to a field of type 'ChannelType'
+   */
+  export type EnumChannelTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChannelType'>
+    
+
+
+  /**
+   * Reference to a field of type 'ChannelType[]'
+   */
+  export type ListEnumChannelTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChannelType[]'>
+    
   /**
    * Deep Input Types
    */
@@ -40731,6 +41186,7 @@ export namespace Prisma {
     announcements?: AnnouncementListRelationFilter
     assignments?: AssignmentListRelationFilter
     TimetableEntry?: TimetableEntryListRelationFilter
+    Conversation?: ConversationListRelationFilter
   }
 
   export type TeacherOrderByWithRelationInput = {
@@ -40747,6 +41203,7 @@ export namespace Prisma {
     announcements?: AnnouncementOrderByRelationAggregateInput
     assignments?: AssignmentOrderByRelationAggregateInput
     TimetableEntry?: TimetableEntryOrderByRelationAggregateInput
+    Conversation?: ConversationOrderByRelationAggregateInput
   }
 
   export type TeacherWhereUniqueInput = Prisma.AtLeast<{
@@ -40766,6 +41223,7 @@ export namespace Prisma {
     announcements?: AnnouncementListRelationFilter
     assignments?: AssignmentListRelationFilter
     TimetableEntry?: TimetableEntryListRelationFilter
+    Conversation?: ConversationListRelationFilter
   }, "id" | "userId">
 
   export type TeacherOrderByWithAggregationInput = {
@@ -40889,6 +41347,7 @@ export namespace Prisma {
     classSessions?: ClassSessionListRelationFilter
     students?: StudentListRelationFilter
     TimetableEntry?: TimetableEntryListRelationFilter
+    Conversation?: ConversationListRelationFilter
   }
 
   export type SemesterOrderByWithRelationInput = {
@@ -40902,6 +41361,7 @@ export namespace Prisma {
     classSessions?: ClassSessionOrderByRelationAggregateInput
     students?: StudentOrderByRelationAggregateInput
     TimetableEntry?: TimetableEntryOrderByRelationAggregateInput
+    Conversation?: ConversationOrderByRelationAggregateInput
   }
 
   export type SemesterWhereUniqueInput = Prisma.AtLeast<{
@@ -40919,6 +41379,7 @@ export namespace Prisma {
     classSessions?: ClassSessionListRelationFilter
     students?: StudentListRelationFilter
     TimetableEntry?: TimetableEntryListRelationFilter
+    Conversation?: ConversationListRelationFilter
   }, "id" | "name" | "name_campusId">
 
   export type SemesterOrderByWithAggregationInput = {
@@ -40958,6 +41419,7 @@ export namespace Prisma {
     classSessions?: ClassSessionListRelationFilter
     students?: StudentListRelationFilter
     TimetableEntry?: TimetableEntryListRelationFilter
+    Conversation?: ConversationListRelationFilter
   }
 
   export type SectionOrderByWithRelationInput = {
@@ -40970,6 +41432,7 @@ export namespace Prisma {
     classSessions?: ClassSessionOrderByRelationAggregateInput
     students?: StudentOrderByRelationAggregateInput
     TimetableEntry?: TimetableEntryOrderByRelationAggregateInput
+    Conversation?: ConversationOrderByRelationAggregateInput
   }
 
   export type SectionWhereUniqueInput = Prisma.AtLeast<{
@@ -40986,6 +41449,7 @@ export namespace Prisma {
     classSessions?: ClassSessionListRelationFilter
     students?: StudentListRelationFilter
     TimetableEntry?: TimetableEntryListRelationFilter
+    Conversation?: ConversationListRelationFilter
   }, "id" | "name" | "name_campusId">
 
   export type SectionOrderByWithAggregationInput = {
@@ -41027,6 +41491,7 @@ export namespace Prisma {
     exams?: ExamListRelationFilter
     attendanceTokens?: AttendanceTokenListRelationFilter
     TimetableEntry?: TimetableEntryListRelationFilter
+    Conversation?: ConversationListRelationFilter
   }
 
   export type SubjectOrderByWithRelationInput = {
@@ -41045,6 +41510,7 @@ export namespace Prisma {
     exams?: ExamOrderByRelationAggregateInput
     attendanceTokens?: AttendanceTokenOrderByRelationAggregateInput
     TimetableEntry?: TimetableEntryOrderByRelationAggregateInput
+    Conversation?: ConversationOrderByRelationAggregateInput
   }
 
   export type SubjectWhereUniqueInput = Prisma.AtLeast<{
@@ -41067,6 +41533,7 @@ export namespace Prisma {
     exams?: ExamListRelationFilter
     attendanceTokens?: AttendanceTokenListRelationFilter
     TimetableEntry?: TimetableEntryListRelationFilter
+    Conversation?: ConversationListRelationFilter
   }, "id" | "code" | "code_campusId">
 
   export type SubjectOrderByWithAggregationInput = {
@@ -42728,6 +43195,18 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeFilter<"Conversation"> | Date | string
     isTeacherOnly?: BoolFilter<"Conversation"> | boolean
+    pinnedMessageId?: StringNullableFilter<"Conversation"> | string | null
+    isSystemGenerated?: BoolFilter<"Conversation"> | boolean
+    systemType?: EnumChannelTypeNullableFilter<"Conversation"> | $Enums.ChannelType | null
+    subjectId?: StringNullableFilter<"Conversation"> | string | null
+    semesterId?: StringNullableFilter<"Conversation"> | string | null
+    sectionId?: StringNullableFilter<"Conversation"> | string | null
+    teacherId?: StringNullableFilter<"Conversation"> | string | null
+    pinnedMessage?: XOR<MessageNullableScalarRelationFilter, MessageWhereInput> | null
+    subject?: XOR<SubjectNullableScalarRelationFilter, SubjectWhereInput> | null
+    semester?: XOR<SemesterNullableScalarRelationFilter, SemesterWhereInput> | null
+    section?: XOR<SectionNullableScalarRelationFilter, SectionWhereInput> | null
+    teacher?: XOR<TeacherNullableScalarRelationFilter, TeacherWhereInput> | null
     participants?: ConversationParticipantListRelationFilter
     messages?: MessageListRelationFilter
   }
@@ -42740,6 +43219,18 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isTeacherOnly?: SortOrder
+    pinnedMessageId?: SortOrderInput | SortOrder
+    isSystemGenerated?: SortOrder
+    systemType?: SortOrderInput | SortOrder
+    subjectId?: SortOrderInput | SortOrder
+    semesterId?: SortOrderInput | SortOrder
+    sectionId?: SortOrderInput | SortOrder
+    teacherId?: SortOrderInput | SortOrder
+    pinnedMessage?: MessageOrderByWithRelationInput
+    subject?: SubjectOrderByWithRelationInput
+    semester?: SemesterOrderByWithRelationInput
+    section?: SectionOrderByWithRelationInput
+    teacher?: TeacherOrderByWithRelationInput
     participants?: ConversationParticipantOrderByRelationAggregateInput
     messages?: MessageOrderByRelationAggregateInput
   }
@@ -42755,6 +43246,18 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeFilter<"Conversation"> | Date | string
     isTeacherOnly?: BoolFilter<"Conversation"> | boolean
+    pinnedMessageId?: StringNullableFilter<"Conversation"> | string | null
+    isSystemGenerated?: BoolFilter<"Conversation"> | boolean
+    systemType?: EnumChannelTypeNullableFilter<"Conversation"> | $Enums.ChannelType | null
+    subjectId?: StringNullableFilter<"Conversation"> | string | null
+    semesterId?: StringNullableFilter<"Conversation"> | string | null
+    sectionId?: StringNullableFilter<"Conversation"> | string | null
+    teacherId?: StringNullableFilter<"Conversation"> | string | null
+    pinnedMessage?: XOR<MessageNullableScalarRelationFilter, MessageWhereInput> | null
+    subject?: XOR<SubjectNullableScalarRelationFilter, SubjectWhereInput> | null
+    semester?: XOR<SemesterNullableScalarRelationFilter, SemesterWhereInput> | null
+    section?: XOR<SectionNullableScalarRelationFilter, SectionWhereInput> | null
+    teacher?: XOR<TeacherNullableScalarRelationFilter, TeacherWhereInput> | null
     participants?: ConversationParticipantListRelationFilter
     messages?: MessageListRelationFilter
   }, "id">
@@ -42767,6 +43270,13 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isTeacherOnly?: SortOrder
+    pinnedMessageId?: SortOrderInput | SortOrder
+    isSystemGenerated?: SortOrder
+    systemType?: SortOrderInput | SortOrder
+    subjectId?: SortOrderInput | SortOrder
+    semesterId?: SortOrderInput | SortOrder
+    sectionId?: SortOrderInput | SortOrder
+    teacherId?: SortOrderInput | SortOrder
     _count?: ConversationCountOrderByAggregateInput
     _max?: ConversationMaxOrderByAggregateInput
     _min?: ConversationMinOrderByAggregateInput
@@ -42783,6 +43293,13 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Conversation"> | Date | string
     isTeacherOnly?: BoolWithAggregatesFilter<"Conversation"> | boolean
+    pinnedMessageId?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
+    isSystemGenerated?: BoolWithAggregatesFilter<"Conversation"> | boolean
+    systemType?: EnumChannelTypeNullableWithAggregatesFilter<"Conversation"> | $Enums.ChannelType | null
+    subjectId?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
+    semesterId?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
+    sectionId?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
+    teacherId?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
   }
 
   export type ConversationParticipantWhereInput = {
@@ -42863,6 +43380,7 @@ export namespace Prisma {
     sender?: XOR<UserScalarRelationFilter, UserWhereInput>
     attachments?: ResourceListRelationFilter
     encryptedKeys?: MessageKeyListRelationFilter
+    pinnedIn?: ConversationListRelationFilter
     resources?: ResourceListRelationFilter
   }
 
@@ -42877,6 +43395,7 @@ export namespace Prisma {
     sender?: UserOrderByWithRelationInput
     attachments?: ResourceOrderByRelationAggregateInput
     encryptedKeys?: MessageKeyOrderByRelationAggregateInput
+    pinnedIn?: ConversationOrderByRelationAggregateInput
     resources?: ResourceOrderByRelationAggregateInput
   }
 
@@ -42894,6 +43413,7 @@ export namespace Prisma {
     sender?: XOR<UserScalarRelationFilter, UserWhereInput>
     attachments?: ResourceListRelationFilter
     encryptedKeys?: MessageKeyListRelationFilter
+    pinnedIn?: ConversationListRelationFilter
     resources?: ResourceListRelationFilter
   }, "id">
 
@@ -43172,6 +43692,7 @@ export namespace Prisma {
     announcements?: AnnouncementCreateNestedManyWithoutAuthorInput
     assignments?: AssignmentCreateNestedManyWithoutTeacherInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutTeacherInput
+    Conversation?: ConversationCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherUncheckedCreateInput = {
@@ -43187,6 +43708,7 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutTeacherInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutTeacherInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherUpdateInput = {
@@ -43202,6 +43724,7 @@ export namespace Prisma {
     announcements?: AnnouncementUpdateManyWithoutAuthorNestedInput
     assignments?: AssignmentUpdateManyWithoutTeacherNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutTeacherNestedInput
+    Conversation?: ConversationUpdateManyWithoutTeacherNestedInput
   }
 
   export type TeacherUncheckedUpdateInput = {
@@ -43217,6 +43740,7 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutTeacherNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutTeacherNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutTeacherNestedInput
   }
 
   export type TeacherCreateManyInput = {
@@ -43338,6 +43862,7 @@ export namespace Prisma {
     classSessions?: ClassSessionCreateNestedManyWithoutSemesterRelInput
     students?: StudentCreateNestedManyWithoutSemesterInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutSemesterInput
+    Conversation?: ConversationCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateInput = {
@@ -43350,6 +43875,7 @@ export namespace Prisma {
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSemesterRelInput
     students?: StudentUncheckedCreateNestedManyWithoutSemesterInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSemesterInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUpdateInput = {
@@ -43362,6 +43888,7 @@ export namespace Prisma {
     classSessions?: ClassSessionUpdateManyWithoutSemesterRelNestedInput
     students?: StudentUpdateManyWithoutSemesterNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutSemesterNestedInput
+    Conversation?: ConversationUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateInput = {
@@ -43374,6 +43901,7 @@ export namespace Prisma {
     classSessions?: ClassSessionUncheckedUpdateManyWithoutSemesterRelNestedInput
     students?: StudentUncheckedUpdateManyWithoutSemesterNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSemesterNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterCreateManyInput = {
@@ -43408,6 +43936,7 @@ export namespace Prisma {
     classSessions?: ClassSessionCreateNestedManyWithoutSectionRelInput
     students?: StudentCreateNestedManyWithoutSectionInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutSectionInput
+    Conversation?: ConversationCreateNestedManyWithoutSectionInput
   }
 
   export type SectionUncheckedCreateInput = {
@@ -43419,6 +43948,7 @@ export namespace Prisma {
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSectionRelInput
     students?: StudentUncheckedCreateNestedManyWithoutSectionInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSectionInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSectionInput
   }
 
   export type SectionUpdateInput = {
@@ -43430,6 +43960,7 @@ export namespace Prisma {
     classSessions?: ClassSessionUpdateManyWithoutSectionRelNestedInput
     students?: StudentUpdateManyWithoutSectionNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutSectionNestedInput
+    Conversation?: ConversationUpdateManyWithoutSectionNestedInput
   }
 
   export type SectionUncheckedUpdateInput = {
@@ -43441,6 +43972,7 @@ export namespace Prisma {
     classSessions?: ClassSessionUncheckedUpdateManyWithoutSectionRelNestedInput
     students?: StudentUncheckedUpdateManyWithoutSectionNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSectionNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSectionNestedInput
   }
 
   export type SectionCreateManyInput = {
@@ -43478,6 +44010,7 @@ export namespace Prisma {
     exams?: ExamCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutSubjectInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutSubjectInput
+    Conversation?: ConversationCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectUncheckedCreateInput = {
@@ -43495,6 +44028,7 @@ export namespace Prisma {
     exams?: ExamUncheckedCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutSubjectInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSubjectInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectUpdateInput = {
@@ -43512,6 +44046,7 @@ export namespace Prisma {
     exams?: ExamUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUpdateManyWithoutSubjectNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutSubjectNestedInput
+    Conversation?: ConversationUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectUncheckedUpdateInput = {
@@ -43529,6 +44064,7 @@ export namespace Prisma {
     exams?: ExamUncheckedUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutSubjectNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSubjectNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectCreateManyInput = {
@@ -45260,6 +45796,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isTeacherOnly?: boolean
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    pinnedMessage?: MessageCreateNestedOneWithoutPinnedInInput
+    subject?: SubjectCreateNestedOneWithoutConversationInput
+    semester?: SemesterCreateNestedOneWithoutConversationInput
+    section?: SectionCreateNestedOneWithoutConversationInput
+    teacher?: TeacherCreateNestedOneWithoutConversationInput
     participants?: ConversationParticipantCreateNestedManyWithoutConversationInput
     messages?: MessageCreateNestedManyWithoutConversationInput
   }
@@ -45272,6 +45815,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isTeacherOnly?: boolean
+    pinnedMessageId?: string | null
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    subjectId?: string | null
+    semesterId?: string | null
+    sectionId?: string | null
+    teacherId?: string | null
     participants?: ConversationParticipantUncheckedCreateNestedManyWithoutConversationInput
     messages?: MessageUncheckedCreateNestedManyWithoutConversationInput
   }
@@ -45284,6 +45834,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    pinnedMessage?: MessageUpdateOneWithoutPinnedInNestedInput
+    subject?: SubjectUpdateOneWithoutConversationNestedInput
+    semester?: SemesterUpdateOneWithoutConversationNestedInput
+    section?: SectionUpdateOneWithoutConversationNestedInput
+    teacher?: TeacherUpdateOneWithoutConversationNestedInput
     participants?: ConversationParticipantUpdateManyWithoutConversationNestedInput
     messages?: MessageUpdateManyWithoutConversationNestedInput
   }
@@ -45296,6 +45853,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    pinnedMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    teacherId?: NullableStringFieldUpdateOperationsInput | string | null
     participants?: ConversationParticipantUncheckedUpdateManyWithoutConversationNestedInput
     messages?: MessageUncheckedUpdateManyWithoutConversationNestedInput
   }
@@ -45308,6 +45872,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isTeacherOnly?: boolean
+    pinnedMessageId?: string | null
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    subjectId?: string | null
+    semesterId?: string | null
+    sectionId?: string | null
+    teacherId?: string | null
   }
 
   export type ConversationUpdateManyMutationInput = {
@@ -45318,6 +45889,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
   }
 
   export type ConversationUncheckedUpdateManyInput = {
@@ -45328,6 +45901,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    pinnedMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    teacherId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ConversationParticipantCreateInput = {
@@ -45400,6 +45980,7 @@ export namespace Prisma {
     sender: UserCreateNestedOneWithoutChatMessagesSentInput
     attachments?: ResourceCreateNestedManyWithoutChatMessageInput
     encryptedKeys?: MessageKeyCreateNestedManyWithoutMessageInput
+    pinnedIn?: ConversationCreateNestedManyWithoutPinnedMessageInput
     resources?: ResourceCreateNestedManyWithoutMessageInput
   }
 
@@ -45412,6 +45993,7 @@ export namespace Prisma {
     createdAt?: Date | string
     attachments?: ResourceUncheckedCreateNestedManyWithoutChatMessageInput
     encryptedKeys?: MessageKeyUncheckedCreateNestedManyWithoutMessageInput
+    pinnedIn?: ConversationUncheckedCreateNestedManyWithoutPinnedMessageInput
     resources?: ResourceUncheckedCreateNestedManyWithoutMessageInput
   }
 
@@ -45424,6 +46006,7 @@ export namespace Prisma {
     sender?: UserUpdateOneRequiredWithoutChatMessagesSentNestedInput
     attachments?: ResourceUpdateManyWithoutChatMessageNestedInput
     encryptedKeys?: MessageKeyUpdateManyWithoutMessageNestedInput
+    pinnedIn?: ConversationUpdateManyWithoutPinnedMessageNestedInput
     resources?: ResourceUpdateManyWithoutMessageNestedInput
   }
 
@@ -45436,6 +46019,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ResourceUncheckedUpdateManyWithoutChatMessageNestedInput
     encryptedKeys?: MessageKeyUncheckedUpdateManyWithoutMessageNestedInput
+    pinnedIn?: ConversationUncheckedUpdateManyWithoutPinnedMessageNestedInput
     resources?: ResourceUncheckedUpdateManyWithoutMessageNestedInput
   }
 
@@ -45903,6 +46487,12 @@ export namespace Prisma {
     none?: TimetableEntryWhereInput
   }
 
+  export type ConversationListRelationFilter = {
+    every?: ConversationWhereInput
+    some?: ConversationWhereInput
+    none?: ConversationWhereInput
+  }
+
   export type TeacherSubjectOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -45920,6 +46510,10 @@ export namespace Prisma {
   }
 
   export type TimetableEntryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ConversationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -47336,6 +47930,13 @@ export namespace Prisma {
     not?: NestedEnumConversationTypeFilter<$PrismaModel> | $Enums.ConversationType
   }
 
+  export type EnumChannelTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChannelType | EnumChannelTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ChannelType[] | ListEnumChannelTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ChannelType[] | ListEnumChannelTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumChannelTypeNullableFilter<$PrismaModel> | $Enums.ChannelType | null
+  }
+
   export type ConversationCountOrderByAggregateInput = {
     id?: SortOrder
     type?: SortOrder
@@ -47344,6 +47945,13 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isTeacherOnly?: SortOrder
+    pinnedMessageId?: SortOrder
+    isSystemGenerated?: SortOrder
+    systemType?: SortOrder
+    subjectId?: SortOrder
+    semesterId?: SortOrder
+    sectionId?: SortOrder
+    teacherId?: SortOrder
   }
 
   export type ConversationMaxOrderByAggregateInput = {
@@ -47354,6 +47962,13 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isTeacherOnly?: SortOrder
+    pinnedMessageId?: SortOrder
+    isSystemGenerated?: SortOrder
+    systemType?: SortOrder
+    subjectId?: SortOrder
+    semesterId?: SortOrder
+    sectionId?: SortOrder
+    teacherId?: SortOrder
   }
 
   export type ConversationMinOrderByAggregateInput = {
@@ -47364,6 +47979,13 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isTeacherOnly?: SortOrder
+    pinnedMessageId?: SortOrder
+    isSystemGenerated?: SortOrder
+    systemType?: SortOrder
+    subjectId?: SortOrder
+    semesterId?: SortOrder
+    sectionId?: SortOrder
+    teacherId?: SortOrder
   }
 
   export type EnumConversationTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -47374,6 +47996,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumConversationTypeFilter<$PrismaModel>
     _max?: NestedEnumConversationTypeFilter<$PrismaModel>
+  }
+
+  export type EnumChannelTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChannelType | EnumChannelTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ChannelType[] | ListEnumChannelTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ChannelType[] | ListEnumChannelTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumChannelTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.ChannelType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumChannelTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumChannelTypeNullableFilter<$PrismaModel>
   }
 
   export type ConversationScalarRelationFilter = {
@@ -48085,6 +48717,13 @@ export namespace Prisma {
     connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
   }
 
+  export type ConversationCreateNestedManyWithoutTeacherInput = {
+    create?: XOR<ConversationCreateWithoutTeacherInput, ConversationUncheckedCreateWithoutTeacherInput> | ConversationCreateWithoutTeacherInput[] | ConversationUncheckedCreateWithoutTeacherInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutTeacherInput | ConversationCreateOrConnectWithoutTeacherInput[]
+    createMany?: ConversationCreateManyTeacherInputEnvelope
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+  }
+
   export type TeacherSubjectUncheckedCreateNestedManyWithoutTeacherInput = {
     create?: XOR<TeacherSubjectCreateWithoutTeacherInput, TeacherSubjectUncheckedCreateWithoutTeacherInput> | TeacherSubjectCreateWithoutTeacherInput[] | TeacherSubjectUncheckedCreateWithoutTeacherInput[]
     connectOrCreate?: TeacherSubjectCreateOrConnectWithoutTeacherInput | TeacherSubjectCreateOrConnectWithoutTeacherInput[]
@@ -48125,6 +48764,13 @@ export namespace Prisma {
     connectOrCreate?: TimetableEntryCreateOrConnectWithoutTeacherInput | TimetableEntryCreateOrConnectWithoutTeacherInput[]
     createMany?: TimetableEntryCreateManyTeacherInputEnvelope
     connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+  }
+
+  export type ConversationUncheckedCreateNestedManyWithoutTeacherInput = {
+    create?: XOR<ConversationCreateWithoutTeacherInput, ConversationUncheckedCreateWithoutTeacherInput> | ConversationCreateWithoutTeacherInput[] | ConversationUncheckedCreateWithoutTeacherInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutTeacherInput | ConversationCreateOrConnectWithoutTeacherInput[]
+    createMany?: ConversationCreateManyTeacherInputEnvelope
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
   }
 
   export type UserUpdateOneRequiredWithoutTeacherProfileNestedInput = {
@@ -48219,6 +48865,20 @@ export namespace Prisma {
     deleteMany?: TimetableEntryScalarWhereInput | TimetableEntryScalarWhereInput[]
   }
 
+  export type ConversationUpdateManyWithoutTeacherNestedInput = {
+    create?: XOR<ConversationCreateWithoutTeacherInput, ConversationUncheckedCreateWithoutTeacherInput> | ConversationCreateWithoutTeacherInput[] | ConversationUncheckedCreateWithoutTeacherInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutTeacherInput | ConversationCreateOrConnectWithoutTeacherInput[]
+    upsert?: ConversationUpsertWithWhereUniqueWithoutTeacherInput | ConversationUpsertWithWhereUniqueWithoutTeacherInput[]
+    createMany?: ConversationCreateManyTeacherInputEnvelope
+    set?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    disconnect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    delete?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    update?: ConversationUpdateWithWhereUniqueWithoutTeacherInput | ConversationUpdateWithWhereUniqueWithoutTeacherInput[]
+    updateMany?: ConversationUpdateManyWithWhereWithoutTeacherInput | ConversationUpdateManyWithWhereWithoutTeacherInput[]
+    deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
+  }
+
   export type TeacherSubjectUncheckedUpdateManyWithoutTeacherNestedInput = {
     create?: XOR<TeacherSubjectCreateWithoutTeacherInput, TeacherSubjectUncheckedCreateWithoutTeacherInput> | TeacherSubjectCreateWithoutTeacherInput[] | TeacherSubjectUncheckedCreateWithoutTeacherInput[]
     connectOrCreate?: TeacherSubjectCreateOrConnectWithoutTeacherInput | TeacherSubjectCreateOrConnectWithoutTeacherInput[]
@@ -48301,6 +48961,20 @@ export namespace Prisma {
     update?: TimetableEntryUpdateWithWhereUniqueWithoutTeacherInput | TimetableEntryUpdateWithWhereUniqueWithoutTeacherInput[]
     updateMany?: TimetableEntryUpdateManyWithWhereWithoutTeacherInput | TimetableEntryUpdateManyWithWhereWithoutTeacherInput[]
     deleteMany?: TimetableEntryScalarWhereInput | TimetableEntryScalarWhereInput[]
+  }
+
+  export type ConversationUncheckedUpdateManyWithoutTeacherNestedInput = {
+    create?: XOR<ConversationCreateWithoutTeacherInput, ConversationUncheckedCreateWithoutTeacherInput> | ConversationCreateWithoutTeacherInput[] | ConversationUncheckedCreateWithoutTeacherInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutTeacherInput | ConversationCreateOrConnectWithoutTeacherInput[]
+    upsert?: ConversationUpsertWithWhereUniqueWithoutTeacherInput | ConversationUpsertWithWhereUniqueWithoutTeacherInput[]
+    createMany?: ConversationCreateManyTeacherInputEnvelope
+    set?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    disconnect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    delete?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    update?: ConversationUpdateWithWhereUniqueWithoutTeacherInput | ConversationUpdateWithWhereUniqueWithoutTeacherInput[]
+    updateMany?: ConversationUpdateManyWithWhereWithoutTeacherInput | ConversationUpdateManyWithWhereWithoutTeacherInput[]
+    deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutStudentProfileInput = {
@@ -48551,6 +49225,13 @@ export namespace Prisma {
     connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
   }
 
+  export type ConversationCreateNestedManyWithoutSemesterInput = {
+    create?: XOR<ConversationCreateWithoutSemesterInput, ConversationUncheckedCreateWithoutSemesterInput> | ConversationCreateWithoutSemesterInput[] | ConversationUncheckedCreateWithoutSemesterInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutSemesterInput | ConversationCreateOrConnectWithoutSemesterInput[]
+    createMany?: ConversationCreateManySemesterInputEnvelope
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+  }
+
   export type TeacherSubjectUncheckedCreateNestedManyWithoutSemesterInput = {
     create?: XOR<TeacherSubjectCreateWithoutSemesterInput, TeacherSubjectUncheckedCreateWithoutSemesterInput> | TeacherSubjectCreateWithoutSemesterInput[] | TeacherSubjectUncheckedCreateWithoutSemesterInput[]
     connectOrCreate?: TeacherSubjectCreateOrConnectWithoutSemesterInput | TeacherSubjectCreateOrConnectWithoutSemesterInput[]
@@ -48577,6 +49258,13 @@ export namespace Prisma {
     connectOrCreate?: TimetableEntryCreateOrConnectWithoutSemesterInput | TimetableEntryCreateOrConnectWithoutSemesterInput[]
     createMany?: TimetableEntryCreateManySemesterInputEnvelope
     connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+  }
+
+  export type ConversationUncheckedCreateNestedManyWithoutSemesterInput = {
+    create?: XOR<ConversationCreateWithoutSemesterInput, ConversationUncheckedCreateWithoutSemesterInput> | ConversationCreateWithoutSemesterInput[] | ConversationUncheckedCreateWithoutSemesterInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutSemesterInput | ConversationCreateOrConnectWithoutSemesterInput[]
+    createMany?: ConversationCreateManySemesterInputEnvelope
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
   }
 
   export type CampusUpdateOneRequiredWithoutSemestersNestedInput = {
@@ -48643,6 +49331,20 @@ export namespace Prisma {
     deleteMany?: TimetableEntryScalarWhereInput | TimetableEntryScalarWhereInput[]
   }
 
+  export type ConversationUpdateManyWithoutSemesterNestedInput = {
+    create?: XOR<ConversationCreateWithoutSemesterInput, ConversationUncheckedCreateWithoutSemesterInput> | ConversationCreateWithoutSemesterInput[] | ConversationUncheckedCreateWithoutSemesterInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutSemesterInput | ConversationCreateOrConnectWithoutSemesterInput[]
+    upsert?: ConversationUpsertWithWhereUniqueWithoutSemesterInput | ConversationUpsertWithWhereUniqueWithoutSemesterInput[]
+    createMany?: ConversationCreateManySemesterInputEnvelope
+    set?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    disconnect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    delete?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    update?: ConversationUpdateWithWhereUniqueWithoutSemesterInput | ConversationUpdateWithWhereUniqueWithoutSemesterInput[]
+    updateMany?: ConversationUpdateManyWithWhereWithoutSemesterInput | ConversationUpdateManyWithWhereWithoutSemesterInput[]
+    deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
+  }
+
   export type TeacherSubjectUncheckedUpdateManyWithoutSemesterNestedInput = {
     create?: XOR<TeacherSubjectCreateWithoutSemesterInput, TeacherSubjectUncheckedCreateWithoutSemesterInput> | TeacherSubjectCreateWithoutSemesterInput[] | TeacherSubjectUncheckedCreateWithoutSemesterInput[]
     connectOrCreate?: TeacherSubjectCreateOrConnectWithoutSemesterInput | TeacherSubjectCreateOrConnectWithoutSemesterInput[]
@@ -48699,6 +49401,20 @@ export namespace Prisma {
     deleteMany?: TimetableEntryScalarWhereInput | TimetableEntryScalarWhereInput[]
   }
 
+  export type ConversationUncheckedUpdateManyWithoutSemesterNestedInput = {
+    create?: XOR<ConversationCreateWithoutSemesterInput, ConversationUncheckedCreateWithoutSemesterInput> | ConversationCreateWithoutSemesterInput[] | ConversationUncheckedCreateWithoutSemesterInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutSemesterInput | ConversationCreateOrConnectWithoutSemesterInput[]
+    upsert?: ConversationUpsertWithWhereUniqueWithoutSemesterInput | ConversationUpsertWithWhereUniqueWithoutSemesterInput[]
+    createMany?: ConversationCreateManySemesterInputEnvelope
+    set?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    disconnect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    delete?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    update?: ConversationUpdateWithWhereUniqueWithoutSemesterInput | ConversationUpdateWithWhereUniqueWithoutSemesterInput[]
+    updateMany?: ConversationUpdateManyWithWhereWithoutSemesterInput | ConversationUpdateManyWithWhereWithoutSemesterInput[]
+    deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
+  }
+
   export type CampusCreateNestedOneWithoutSectionsInput = {
     create?: XOR<CampusCreateWithoutSectionsInput, CampusUncheckedCreateWithoutSectionsInput>
     connectOrCreate?: CampusCreateOrConnectWithoutSectionsInput
@@ -48733,6 +49449,13 @@ export namespace Prisma {
     connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
   }
 
+  export type ConversationCreateNestedManyWithoutSectionInput = {
+    create?: XOR<ConversationCreateWithoutSectionInput, ConversationUncheckedCreateWithoutSectionInput> | ConversationCreateWithoutSectionInput[] | ConversationUncheckedCreateWithoutSectionInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutSectionInput | ConversationCreateOrConnectWithoutSectionInput[]
+    createMany?: ConversationCreateManySectionInputEnvelope
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+  }
+
   export type TeacherSubjectUncheckedCreateNestedManyWithoutSectionInput = {
     create?: XOR<TeacherSubjectCreateWithoutSectionInput, TeacherSubjectUncheckedCreateWithoutSectionInput> | TeacherSubjectCreateWithoutSectionInput[] | TeacherSubjectUncheckedCreateWithoutSectionInput[]
     connectOrCreate?: TeacherSubjectCreateOrConnectWithoutSectionInput | TeacherSubjectCreateOrConnectWithoutSectionInput[]
@@ -48759,6 +49482,13 @@ export namespace Prisma {
     connectOrCreate?: TimetableEntryCreateOrConnectWithoutSectionInput | TimetableEntryCreateOrConnectWithoutSectionInput[]
     createMany?: TimetableEntryCreateManySectionInputEnvelope
     connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+  }
+
+  export type ConversationUncheckedCreateNestedManyWithoutSectionInput = {
+    create?: XOR<ConversationCreateWithoutSectionInput, ConversationUncheckedCreateWithoutSectionInput> | ConversationCreateWithoutSectionInput[] | ConversationUncheckedCreateWithoutSectionInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutSectionInput | ConversationCreateOrConnectWithoutSectionInput[]
+    createMany?: ConversationCreateManySectionInputEnvelope
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
   }
 
   export type CampusUpdateOneRequiredWithoutSectionsNestedInput = {
@@ -48825,6 +49555,20 @@ export namespace Prisma {
     deleteMany?: TimetableEntryScalarWhereInput | TimetableEntryScalarWhereInput[]
   }
 
+  export type ConversationUpdateManyWithoutSectionNestedInput = {
+    create?: XOR<ConversationCreateWithoutSectionInput, ConversationUncheckedCreateWithoutSectionInput> | ConversationCreateWithoutSectionInput[] | ConversationUncheckedCreateWithoutSectionInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutSectionInput | ConversationCreateOrConnectWithoutSectionInput[]
+    upsert?: ConversationUpsertWithWhereUniqueWithoutSectionInput | ConversationUpsertWithWhereUniqueWithoutSectionInput[]
+    createMany?: ConversationCreateManySectionInputEnvelope
+    set?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    disconnect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    delete?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    update?: ConversationUpdateWithWhereUniqueWithoutSectionInput | ConversationUpdateWithWhereUniqueWithoutSectionInput[]
+    updateMany?: ConversationUpdateManyWithWhereWithoutSectionInput | ConversationUpdateManyWithWhereWithoutSectionInput[]
+    deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
+  }
+
   export type TeacherSubjectUncheckedUpdateManyWithoutSectionNestedInput = {
     create?: XOR<TeacherSubjectCreateWithoutSectionInput, TeacherSubjectUncheckedCreateWithoutSectionInput> | TeacherSubjectCreateWithoutSectionInput[] | TeacherSubjectUncheckedCreateWithoutSectionInput[]
     connectOrCreate?: TeacherSubjectCreateOrConnectWithoutSectionInput | TeacherSubjectCreateOrConnectWithoutSectionInput[]
@@ -48879,6 +49623,20 @@ export namespace Prisma {
     update?: TimetableEntryUpdateWithWhereUniqueWithoutSectionInput | TimetableEntryUpdateWithWhereUniqueWithoutSectionInput[]
     updateMany?: TimetableEntryUpdateManyWithWhereWithoutSectionInput | TimetableEntryUpdateManyWithWhereWithoutSectionInput[]
     deleteMany?: TimetableEntryScalarWhereInput | TimetableEntryScalarWhereInput[]
+  }
+
+  export type ConversationUncheckedUpdateManyWithoutSectionNestedInput = {
+    create?: XOR<ConversationCreateWithoutSectionInput, ConversationUncheckedCreateWithoutSectionInput> | ConversationCreateWithoutSectionInput[] | ConversationUncheckedCreateWithoutSectionInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutSectionInput | ConversationCreateOrConnectWithoutSectionInput[]
+    upsert?: ConversationUpsertWithWhereUniqueWithoutSectionInput | ConversationUpsertWithWhereUniqueWithoutSectionInput[]
+    createMany?: ConversationCreateManySectionInputEnvelope
+    set?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    disconnect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    delete?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    update?: ConversationUpdateWithWhereUniqueWithoutSectionInput | ConversationUpdateWithWhereUniqueWithoutSectionInput[]
+    updateMany?: ConversationUpdateManyWithWhereWithoutSectionInput | ConversationUpdateManyWithWhereWithoutSectionInput[]
+    deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
   }
 
   export type CampusCreateNestedOneWithoutSubjectsInput = {
@@ -48936,6 +49694,13 @@ export namespace Prisma {
     connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
   }
 
+  export type ConversationCreateNestedManyWithoutSubjectInput = {
+    create?: XOR<ConversationCreateWithoutSubjectInput, ConversationUncheckedCreateWithoutSubjectInput> | ConversationCreateWithoutSubjectInput[] | ConversationUncheckedCreateWithoutSubjectInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutSubjectInput | ConversationCreateOrConnectWithoutSubjectInput[]
+    createMany?: ConversationCreateManySubjectInputEnvelope
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+  }
+
   export type TeacherSubjectUncheckedCreateNestedManyWithoutSubjectInput = {
     create?: XOR<TeacherSubjectCreateWithoutSubjectInput, TeacherSubjectUncheckedCreateWithoutSubjectInput> | TeacherSubjectCreateWithoutSubjectInput[] | TeacherSubjectUncheckedCreateWithoutSubjectInput[]
     connectOrCreate?: TeacherSubjectCreateOrConnectWithoutSubjectInput | TeacherSubjectCreateOrConnectWithoutSubjectInput[]
@@ -48983,6 +49748,13 @@ export namespace Prisma {
     connectOrCreate?: TimetableEntryCreateOrConnectWithoutSubjectInput | TimetableEntryCreateOrConnectWithoutSubjectInput[]
     createMany?: TimetableEntryCreateManySubjectInputEnvelope
     connect?: TimetableEntryWhereUniqueInput | TimetableEntryWhereUniqueInput[]
+  }
+
+  export type ConversationUncheckedCreateNestedManyWithoutSubjectInput = {
+    create?: XOR<ConversationCreateWithoutSubjectInput, ConversationUncheckedCreateWithoutSubjectInput> | ConversationCreateWithoutSubjectInput[] | ConversationUncheckedCreateWithoutSubjectInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutSubjectInput | ConversationCreateOrConnectWithoutSubjectInput[]
+    createMany?: ConversationCreateManySubjectInputEnvelope
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
   }
 
   export type CampusUpdateOneRequiredWithoutSubjectsNestedInput = {
@@ -49091,6 +49863,20 @@ export namespace Prisma {
     deleteMany?: TimetableEntryScalarWhereInput | TimetableEntryScalarWhereInput[]
   }
 
+  export type ConversationUpdateManyWithoutSubjectNestedInput = {
+    create?: XOR<ConversationCreateWithoutSubjectInput, ConversationUncheckedCreateWithoutSubjectInput> | ConversationCreateWithoutSubjectInput[] | ConversationUncheckedCreateWithoutSubjectInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutSubjectInput | ConversationCreateOrConnectWithoutSubjectInput[]
+    upsert?: ConversationUpsertWithWhereUniqueWithoutSubjectInput | ConversationUpsertWithWhereUniqueWithoutSubjectInput[]
+    createMany?: ConversationCreateManySubjectInputEnvelope
+    set?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    disconnect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    delete?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    update?: ConversationUpdateWithWhereUniqueWithoutSubjectInput | ConversationUpdateWithWhereUniqueWithoutSubjectInput[]
+    updateMany?: ConversationUpdateManyWithWhereWithoutSubjectInput | ConversationUpdateManyWithWhereWithoutSubjectInput[]
+    deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
+  }
+
   export type TeacherSubjectUncheckedUpdateManyWithoutSubjectNestedInput = {
     create?: XOR<TeacherSubjectCreateWithoutSubjectInput, TeacherSubjectUncheckedCreateWithoutSubjectInput> | TeacherSubjectCreateWithoutSubjectInput[] | TeacherSubjectUncheckedCreateWithoutSubjectInput[]
     connectOrCreate?: TeacherSubjectCreateOrConnectWithoutSubjectInput | TeacherSubjectCreateOrConnectWithoutSubjectInput[]
@@ -49187,6 +49973,20 @@ export namespace Prisma {
     update?: TimetableEntryUpdateWithWhereUniqueWithoutSubjectInput | TimetableEntryUpdateWithWhereUniqueWithoutSubjectInput[]
     updateMany?: TimetableEntryUpdateManyWithWhereWithoutSubjectInput | TimetableEntryUpdateManyWithWhereWithoutSubjectInput[]
     deleteMany?: TimetableEntryScalarWhereInput | TimetableEntryScalarWhereInput[]
+  }
+
+  export type ConversationUncheckedUpdateManyWithoutSubjectNestedInput = {
+    create?: XOR<ConversationCreateWithoutSubjectInput, ConversationUncheckedCreateWithoutSubjectInput> | ConversationCreateWithoutSubjectInput[] | ConversationUncheckedCreateWithoutSubjectInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutSubjectInput | ConversationCreateOrConnectWithoutSubjectInput[]
+    upsert?: ConversationUpsertWithWhereUniqueWithoutSubjectInput | ConversationUpsertWithWhereUniqueWithoutSubjectInput[]
+    createMany?: ConversationCreateManySubjectInputEnvelope
+    set?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    disconnect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    delete?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    update?: ConversationUpdateWithWhereUniqueWithoutSubjectInput | ConversationUpdateWithWhereUniqueWithoutSubjectInput[]
+    updateMany?: ConversationUpdateManyWithWhereWithoutSubjectInput | ConversationUpdateManyWithWhereWithoutSubjectInput[]
+    deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
   }
 
   export type TeacherCreateNestedOneWithoutTeacherSubjectsInput = {
@@ -50406,6 +51206,36 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSupportRequestsInput, UserUpdateWithoutSupportRequestsInput>, UserUncheckedUpdateWithoutSupportRequestsInput>
   }
 
+  export type MessageCreateNestedOneWithoutPinnedInInput = {
+    create?: XOR<MessageCreateWithoutPinnedInInput, MessageUncheckedCreateWithoutPinnedInInput>
+    connectOrCreate?: MessageCreateOrConnectWithoutPinnedInInput
+    connect?: MessageWhereUniqueInput
+  }
+
+  export type SubjectCreateNestedOneWithoutConversationInput = {
+    create?: XOR<SubjectCreateWithoutConversationInput, SubjectUncheckedCreateWithoutConversationInput>
+    connectOrCreate?: SubjectCreateOrConnectWithoutConversationInput
+    connect?: SubjectWhereUniqueInput
+  }
+
+  export type SemesterCreateNestedOneWithoutConversationInput = {
+    create?: XOR<SemesterCreateWithoutConversationInput, SemesterUncheckedCreateWithoutConversationInput>
+    connectOrCreate?: SemesterCreateOrConnectWithoutConversationInput
+    connect?: SemesterWhereUniqueInput
+  }
+
+  export type SectionCreateNestedOneWithoutConversationInput = {
+    create?: XOR<SectionCreateWithoutConversationInput, SectionUncheckedCreateWithoutConversationInput>
+    connectOrCreate?: SectionCreateOrConnectWithoutConversationInput
+    connect?: SectionWhereUniqueInput
+  }
+
+  export type TeacherCreateNestedOneWithoutConversationInput = {
+    create?: XOR<TeacherCreateWithoutConversationInput, TeacherUncheckedCreateWithoutConversationInput>
+    connectOrCreate?: TeacherCreateOrConnectWithoutConversationInput
+    connect?: TeacherWhereUniqueInput
+  }
+
   export type ConversationParticipantCreateNestedManyWithoutConversationInput = {
     create?: XOR<ConversationParticipantCreateWithoutConversationInput, ConversationParticipantUncheckedCreateWithoutConversationInput> | ConversationParticipantCreateWithoutConversationInput[] | ConversationParticipantUncheckedCreateWithoutConversationInput[]
     connectOrCreate?: ConversationParticipantCreateOrConnectWithoutConversationInput | ConversationParticipantCreateOrConnectWithoutConversationInput[]
@@ -50436,6 +51266,60 @@ export namespace Prisma {
 
   export type EnumConversationTypeFieldUpdateOperationsInput = {
     set?: $Enums.ConversationType
+  }
+
+  export type NullableEnumChannelTypeFieldUpdateOperationsInput = {
+    set?: $Enums.ChannelType | null
+  }
+
+  export type MessageUpdateOneWithoutPinnedInNestedInput = {
+    create?: XOR<MessageCreateWithoutPinnedInInput, MessageUncheckedCreateWithoutPinnedInInput>
+    connectOrCreate?: MessageCreateOrConnectWithoutPinnedInInput
+    upsert?: MessageUpsertWithoutPinnedInInput
+    disconnect?: MessageWhereInput | boolean
+    delete?: MessageWhereInput | boolean
+    connect?: MessageWhereUniqueInput
+    update?: XOR<XOR<MessageUpdateToOneWithWhereWithoutPinnedInInput, MessageUpdateWithoutPinnedInInput>, MessageUncheckedUpdateWithoutPinnedInInput>
+  }
+
+  export type SubjectUpdateOneWithoutConversationNestedInput = {
+    create?: XOR<SubjectCreateWithoutConversationInput, SubjectUncheckedCreateWithoutConversationInput>
+    connectOrCreate?: SubjectCreateOrConnectWithoutConversationInput
+    upsert?: SubjectUpsertWithoutConversationInput
+    disconnect?: SubjectWhereInput | boolean
+    delete?: SubjectWhereInput | boolean
+    connect?: SubjectWhereUniqueInput
+    update?: XOR<XOR<SubjectUpdateToOneWithWhereWithoutConversationInput, SubjectUpdateWithoutConversationInput>, SubjectUncheckedUpdateWithoutConversationInput>
+  }
+
+  export type SemesterUpdateOneWithoutConversationNestedInput = {
+    create?: XOR<SemesterCreateWithoutConversationInput, SemesterUncheckedCreateWithoutConversationInput>
+    connectOrCreate?: SemesterCreateOrConnectWithoutConversationInput
+    upsert?: SemesterUpsertWithoutConversationInput
+    disconnect?: SemesterWhereInput | boolean
+    delete?: SemesterWhereInput | boolean
+    connect?: SemesterWhereUniqueInput
+    update?: XOR<XOR<SemesterUpdateToOneWithWhereWithoutConversationInput, SemesterUpdateWithoutConversationInput>, SemesterUncheckedUpdateWithoutConversationInput>
+  }
+
+  export type SectionUpdateOneWithoutConversationNestedInput = {
+    create?: XOR<SectionCreateWithoutConversationInput, SectionUncheckedCreateWithoutConversationInput>
+    connectOrCreate?: SectionCreateOrConnectWithoutConversationInput
+    upsert?: SectionUpsertWithoutConversationInput
+    disconnect?: SectionWhereInput | boolean
+    delete?: SectionWhereInput | boolean
+    connect?: SectionWhereUniqueInput
+    update?: XOR<XOR<SectionUpdateToOneWithWhereWithoutConversationInput, SectionUpdateWithoutConversationInput>, SectionUncheckedUpdateWithoutConversationInput>
+  }
+
+  export type TeacherUpdateOneWithoutConversationNestedInput = {
+    create?: XOR<TeacherCreateWithoutConversationInput, TeacherUncheckedCreateWithoutConversationInput>
+    connectOrCreate?: TeacherCreateOrConnectWithoutConversationInput
+    upsert?: TeacherUpsertWithoutConversationInput
+    disconnect?: TeacherWhereInput | boolean
+    delete?: TeacherWhereInput | boolean
+    connect?: TeacherWhereUniqueInput
+    update?: XOR<XOR<TeacherUpdateToOneWithWhereWithoutConversationInput, TeacherUpdateWithoutConversationInput>, TeacherUncheckedUpdateWithoutConversationInput>
   }
 
   export type ConversationParticipantUpdateManyWithoutConversationNestedInput = {
@@ -50548,6 +51432,13 @@ export namespace Prisma {
     connect?: MessageKeyWhereUniqueInput | MessageKeyWhereUniqueInput[]
   }
 
+  export type ConversationCreateNestedManyWithoutPinnedMessageInput = {
+    create?: XOR<ConversationCreateWithoutPinnedMessageInput, ConversationUncheckedCreateWithoutPinnedMessageInput> | ConversationCreateWithoutPinnedMessageInput[] | ConversationUncheckedCreateWithoutPinnedMessageInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutPinnedMessageInput | ConversationCreateOrConnectWithoutPinnedMessageInput[]
+    createMany?: ConversationCreateManyPinnedMessageInputEnvelope
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+  }
+
   export type ResourceCreateNestedManyWithoutMessageInput = {
     create?: XOR<ResourceCreateWithoutMessageInput, ResourceUncheckedCreateWithoutMessageInput> | ResourceCreateWithoutMessageInput[] | ResourceUncheckedCreateWithoutMessageInput[]
     connectOrCreate?: ResourceCreateOrConnectWithoutMessageInput | ResourceCreateOrConnectWithoutMessageInput[]
@@ -50567,6 +51458,13 @@ export namespace Prisma {
     connectOrCreate?: MessageKeyCreateOrConnectWithoutMessageInput | MessageKeyCreateOrConnectWithoutMessageInput[]
     createMany?: MessageKeyCreateManyMessageInputEnvelope
     connect?: MessageKeyWhereUniqueInput | MessageKeyWhereUniqueInput[]
+  }
+
+  export type ConversationUncheckedCreateNestedManyWithoutPinnedMessageInput = {
+    create?: XOR<ConversationCreateWithoutPinnedMessageInput, ConversationUncheckedCreateWithoutPinnedMessageInput> | ConversationCreateWithoutPinnedMessageInput[] | ConversationUncheckedCreateWithoutPinnedMessageInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutPinnedMessageInput | ConversationCreateOrConnectWithoutPinnedMessageInput[]
+    createMany?: ConversationCreateManyPinnedMessageInputEnvelope
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
   }
 
   export type ResourceUncheckedCreateNestedManyWithoutMessageInput = {
@@ -50620,6 +51518,20 @@ export namespace Prisma {
     deleteMany?: MessageKeyScalarWhereInput | MessageKeyScalarWhereInput[]
   }
 
+  export type ConversationUpdateManyWithoutPinnedMessageNestedInput = {
+    create?: XOR<ConversationCreateWithoutPinnedMessageInput, ConversationUncheckedCreateWithoutPinnedMessageInput> | ConversationCreateWithoutPinnedMessageInput[] | ConversationUncheckedCreateWithoutPinnedMessageInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutPinnedMessageInput | ConversationCreateOrConnectWithoutPinnedMessageInput[]
+    upsert?: ConversationUpsertWithWhereUniqueWithoutPinnedMessageInput | ConversationUpsertWithWhereUniqueWithoutPinnedMessageInput[]
+    createMany?: ConversationCreateManyPinnedMessageInputEnvelope
+    set?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    disconnect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    delete?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    update?: ConversationUpdateWithWhereUniqueWithoutPinnedMessageInput | ConversationUpdateWithWhereUniqueWithoutPinnedMessageInput[]
+    updateMany?: ConversationUpdateManyWithWhereWithoutPinnedMessageInput | ConversationUpdateManyWithWhereWithoutPinnedMessageInput[]
+    deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
+  }
+
   export type ResourceUpdateManyWithoutMessageNestedInput = {
     create?: XOR<ResourceCreateWithoutMessageInput, ResourceUncheckedCreateWithoutMessageInput> | ResourceCreateWithoutMessageInput[] | ResourceUncheckedCreateWithoutMessageInput[]
     connectOrCreate?: ResourceCreateOrConnectWithoutMessageInput | ResourceCreateOrConnectWithoutMessageInput[]
@@ -50660,6 +51572,20 @@ export namespace Prisma {
     update?: MessageKeyUpdateWithWhereUniqueWithoutMessageInput | MessageKeyUpdateWithWhereUniqueWithoutMessageInput[]
     updateMany?: MessageKeyUpdateManyWithWhereWithoutMessageInput | MessageKeyUpdateManyWithWhereWithoutMessageInput[]
     deleteMany?: MessageKeyScalarWhereInput | MessageKeyScalarWhereInput[]
+  }
+
+  export type ConversationUncheckedUpdateManyWithoutPinnedMessageNestedInput = {
+    create?: XOR<ConversationCreateWithoutPinnedMessageInput, ConversationUncheckedCreateWithoutPinnedMessageInput> | ConversationCreateWithoutPinnedMessageInput[] | ConversationUncheckedCreateWithoutPinnedMessageInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutPinnedMessageInput | ConversationCreateOrConnectWithoutPinnedMessageInput[]
+    upsert?: ConversationUpsertWithWhereUniqueWithoutPinnedMessageInput | ConversationUpsertWithWhereUniqueWithoutPinnedMessageInput[]
+    createMany?: ConversationCreateManyPinnedMessageInputEnvelope
+    set?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    disconnect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    delete?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    update?: ConversationUpdateWithWhereUniqueWithoutPinnedMessageInput | ConversationUpdateWithWhereUniqueWithoutPinnedMessageInput[]
+    updateMany?: ConversationUpdateManyWithWhereWithoutPinnedMessageInput | ConversationUpdateManyWithWhereWithoutPinnedMessageInput[]
+    deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
   }
 
   export type ResourceUncheckedUpdateManyWithoutMessageNestedInput = {
@@ -51086,6 +52012,13 @@ export namespace Prisma {
     not?: NestedEnumConversationTypeFilter<$PrismaModel> | $Enums.ConversationType
   }
 
+  export type NestedEnumChannelTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChannelType | EnumChannelTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ChannelType[] | ListEnumChannelTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ChannelType[] | ListEnumChannelTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumChannelTypeNullableFilter<$PrismaModel> | $Enums.ChannelType | null
+  }
+
   export type NestedEnumConversationTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.ConversationType | EnumConversationTypeFieldRefInput<$PrismaModel>
     in?: $Enums.ConversationType[] | ListEnumConversationTypeFieldRefInput<$PrismaModel>
@@ -51094,6 +52027,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumConversationTypeFilter<$PrismaModel>
     _max?: NestedEnumConversationTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumChannelTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChannelType | EnumChannelTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ChannelType[] | ListEnumChannelTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ChannelType[] | ListEnumChannelTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumChannelTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.ChannelType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumChannelTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumChannelTypeNullableFilter<$PrismaModel>
   }
 
   export type CampusCreateWithoutUsersInput = {
@@ -51151,6 +52094,7 @@ export namespace Prisma {
     announcements?: AnnouncementCreateNestedManyWithoutAuthorInput
     assignments?: AssignmentCreateNestedManyWithoutTeacherInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutTeacherInput
+    Conversation?: ConversationCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherUncheckedCreateWithoutUserInput = {
@@ -51165,6 +52109,7 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutTeacherInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutTeacherInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherCreateOrConnectWithoutUserInput = {
@@ -51458,6 +52403,7 @@ export namespace Prisma {
     conversation: ConversationCreateNestedOneWithoutMessagesInput
     attachments?: ResourceCreateNestedManyWithoutChatMessageInput
     encryptedKeys?: MessageKeyCreateNestedManyWithoutMessageInput
+    pinnedIn?: ConversationCreateNestedManyWithoutPinnedMessageInput
     resources?: ResourceCreateNestedManyWithoutMessageInput
   }
 
@@ -51469,6 +52415,7 @@ export namespace Prisma {
     createdAt?: Date | string
     attachments?: ResourceUncheckedCreateNestedManyWithoutChatMessageInput
     encryptedKeys?: MessageKeyUncheckedCreateNestedManyWithoutMessageInput
+    pinnedIn?: ConversationUncheckedCreateNestedManyWithoutPinnedMessageInput
     resources?: ResourceUncheckedCreateNestedManyWithoutMessageInput
   }
 
@@ -51576,6 +52523,7 @@ export namespace Prisma {
     announcements?: AnnouncementUpdateManyWithoutAuthorNestedInput
     assignments?: AssignmentUpdateManyWithoutTeacherNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutTeacherNestedInput
+    Conversation?: ConversationUpdateManyWithoutTeacherNestedInput
   }
 
   export type TeacherUncheckedUpdateWithoutUserInput = {
@@ -51590,6 +52538,7 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutTeacherNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutTeacherNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutTeacherNestedInput
   }
 
   export type StudentUpsertWithoutUserInput = {
@@ -52235,6 +53184,52 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ConversationCreateWithoutTeacherInput = {
+    id?: string
+    type: $Enums.ConversationType
+    name?: string | null
+    campusId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isTeacherOnly?: boolean
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    pinnedMessage?: MessageCreateNestedOneWithoutPinnedInInput
+    subject?: SubjectCreateNestedOneWithoutConversationInput
+    semester?: SemesterCreateNestedOneWithoutConversationInput
+    section?: SectionCreateNestedOneWithoutConversationInput
+    participants?: ConversationParticipantCreateNestedManyWithoutConversationInput
+    messages?: MessageCreateNestedManyWithoutConversationInput
+  }
+
+  export type ConversationUncheckedCreateWithoutTeacherInput = {
+    id?: string
+    type: $Enums.ConversationType
+    name?: string | null
+    campusId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isTeacherOnly?: boolean
+    pinnedMessageId?: string | null
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    subjectId?: string | null
+    semesterId?: string | null
+    sectionId?: string | null
+    participants?: ConversationParticipantUncheckedCreateNestedManyWithoutConversationInput
+    messages?: MessageUncheckedCreateNestedManyWithoutConversationInput
+  }
+
+  export type ConversationCreateOrConnectWithoutTeacherInput = {
+    where: ConversationWhereUniqueInput
+    create: XOR<ConversationCreateWithoutTeacherInput, ConversationUncheckedCreateWithoutTeacherInput>
+  }
+
+  export type ConversationCreateManyTeacherInputEnvelope = {
+    data: ConversationCreateManyTeacherInput | ConversationCreateManyTeacherInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutTeacherProfileInput = {
     update: XOR<UserUpdateWithoutTeacherProfileInput, UserUncheckedUpdateWithoutTeacherProfileInput>
     create: XOR<UserCreateWithoutTeacherProfileInput, UserUncheckedCreateWithoutTeacherProfileInput>
@@ -52490,6 +53485,42 @@ export namespace Prisma {
     sectionId?: StringFilter<"TimetableEntry"> | string
   }
 
+  export type ConversationUpsertWithWhereUniqueWithoutTeacherInput = {
+    where: ConversationWhereUniqueInput
+    update: XOR<ConversationUpdateWithoutTeacherInput, ConversationUncheckedUpdateWithoutTeacherInput>
+    create: XOR<ConversationCreateWithoutTeacherInput, ConversationUncheckedCreateWithoutTeacherInput>
+  }
+
+  export type ConversationUpdateWithWhereUniqueWithoutTeacherInput = {
+    where: ConversationWhereUniqueInput
+    data: XOR<ConversationUpdateWithoutTeacherInput, ConversationUncheckedUpdateWithoutTeacherInput>
+  }
+
+  export type ConversationUpdateManyWithWhereWithoutTeacherInput = {
+    where: ConversationScalarWhereInput
+    data: XOR<ConversationUpdateManyMutationInput, ConversationUncheckedUpdateManyWithoutTeacherInput>
+  }
+
+  export type ConversationScalarWhereInput = {
+    AND?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
+    OR?: ConversationScalarWhereInput[]
+    NOT?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
+    id?: StringFilter<"Conversation"> | string
+    type?: EnumConversationTypeFilter<"Conversation"> | $Enums.ConversationType
+    name?: StringNullableFilter<"Conversation"> | string | null
+    campusId?: StringFilter<"Conversation"> | string
+    createdAt?: DateTimeFilter<"Conversation"> | Date | string
+    updatedAt?: DateTimeFilter<"Conversation"> | Date | string
+    isTeacherOnly?: BoolFilter<"Conversation"> | boolean
+    pinnedMessageId?: StringNullableFilter<"Conversation"> | string | null
+    isSystemGenerated?: BoolFilter<"Conversation"> | boolean
+    systemType?: EnumChannelTypeNullableFilter<"Conversation"> | $Enums.ChannelType | null
+    subjectId?: StringNullableFilter<"Conversation"> | string | null
+    semesterId?: StringNullableFilter<"Conversation"> | string | null
+    sectionId?: StringNullableFilter<"Conversation"> | string | null
+    teacherId?: StringNullableFilter<"Conversation"> | string | null
+  }
+
   export type UserCreateWithoutStudentProfileInput = {
     id?: string
     name: string
@@ -52566,6 +53597,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutSemesterInput
     classSessions?: ClassSessionCreateNestedManyWithoutSemesterRelInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutSemesterInput
+    Conversation?: ConversationCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutStudentsInput = {
@@ -52577,6 +53609,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutSemesterInput
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSemesterRelInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSemesterInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutStudentsInput = {
@@ -52592,6 +53625,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutSectionInput
     classSessions?: ClassSessionCreateNestedManyWithoutSectionRelInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutSectionInput
+    Conversation?: ConversationCreateNestedManyWithoutSectionInput
   }
 
   export type SectionUncheckedCreateWithoutStudentsInput = {
@@ -52602,6 +53636,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutSectionInput
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSectionRelInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSectionInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSectionInput
   }
 
   export type SectionCreateOrConnectWithoutStudentsInput = {
@@ -52842,6 +53877,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUpdateManyWithoutSemesterNestedInput
     classSessions?: ClassSessionUpdateManyWithoutSemesterRelNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutSemesterNestedInput
+    Conversation?: ConversationUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutStudentsInput = {
@@ -52853,6 +53889,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutSemesterNestedInput
     classSessions?: ClassSessionUncheckedUpdateManyWithoutSemesterRelNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSemesterNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type SectionUpsertWithoutStudentsInput = {
@@ -52874,6 +53911,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUpdateManyWithoutSectionNestedInput
     classSessions?: ClassSessionUpdateManyWithoutSectionRelNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutSectionNestedInput
+    Conversation?: ConversationUpdateManyWithoutSectionNestedInput
   }
 
   export type SectionUncheckedUpdateWithoutStudentsInput = {
@@ -52884,6 +53922,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutSectionNestedInput
     classSessions?: ClassSessionUncheckedUpdateManyWithoutSectionRelNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSectionNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSectionNestedInput
   }
 
   export type AttendanceUpsertWithWhereUniqueWithoutStudentInput = {
@@ -53174,6 +54213,52 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ConversationCreateWithoutSemesterInput = {
+    id?: string
+    type: $Enums.ConversationType
+    name?: string | null
+    campusId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isTeacherOnly?: boolean
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    pinnedMessage?: MessageCreateNestedOneWithoutPinnedInInput
+    subject?: SubjectCreateNestedOneWithoutConversationInput
+    section?: SectionCreateNestedOneWithoutConversationInput
+    teacher?: TeacherCreateNestedOneWithoutConversationInput
+    participants?: ConversationParticipantCreateNestedManyWithoutConversationInput
+    messages?: MessageCreateNestedManyWithoutConversationInput
+  }
+
+  export type ConversationUncheckedCreateWithoutSemesterInput = {
+    id?: string
+    type: $Enums.ConversationType
+    name?: string | null
+    campusId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isTeacherOnly?: boolean
+    pinnedMessageId?: string | null
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    subjectId?: string | null
+    sectionId?: string | null
+    teacherId?: string | null
+    participants?: ConversationParticipantUncheckedCreateNestedManyWithoutConversationInput
+    messages?: MessageUncheckedCreateNestedManyWithoutConversationInput
+  }
+
+  export type ConversationCreateOrConnectWithoutSemesterInput = {
+    where: ConversationWhereUniqueInput
+    create: XOR<ConversationCreateWithoutSemesterInput, ConversationUncheckedCreateWithoutSemesterInput>
+  }
+
+  export type ConversationCreateManySemesterInputEnvelope = {
+    data: ConversationCreateManySemesterInput | ConversationCreateManySemesterInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CampusUpsertWithoutSemestersInput = {
     update: XOR<CampusUpdateWithoutSemestersInput, CampusUncheckedUpdateWithoutSemestersInput>
     create: XOR<CampusCreateWithoutSemestersInput, CampusUncheckedCreateWithoutSemestersInput>
@@ -53298,6 +54383,22 @@ export namespace Prisma {
   export type TimetableEntryUpdateManyWithWhereWithoutSemesterInput = {
     where: TimetableEntryScalarWhereInput
     data: XOR<TimetableEntryUpdateManyMutationInput, TimetableEntryUncheckedUpdateManyWithoutSemesterInput>
+  }
+
+  export type ConversationUpsertWithWhereUniqueWithoutSemesterInput = {
+    where: ConversationWhereUniqueInput
+    update: XOR<ConversationUpdateWithoutSemesterInput, ConversationUncheckedUpdateWithoutSemesterInput>
+    create: XOR<ConversationCreateWithoutSemesterInput, ConversationUncheckedCreateWithoutSemesterInput>
+  }
+
+  export type ConversationUpdateWithWhereUniqueWithoutSemesterInput = {
+    where: ConversationWhereUniqueInput
+    data: XOR<ConversationUpdateWithoutSemesterInput, ConversationUncheckedUpdateWithoutSemesterInput>
+  }
+
+  export type ConversationUpdateManyWithWhereWithoutSemesterInput = {
+    where: ConversationScalarWhereInput
+    data: XOR<ConversationUpdateManyMutationInput, ConversationUncheckedUpdateManyWithoutSemesterInput>
   }
 
   export type CampusCreateWithoutSectionsInput = {
@@ -53491,6 +54592,52 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ConversationCreateWithoutSectionInput = {
+    id?: string
+    type: $Enums.ConversationType
+    name?: string | null
+    campusId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isTeacherOnly?: boolean
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    pinnedMessage?: MessageCreateNestedOneWithoutPinnedInInput
+    subject?: SubjectCreateNestedOneWithoutConversationInput
+    semester?: SemesterCreateNestedOneWithoutConversationInput
+    teacher?: TeacherCreateNestedOneWithoutConversationInput
+    participants?: ConversationParticipantCreateNestedManyWithoutConversationInput
+    messages?: MessageCreateNestedManyWithoutConversationInput
+  }
+
+  export type ConversationUncheckedCreateWithoutSectionInput = {
+    id?: string
+    type: $Enums.ConversationType
+    name?: string | null
+    campusId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isTeacherOnly?: boolean
+    pinnedMessageId?: string | null
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    subjectId?: string | null
+    semesterId?: string | null
+    teacherId?: string | null
+    participants?: ConversationParticipantUncheckedCreateNestedManyWithoutConversationInput
+    messages?: MessageUncheckedCreateNestedManyWithoutConversationInput
+  }
+
+  export type ConversationCreateOrConnectWithoutSectionInput = {
+    where: ConversationWhereUniqueInput
+    create: XOR<ConversationCreateWithoutSectionInput, ConversationUncheckedCreateWithoutSectionInput>
+  }
+
+  export type ConversationCreateManySectionInputEnvelope = {
+    data: ConversationCreateManySectionInput | ConversationCreateManySectionInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CampusUpsertWithoutSectionsInput = {
     update: XOR<CampusUpdateWithoutSectionsInput, CampusUncheckedUpdateWithoutSectionsInput>
     create: XOR<CampusCreateWithoutSectionsInput, CampusUncheckedCreateWithoutSectionsInput>
@@ -53602,6 +54749,22 @@ export namespace Prisma {
   export type TimetableEntryUpdateManyWithWhereWithoutSectionInput = {
     where: TimetableEntryScalarWhereInput
     data: XOR<TimetableEntryUpdateManyMutationInput, TimetableEntryUncheckedUpdateManyWithoutSectionInput>
+  }
+
+  export type ConversationUpsertWithWhereUniqueWithoutSectionInput = {
+    where: ConversationWhereUniqueInput
+    update: XOR<ConversationUpdateWithoutSectionInput, ConversationUncheckedUpdateWithoutSectionInput>
+    create: XOR<ConversationCreateWithoutSectionInput, ConversationUncheckedCreateWithoutSectionInput>
+  }
+
+  export type ConversationUpdateWithWhereUniqueWithoutSectionInput = {
+    where: ConversationWhereUniqueInput
+    data: XOR<ConversationUpdateWithoutSectionInput, ConversationUncheckedUpdateWithoutSectionInput>
+  }
+
+  export type ConversationUpdateManyWithWhereWithoutSectionInput = {
+    where: ConversationScalarWhereInput
+    data: XOR<ConversationUpdateManyMutationInput, ConversationUncheckedUpdateManyWithoutSectionInput>
   }
 
   export type CampusCreateWithoutSubjectsInput = {
@@ -53909,6 +55072,52 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ConversationCreateWithoutSubjectInput = {
+    id?: string
+    type: $Enums.ConversationType
+    name?: string | null
+    campusId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isTeacherOnly?: boolean
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    pinnedMessage?: MessageCreateNestedOneWithoutPinnedInInput
+    semester?: SemesterCreateNestedOneWithoutConversationInput
+    section?: SectionCreateNestedOneWithoutConversationInput
+    teacher?: TeacherCreateNestedOneWithoutConversationInput
+    participants?: ConversationParticipantCreateNestedManyWithoutConversationInput
+    messages?: MessageCreateNestedManyWithoutConversationInput
+  }
+
+  export type ConversationUncheckedCreateWithoutSubjectInput = {
+    id?: string
+    type: $Enums.ConversationType
+    name?: string | null
+    campusId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isTeacherOnly?: boolean
+    pinnedMessageId?: string | null
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    semesterId?: string | null
+    sectionId?: string | null
+    teacherId?: string | null
+    participants?: ConversationParticipantUncheckedCreateNestedManyWithoutConversationInput
+    messages?: MessageUncheckedCreateNestedManyWithoutConversationInput
+  }
+
+  export type ConversationCreateOrConnectWithoutSubjectInput = {
+    where: ConversationWhereUniqueInput
+    create: XOR<ConversationCreateWithoutSubjectInput, ConversationUncheckedCreateWithoutSubjectInput>
+  }
+
+  export type ConversationCreateManySubjectInputEnvelope = {
+    data: ConversationCreateManySubjectInput | ConversationCreateManySubjectInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CampusUpsertWithoutSubjectsInput = {
     update: XOR<CampusUpdateWithoutSubjectsInput, CampusUncheckedUpdateWithoutSubjectsInput>
     create: XOR<CampusCreateWithoutSubjectsInput, CampusUncheckedCreateWithoutSubjectsInput>
@@ -54104,6 +55313,22 @@ export namespace Prisma {
     data: XOR<TimetableEntryUpdateManyMutationInput, TimetableEntryUncheckedUpdateManyWithoutSubjectInput>
   }
 
+  export type ConversationUpsertWithWhereUniqueWithoutSubjectInput = {
+    where: ConversationWhereUniqueInput
+    update: XOR<ConversationUpdateWithoutSubjectInput, ConversationUncheckedUpdateWithoutSubjectInput>
+    create: XOR<ConversationCreateWithoutSubjectInput, ConversationUncheckedCreateWithoutSubjectInput>
+  }
+
+  export type ConversationUpdateWithWhereUniqueWithoutSubjectInput = {
+    where: ConversationWhereUniqueInput
+    data: XOR<ConversationUpdateWithoutSubjectInput, ConversationUncheckedUpdateWithoutSubjectInput>
+  }
+
+  export type ConversationUpdateManyWithWhereWithoutSubjectInput = {
+    where: ConversationScalarWhereInput
+    data: XOR<ConversationUpdateManyMutationInput, ConversationUncheckedUpdateManyWithoutSubjectInput>
+  }
+
   export type TeacherCreateWithoutTeacherSubjectsInput = {
     id?: string
     department?: string | null
@@ -54116,6 +55341,7 @@ export namespace Prisma {
     announcements?: AnnouncementCreateNestedManyWithoutAuthorInput
     assignments?: AssignmentCreateNestedManyWithoutTeacherInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutTeacherInput
+    Conversation?: ConversationCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherUncheckedCreateWithoutTeacherSubjectsInput = {
@@ -54130,6 +55356,7 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutTeacherInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutTeacherInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherCreateOrConnectWithoutTeacherSubjectsInput = {
@@ -54151,6 +55378,7 @@ export namespace Prisma {
     exams?: ExamCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutSubjectInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutSubjectInput
+    Conversation?: ConversationCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectUncheckedCreateWithoutTeacherSubjectsInput = {
@@ -54167,6 +55395,7 @@ export namespace Prisma {
     exams?: ExamUncheckedCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutSubjectInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSubjectInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectCreateOrConnectWithoutTeacherSubjectsInput = {
@@ -54183,6 +55412,7 @@ export namespace Prisma {
     classSessions?: ClassSessionCreateNestedManyWithoutSemesterRelInput
     students?: StudentCreateNestedManyWithoutSemesterInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutSemesterInput
+    Conversation?: ConversationCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutTeacherSubjectsInput = {
@@ -54194,6 +55424,7 @@ export namespace Prisma {
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSemesterRelInput
     students?: StudentUncheckedCreateNestedManyWithoutSemesterInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSemesterInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutTeacherSubjectsInput = {
@@ -54209,6 +55440,7 @@ export namespace Prisma {
     classSessions?: ClassSessionCreateNestedManyWithoutSectionRelInput
     students?: StudentCreateNestedManyWithoutSectionInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutSectionInput
+    Conversation?: ConversationCreateNestedManyWithoutSectionInput
   }
 
   export type SectionUncheckedCreateWithoutTeacherSubjectsInput = {
@@ -54219,6 +55451,7 @@ export namespace Prisma {
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSectionRelInput
     students?: StudentUncheckedCreateNestedManyWithoutSectionInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSectionInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSectionInput
   }
 
   export type SectionCreateOrConnectWithoutTeacherSubjectsInput = {
@@ -54249,6 +55482,7 @@ export namespace Prisma {
     announcements?: AnnouncementUpdateManyWithoutAuthorNestedInput
     assignments?: AssignmentUpdateManyWithoutTeacherNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutTeacherNestedInput
+    Conversation?: ConversationUpdateManyWithoutTeacherNestedInput
   }
 
   export type TeacherUncheckedUpdateWithoutTeacherSubjectsInput = {
@@ -54263,6 +55497,7 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutTeacherNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutTeacherNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutTeacherNestedInput
   }
 
   export type SubjectUpsertWithoutTeacherSubjectsInput = {
@@ -54290,6 +55525,7 @@ export namespace Prisma {
     exams?: ExamUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUpdateManyWithoutSubjectNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutSubjectNestedInput
+    Conversation?: ConversationUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectUncheckedUpdateWithoutTeacherSubjectsInput = {
@@ -54306,6 +55542,7 @@ export namespace Prisma {
     exams?: ExamUncheckedUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutSubjectNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSubjectNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSubjectNestedInput
   }
 
   export type SemesterUpsertWithoutTeacherSubjectsInput = {
@@ -54328,6 +55565,7 @@ export namespace Prisma {
     classSessions?: ClassSessionUpdateManyWithoutSemesterRelNestedInput
     students?: StudentUpdateManyWithoutSemesterNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutSemesterNestedInput
+    Conversation?: ConversationUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutTeacherSubjectsInput = {
@@ -54339,6 +55577,7 @@ export namespace Prisma {
     classSessions?: ClassSessionUncheckedUpdateManyWithoutSemesterRelNestedInput
     students?: StudentUncheckedUpdateManyWithoutSemesterNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSemesterNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type SectionUpsertWithoutTeacherSubjectsInput = {
@@ -54360,6 +55599,7 @@ export namespace Prisma {
     classSessions?: ClassSessionUpdateManyWithoutSectionRelNestedInput
     students?: StudentUpdateManyWithoutSectionNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutSectionNestedInput
+    Conversation?: ConversationUpdateManyWithoutSectionNestedInput
   }
 
   export type SectionUncheckedUpdateWithoutTeacherSubjectsInput = {
@@ -54370,6 +55610,7 @@ export namespace Prisma {
     classSessions?: ClassSessionUncheckedUpdateManyWithoutSectionRelNestedInput
     students?: StudentUncheckedUpdateManyWithoutSectionNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSectionNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSectionNestedInput
   }
 
   export type UserCreateWithoutCampusInput = {
@@ -54507,6 +55748,7 @@ export namespace Prisma {
     classSessions?: ClassSessionCreateNestedManyWithoutSemesterRelInput
     students?: StudentCreateNestedManyWithoutSemesterInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutSemesterInput
+    Conversation?: ConversationCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutCampusInput = {
@@ -54518,6 +55760,7 @@ export namespace Prisma {
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSemesterRelInput
     students?: StudentUncheckedCreateNestedManyWithoutSemesterInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSemesterInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutCampusInput = {
@@ -54538,6 +55781,7 @@ export namespace Prisma {
     classSessions?: ClassSessionCreateNestedManyWithoutSectionRelInput
     students?: StudentCreateNestedManyWithoutSectionInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutSectionInput
+    Conversation?: ConversationCreateNestedManyWithoutSectionInput
   }
 
   export type SectionUncheckedCreateWithoutCampusInput = {
@@ -54548,6 +55792,7 @@ export namespace Prisma {
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSectionRelInput
     students?: StudentUncheckedCreateNestedManyWithoutSectionInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSectionInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSectionInput
   }
 
   export type SectionCreateOrConnectWithoutCampusInput = {
@@ -54574,6 +55819,7 @@ export namespace Prisma {
     exams?: ExamCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutSubjectInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutSubjectInput
+    Conversation?: ConversationCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectUncheckedCreateWithoutCampusInput = {
@@ -54590,6 +55836,7 @@ export namespace Prisma {
     exams?: ExamUncheckedCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutSubjectInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSubjectInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectCreateOrConnectWithoutCampusInput = {
@@ -54868,6 +56115,7 @@ export namespace Prisma {
     exams?: ExamCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutSubjectInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutSubjectInput
+    Conversation?: ConversationCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectUncheckedCreateWithoutClassSessionsInput = {
@@ -54884,6 +56132,7 @@ export namespace Prisma {
     exams?: ExamUncheckedCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutSubjectInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSubjectInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectCreateOrConnectWithoutClassSessionsInput = {
@@ -54946,6 +56195,7 @@ export namespace Prisma {
     announcements?: AnnouncementCreateNestedManyWithoutAuthorInput
     assignments?: AssignmentCreateNestedManyWithoutTeacherInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutTeacherInput
+    Conversation?: ConversationCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherUncheckedCreateWithoutClassSessionsInput = {
@@ -54960,6 +56210,7 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutTeacherInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutTeacherInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherCreateOrConnectWithoutClassSessionsInput = {
@@ -54976,6 +56227,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutSemesterInput
     students?: StudentCreateNestedManyWithoutSemesterInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutSemesterInput
+    Conversation?: ConversationCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutClassSessionsInput = {
@@ -54987,6 +56239,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutSemesterInput
     students?: StudentUncheckedCreateNestedManyWithoutSemesterInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSemesterInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutClassSessionsInput = {
@@ -55002,6 +56255,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutSectionInput
     students?: StudentCreateNestedManyWithoutSectionInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutSectionInput
+    Conversation?: ConversationCreateNestedManyWithoutSectionInput
   }
 
   export type SectionUncheckedCreateWithoutClassSessionsInput = {
@@ -55012,6 +56266,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutSectionInput
     students?: StudentUncheckedCreateNestedManyWithoutSectionInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSectionInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSectionInput
   }
 
   export type SectionCreateOrConnectWithoutClassSessionsInput = {
@@ -55078,6 +56333,7 @@ export namespace Prisma {
     exams?: ExamUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUpdateManyWithoutSubjectNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutSubjectNestedInput
+    Conversation?: ConversationUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectUncheckedUpdateWithoutClassSessionsInput = {
@@ -55094,6 +56350,7 @@ export namespace Prisma {
     exams?: ExamUncheckedUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutSubjectNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSubjectNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSubjectNestedInput
   }
 
   export type CampusUpsertWithoutClassSessionsInput = {
@@ -55168,6 +56425,7 @@ export namespace Prisma {
     announcements?: AnnouncementUpdateManyWithoutAuthorNestedInput
     assignments?: AssignmentUpdateManyWithoutTeacherNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutTeacherNestedInput
+    Conversation?: ConversationUpdateManyWithoutTeacherNestedInput
   }
 
   export type TeacherUncheckedUpdateWithoutClassSessionsInput = {
@@ -55182,6 +56440,7 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutTeacherNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutTeacherNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutTeacherNestedInput
   }
 
   export type SemesterUpsertWithoutClassSessionsInput = {
@@ -55204,6 +56463,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUpdateManyWithoutSemesterNestedInput
     students?: StudentUpdateManyWithoutSemesterNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutSemesterNestedInput
+    Conversation?: ConversationUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutClassSessionsInput = {
@@ -55215,6 +56475,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutSemesterNestedInput
     students?: StudentUncheckedUpdateManyWithoutSemesterNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSemesterNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type SectionUpsertWithoutClassSessionsInput = {
@@ -55236,6 +56497,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUpdateManyWithoutSectionNestedInput
     students?: StudentUpdateManyWithoutSectionNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutSectionNestedInput
+    Conversation?: ConversationUpdateManyWithoutSectionNestedInput
   }
 
   export type SectionUncheckedUpdateWithoutClassSessionsInput = {
@@ -55246,6 +56508,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutSectionNestedInput
     students?: StudentUncheckedUpdateManyWithoutSectionNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSectionNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSectionNestedInput
   }
 
   export type AttendanceUpsertWithWhereUniqueWithoutClassSessionInput = {
@@ -55319,6 +56582,7 @@ export namespace Prisma {
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutTeacherInput
     announcements?: AnnouncementCreateNestedManyWithoutAuthorInput
     assignments?: AssignmentCreateNestedManyWithoutTeacherInput
+    Conversation?: ConversationCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherUncheckedCreateWithoutTimetableEntryInput = {
@@ -55333,6 +56597,7 @@ export namespace Prisma {
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutTeacherInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutTeacherInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherCreateOrConnectWithoutTimetableEntryInput = {
@@ -55354,6 +56619,7 @@ export namespace Prisma {
     resources?: ResourceCreateNestedManyWithoutSubjectInput
     exams?: ExamCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutSubjectInput
+    Conversation?: ConversationCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectUncheckedCreateWithoutTimetableEntryInput = {
@@ -55370,6 +56636,7 @@ export namespace Prisma {
     resources?: ResourceUncheckedCreateNestedManyWithoutSubjectInput
     exams?: ExamUncheckedCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutSubjectInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectCreateOrConnectWithoutTimetableEntryInput = {
@@ -55386,6 +56653,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutSemesterInput
     classSessions?: ClassSessionCreateNestedManyWithoutSemesterRelInput
     students?: StudentCreateNestedManyWithoutSemesterInput
+    Conversation?: ConversationCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutTimetableEntryInput = {
@@ -55397,6 +56665,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutSemesterInput
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSemesterRelInput
     students?: StudentUncheckedCreateNestedManyWithoutSemesterInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutTimetableEntryInput = {
@@ -55412,6 +56681,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectCreateNestedManyWithoutSectionInput
     classSessions?: ClassSessionCreateNestedManyWithoutSectionRelInput
     students?: StudentCreateNestedManyWithoutSectionInput
+    Conversation?: ConversationCreateNestedManyWithoutSectionInput
   }
 
   export type SectionUncheckedCreateWithoutTimetableEntryInput = {
@@ -55422,6 +56692,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutSectionInput
     classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSectionRelInput
     students?: StudentUncheckedCreateNestedManyWithoutSectionInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSectionInput
   }
 
   export type SectionCreateOrConnectWithoutTimetableEntryInput = {
@@ -55501,6 +56772,7 @@ export namespace Prisma {
     attendanceTokens?: AttendanceTokenUpdateManyWithoutTeacherNestedInput
     announcements?: AnnouncementUpdateManyWithoutAuthorNestedInput
     assignments?: AssignmentUpdateManyWithoutTeacherNestedInput
+    Conversation?: ConversationUpdateManyWithoutTeacherNestedInput
   }
 
   export type TeacherUncheckedUpdateWithoutTimetableEntryInput = {
@@ -55515,6 +56787,7 @@ export namespace Prisma {
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutTeacherNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutTeacherNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutTeacherNestedInput
   }
 
   export type SubjectUpsertWithoutTimetableEntryInput = {
@@ -55542,6 +56815,7 @@ export namespace Prisma {
     resources?: ResourceUpdateManyWithoutSubjectNestedInput
     exams?: ExamUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUpdateManyWithoutSubjectNestedInput
+    Conversation?: ConversationUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectUncheckedUpdateWithoutTimetableEntryInput = {
@@ -55558,6 +56832,7 @@ export namespace Prisma {
     resources?: ResourceUncheckedUpdateManyWithoutSubjectNestedInput
     exams?: ExamUncheckedUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutSubjectNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSubjectNestedInput
   }
 
   export type SemesterUpsertWithoutTimetableEntryInput = {
@@ -55580,6 +56855,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUpdateManyWithoutSemesterNestedInput
     classSessions?: ClassSessionUpdateManyWithoutSemesterRelNestedInput
     students?: StudentUpdateManyWithoutSemesterNestedInput
+    Conversation?: ConversationUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutTimetableEntryInput = {
@@ -55591,6 +56867,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutSemesterNestedInput
     classSessions?: ClassSessionUncheckedUpdateManyWithoutSemesterRelNestedInput
     students?: StudentUncheckedUpdateManyWithoutSemesterNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type SectionUpsertWithoutTimetableEntryInput = {
@@ -55612,6 +56889,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUpdateManyWithoutSectionNestedInput
     classSessions?: ClassSessionUpdateManyWithoutSectionRelNestedInput
     students?: StudentUpdateManyWithoutSectionNestedInput
+    Conversation?: ConversationUpdateManyWithoutSectionNestedInput
   }
 
   export type SectionUncheckedUpdateWithoutTimetableEntryInput = {
@@ -55622,6 +56900,7 @@ export namespace Prisma {
     teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutSectionNestedInput
     classSessions?: ClassSessionUncheckedUpdateManyWithoutSectionRelNestedInput
     students?: StudentUncheckedUpdateManyWithoutSectionNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSectionNestedInput
   }
 
   export type ClassSessionCreateWithoutAttendancesInput = {
@@ -55981,6 +57260,7 @@ export namespace Prisma {
     resources?: ResourceCreateNestedManyWithoutSubjectInput
     exams?: ExamCreateNestedManyWithoutSubjectInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutSubjectInput
+    Conversation?: ConversationCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectUncheckedCreateWithoutAttendanceTokensInput = {
@@ -55997,6 +57277,7 @@ export namespace Prisma {
     resources?: ResourceUncheckedCreateNestedManyWithoutSubjectInput
     exams?: ExamUncheckedCreateNestedManyWithoutSubjectInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSubjectInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectCreateOrConnectWithoutAttendanceTokensInput = {
@@ -56016,6 +57297,7 @@ export namespace Prisma {
     announcements?: AnnouncementCreateNestedManyWithoutAuthorInput
     assignments?: AssignmentCreateNestedManyWithoutTeacherInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutTeacherInput
+    Conversation?: ConversationCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherUncheckedCreateWithoutAttendanceTokensInput = {
@@ -56030,6 +57312,7 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutTeacherInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutTeacherInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherCreateOrConnectWithoutAttendanceTokensInput = {
@@ -56099,6 +57382,7 @@ export namespace Prisma {
     resources?: ResourceUpdateManyWithoutSubjectNestedInput
     exams?: ExamUpdateManyWithoutSubjectNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutSubjectNestedInput
+    Conversation?: ConversationUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectUncheckedUpdateWithoutAttendanceTokensInput = {
@@ -56115,6 +57399,7 @@ export namespace Prisma {
     resources?: ResourceUncheckedUpdateManyWithoutSubjectNestedInput
     exams?: ExamUncheckedUpdateManyWithoutSubjectNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSubjectNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSubjectNestedInput
   }
 
   export type TeacherUpsertWithoutAttendanceTokensInput = {
@@ -56140,6 +57425,7 @@ export namespace Prisma {
     announcements?: AnnouncementUpdateManyWithoutAuthorNestedInput
     assignments?: AssignmentUpdateManyWithoutTeacherNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutTeacherNestedInput
+    Conversation?: ConversationUpdateManyWithoutTeacherNestedInput
   }
 
   export type TeacherUncheckedUpdateWithoutAttendanceTokensInput = {
@@ -56154,6 +57440,7 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutTeacherNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutTeacherNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutTeacherNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -56402,6 +57689,7 @@ export namespace Prisma {
     exams?: ExamCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutSubjectInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutSubjectInput
+    Conversation?: ConversationCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectUncheckedCreateWithoutAssignmentsInput = {
@@ -56418,6 +57706,7 @@ export namespace Prisma {
     exams?: ExamUncheckedCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutSubjectInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSubjectInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectCreateOrConnectWithoutAssignmentsInput = {
@@ -56437,6 +57726,7 @@ export namespace Prisma {
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutTeacherInput
     announcements?: AnnouncementCreateNestedManyWithoutAuthorInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutTeacherInput
+    Conversation?: ConversationCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherUncheckedCreateWithoutAssignmentsInput = {
@@ -56451,6 +57741,7 @@ export namespace Prisma {
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutTeacherInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutTeacherInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherCreateOrConnectWithoutAssignmentsInput = {
@@ -56571,6 +57862,7 @@ export namespace Prisma {
     exams?: ExamUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUpdateManyWithoutSubjectNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutSubjectNestedInput
+    Conversation?: ConversationUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectUncheckedUpdateWithoutAssignmentsInput = {
@@ -56587,6 +57879,7 @@ export namespace Prisma {
     exams?: ExamUncheckedUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutSubjectNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSubjectNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSubjectNestedInput
   }
 
   export type TeacherUpsertWithoutAssignmentsInput = {
@@ -56612,6 +57905,7 @@ export namespace Prisma {
     attendanceTokens?: AttendanceTokenUpdateManyWithoutTeacherNestedInput
     announcements?: AnnouncementUpdateManyWithoutAuthorNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutTeacherNestedInput
+    Conversation?: ConversationUpdateManyWithoutTeacherNestedInput
   }
 
   export type TeacherUncheckedUpdateWithoutAssignmentsInput = {
@@ -56626,6 +57920,7 @@ export namespace Prisma {
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutTeacherNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutTeacherNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutTeacherNestedInput
   }
 
   export type ResourceUpsertWithWhereUniqueWithoutAssignmentInput = {
@@ -56816,6 +58111,7 @@ export namespace Prisma {
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutTeacherInput
     assignments?: AssignmentCreateNestedManyWithoutTeacherInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutTeacherInput
+    Conversation?: ConversationCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherUncheckedCreateWithoutAnnouncementsInput = {
@@ -56830,6 +58126,7 @@ export namespace Prisma {
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutTeacherInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutTeacherInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutTeacherInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherCreateOrConnectWithoutAnnouncementsInput = {
@@ -56971,6 +58268,7 @@ export namespace Prisma {
     attendanceTokens?: AttendanceTokenUpdateManyWithoutTeacherNestedInput
     assignments?: AssignmentUpdateManyWithoutTeacherNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutTeacherNestedInput
+    Conversation?: ConversationUpdateManyWithoutTeacherNestedInput
   }
 
   export type TeacherUncheckedUpdateWithoutAnnouncementsInput = {
@@ -56985,6 +58283,7 @@ export namespace Prisma {
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutTeacherNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutTeacherNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutTeacherNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutTeacherNestedInput
   }
 
   export type UserUpsertWithoutAnnouncementsInput = {
@@ -57090,6 +58389,7 @@ export namespace Prisma {
     exams?: ExamCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutSubjectInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutSubjectInput
+    Conversation?: ConversationCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectUncheckedCreateWithoutResourcesInput = {
@@ -57106,6 +58406,7 @@ export namespace Prisma {
     exams?: ExamUncheckedCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutSubjectInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSubjectInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectCreateOrConnectWithoutResourcesInput = {
@@ -57189,6 +58490,7 @@ export namespace Prisma {
     conversation: ConversationCreateNestedOneWithoutMessagesInput
     sender: UserCreateNestedOneWithoutChatMessagesSentInput
     encryptedKeys?: MessageKeyCreateNestedManyWithoutMessageInput
+    pinnedIn?: ConversationCreateNestedManyWithoutPinnedMessageInput
     resources?: ResourceCreateNestedManyWithoutMessageInput
   }
 
@@ -57200,6 +58502,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     encryptedKeys?: MessageKeyUncheckedCreateNestedManyWithoutMessageInput
+    pinnedIn?: ConversationUncheckedCreateNestedManyWithoutPinnedMessageInput
     resources?: ResourceUncheckedCreateNestedManyWithoutMessageInput
   }
 
@@ -57217,6 +58520,7 @@ export namespace Prisma {
     sender: UserCreateNestedOneWithoutChatMessagesSentInput
     attachments?: ResourceCreateNestedManyWithoutChatMessageInput
     encryptedKeys?: MessageKeyCreateNestedManyWithoutMessageInput
+    pinnedIn?: ConversationCreateNestedManyWithoutPinnedMessageInput
   }
 
   export type MessageUncheckedCreateWithoutResourcesInput = {
@@ -57228,6 +58532,7 @@ export namespace Prisma {
     createdAt?: Date | string
     attachments?: ResourceUncheckedCreateNestedManyWithoutChatMessageInput
     encryptedKeys?: MessageKeyUncheckedCreateNestedManyWithoutMessageInput
+    pinnedIn?: ConversationUncheckedCreateNestedManyWithoutPinnedMessageInput
   }
 
   export type MessageCreateOrConnectWithoutResourcesInput = {
@@ -57260,6 +58565,7 @@ export namespace Prisma {
     exams?: ExamUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUpdateManyWithoutSubjectNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutSubjectNestedInput
+    Conversation?: ConversationUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectUncheckedUpdateWithoutResourcesInput = {
@@ -57276,6 +58582,7 @@ export namespace Prisma {
     exams?: ExamUncheckedUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutSubjectNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSubjectNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSubjectNestedInput
   }
 
   export type AssignmentUpsertWithoutAttachmentsInput = {
@@ -57377,6 +58684,7 @@ export namespace Prisma {
     conversation?: ConversationUpdateOneRequiredWithoutMessagesNestedInput
     sender?: UserUpdateOneRequiredWithoutChatMessagesSentNestedInput
     encryptedKeys?: MessageKeyUpdateManyWithoutMessageNestedInput
+    pinnedIn?: ConversationUpdateManyWithoutPinnedMessageNestedInput
     resources?: ResourceUpdateManyWithoutMessageNestedInput
   }
 
@@ -57388,6 +58696,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     encryptedKeys?: MessageKeyUncheckedUpdateManyWithoutMessageNestedInput
+    pinnedIn?: ConversationUncheckedUpdateManyWithoutPinnedMessageNestedInput
     resources?: ResourceUncheckedUpdateManyWithoutMessageNestedInput
   }
 
@@ -57411,6 +58720,7 @@ export namespace Prisma {
     sender?: UserUpdateOneRequiredWithoutChatMessagesSentNestedInput
     attachments?: ResourceUpdateManyWithoutChatMessageNestedInput
     encryptedKeys?: MessageKeyUpdateManyWithoutMessageNestedInput
+    pinnedIn?: ConversationUpdateManyWithoutPinnedMessageNestedInput
   }
 
   export type MessageUncheckedUpdateWithoutResourcesInput = {
@@ -57422,6 +58732,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ResourceUncheckedUpdateManyWithoutChatMessageNestedInput
     encryptedKeys?: MessageKeyUncheckedUpdateManyWithoutMessageNestedInput
+    pinnedIn?: ConversationUncheckedUpdateManyWithoutPinnedMessageNestedInput
   }
 
   export type SubjectCreateWithoutExamsInput = {
@@ -57438,6 +58749,7 @@ export namespace Prisma {
     resources?: ResourceCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenCreateNestedManyWithoutSubjectInput
     TimetableEntry?: TimetableEntryCreateNestedManyWithoutSubjectInput
+    Conversation?: ConversationCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectUncheckedCreateWithoutExamsInput = {
@@ -57454,6 +58766,7 @@ export namespace Prisma {
     resources?: ResourceUncheckedCreateNestedManyWithoutSubjectInput
     attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutSubjectInput
     TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSubjectInput
+    Conversation?: ConversationUncheckedCreateNestedManyWithoutSubjectInput
   }
 
   export type SubjectCreateOrConnectWithoutExamsInput = {
@@ -57512,6 +58825,7 @@ export namespace Prisma {
     resources?: ResourceUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUpdateManyWithoutSubjectNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutSubjectNestedInput
+    Conversation?: ConversationUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectUncheckedUpdateWithoutExamsInput = {
@@ -57528,6 +58842,7 @@ export namespace Prisma {
     resources?: ResourceUncheckedUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutSubjectNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSubjectNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSubjectNestedInput
   }
 
   export type GradeUpsertWithWhereUniqueWithoutExamInput = {
@@ -58313,6 +59628,165 @@ export namespace Prisma {
     messageKeys?: MessageKeyUncheckedUpdateManyWithoutRecipientNestedInput
   }
 
+  export type MessageCreateWithoutPinnedInInput = {
+    id?: string
+    encryptedContent: string
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    conversation: ConversationCreateNestedOneWithoutMessagesInput
+    sender: UserCreateNestedOneWithoutChatMessagesSentInput
+    attachments?: ResourceCreateNestedManyWithoutChatMessageInput
+    encryptedKeys?: MessageKeyCreateNestedManyWithoutMessageInput
+    resources?: ResourceCreateNestedManyWithoutMessageInput
+  }
+
+  export type MessageUncheckedCreateWithoutPinnedInInput = {
+    id?: string
+    conversationId: string
+    senderId: string
+    encryptedContent: string
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    attachments?: ResourceUncheckedCreateNestedManyWithoutChatMessageInput
+    encryptedKeys?: MessageKeyUncheckedCreateNestedManyWithoutMessageInput
+    resources?: ResourceUncheckedCreateNestedManyWithoutMessageInput
+  }
+
+  export type MessageCreateOrConnectWithoutPinnedInInput = {
+    where: MessageWhereUniqueInput
+    create: XOR<MessageCreateWithoutPinnedInInput, MessageUncheckedCreateWithoutPinnedInInput>
+  }
+
+  export type SubjectCreateWithoutConversationInput = {
+    id?: string
+    name: string
+    code?: string | null
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campus: CampusCreateNestedOneWithoutSubjectsInput
+    teacherSubjects?: TeacherSubjectCreateNestedManyWithoutSubjectInput
+    classSessions?: ClassSessionCreateNestedManyWithoutSubjectRelInput
+    assignments?: AssignmentCreateNestedManyWithoutSubjectInput
+    resources?: ResourceCreateNestedManyWithoutSubjectInput
+    exams?: ExamCreateNestedManyWithoutSubjectInput
+    attendanceTokens?: AttendanceTokenCreateNestedManyWithoutSubjectInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSubjectInput
+  }
+
+  export type SubjectUncheckedCreateWithoutConversationInput = {
+    id?: string
+    name: string
+    code?: string | null
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campusId: string
+    teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutSubjectInput
+    classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSubjectRelInput
+    assignments?: AssignmentUncheckedCreateNestedManyWithoutSubjectInput
+    resources?: ResourceUncheckedCreateNestedManyWithoutSubjectInput
+    exams?: ExamUncheckedCreateNestedManyWithoutSubjectInput
+    attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutSubjectInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSubjectInput
+  }
+
+  export type SubjectCreateOrConnectWithoutConversationInput = {
+    where: SubjectWhereUniqueInput
+    create: XOR<SubjectCreateWithoutConversationInput, SubjectUncheckedCreateWithoutConversationInput>
+  }
+
+  export type SemesterCreateWithoutConversationInput = {
+    id?: string
+    name: string
+    number?: number | null
+    createdAt?: Date | string
+    campus: CampusCreateNestedOneWithoutSemestersInput
+    teacherSubjects?: TeacherSubjectCreateNestedManyWithoutSemesterInput
+    classSessions?: ClassSessionCreateNestedManyWithoutSemesterRelInput
+    students?: StudentCreateNestedManyWithoutSemesterInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSemesterInput
+  }
+
+  export type SemesterUncheckedCreateWithoutConversationInput = {
+    id?: string
+    name: string
+    number?: number | null
+    createdAt?: Date | string
+    campusId: string
+    teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutSemesterInput
+    classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSemesterRelInput
+    students?: StudentUncheckedCreateNestedManyWithoutSemesterInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSemesterInput
+  }
+
+  export type SemesterCreateOrConnectWithoutConversationInput = {
+    where: SemesterWhereUniqueInput
+    create: XOR<SemesterCreateWithoutConversationInput, SemesterUncheckedCreateWithoutConversationInput>
+  }
+
+  export type SectionCreateWithoutConversationInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    campus: CampusCreateNestedOneWithoutSectionsInput
+    teacherSubjects?: TeacherSubjectCreateNestedManyWithoutSectionInput
+    classSessions?: ClassSessionCreateNestedManyWithoutSectionRelInput
+    students?: StudentCreateNestedManyWithoutSectionInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutSectionInput
+  }
+
+  export type SectionUncheckedCreateWithoutConversationInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    campusId: string
+    teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutSectionInput
+    classSessions?: ClassSessionUncheckedCreateNestedManyWithoutSectionRelInput
+    students?: StudentUncheckedCreateNestedManyWithoutSectionInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutSectionInput
+  }
+
+  export type SectionCreateOrConnectWithoutConversationInput = {
+    where: SectionWhereUniqueInput
+    create: XOR<SectionCreateWithoutConversationInput, SectionUncheckedCreateWithoutConversationInput>
+  }
+
+  export type TeacherCreateWithoutConversationInput = {
+    id?: string
+    department?: string | null
+    designation?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutTeacherProfileInput
+    teacherSubjects?: TeacherSubjectCreateNestedManyWithoutTeacherInput
+    classSessions?: ClassSessionCreateNestedManyWithoutTeacherInput
+    attendanceTokens?: AttendanceTokenCreateNestedManyWithoutTeacherInput
+    announcements?: AnnouncementCreateNestedManyWithoutAuthorInput
+    assignments?: AssignmentCreateNestedManyWithoutTeacherInput
+    TimetableEntry?: TimetableEntryCreateNestedManyWithoutTeacherInput
+  }
+
+  export type TeacherUncheckedCreateWithoutConversationInput = {
+    id?: string
+    userId: string
+    department?: string | null
+    designation?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    teacherSubjects?: TeacherSubjectUncheckedCreateNestedManyWithoutTeacherInput
+    classSessions?: ClassSessionUncheckedCreateNestedManyWithoutTeacherInput
+    attendanceTokens?: AttendanceTokenUncheckedCreateNestedManyWithoutTeacherInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
+    assignments?: AssignmentUncheckedCreateNestedManyWithoutTeacherInput
+    TimetableEntry?: TimetableEntryUncheckedCreateNestedManyWithoutTeacherInput
+  }
+
+  export type TeacherCreateOrConnectWithoutConversationInput = {
+    where: TeacherWhereUniqueInput
+    create: XOR<TeacherCreateWithoutConversationInput, TeacherUncheckedCreateWithoutConversationInput>
+  }
+
   export type ConversationParticipantCreateWithoutConversationInput = {
     id?: string
     publicKey: string
@@ -58347,6 +59821,7 @@ export namespace Prisma {
     sender: UserCreateNestedOneWithoutChatMessagesSentInput
     attachments?: ResourceCreateNestedManyWithoutChatMessageInput
     encryptedKeys?: MessageKeyCreateNestedManyWithoutMessageInput
+    pinnedIn?: ConversationCreateNestedManyWithoutPinnedMessageInput
     resources?: ResourceCreateNestedManyWithoutMessageInput
   }
 
@@ -58358,6 +59833,7 @@ export namespace Prisma {
     createdAt?: Date | string
     attachments?: ResourceUncheckedCreateNestedManyWithoutChatMessageInput
     encryptedKeys?: MessageKeyUncheckedCreateNestedManyWithoutMessageInput
+    pinnedIn?: ConversationUncheckedCreateNestedManyWithoutPinnedMessageInput
     resources?: ResourceUncheckedCreateNestedManyWithoutMessageInput
   }
 
@@ -58369,6 +59845,195 @@ export namespace Prisma {
   export type MessageCreateManyConversationInputEnvelope = {
     data: MessageCreateManyConversationInput | MessageCreateManyConversationInput[]
     skipDuplicates?: boolean
+  }
+
+  export type MessageUpsertWithoutPinnedInInput = {
+    update: XOR<MessageUpdateWithoutPinnedInInput, MessageUncheckedUpdateWithoutPinnedInInput>
+    create: XOR<MessageCreateWithoutPinnedInInput, MessageUncheckedCreateWithoutPinnedInInput>
+    where?: MessageWhereInput
+  }
+
+  export type MessageUpdateToOneWithWhereWithoutPinnedInInput = {
+    where?: MessageWhereInput
+    data: XOR<MessageUpdateWithoutPinnedInInput, MessageUncheckedUpdateWithoutPinnedInInput>
+  }
+
+  export type MessageUpdateWithoutPinnedInInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    encryptedContent?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    conversation?: ConversationUpdateOneRequiredWithoutMessagesNestedInput
+    sender?: UserUpdateOneRequiredWithoutChatMessagesSentNestedInput
+    attachments?: ResourceUpdateManyWithoutChatMessageNestedInput
+    encryptedKeys?: MessageKeyUpdateManyWithoutMessageNestedInput
+    resources?: ResourceUpdateManyWithoutMessageNestedInput
+  }
+
+  export type MessageUncheckedUpdateWithoutPinnedInInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    conversationId?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
+    encryptedContent?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachments?: ResourceUncheckedUpdateManyWithoutChatMessageNestedInput
+    encryptedKeys?: MessageKeyUncheckedUpdateManyWithoutMessageNestedInput
+    resources?: ResourceUncheckedUpdateManyWithoutMessageNestedInput
+  }
+
+  export type SubjectUpsertWithoutConversationInput = {
+    update: XOR<SubjectUpdateWithoutConversationInput, SubjectUncheckedUpdateWithoutConversationInput>
+    create: XOR<SubjectCreateWithoutConversationInput, SubjectUncheckedCreateWithoutConversationInput>
+    where?: SubjectWhereInput
+  }
+
+  export type SubjectUpdateToOneWithWhereWithoutConversationInput = {
+    where?: SubjectWhereInput
+    data: XOR<SubjectUpdateWithoutConversationInput, SubjectUncheckedUpdateWithoutConversationInput>
+  }
+
+  export type SubjectUpdateWithoutConversationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campus?: CampusUpdateOneRequiredWithoutSubjectsNestedInput
+    teacherSubjects?: TeacherSubjectUpdateManyWithoutSubjectNestedInput
+    classSessions?: ClassSessionUpdateManyWithoutSubjectRelNestedInput
+    assignments?: AssignmentUpdateManyWithoutSubjectNestedInput
+    resources?: ResourceUpdateManyWithoutSubjectNestedInput
+    exams?: ExamUpdateManyWithoutSubjectNestedInput
+    attendanceTokens?: AttendanceTokenUpdateManyWithoutSubjectNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSubjectNestedInput
+  }
+
+  export type SubjectUncheckedUpdateWithoutConversationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campusId?: StringFieldUpdateOperationsInput | string
+    teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutSubjectNestedInput
+    classSessions?: ClassSessionUncheckedUpdateManyWithoutSubjectRelNestedInput
+    assignments?: AssignmentUncheckedUpdateManyWithoutSubjectNestedInput
+    resources?: ResourceUncheckedUpdateManyWithoutSubjectNestedInput
+    exams?: ExamUncheckedUpdateManyWithoutSubjectNestedInput
+    attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutSubjectNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSubjectNestedInput
+  }
+
+  export type SemesterUpsertWithoutConversationInput = {
+    update: XOR<SemesterUpdateWithoutConversationInput, SemesterUncheckedUpdateWithoutConversationInput>
+    create: XOR<SemesterCreateWithoutConversationInput, SemesterUncheckedCreateWithoutConversationInput>
+    where?: SemesterWhereInput
+  }
+
+  export type SemesterUpdateToOneWithWhereWithoutConversationInput = {
+    where?: SemesterWhereInput
+    data: XOR<SemesterUpdateWithoutConversationInput, SemesterUncheckedUpdateWithoutConversationInput>
+  }
+
+  export type SemesterUpdateWithoutConversationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    number?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campus?: CampusUpdateOneRequiredWithoutSemestersNestedInput
+    teacherSubjects?: TeacherSubjectUpdateManyWithoutSemesterNestedInput
+    classSessions?: ClassSessionUpdateManyWithoutSemesterRelNestedInput
+    students?: StudentUpdateManyWithoutSemesterNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSemesterNestedInput
+  }
+
+  export type SemesterUncheckedUpdateWithoutConversationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    number?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campusId?: StringFieldUpdateOperationsInput | string
+    teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutSemesterNestedInput
+    classSessions?: ClassSessionUncheckedUpdateManyWithoutSemesterRelNestedInput
+    students?: StudentUncheckedUpdateManyWithoutSemesterNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSemesterNestedInput
+  }
+
+  export type SectionUpsertWithoutConversationInput = {
+    update: XOR<SectionUpdateWithoutConversationInput, SectionUncheckedUpdateWithoutConversationInput>
+    create: XOR<SectionCreateWithoutConversationInput, SectionUncheckedCreateWithoutConversationInput>
+    where?: SectionWhereInput
+  }
+
+  export type SectionUpdateToOneWithWhereWithoutConversationInput = {
+    where?: SectionWhereInput
+    data: XOR<SectionUpdateWithoutConversationInput, SectionUncheckedUpdateWithoutConversationInput>
+  }
+
+  export type SectionUpdateWithoutConversationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campus?: CampusUpdateOneRequiredWithoutSectionsNestedInput
+    teacherSubjects?: TeacherSubjectUpdateManyWithoutSectionNestedInput
+    classSessions?: ClassSessionUpdateManyWithoutSectionRelNestedInput
+    students?: StudentUpdateManyWithoutSectionNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutSectionNestedInput
+  }
+
+  export type SectionUncheckedUpdateWithoutConversationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campusId?: StringFieldUpdateOperationsInput | string
+    teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutSectionNestedInput
+    classSessions?: ClassSessionUncheckedUpdateManyWithoutSectionRelNestedInput
+    students?: StudentUncheckedUpdateManyWithoutSectionNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSectionNestedInput
+  }
+
+  export type TeacherUpsertWithoutConversationInput = {
+    update: XOR<TeacherUpdateWithoutConversationInput, TeacherUncheckedUpdateWithoutConversationInput>
+    create: XOR<TeacherCreateWithoutConversationInput, TeacherUncheckedCreateWithoutConversationInput>
+    where?: TeacherWhereInput
+  }
+
+  export type TeacherUpdateToOneWithWhereWithoutConversationInput = {
+    where?: TeacherWhereInput
+    data: XOR<TeacherUpdateWithoutConversationInput, TeacherUncheckedUpdateWithoutConversationInput>
+  }
+
+  export type TeacherUpdateWithoutConversationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutTeacherProfileNestedInput
+    teacherSubjects?: TeacherSubjectUpdateManyWithoutTeacherNestedInput
+    classSessions?: ClassSessionUpdateManyWithoutTeacherNestedInput
+    attendanceTokens?: AttendanceTokenUpdateManyWithoutTeacherNestedInput
+    announcements?: AnnouncementUpdateManyWithoutAuthorNestedInput
+    assignments?: AssignmentUpdateManyWithoutTeacherNestedInput
+    TimetableEntry?: TimetableEntryUpdateManyWithoutTeacherNestedInput
+  }
+
+  export type TeacherUncheckedUpdateWithoutConversationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    teacherSubjects?: TeacherSubjectUncheckedUpdateManyWithoutTeacherNestedInput
+    classSessions?: ClassSessionUncheckedUpdateManyWithoutTeacherNestedInput
+    attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutTeacherNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
+    assignments?: AssignmentUncheckedUpdateManyWithoutTeacherNestedInput
+    TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutTeacherNestedInput
   }
 
   export type ConversationParticipantUpsertWithWhereUniqueWithoutConversationInput = {
@@ -58411,6 +60076,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isTeacherOnly?: boolean
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    pinnedMessage?: MessageCreateNestedOneWithoutPinnedInInput
+    subject?: SubjectCreateNestedOneWithoutConversationInput
+    semester?: SemesterCreateNestedOneWithoutConversationInput
+    section?: SectionCreateNestedOneWithoutConversationInput
+    teacher?: TeacherCreateNestedOneWithoutConversationInput
     messages?: MessageCreateNestedManyWithoutConversationInput
   }
 
@@ -58422,6 +60094,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isTeacherOnly?: boolean
+    pinnedMessageId?: string | null
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    subjectId?: string | null
+    semesterId?: string | null
+    sectionId?: string | null
+    teacherId?: string | null
     messages?: MessageUncheckedCreateNestedManyWithoutConversationInput
   }
 
@@ -58516,6 +60195,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    pinnedMessage?: MessageUpdateOneWithoutPinnedInNestedInput
+    subject?: SubjectUpdateOneWithoutConversationNestedInput
+    semester?: SemesterUpdateOneWithoutConversationNestedInput
+    section?: SectionUpdateOneWithoutConversationNestedInput
+    teacher?: TeacherUpdateOneWithoutConversationNestedInput
     messages?: MessageUpdateManyWithoutConversationNestedInput
   }
 
@@ -58527,6 +60213,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    pinnedMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    teacherId?: NullableStringFieldUpdateOperationsInput | string | null
     messages?: MessageUncheckedUpdateManyWithoutConversationNestedInput
   }
 
@@ -58611,6 +60304,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isTeacherOnly?: boolean
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    pinnedMessage?: MessageCreateNestedOneWithoutPinnedInInput
+    subject?: SubjectCreateNestedOneWithoutConversationInput
+    semester?: SemesterCreateNestedOneWithoutConversationInput
+    section?: SectionCreateNestedOneWithoutConversationInput
+    teacher?: TeacherCreateNestedOneWithoutConversationInput
     participants?: ConversationParticipantCreateNestedManyWithoutConversationInput
   }
 
@@ -58622,6 +60322,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isTeacherOnly?: boolean
+    pinnedMessageId?: string | null
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    subjectId?: string | null
+    semesterId?: string | null
+    sectionId?: string | null
+    teacherId?: string | null
     participants?: ConversationParticipantUncheckedCreateNestedManyWithoutConversationInput
   }
 
@@ -58763,6 +60470,52 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ConversationCreateWithoutPinnedMessageInput = {
+    id?: string
+    type: $Enums.ConversationType
+    name?: string | null
+    campusId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isTeacherOnly?: boolean
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    subject?: SubjectCreateNestedOneWithoutConversationInput
+    semester?: SemesterCreateNestedOneWithoutConversationInput
+    section?: SectionCreateNestedOneWithoutConversationInput
+    teacher?: TeacherCreateNestedOneWithoutConversationInput
+    participants?: ConversationParticipantCreateNestedManyWithoutConversationInput
+    messages?: MessageCreateNestedManyWithoutConversationInput
+  }
+
+  export type ConversationUncheckedCreateWithoutPinnedMessageInput = {
+    id?: string
+    type: $Enums.ConversationType
+    name?: string | null
+    campusId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isTeacherOnly?: boolean
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    subjectId?: string | null
+    semesterId?: string | null
+    sectionId?: string | null
+    teacherId?: string | null
+    participants?: ConversationParticipantUncheckedCreateNestedManyWithoutConversationInput
+    messages?: MessageUncheckedCreateNestedManyWithoutConversationInput
+  }
+
+  export type ConversationCreateOrConnectWithoutPinnedMessageInput = {
+    where: ConversationWhereUniqueInput
+    create: XOR<ConversationCreateWithoutPinnedMessageInput, ConversationUncheckedCreateWithoutPinnedMessageInput>
+  }
+
+  export type ConversationCreateManyPinnedMessageInputEnvelope = {
+    data: ConversationCreateManyPinnedMessageInput | ConversationCreateManyPinnedMessageInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ResourceCreateWithoutMessageInput = {
     id?: string
     title: string
@@ -58826,6 +60579,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    pinnedMessage?: MessageUpdateOneWithoutPinnedInNestedInput
+    subject?: SubjectUpdateOneWithoutConversationNestedInput
+    semester?: SemesterUpdateOneWithoutConversationNestedInput
+    section?: SectionUpdateOneWithoutConversationNestedInput
+    teacher?: TeacherUpdateOneWithoutConversationNestedInput
     participants?: ConversationParticipantUpdateManyWithoutConversationNestedInput
   }
 
@@ -58837,6 +60597,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    pinnedMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    teacherId?: NullableStringFieldUpdateOperationsInput | string | null
     participants?: ConversationParticipantUncheckedUpdateManyWithoutConversationNestedInput
   }
 
@@ -58945,6 +60712,22 @@ export namespace Prisma {
     data: XOR<MessageKeyUpdateManyMutationInput, MessageKeyUncheckedUpdateManyWithoutMessageInput>
   }
 
+  export type ConversationUpsertWithWhereUniqueWithoutPinnedMessageInput = {
+    where: ConversationWhereUniqueInput
+    update: XOR<ConversationUpdateWithoutPinnedMessageInput, ConversationUncheckedUpdateWithoutPinnedMessageInput>
+    create: XOR<ConversationCreateWithoutPinnedMessageInput, ConversationUncheckedCreateWithoutPinnedMessageInput>
+  }
+
+  export type ConversationUpdateWithWhereUniqueWithoutPinnedMessageInput = {
+    where: ConversationWhereUniqueInput
+    data: XOR<ConversationUpdateWithoutPinnedMessageInput, ConversationUncheckedUpdateWithoutPinnedMessageInput>
+  }
+
+  export type ConversationUpdateManyWithWhereWithoutPinnedMessageInput = {
+    where: ConversationScalarWhereInput
+    data: XOR<ConversationUpdateManyMutationInput, ConversationUncheckedUpdateManyWithoutPinnedMessageInput>
+  }
+
   export type ResourceUpsertWithWhereUniqueWithoutMessageInput = {
     where: ResourceWhereUniqueInput
     update: XOR<ResourceUpdateWithoutMessageInput, ResourceUncheckedUpdateWithoutMessageInput>
@@ -58969,6 +60752,7 @@ export namespace Prisma {
     conversation: ConversationCreateNestedOneWithoutMessagesInput
     sender: UserCreateNestedOneWithoutChatMessagesSentInput
     attachments?: ResourceCreateNestedManyWithoutChatMessageInput
+    pinnedIn?: ConversationCreateNestedManyWithoutPinnedMessageInput
     resources?: ResourceCreateNestedManyWithoutMessageInput
   }
 
@@ -58980,6 +60764,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     attachments?: ResourceUncheckedCreateNestedManyWithoutChatMessageInput
+    pinnedIn?: ConversationUncheckedCreateNestedManyWithoutPinnedMessageInput
     resources?: ResourceUncheckedCreateNestedManyWithoutMessageInput
   }
 
@@ -59074,6 +60859,7 @@ export namespace Prisma {
     conversation?: ConversationUpdateOneRequiredWithoutMessagesNestedInput
     sender?: UserUpdateOneRequiredWithoutChatMessagesSentNestedInput
     attachments?: ResourceUpdateManyWithoutChatMessageNestedInput
+    pinnedIn?: ConversationUpdateManyWithoutPinnedMessageNestedInput
     resources?: ResourceUpdateManyWithoutMessageNestedInput
   }
 
@@ -59085,6 +60871,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ResourceUncheckedUpdateManyWithoutChatMessageNestedInput
+    pinnedIn?: ConversationUncheckedUpdateManyWithoutPinnedMessageNestedInput
     resources?: ResourceUncheckedUpdateManyWithoutMessageNestedInput
   }
 
@@ -59498,6 +61285,7 @@ export namespace Prisma {
     conversation?: ConversationUpdateOneRequiredWithoutMessagesNestedInput
     attachments?: ResourceUpdateManyWithoutChatMessageNestedInput
     encryptedKeys?: MessageKeyUpdateManyWithoutMessageNestedInput
+    pinnedIn?: ConversationUpdateManyWithoutPinnedMessageNestedInput
     resources?: ResourceUpdateManyWithoutMessageNestedInput
   }
 
@@ -59509,6 +61297,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ResourceUncheckedUpdateManyWithoutChatMessageNestedInput
     encryptedKeys?: MessageKeyUncheckedUpdateManyWithoutMessageNestedInput
+    pinnedIn?: ConversationUncheckedUpdateManyWithoutPinnedMessageNestedInput
     resources?: ResourceUncheckedUpdateManyWithoutMessageNestedInput
   }
 
@@ -59615,6 +61404,22 @@ export namespace Prisma {
     subjectId: string
     semesterId: string
     sectionId: string
+  }
+
+  export type ConversationCreateManyTeacherInput = {
+    id?: string
+    type: $Enums.ConversationType
+    name?: string | null
+    campusId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isTeacherOnly?: boolean
+    pinnedMessageId?: string | null
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    subjectId?: string | null
+    semesterId?: string | null
+    sectionId?: string | null
   }
 
   export type TeacherSubjectUpdateWithoutTeacherInput = {
@@ -59860,6 +61665,58 @@ export namespace Prisma {
     subjectId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
     sectionId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ConversationUpdateWithoutTeacherInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumConversationTypeFieldUpdateOperationsInput | $Enums.ConversationType
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    pinnedMessage?: MessageUpdateOneWithoutPinnedInNestedInput
+    subject?: SubjectUpdateOneWithoutConversationNestedInput
+    semester?: SemesterUpdateOneWithoutConversationNestedInput
+    section?: SectionUpdateOneWithoutConversationNestedInput
+    participants?: ConversationParticipantUpdateManyWithoutConversationNestedInput
+    messages?: MessageUpdateManyWithoutConversationNestedInput
+  }
+
+  export type ConversationUncheckedUpdateWithoutTeacherInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumConversationTypeFieldUpdateOperationsInput | $Enums.ConversationType
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    pinnedMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    participants?: ConversationParticipantUncheckedUpdateManyWithoutConversationNestedInput
+    messages?: MessageUncheckedUpdateManyWithoutConversationNestedInput
+  }
+
+  export type ConversationUncheckedUpdateManyWithoutTeacherInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumConversationTypeFieldUpdateOperationsInput | $Enums.ConversationType
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    pinnedMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AttendanceCreateManyStudentInput = {
@@ -60111,6 +61968,22 @@ export namespace Prisma {
     sectionId: string
   }
 
+  export type ConversationCreateManySemesterInput = {
+    id?: string
+    type: $Enums.ConversationType
+    name?: string | null
+    campusId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isTeacherOnly?: boolean
+    pinnedMessageId?: string | null
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    subjectId?: string | null
+    sectionId?: string | null
+    teacherId?: string | null
+  }
+
   export type TeacherSubjectUpdateWithoutSemesterInput = {
     id?: StringFieldUpdateOperationsInput | string
     teacher?: TeacherUpdateOneRequiredWithoutTeacherSubjectsNestedInput
@@ -60268,6 +62141,58 @@ export namespace Prisma {
     sectionId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type ConversationUpdateWithoutSemesterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumConversationTypeFieldUpdateOperationsInput | $Enums.ConversationType
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    pinnedMessage?: MessageUpdateOneWithoutPinnedInNestedInput
+    subject?: SubjectUpdateOneWithoutConversationNestedInput
+    section?: SectionUpdateOneWithoutConversationNestedInput
+    teacher?: TeacherUpdateOneWithoutConversationNestedInput
+    participants?: ConversationParticipantUpdateManyWithoutConversationNestedInput
+    messages?: MessageUpdateManyWithoutConversationNestedInput
+  }
+
+  export type ConversationUncheckedUpdateWithoutSemesterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumConversationTypeFieldUpdateOperationsInput | $Enums.ConversationType
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    pinnedMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    teacherId?: NullableStringFieldUpdateOperationsInput | string | null
+    participants?: ConversationParticipantUncheckedUpdateManyWithoutConversationNestedInput
+    messages?: MessageUncheckedUpdateManyWithoutConversationNestedInput
+  }
+
+  export type ConversationUncheckedUpdateManyWithoutSemesterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumConversationTypeFieldUpdateOperationsInput | $Enums.ConversationType
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    pinnedMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    teacherId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type TeacherSubjectCreateManySectionInput = {
     id?: string
     teacherId: string
@@ -60315,6 +62240,22 @@ export namespace Prisma {
     teacherId: string
     subjectId: string
     semesterId: string
+  }
+
+  export type ConversationCreateManySectionInput = {
+    id?: string
+    type: $Enums.ConversationType
+    name?: string | null
+    campusId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isTeacherOnly?: boolean
+    pinnedMessageId?: string | null
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    subjectId?: string | null
+    semesterId?: string | null
+    teacherId?: string | null
   }
 
   export type TeacherSubjectUpdateWithoutSectionInput = {
@@ -60474,6 +62415,58 @@ export namespace Prisma {
     semesterId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type ConversationUpdateWithoutSectionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumConversationTypeFieldUpdateOperationsInput | $Enums.ConversationType
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    pinnedMessage?: MessageUpdateOneWithoutPinnedInNestedInput
+    subject?: SubjectUpdateOneWithoutConversationNestedInput
+    semester?: SemesterUpdateOneWithoutConversationNestedInput
+    teacher?: TeacherUpdateOneWithoutConversationNestedInput
+    participants?: ConversationParticipantUpdateManyWithoutConversationNestedInput
+    messages?: MessageUpdateManyWithoutConversationNestedInput
+  }
+
+  export type ConversationUncheckedUpdateWithoutSectionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumConversationTypeFieldUpdateOperationsInput | $Enums.ConversationType
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    pinnedMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    teacherId?: NullableStringFieldUpdateOperationsInput | string | null
+    participants?: ConversationParticipantUncheckedUpdateManyWithoutConversationNestedInput
+    messages?: MessageUncheckedUpdateManyWithoutConversationNestedInput
+  }
+
+  export type ConversationUncheckedUpdateManyWithoutSectionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumConversationTypeFieldUpdateOperationsInput | $Enums.ConversationType
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    pinnedMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    teacherId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type TeacherSubjectCreateManySubjectInput = {
     id?: string
     teacherId: string
@@ -60564,6 +62557,22 @@ export namespace Prisma {
     teacherId: string
     semesterId: string
     sectionId: string
+  }
+
+  export type ConversationCreateManySubjectInput = {
+    id?: string
+    type: $Enums.ConversationType
+    name?: string | null
+    campusId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isTeacherOnly?: boolean
+    pinnedMessageId?: string | null
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    semesterId?: string | null
+    sectionId?: string | null
+    teacherId?: string | null
   }
 
   export type TeacherSubjectUpdateWithoutSubjectInput = {
@@ -60850,6 +62859,58 @@ export namespace Prisma {
     sectionId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type ConversationUpdateWithoutSubjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumConversationTypeFieldUpdateOperationsInput | $Enums.ConversationType
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    pinnedMessage?: MessageUpdateOneWithoutPinnedInNestedInput
+    semester?: SemesterUpdateOneWithoutConversationNestedInput
+    section?: SectionUpdateOneWithoutConversationNestedInput
+    teacher?: TeacherUpdateOneWithoutConversationNestedInput
+    participants?: ConversationParticipantUpdateManyWithoutConversationNestedInput
+    messages?: MessageUpdateManyWithoutConversationNestedInput
+  }
+
+  export type ConversationUncheckedUpdateWithoutSubjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumConversationTypeFieldUpdateOperationsInput | $Enums.ConversationType
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    pinnedMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    teacherId?: NullableStringFieldUpdateOperationsInput | string | null
+    participants?: ConversationParticipantUncheckedUpdateManyWithoutConversationNestedInput
+    messages?: MessageUncheckedUpdateManyWithoutConversationNestedInput
+  }
+
+  export type ConversationUncheckedUpdateManyWithoutSubjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumConversationTypeFieldUpdateOperationsInput | $Enums.ConversationType
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    pinnedMessageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    teacherId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type UserCreateManyCampusInput = {
     id?: string
     name: string
@@ -61089,6 +63150,7 @@ export namespace Prisma {
     classSessions?: ClassSessionUpdateManyWithoutSemesterRelNestedInput
     students?: StudentUpdateManyWithoutSemesterNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutSemesterNestedInput
+    Conversation?: ConversationUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutCampusInput = {
@@ -61100,6 +63162,7 @@ export namespace Prisma {
     classSessions?: ClassSessionUncheckedUpdateManyWithoutSemesterRelNestedInput
     students?: StudentUncheckedUpdateManyWithoutSemesterNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSemesterNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateManyWithoutCampusInput = {
@@ -61117,6 +63180,7 @@ export namespace Prisma {
     classSessions?: ClassSessionUpdateManyWithoutSectionRelNestedInput
     students?: StudentUpdateManyWithoutSectionNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutSectionNestedInput
+    Conversation?: ConversationUpdateManyWithoutSectionNestedInput
   }
 
   export type SectionUncheckedUpdateWithoutCampusInput = {
@@ -61127,6 +63191,7 @@ export namespace Prisma {
     classSessions?: ClassSessionUncheckedUpdateManyWithoutSectionRelNestedInput
     students?: StudentUncheckedUpdateManyWithoutSectionNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSectionNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSectionNestedInput
   }
 
   export type SectionUncheckedUpdateManyWithoutCampusInput = {
@@ -61149,6 +63214,7 @@ export namespace Prisma {
     exams?: ExamUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUpdateManyWithoutSubjectNestedInput
     TimetableEntry?: TimetableEntryUpdateManyWithoutSubjectNestedInput
+    Conversation?: ConversationUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectUncheckedUpdateWithoutCampusInput = {
@@ -61165,6 +63231,7 @@ export namespace Prisma {
     exams?: ExamUncheckedUpdateManyWithoutSubjectNestedInput
     attendanceTokens?: AttendanceTokenUncheckedUpdateManyWithoutSubjectNestedInput
     TimetableEntry?: TimetableEntryUncheckedUpdateManyWithoutSubjectNestedInput
+    Conversation?: ConversationUncheckedUpdateManyWithoutSubjectNestedInput
   }
 
   export type SubjectUncheckedUpdateManyWithoutCampusInput = {
@@ -61661,6 +63728,7 @@ export namespace Prisma {
     sender?: UserUpdateOneRequiredWithoutChatMessagesSentNestedInput
     attachments?: ResourceUpdateManyWithoutChatMessageNestedInput
     encryptedKeys?: MessageKeyUpdateManyWithoutMessageNestedInput
+    pinnedIn?: ConversationUpdateManyWithoutPinnedMessageNestedInput
     resources?: ResourceUpdateManyWithoutMessageNestedInput
   }
 
@@ -61672,6 +63740,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ResourceUncheckedUpdateManyWithoutChatMessageNestedInput
     encryptedKeys?: MessageKeyUncheckedUpdateManyWithoutMessageNestedInput
+    pinnedIn?: ConversationUncheckedUpdateManyWithoutPinnedMessageNestedInput
     resources?: ResourceUncheckedUpdateManyWithoutMessageNestedInput
   }
 
@@ -61704,6 +63773,22 @@ export namespace Prisma {
     id?: string
     recipientId: string
     encryptedKey: string
+  }
+
+  export type ConversationCreateManyPinnedMessageInput = {
+    id?: string
+    type: $Enums.ConversationType
+    name?: string | null
+    campusId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isTeacherOnly?: boolean
+    isSystemGenerated?: boolean
+    systemType?: $Enums.ChannelType | null
+    subjectId?: string | null
+    semesterId?: string | null
+    sectionId?: string | null
+    teacherId?: string | null
   }
 
   export type ResourceCreateManyMessageInput = {
@@ -61790,6 +63875,58 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     recipientId?: StringFieldUpdateOperationsInput | string
     encryptedKey?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ConversationUpdateWithoutPinnedMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumConversationTypeFieldUpdateOperationsInput | $Enums.ConversationType
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    subject?: SubjectUpdateOneWithoutConversationNestedInput
+    semester?: SemesterUpdateOneWithoutConversationNestedInput
+    section?: SectionUpdateOneWithoutConversationNestedInput
+    teacher?: TeacherUpdateOneWithoutConversationNestedInput
+    participants?: ConversationParticipantUpdateManyWithoutConversationNestedInput
+    messages?: MessageUpdateManyWithoutConversationNestedInput
+  }
+
+  export type ConversationUncheckedUpdateWithoutPinnedMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumConversationTypeFieldUpdateOperationsInput | $Enums.ConversationType
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    teacherId?: NullableStringFieldUpdateOperationsInput | string | null
+    participants?: ConversationParticipantUncheckedUpdateManyWithoutConversationNestedInput
+    messages?: MessageUncheckedUpdateManyWithoutConversationNestedInput
+  }
+
+  export type ConversationUncheckedUpdateManyWithoutPinnedMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumConversationTypeFieldUpdateOperationsInput | $Enums.ConversationType
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    campusId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isTeacherOnly?: BoolFieldUpdateOperationsInput | boolean
+    isSystemGenerated?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableEnumChannelTypeFieldUpdateOperationsInput | $Enums.ChannelType | null
+    subjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    teacherId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ResourceUpdateWithoutMessageInput = {
