@@ -451,6 +451,7 @@ exports.Prisma.ConversationParticipantScalarFieldEnum = {
 
 exports.Prisma.MessageScalarFieldEnum = {
   id: 'id',
+  replyToId: 'replyToId',
   conversationId: 'conversationId',
   senderId: 'senderId',
   encryptedContent: 'encryptedContent',

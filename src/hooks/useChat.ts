@@ -20,6 +20,7 @@ export function useChat({
   const [chatError, setChatError] = useState<string | null>(null);
   const [readByUsers, setReadByUsers] = useState<Record<string, string>>({});
   const [pinnedMessage, setPinnedMessage] = useState<Message | null>(null);
+  const [replyingTo, setReplyingTo] = useState<Message | null>(null);
 
   const participantNamesRef = useRef<Record<string, string>>({});
 
@@ -39,7 +40,32 @@ export function useChat({
           encryptedKey,
           privateKey,
         );
-        return { ...msg, decryptedContent };
+        //? decrypt replied message too....
+        let decryptedReply = null;
+        if (msg.replyTo) {
+          try {
+            const replyKey = msg.replyTo.encryptedKeys?.find(
+              (k: any) => k.recipientId === userId,
+            );
+            if (replyKey?.encryptedKey) {
+              const replyContent = await decryptMessage(
+                msg.replyTo.encryptedContent,
+                replyKey.encryptedKey,
+                privateKey,
+              );
+              decryptedReply = {
+                ...msg.replyTo,
+                decryptedContent: replyContent,
+              };
+            }
+          } catch (error) {
+            decryptedReply = {
+              ...msg.replyTo,
+              decryptedContent: "[could not decrypt]",
+            };
+          }
+        }
+        return { ...msg, decryptedContent, replyTo: decryptedReply };
       } catch {
         return { ...msg, decryptedContent: "[could not decrypt]" };
       }
@@ -83,7 +109,11 @@ export function useChat({
 
   //? send message....
   const sendMessage = useCallback(
-    async (plainText: string, attachmentIds?: string[]) => {
+    async (
+      plainText: string,
+      attachmentIds?: string[],
+      replyToId?: string | null,
+    ) => {
       //? fetch all participant public keys....
       const convRes = await fetch(`/api/chat/conversations?userId=${userId}`);
       const conversations = await convRes.json();
@@ -126,8 +156,10 @@ export function useChat({
           encryptedContent,
           encryptedKeys,
           attachmentIds,
+          replyToId: replyToId || null,
         }),
       });
+      setReplyingTo(null);
     },
     [userId, conversationId],
   );
@@ -239,5 +271,7 @@ export function useChat({
     pinMessage,
     unpinMessage,
     pinnedMessage,
+    replyingTo,
+    setReplyingTo,
   };
 }

@@ -9,6 +9,7 @@ const sendMessageSchema = z.object({
   conversationId: z.string(),
   senderId: z.string(),
   encryptedContent: z.string(),
+  replyToId: z.string().nullable().optional(),
   encryptedKeys: z.array(
     z.object({
       recipientId: z.string(),
@@ -70,6 +71,7 @@ export async function POST(req: NextRequest) {
           conversationId: data.conversationId,
           senderId: data.senderId,
           encryptedContent: data.encryptedContent,
+          replyToId: data.replyToId || null,
           encryptedKeys: {
             create: data.encryptedKeys.map(({ recipientId, encryptedKey }) => ({
               recipientId,
@@ -88,6 +90,17 @@ export async function POST(req: NextRequest) {
           },
           encryptedKeys: true,
           attachments: true,
+          replyTo: {
+            include: {
+              sender: {
+                select: {
+                  id: true,
+                  name: true,
+                  avatarUrl: true,
+                },
+              },
+            },
+          },
         },
       });
 
@@ -182,6 +195,12 @@ export async function GET(req: NextRequest) {
             sender: true,
             attachments: true,
             encryptedKeys: true,
+            replyTo: {
+              include: {
+                sender: true,
+                encryptedKeys: true,
+              },
+            },
           },
         },
       },
@@ -204,6 +223,18 @@ export async function GET(req: NextRequest) {
           select: { encryptedKey: true, recipientId: true },
         },
         attachments: true,
+        replyTo: {
+          include: {
+            sender: {
+              select: {
+                id: true,
+                name: true,
+                avatarUrl: true,
+              },
+            },
+            encryptedKeys: true,
+          },
+        },
       },
     });
 
@@ -215,7 +246,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       messages: messages.reverse(),
       nextCursor,
-      pinnedMessage: conversation?.pinnedMessage || null
+      pinnedMessage: conversation?.pinnedMessage || null,
     });
   } catch (err) {
     console.error("Get messages error:", err);

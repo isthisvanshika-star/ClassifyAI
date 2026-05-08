@@ -369,11 +369,13 @@ export interface Message {
   conversationId: string;
   sender: { id: string; name: string; avatarUrl: string | null };
   encryptedContent: string;
-  encryptedKeys: { encryptedKey: string, recipientId?: string }[];
+  encryptedKeys: { encryptedKey: string; recipientId?: string }[];
   attachments: any[];
   deletedAt: string | null;
   createdAt: string;
   decryptedContent?: string;
+  replyToId?: string | null;
+  replyTo?: Message | null;
 }
 
 export interface UseChatOptions {

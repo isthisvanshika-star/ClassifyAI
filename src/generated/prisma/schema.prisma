@@ -517,6 +517,9 @@ model ConversationParticipant {
 
 model Message {
   id               String         @id @default(cuid())
+  replyToId        String?
+  replyTo          Message?       @relation("MessageReplies", fields: [replyToId], references: [id])
+  replies          Message[]      @relation("MessageReplies")
   conversationId   String
   conversation     Conversation   @relation("ConversationMessages", fields: [conversationId], references: [id], onDelete: Cascade)
   senderId         String

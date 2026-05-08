@@ -4408,6 +4408,7 @@ export namespace Prisma {
    */
 
   export type MessageCountOutputType = {
+    replies: number
     attachments: number
     encryptedKeys: number
     pinnedIn: number
@@ -4415,6 +4416,7 @@ export namespace Prisma {
   }
 
   export type MessageCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    replies?: boolean | MessageCountOutputTypeCountRepliesArgs
     attachments?: boolean | MessageCountOutputTypeCountAttachmentsArgs
     encryptedKeys?: boolean | MessageCountOutputTypeCountEncryptedKeysArgs
     pinnedIn?: boolean | MessageCountOutputTypeCountPinnedInArgs
@@ -4430,6 +4432,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the MessageCountOutputType
      */
     select?: MessageCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MessageCountOutputType without action
+   */
+  export type MessageCountOutputTypeCountRepliesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MessageWhereInput
   }
 
   /**
@@ -38083,6 +38092,7 @@ export namespace Prisma {
 
   export type MessageMinAggregateOutputType = {
     id: string | null
+    replyToId: string | null
     conversationId: string | null
     senderId: string | null
     encryptedContent: string | null
@@ -38092,6 +38102,7 @@ export namespace Prisma {
 
   export type MessageMaxAggregateOutputType = {
     id: string | null
+    replyToId: string | null
     conversationId: string | null
     senderId: string | null
     encryptedContent: string | null
@@ -38101,6 +38112,7 @@ export namespace Prisma {
 
   export type MessageCountAggregateOutputType = {
     id: number
+    replyToId: number
     conversationId: number
     senderId: number
     encryptedContent: number
@@ -38112,6 +38124,7 @@ export namespace Prisma {
 
   export type MessageMinAggregateInputType = {
     id?: true
+    replyToId?: true
     conversationId?: true
     senderId?: true
     encryptedContent?: true
@@ -38121,6 +38134,7 @@ export namespace Prisma {
 
   export type MessageMaxAggregateInputType = {
     id?: true
+    replyToId?: true
     conversationId?: true
     senderId?: true
     encryptedContent?: true
@@ -38130,6 +38144,7 @@ export namespace Prisma {
 
   export type MessageCountAggregateInputType = {
     id?: true
+    replyToId?: true
     conversationId?: true
     senderId?: true
     encryptedContent?: true
@@ -38212,6 +38227,7 @@ export namespace Prisma {
 
   export type MessageGroupByOutputType = {
     id: string
+    replyToId: string | null
     conversationId: string
     senderId: string
     encryptedContent: string
@@ -38238,11 +38254,14 @@ export namespace Prisma {
 
   export type MessageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    replyToId?: boolean
     conversationId?: boolean
     senderId?: boolean
     encryptedContent?: boolean
     deletedAt?: boolean
     createdAt?: boolean
+    replyTo?: boolean | Message$replyToArgs<ExtArgs>
+    replies?: boolean | Message$repliesArgs<ExtArgs>
     conversation?: boolean | ConversationDefaultArgs<ExtArgs>
     sender?: boolean | UserDefaultArgs<ExtArgs>
     attachments?: boolean | Message$attachmentsArgs<ExtArgs>
@@ -38254,28 +38273,33 @@ export namespace Prisma {
 
   export type MessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    replyToId?: boolean
     conversationId?: boolean
     senderId?: boolean
     encryptedContent?: boolean
     deletedAt?: boolean
     createdAt?: boolean
+    replyTo?: boolean | Message$replyToArgs<ExtArgs>
     conversation?: boolean | ConversationDefaultArgs<ExtArgs>
     sender?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
 
   export type MessageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    replyToId?: boolean
     conversationId?: boolean
     senderId?: boolean
     encryptedContent?: boolean
     deletedAt?: boolean
     createdAt?: boolean
+    replyTo?: boolean | Message$replyToArgs<ExtArgs>
     conversation?: boolean | ConversationDefaultArgs<ExtArgs>
     sender?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
 
   export type MessageSelectScalar = {
     id?: boolean
+    replyToId?: boolean
     conversationId?: boolean
     senderId?: boolean
     encryptedContent?: boolean
@@ -38283,8 +38307,10 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "conversationId" | "senderId" | "encryptedContent" | "deletedAt" | "createdAt", ExtArgs["result"]["message"]>
+  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "replyToId" | "conversationId" | "senderId" | "encryptedContent" | "deletedAt" | "createdAt", ExtArgs["result"]["message"]>
   export type MessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    replyTo?: boolean | Message$replyToArgs<ExtArgs>
+    replies?: boolean | Message$repliesArgs<ExtArgs>
     conversation?: boolean | ConversationDefaultArgs<ExtArgs>
     sender?: boolean | UserDefaultArgs<ExtArgs>
     attachments?: boolean | Message$attachmentsArgs<ExtArgs>
@@ -38294,10 +38320,12 @@ export namespace Prisma {
     _count?: boolean | MessageCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    replyTo?: boolean | Message$replyToArgs<ExtArgs>
     conversation?: boolean | ConversationDefaultArgs<ExtArgs>
     sender?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type MessageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    replyTo?: boolean | Message$replyToArgs<ExtArgs>
     conversation?: boolean | ConversationDefaultArgs<ExtArgs>
     sender?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -38305,6 +38333,8 @@ export namespace Prisma {
   export type $MessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Message"
     objects: {
+      replyTo: Prisma.$MessagePayload<ExtArgs> | null
+      replies: Prisma.$MessagePayload<ExtArgs>[]
       conversation: Prisma.$ConversationPayload<ExtArgs>
       sender: Prisma.$UserPayload<ExtArgs>
       attachments: Prisma.$ResourcePayload<ExtArgs>[]
@@ -38314,6 +38344,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      replyToId: string | null
       conversationId: string
       senderId: string
       encryptedContent: string
@@ -38713,6 +38744,8 @@ export namespace Prisma {
    */
   export interface Prisma__MessageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    replyTo<T extends Message$replyToArgs<ExtArgs> = {}>(args?: Subset<T, Message$replyToArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    replies<T extends Message$repliesArgs<ExtArgs> = {}>(args?: Subset<T, Message$repliesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     conversation<T extends ConversationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ConversationDefaultArgs<ExtArgs>>): Prisma__ConversationClient<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     sender<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     attachments<T extends Message$attachmentsArgs<ExtArgs> = {}>(args?: Subset<T, Message$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -38749,6 +38782,7 @@ export namespace Prisma {
    */
   interface MessageFieldRefs {
     readonly id: FieldRef<"Message", 'String'>
+    readonly replyToId: FieldRef<"Message", 'String'>
     readonly conversationId: FieldRef<"Message", 'String'>
     readonly senderId: FieldRef<"Message", 'String'>
     readonly encryptedContent: FieldRef<"Message", 'String'>
@@ -39147,6 +39181,49 @@ export namespace Prisma {
      * Limit how many Messages to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Message.replyTo
+   */
+  export type Message$replyToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageInclude<ExtArgs> | null
+    where?: MessageWhereInput
+  }
+
+  /**
+   * Message.replies
+   */
+  export type Message$repliesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageInclude<ExtArgs> | null
+    where?: MessageWhereInput
+    orderBy?: MessageOrderByWithRelationInput | MessageOrderByWithRelationInput[]
+    cursor?: MessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
   }
 
   /**
@@ -40746,6 +40823,7 @@ export namespace Prisma {
 
   export const MessageScalarFieldEnum: {
     id: 'id',
+    replyToId: 'replyToId',
     conversationId: 'conversationId',
     senderId: 'senderId',
     encryptedContent: 'encryptedContent',
@@ -43371,11 +43449,14 @@ export namespace Prisma {
     OR?: MessageWhereInput[]
     NOT?: MessageWhereInput | MessageWhereInput[]
     id?: StringFilter<"Message"> | string
+    replyToId?: StringNullableFilter<"Message"> | string | null
     conversationId?: StringFilter<"Message"> | string
     senderId?: StringFilter<"Message"> | string
     encryptedContent?: StringFilter<"Message"> | string
     deletedAt?: DateTimeNullableFilter<"Message"> | Date | string | null
     createdAt?: DateTimeFilter<"Message"> | Date | string
+    replyTo?: XOR<MessageNullableScalarRelationFilter, MessageWhereInput> | null
+    replies?: MessageListRelationFilter
     conversation?: XOR<ConversationScalarRelationFilter, ConversationWhereInput>
     sender?: XOR<UserScalarRelationFilter, UserWhereInput>
     attachments?: ResourceListRelationFilter
@@ -43386,11 +43467,14 @@ export namespace Prisma {
 
   export type MessageOrderByWithRelationInput = {
     id?: SortOrder
+    replyToId?: SortOrderInput | SortOrder
     conversationId?: SortOrder
     senderId?: SortOrder
     encryptedContent?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    replyTo?: MessageOrderByWithRelationInput
+    replies?: MessageOrderByRelationAggregateInput
     conversation?: ConversationOrderByWithRelationInput
     sender?: UserOrderByWithRelationInput
     attachments?: ResourceOrderByRelationAggregateInput
@@ -43404,11 +43488,14 @@ export namespace Prisma {
     AND?: MessageWhereInput | MessageWhereInput[]
     OR?: MessageWhereInput[]
     NOT?: MessageWhereInput | MessageWhereInput[]
+    replyToId?: StringNullableFilter<"Message"> | string | null
     conversationId?: StringFilter<"Message"> | string
     senderId?: StringFilter<"Message"> | string
     encryptedContent?: StringFilter<"Message"> | string
     deletedAt?: DateTimeNullableFilter<"Message"> | Date | string | null
     createdAt?: DateTimeFilter<"Message"> | Date | string
+    replyTo?: XOR<MessageNullableScalarRelationFilter, MessageWhereInput> | null
+    replies?: MessageListRelationFilter
     conversation?: XOR<ConversationScalarRelationFilter, ConversationWhereInput>
     sender?: XOR<UserScalarRelationFilter, UserWhereInput>
     attachments?: ResourceListRelationFilter
@@ -43419,6 +43506,7 @@ export namespace Prisma {
 
   export type MessageOrderByWithAggregationInput = {
     id?: SortOrder
+    replyToId?: SortOrderInput | SortOrder
     conversationId?: SortOrder
     senderId?: SortOrder
     encryptedContent?: SortOrder
@@ -43434,6 +43522,7 @@ export namespace Prisma {
     OR?: MessageScalarWhereWithAggregatesInput[]
     NOT?: MessageScalarWhereWithAggregatesInput | MessageScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Message"> | string
+    replyToId?: StringNullableWithAggregatesFilter<"Message"> | string | null
     conversationId?: StringWithAggregatesFilter<"Message"> | string
     senderId?: StringWithAggregatesFilter<"Message"> | string
     encryptedContent?: StringWithAggregatesFilter<"Message"> | string
@@ -45976,6 +46065,8 @@ export namespace Prisma {
     encryptedContent: string
     deletedAt?: Date | string | null
     createdAt?: Date | string
+    replyTo?: MessageCreateNestedOneWithoutRepliesInput
+    replies?: MessageCreateNestedManyWithoutReplyToInput
     conversation: ConversationCreateNestedOneWithoutMessagesInput
     sender: UserCreateNestedOneWithoutChatMessagesSentInput
     attachments?: ResourceCreateNestedManyWithoutChatMessageInput
@@ -45986,11 +46077,13 @@ export namespace Prisma {
 
   export type MessageUncheckedCreateInput = {
     id?: string
+    replyToId?: string | null
     conversationId: string
     senderId: string
     encryptedContent: string
     deletedAt?: Date | string | null
     createdAt?: Date | string
+    replies?: MessageUncheckedCreateNestedManyWithoutReplyToInput
     attachments?: ResourceUncheckedCreateNestedManyWithoutChatMessageInput
     encryptedKeys?: MessageKeyUncheckedCreateNestedManyWithoutMessageInput
     pinnedIn?: ConversationUncheckedCreateNestedManyWithoutPinnedMessageInput
@@ -46002,6 +46095,8 @@ export namespace Prisma {
     encryptedContent?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replyTo?: MessageUpdateOneWithoutRepliesNestedInput
+    replies?: MessageUpdateManyWithoutReplyToNestedInput
     conversation?: ConversationUpdateOneRequiredWithoutMessagesNestedInput
     sender?: UserUpdateOneRequiredWithoutChatMessagesSentNestedInput
     attachments?: ResourceUpdateManyWithoutChatMessageNestedInput
@@ -46012,11 +46107,13 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    replyToId?: NullableStringFieldUpdateOperationsInput | string | null
     conversationId?: StringFieldUpdateOperationsInput | string
     senderId?: StringFieldUpdateOperationsInput | string
     encryptedContent?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replies?: MessageUncheckedUpdateManyWithoutReplyToNestedInput
     attachments?: ResourceUncheckedUpdateManyWithoutChatMessageNestedInput
     encryptedKeys?: MessageKeyUncheckedUpdateManyWithoutMessageNestedInput
     pinnedIn?: ConversationUncheckedUpdateManyWithoutPinnedMessageNestedInput
@@ -46025,6 +46122,7 @@ export namespace Prisma {
 
   export type MessageCreateManyInput = {
     id?: string
+    replyToId?: string | null
     conversationId: string
     senderId: string
     encryptedContent: string
@@ -46041,6 +46139,7 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    replyToId?: NullableStringFieldUpdateOperationsInput | string | null
     conversationId?: StringFieldUpdateOperationsInput | string
     senderId?: StringFieldUpdateOperationsInput | string
     encryptedContent?: StringFieldUpdateOperationsInput | string
@@ -48047,6 +48146,7 @@ export namespace Prisma {
 
   export type MessageCountOrderByAggregateInput = {
     id?: SortOrder
+    replyToId?: SortOrder
     conversationId?: SortOrder
     senderId?: SortOrder
     encryptedContent?: SortOrder
@@ -48056,6 +48156,7 @@ export namespace Prisma {
 
   export type MessageMaxOrderByAggregateInput = {
     id?: SortOrder
+    replyToId?: SortOrder
     conversationId?: SortOrder
     senderId?: SortOrder
     encryptedContent?: SortOrder
@@ -48065,6 +48166,7 @@ export namespace Prisma {
 
   export type MessageMinOrderByAggregateInput = {
     id?: SortOrder
+    replyToId?: SortOrder
     conversationId?: SortOrder
     senderId?: SortOrder
     encryptedContent?: SortOrder
@@ -51406,6 +51508,19 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutConversationsInput, UserUpdateWithoutConversationsInput>, UserUncheckedUpdateWithoutConversationsInput>
   }
 
+  export type MessageCreateNestedOneWithoutRepliesInput = {
+    create?: XOR<MessageCreateWithoutRepliesInput, MessageUncheckedCreateWithoutRepliesInput>
+    connectOrCreate?: MessageCreateOrConnectWithoutRepliesInput
+    connect?: MessageWhereUniqueInput
+  }
+
+  export type MessageCreateNestedManyWithoutReplyToInput = {
+    create?: XOR<MessageCreateWithoutReplyToInput, MessageUncheckedCreateWithoutReplyToInput> | MessageCreateWithoutReplyToInput[] | MessageUncheckedCreateWithoutReplyToInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutReplyToInput | MessageCreateOrConnectWithoutReplyToInput[]
+    createMany?: MessageCreateManyReplyToInputEnvelope
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+  }
+
   export type ConversationCreateNestedOneWithoutMessagesInput = {
     create?: XOR<ConversationCreateWithoutMessagesInput, ConversationUncheckedCreateWithoutMessagesInput>
     connectOrCreate?: ConversationCreateOrConnectWithoutMessagesInput
@@ -51446,6 +51561,13 @@ export namespace Prisma {
     connect?: ResourceWhereUniqueInput | ResourceWhereUniqueInput[]
   }
 
+  export type MessageUncheckedCreateNestedManyWithoutReplyToInput = {
+    create?: XOR<MessageCreateWithoutReplyToInput, MessageUncheckedCreateWithoutReplyToInput> | MessageCreateWithoutReplyToInput[] | MessageUncheckedCreateWithoutReplyToInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutReplyToInput | MessageCreateOrConnectWithoutReplyToInput[]
+    createMany?: MessageCreateManyReplyToInputEnvelope
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+  }
+
   export type ResourceUncheckedCreateNestedManyWithoutChatMessageInput = {
     create?: XOR<ResourceCreateWithoutChatMessageInput, ResourceUncheckedCreateWithoutChatMessageInput> | ResourceCreateWithoutChatMessageInput[] | ResourceUncheckedCreateWithoutChatMessageInput[]
     connectOrCreate?: ResourceCreateOrConnectWithoutChatMessageInput | ResourceCreateOrConnectWithoutChatMessageInput[]
@@ -51472,6 +51594,30 @@ export namespace Prisma {
     connectOrCreate?: ResourceCreateOrConnectWithoutMessageInput | ResourceCreateOrConnectWithoutMessageInput[]
     createMany?: ResourceCreateManyMessageInputEnvelope
     connect?: ResourceWhereUniqueInput | ResourceWhereUniqueInput[]
+  }
+
+  export type MessageUpdateOneWithoutRepliesNestedInput = {
+    create?: XOR<MessageCreateWithoutRepliesInput, MessageUncheckedCreateWithoutRepliesInput>
+    connectOrCreate?: MessageCreateOrConnectWithoutRepliesInput
+    upsert?: MessageUpsertWithoutRepliesInput
+    disconnect?: MessageWhereInput | boolean
+    delete?: MessageWhereInput | boolean
+    connect?: MessageWhereUniqueInput
+    update?: XOR<XOR<MessageUpdateToOneWithWhereWithoutRepliesInput, MessageUpdateWithoutRepliesInput>, MessageUncheckedUpdateWithoutRepliesInput>
+  }
+
+  export type MessageUpdateManyWithoutReplyToNestedInput = {
+    create?: XOR<MessageCreateWithoutReplyToInput, MessageUncheckedCreateWithoutReplyToInput> | MessageCreateWithoutReplyToInput[] | MessageUncheckedCreateWithoutReplyToInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutReplyToInput | MessageCreateOrConnectWithoutReplyToInput[]
+    upsert?: MessageUpsertWithWhereUniqueWithoutReplyToInput | MessageUpsertWithWhereUniqueWithoutReplyToInput[]
+    createMany?: MessageCreateManyReplyToInputEnvelope
+    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    update?: MessageUpdateWithWhereUniqueWithoutReplyToInput | MessageUpdateWithWhereUniqueWithoutReplyToInput[]
+    updateMany?: MessageUpdateManyWithWhereWithoutReplyToInput | MessageUpdateManyWithWhereWithoutReplyToInput[]
+    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
   }
 
   export type ConversationUpdateOneRequiredWithoutMessagesNestedInput = {
@@ -51544,6 +51690,20 @@ export namespace Prisma {
     update?: ResourceUpdateWithWhereUniqueWithoutMessageInput | ResourceUpdateWithWhereUniqueWithoutMessageInput[]
     updateMany?: ResourceUpdateManyWithWhereWithoutMessageInput | ResourceUpdateManyWithWhereWithoutMessageInput[]
     deleteMany?: ResourceScalarWhereInput | ResourceScalarWhereInput[]
+  }
+
+  export type MessageUncheckedUpdateManyWithoutReplyToNestedInput = {
+    create?: XOR<MessageCreateWithoutReplyToInput, MessageUncheckedCreateWithoutReplyToInput> | MessageCreateWithoutReplyToInput[] | MessageUncheckedCreateWithoutReplyToInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutReplyToInput | MessageCreateOrConnectWithoutReplyToInput[]
+    upsert?: MessageUpsertWithWhereUniqueWithoutReplyToInput | MessageUpsertWithWhereUniqueWithoutReplyToInput[]
+    createMany?: MessageCreateManyReplyToInputEnvelope
+    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    update?: MessageUpdateWithWhereUniqueWithoutReplyToInput | MessageUpdateWithWhereUniqueWithoutReplyToInput[]
+    updateMany?: MessageUpdateManyWithWhereWithoutReplyToInput | MessageUpdateManyWithWhereWithoutReplyToInput[]
+    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
   }
 
   export type ResourceUncheckedUpdateManyWithoutChatMessageNestedInput = {
@@ -52400,6 +52560,8 @@ export namespace Prisma {
     encryptedContent: string
     deletedAt?: Date | string | null
     createdAt?: Date | string
+    replyTo?: MessageCreateNestedOneWithoutRepliesInput
+    replies?: MessageCreateNestedManyWithoutReplyToInput
     conversation: ConversationCreateNestedOneWithoutMessagesInput
     attachments?: ResourceCreateNestedManyWithoutChatMessageInput
     encryptedKeys?: MessageKeyCreateNestedManyWithoutMessageInput
@@ -52409,10 +52571,12 @@ export namespace Prisma {
 
   export type MessageUncheckedCreateWithoutSenderInput = {
     id?: string
+    replyToId?: string | null
     conversationId: string
     encryptedContent: string
     deletedAt?: Date | string | null
     createdAt?: Date | string
+    replies?: MessageUncheckedCreateNestedManyWithoutReplyToInput
     attachments?: ResourceUncheckedCreateNestedManyWithoutChatMessageInput
     encryptedKeys?: MessageKeyUncheckedCreateNestedManyWithoutMessageInput
     pinnedIn?: ConversationUncheckedCreateNestedManyWithoutPinnedMessageInput
@@ -52858,6 +53022,7 @@ export namespace Prisma {
     OR?: MessageScalarWhereInput[]
     NOT?: MessageScalarWhereInput | MessageScalarWhereInput[]
     id?: StringFilter<"Message"> | string
+    replyToId?: StringNullableFilter<"Message"> | string | null
     conversationId?: StringFilter<"Message"> | string
     senderId?: StringFilter<"Message"> | string
     encryptedContent?: StringFilter<"Message"> | string
@@ -58487,6 +58652,8 @@ export namespace Prisma {
     encryptedContent: string
     deletedAt?: Date | string | null
     createdAt?: Date | string
+    replyTo?: MessageCreateNestedOneWithoutRepliesInput
+    replies?: MessageCreateNestedManyWithoutReplyToInput
     conversation: ConversationCreateNestedOneWithoutMessagesInput
     sender: UserCreateNestedOneWithoutChatMessagesSentInput
     encryptedKeys?: MessageKeyCreateNestedManyWithoutMessageInput
@@ -58496,11 +58663,13 @@ export namespace Prisma {
 
   export type MessageUncheckedCreateWithoutAttachmentsInput = {
     id?: string
+    replyToId?: string | null
     conversationId: string
     senderId: string
     encryptedContent: string
     deletedAt?: Date | string | null
     createdAt?: Date | string
+    replies?: MessageUncheckedCreateNestedManyWithoutReplyToInput
     encryptedKeys?: MessageKeyUncheckedCreateNestedManyWithoutMessageInput
     pinnedIn?: ConversationUncheckedCreateNestedManyWithoutPinnedMessageInput
     resources?: ResourceUncheckedCreateNestedManyWithoutMessageInput
@@ -58516,6 +58685,8 @@ export namespace Prisma {
     encryptedContent: string
     deletedAt?: Date | string | null
     createdAt?: Date | string
+    replyTo?: MessageCreateNestedOneWithoutRepliesInput
+    replies?: MessageCreateNestedManyWithoutReplyToInput
     conversation: ConversationCreateNestedOneWithoutMessagesInput
     sender: UserCreateNestedOneWithoutChatMessagesSentInput
     attachments?: ResourceCreateNestedManyWithoutChatMessageInput
@@ -58525,11 +58696,13 @@ export namespace Prisma {
 
   export type MessageUncheckedCreateWithoutResourcesInput = {
     id?: string
+    replyToId?: string | null
     conversationId: string
     senderId: string
     encryptedContent: string
     deletedAt?: Date | string | null
     createdAt?: Date | string
+    replies?: MessageUncheckedCreateNestedManyWithoutReplyToInput
     attachments?: ResourceUncheckedCreateNestedManyWithoutChatMessageInput
     encryptedKeys?: MessageKeyUncheckedCreateNestedManyWithoutMessageInput
     pinnedIn?: ConversationUncheckedCreateNestedManyWithoutPinnedMessageInput
@@ -58681,6 +58854,8 @@ export namespace Prisma {
     encryptedContent?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replyTo?: MessageUpdateOneWithoutRepliesNestedInput
+    replies?: MessageUpdateManyWithoutReplyToNestedInput
     conversation?: ConversationUpdateOneRequiredWithoutMessagesNestedInput
     sender?: UserUpdateOneRequiredWithoutChatMessagesSentNestedInput
     encryptedKeys?: MessageKeyUpdateManyWithoutMessageNestedInput
@@ -58690,11 +58865,13 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateWithoutAttachmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    replyToId?: NullableStringFieldUpdateOperationsInput | string | null
     conversationId?: StringFieldUpdateOperationsInput | string
     senderId?: StringFieldUpdateOperationsInput | string
     encryptedContent?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replies?: MessageUncheckedUpdateManyWithoutReplyToNestedInput
     encryptedKeys?: MessageKeyUncheckedUpdateManyWithoutMessageNestedInput
     pinnedIn?: ConversationUncheckedUpdateManyWithoutPinnedMessageNestedInput
     resources?: ResourceUncheckedUpdateManyWithoutMessageNestedInput
@@ -58716,6 +58893,8 @@ export namespace Prisma {
     encryptedContent?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replyTo?: MessageUpdateOneWithoutRepliesNestedInput
+    replies?: MessageUpdateManyWithoutReplyToNestedInput
     conversation?: ConversationUpdateOneRequiredWithoutMessagesNestedInput
     sender?: UserUpdateOneRequiredWithoutChatMessagesSentNestedInput
     attachments?: ResourceUpdateManyWithoutChatMessageNestedInput
@@ -58725,11 +58904,13 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateWithoutResourcesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    replyToId?: NullableStringFieldUpdateOperationsInput | string | null
     conversationId?: StringFieldUpdateOperationsInput | string
     senderId?: StringFieldUpdateOperationsInput | string
     encryptedContent?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replies?: MessageUncheckedUpdateManyWithoutReplyToNestedInput
     attachments?: ResourceUncheckedUpdateManyWithoutChatMessageNestedInput
     encryptedKeys?: MessageKeyUncheckedUpdateManyWithoutMessageNestedInput
     pinnedIn?: ConversationUncheckedUpdateManyWithoutPinnedMessageNestedInput
@@ -59633,6 +59814,8 @@ export namespace Prisma {
     encryptedContent: string
     deletedAt?: Date | string | null
     createdAt?: Date | string
+    replyTo?: MessageCreateNestedOneWithoutRepliesInput
+    replies?: MessageCreateNestedManyWithoutReplyToInput
     conversation: ConversationCreateNestedOneWithoutMessagesInput
     sender: UserCreateNestedOneWithoutChatMessagesSentInput
     attachments?: ResourceCreateNestedManyWithoutChatMessageInput
@@ -59642,11 +59825,13 @@ export namespace Prisma {
 
   export type MessageUncheckedCreateWithoutPinnedInInput = {
     id?: string
+    replyToId?: string | null
     conversationId: string
     senderId: string
     encryptedContent: string
     deletedAt?: Date | string | null
     createdAt?: Date | string
+    replies?: MessageUncheckedCreateNestedManyWithoutReplyToInput
     attachments?: ResourceUncheckedCreateNestedManyWithoutChatMessageInput
     encryptedKeys?: MessageKeyUncheckedCreateNestedManyWithoutMessageInput
     resources?: ResourceUncheckedCreateNestedManyWithoutMessageInput
@@ -59818,6 +60003,8 @@ export namespace Prisma {
     encryptedContent: string
     deletedAt?: Date | string | null
     createdAt?: Date | string
+    replyTo?: MessageCreateNestedOneWithoutRepliesInput
+    replies?: MessageCreateNestedManyWithoutReplyToInput
     sender: UserCreateNestedOneWithoutChatMessagesSentInput
     attachments?: ResourceCreateNestedManyWithoutChatMessageInput
     encryptedKeys?: MessageKeyCreateNestedManyWithoutMessageInput
@@ -59827,10 +60014,12 @@ export namespace Prisma {
 
   export type MessageUncheckedCreateWithoutConversationInput = {
     id?: string
+    replyToId?: string | null
     senderId: string
     encryptedContent: string
     deletedAt?: Date | string | null
     createdAt?: Date | string
+    replies?: MessageUncheckedCreateNestedManyWithoutReplyToInput
     attachments?: ResourceUncheckedCreateNestedManyWithoutChatMessageInput
     encryptedKeys?: MessageKeyUncheckedCreateNestedManyWithoutMessageInput
     pinnedIn?: ConversationUncheckedCreateNestedManyWithoutPinnedMessageInput
@@ -59863,6 +60052,8 @@ export namespace Prisma {
     encryptedContent?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replyTo?: MessageUpdateOneWithoutRepliesNestedInput
+    replies?: MessageUpdateManyWithoutReplyToNestedInput
     conversation?: ConversationUpdateOneRequiredWithoutMessagesNestedInput
     sender?: UserUpdateOneRequiredWithoutChatMessagesSentNestedInput
     attachments?: ResourceUpdateManyWithoutChatMessageNestedInput
@@ -59872,11 +60063,13 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateWithoutPinnedInInput = {
     id?: StringFieldUpdateOperationsInput | string
+    replyToId?: NullableStringFieldUpdateOperationsInput | string | null
     conversationId?: StringFieldUpdateOperationsInput | string
     senderId?: StringFieldUpdateOperationsInput | string
     encryptedContent?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replies?: MessageUncheckedUpdateManyWithoutReplyToNestedInput
     attachments?: ResourceUncheckedUpdateManyWithoutChatMessageNestedInput
     encryptedKeys?: MessageKeyUncheckedUpdateManyWithoutMessageNestedInput
     resources?: ResourceUncheckedUpdateManyWithoutMessageNestedInput
@@ -60296,6 +60489,77 @@ export namespace Prisma {
     messageKeys?: MessageKeyUncheckedUpdateManyWithoutRecipientNestedInput
   }
 
+  export type MessageCreateWithoutRepliesInput = {
+    id?: string
+    encryptedContent: string
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    replyTo?: MessageCreateNestedOneWithoutRepliesInput
+    conversation: ConversationCreateNestedOneWithoutMessagesInput
+    sender: UserCreateNestedOneWithoutChatMessagesSentInput
+    attachments?: ResourceCreateNestedManyWithoutChatMessageInput
+    encryptedKeys?: MessageKeyCreateNestedManyWithoutMessageInput
+    pinnedIn?: ConversationCreateNestedManyWithoutPinnedMessageInput
+    resources?: ResourceCreateNestedManyWithoutMessageInput
+  }
+
+  export type MessageUncheckedCreateWithoutRepliesInput = {
+    id?: string
+    replyToId?: string | null
+    conversationId: string
+    senderId: string
+    encryptedContent: string
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    attachments?: ResourceUncheckedCreateNestedManyWithoutChatMessageInput
+    encryptedKeys?: MessageKeyUncheckedCreateNestedManyWithoutMessageInput
+    pinnedIn?: ConversationUncheckedCreateNestedManyWithoutPinnedMessageInput
+    resources?: ResourceUncheckedCreateNestedManyWithoutMessageInput
+  }
+
+  export type MessageCreateOrConnectWithoutRepliesInput = {
+    where: MessageWhereUniqueInput
+    create: XOR<MessageCreateWithoutRepliesInput, MessageUncheckedCreateWithoutRepliesInput>
+  }
+
+  export type MessageCreateWithoutReplyToInput = {
+    id?: string
+    encryptedContent: string
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    replies?: MessageCreateNestedManyWithoutReplyToInput
+    conversation: ConversationCreateNestedOneWithoutMessagesInput
+    sender: UserCreateNestedOneWithoutChatMessagesSentInput
+    attachments?: ResourceCreateNestedManyWithoutChatMessageInput
+    encryptedKeys?: MessageKeyCreateNestedManyWithoutMessageInput
+    pinnedIn?: ConversationCreateNestedManyWithoutPinnedMessageInput
+    resources?: ResourceCreateNestedManyWithoutMessageInput
+  }
+
+  export type MessageUncheckedCreateWithoutReplyToInput = {
+    id?: string
+    conversationId: string
+    senderId: string
+    encryptedContent: string
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    replies?: MessageUncheckedCreateNestedManyWithoutReplyToInput
+    attachments?: ResourceUncheckedCreateNestedManyWithoutChatMessageInput
+    encryptedKeys?: MessageKeyUncheckedCreateNestedManyWithoutMessageInput
+    pinnedIn?: ConversationUncheckedCreateNestedManyWithoutPinnedMessageInput
+    resources?: ResourceUncheckedCreateNestedManyWithoutMessageInput
+  }
+
+  export type MessageCreateOrConnectWithoutReplyToInput = {
+    where: MessageWhereUniqueInput
+    create: XOR<MessageCreateWithoutReplyToInput, MessageUncheckedCreateWithoutReplyToInput>
+  }
+
+  export type MessageCreateManyReplyToInputEnvelope = {
+    data: MessageCreateManyReplyToInput | MessageCreateManyReplyToInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ConversationCreateWithoutMessagesInput = {
     id?: string
     type: $Enums.ConversationType
@@ -60560,6 +60824,61 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type MessageUpsertWithoutRepliesInput = {
+    update: XOR<MessageUpdateWithoutRepliesInput, MessageUncheckedUpdateWithoutRepliesInput>
+    create: XOR<MessageCreateWithoutRepliesInput, MessageUncheckedCreateWithoutRepliesInput>
+    where?: MessageWhereInput
+  }
+
+  export type MessageUpdateToOneWithWhereWithoutRepliesInput = {
+    where?: MessageWhereInput
+    data: XOR<MessageUpdateWithoutRepliesInput, MessageUncheckedUpdateWithoutRepliesInput>
+  }
+
+  export type MessageUpdateWithoutRepliesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    encryptedContent?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replyTo?: MessageUpdateOneWithoutRepliesNestedInput
+    conversation?: ConversationUpdateOneRequiredWithoutMessagesNestedInput
+    sender?: UserUpdateOneRequiredWithoutChatMessagesSentNestedInput
+    attachments?: ResourceUpdateManyWithoutChatMessageNestedInput
+    encryptedKeys?: MessageKeyUpdateManyWithoutMessageNestedInput
+    pinnedIn?: ConversationUpdateManyWithoutPinnedMessageNestedInput
+    resources?: ResourceUpdateManyWithoutMessageNestedInput
+  }
+
+  export type MessageUncheckedUpdateWithoutRepliesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    replyToId?: NullableStringFieldUpdateOperationsInput | string | null
+    conversationId?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
+    encryptedContent?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachments?: ResourceUncheckedUpdateManyWithoutChatMessageNestedInput
+    encryptedKeys?: MessageKeyUncheckedUpdateManyWithoutMessageNestedInput
+    pinnedIn?: ConversationUncheckedUpdateManyWithoutPinnedMessageNestedInput
+    resources?: ResourceUncheckedUpdateManyWithoutMessageNestedInput
+  }
+
+  export type MessageUpsertWithWhereUniqueWithoutReplyToInput = {
+    where: MessageWhereUniqueInput
+    update: XOR<MessageUpdateWithoutReplyToInput, MessageUncheckedUpdateWithoutReplyToInput>
+    create: XOR<MessageCreateWithoutReplyToInput, MessageUncheckedCreateWithoutReplyToInput>
+  }
+
+  export type MessageUpdateWithWhereUniqueWithoutReplyToInput = {
+    where: MessageWhereUniqueInput
+    data: XOR<MessageUpdateWithoutReplyToInput, MessageUncheckedUpdateWithoutReplyToInput>
+  }
+
+  export type MessageUpdateManyWithWhereWithoutReplyToInput = {
+    where: MessageScalarWhereInput
+    data: XOR<MessageUpdateManyMutationInput, MessageUncheckedUpdateManyWithoutReplyToInput>
+  }
+
   export type ConversationUpsertWithoutMessagesInput = {
     update: XOR<ConversationUpdateWithoutMessagesInput, ConversationUncheckedUpdateWithoutMessagesInput>
     create: XOR<ConversationCreateWithoutMessagesInput, ConversationUncheckedCreateWithoutMessagesInput>
@@ -60749,6 +61068,8 @@ export namespace Prisma {
     encryptedContent: string
     deletedAt?: Date | string | null
     createdAt?: Date | string
+    replyTo?: MessageCreateNestedOneWithoutRepliesInput
+    replies?: MessageCreateNestedManyWithoutReplyToInput
     conversation: ConversationCreateNestedOneWithoutMessagesInput
     sender: UserCreateNestedOneWithoutChatMessagesSentInput
     attachments?: ResourceCreateNestedManyWithoutChatMessageInput
@@ -60758,11 +61079,13 @@ export namespace Prisma {
 
   export type MessageUncheckedCreateWithoutEncryptedKeysInput = {
     id?: string
+    replyToId?: string | null
     conversationId: string
     senderId: string
     encryptedContent: string
     deletedAt?: Date | string | null
     createdAt?: Date | string
+    replies?: MessageUncheckedCreateNestedManyWithoutReplyToInput
     attachments?: ResourceUncheckedCreateNestedManyWithoutChatMessageInput
     pinnedIn?: ConversationUncheckedCreateNestedManyWithoutPinnedMessageInput
     resources?: ResourceUncheckedCreateNestedManyWithoutMessageInput
@@ -60856,6 +61179,8 @@ export namespace Prisma {
     encryptedContent?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replyTo?: MessageUpdateOneWithoutRepliesNestedInput
+    replies?: MessageUpdateManyWithoutReplyToNestedInput
     conversation?: ConversationUpdateOneRequiredWithoutMessagesNestedInput
     sender?: UserUpdateOneRequiredWithoutChatMessagesSentNestedInput
     attachments?: ResourceUpdateManyWithoutChatMessageNestedInput
@@ -60865,11 +61190,13 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateWithoutEncryptedKeysInput = {
     id?: StringFieldUpdateOperationsInput | string
+    replyToId?: NullableStringFieldUpdateOperationsInput | string | null
     conversationId?: StringFieldUpdateOperationsInput | string
     senderId?: StringFieldUpdateOperationsInput | string
     encryptedContent?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replies?: MessageUncheckedUpdateManyWithoutReplyToNestedInput
     attachments?: ResourceUncheckedUpdateManyWithoutChatMessageNestedInput
     pinnedIn?: ConversationUncheckedUpdateManyWithoutPinnedMessageNestedInput
     resources?: ResourceUncheckedUpdateManyWithoutMessageNestedInput
@@ -61023,6 +61350,7 @@ export namespace Prisma {
 
   export type MessageCreateManySenderInput = {
     id?: string
+    replyToId?: string | null
     conversationId: string
     encryptedContent: string
     deletedAt?: Date | string | null
@@ -61282,6 +61610,8 @@ export namespace Prisma {
     encryptedContent?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replyTo?: MessageUpdateOneWithoutRepliesNestedInput
+    replies?: MessageUpdateManyWithoutReplyToNestedInput
     conversation?: ConversationUpdateOneRequiredWithoutMessagesNestedInput
     attachments?: ResourceUpdateManyWithoutChatMessageNestedInput
     encryptedKeys?: MessageKeyUpdateManyWithoutMessageNestedInput
@@ -61291,10 +61621,12 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateWithoutSenderInput = {
     id?: StringFieldUpdateOperationsInput | string
+    replyToId?: NullableStringFieldUpdateOperationsInput | string | null
     conversationId?: StringFieldUpdateOperationsInput | string
     encryptedContent?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replies?: MessageUncheckedUpdateManyWithoutReplyToNestedInput
     attachments?: ResourceUncheckedUpdateManyWithoutChatMessageNestedInput
     encryptedKeys?: MessageKeyUncheckedUpdateManyWithoutMessageNestedInput
     pinnedIn?: ConversationUncheckedUpdateManyWithoutPinnedMessageNestedInput
@@ -61303,6 +61635,7 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateManyWithoutSenderInput = {
     id?: StringFieldUpdateOperationsInput | string
+    replyToId?: NullableStringFieldUpdateOperationsInput | string | null
     conversationId?: StringFieldUpdateOperationsInput | string
     encryptedContent?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -63690,6 +64023,7 @@ export namespace Prisma {
 
   export type MessageCreateManyConversationInput = {
     id?: string
+    replyToId?: string | null
     senderId: string
     encryptedContent: string
     deletedAt?: Date | string | null
@@ -63725,6 +64059,8 @@ export namespace Prisma {
     encryptedContent?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replyTo?: MessageUpdateOneWithoutRepliesNestedInput
+    replies?: MessageUpdateManyWithoutReplyToNestedInput
     sender?: UserUpdateOneRequiredWithoutChatMessagesSentNestedInput
     attachments?: ResourceUpdateManyWithoutChatMessageNestedInput
     encryptedKeys?: MessageKeyUpdateManyWithoutMessageNestedInput
@@ -63734,10 +64070,12 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateWithoutConversationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    replyToId?: NullableStringFieldUpdateOperationsInput | string | null
     senderId?: StringFieldUpdateOperationsInput | string
     encryptedContent?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replies?: MessageUncheckedUpdateManyWithoutReplyToNestedInput
     attachments?: ResourceUncheckedUpdateManyWithoutChatMessageNestedInput
     encryptedKeys?: MessageKeyUncheckedUpdateManyWithoutMessageNestedInput
     pinnedIn?: ConversationUncheckedUpdateManyWithoutPinnedMessageNestedInput
@@ -63746,10 +64084,20 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateManyWithoutConversationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    replyToId?: NullableStringFieldUpdateOperationsInput | string | null
     senderId?: StringFieldUpdateOperationsInput | string
     encryptedContent?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MessageCreateManyReplyToInput = {
+    id?: string
+    conversationId: string
+    senderId: string
+    encryptedContent: string
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
   }
 
   export type ResourceCreateManyChatMessageInput = {
@@ -63806,6 +64154,43 @@ export namespace Prisma {
     chatMessageId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type MessageUpdateWithoutReplyToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    encryptedContent?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replies?: MessageUpdateManyWithoutReplyToNestedInput
+    conversation?: ConversationUpdateOneRequiredWithoutMessagesNestedInput
+    sender?: UserUpdateOneRequiredWithoutChatMessagesSentNestedInput
+    attachments?: ResourceUpdateManyWithoutChatMessageNestedInput
+    encryptedKeys?: MessageKeyUpdateManyWithoutMessageNestedInput
+    pinnedIn?: ConversationUpdateManyWithoutPinnedMessageNestedInput
+    resources?: ResourceUpdateManyWithoutMessageNestedInput
+  }
+
+  export type MessageUncheckedUpdateWithoutReplyToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    conversationId?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
+    encryptedContent?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replies?: MessageUncheckedUpdateManyWithoutReplyToNestedInput
+    attachments?: ResourceUncheckedUpdateManyWithoutChatMessageNestedInput
+    encryptedKeys?: MessageKeyUncheckedUpdateManyWithoutMessageNestedInput
+    pinnedIn?: ConversationUncheckedUpdateManyWithoutPinnedMessageNestedInput
+    resources?: ResourceUncheckedUpdateManyWithoutMessageNestedInput
+  }
+
+  export type MessageUncheckedUpdateManyWithoutReplyToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    conversationId?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
+    encryptedContent?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ResourceUpdateWithoutChatMessageInput = {
