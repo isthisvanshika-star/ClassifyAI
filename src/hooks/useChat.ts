@@ -19,6 +19,7 @@ export function useChat({
   );
   const [chatError, setChatError] = useState<string | null>(null);
   const [readByUsers, setReadByUsers] = useState<Record<string, string>>({});
+  const [pinnedMessage, setPinnedMessage] = useState<Message | null>(null);
 
   const participantNamesRef = useRef<Record<string, string>>({});
 
@@ -58,9 +59,21 @@ export function useChat({
         const data = await res.json();
 
         const decrypted = await Promise.all(data.messages.map(decrypt));
+        if (data.pinnedMessage) {
+          const decryptedPinned = await decrypt(data.pinnedMessage);
+          setPinnedMessage(decryptedPinned);
+        } else {
+          setPinnedMessage(null);
+        }
 
         setMessages((prev) => (cursor ? [...decrypted, ...prev] : decrypted));
         setNextCursor(data.nextCursor);
+        if (data.pinnedMessage) {
+          const decryptedPinned = await decrypt(data.pinnedMessage);
+          setPinnedMessage(decryptedPinned);
+        } else {
+          setPinnedMessage(null);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -119,6 +132,43 @@ export function useChat({
     [userId, conversationId],
   );
 
+  //?
+  const pinMessage = useCallback(
+    async (messageId: string) => {
+      const res = await fetch("/api/chat/pin", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ conversationId, messageId }),
+      });
+      if (!res.ok) {
+        throw new Error("Failed to pin message");
+      }
+      const data = await res.json();
+      if (data.pinnedMessage) {
+        const decrypted = await decrypt(data.pinnedMessage);
+        setPinnedMessage(decrypted);
+      }
+    },
+    [conversationId, decrypt],
+  );
+
+  const unpinMessage = useCallback(async () => {
+    const res = await fetch("/api/chat/pin", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        conversationId,
+        messageId: null,
+      }),
+    });
+    if (!res.ok) {
+      throw new Error("Failed to unpin");
+    }
+    setPinnedMessage(null);
+  }, [conversationId]);
+
   //? mark conversation as read....
   const markAsRead = useCallback(async () => {
     await fetch(`/api/chat/read`, {
@@ -157,6 +207,15 @@ export function useChat({
     onReadReceipt: ({ userId: readerId, readAt }: ReadReceipt) => {
       setReadByUsers((prev) => ({ ...prev, [readerId]: readAt }));
     },
+
+    onPinnedMessageUpdated: async ({ pinnedMessage }) => {
+      if (!pinnedMessage) {
+        setPinnedMessage(null);
+        return;
+      }
+      const decrypted = await decrypt(pinnedMessage);
+      setPinnedMessage(decrypted);
+    },
   });
 
   useEffect(() => {
@@ -177,5 +236,8 @@ export function useChat({
     sendTypingStart,
     sendTypingStop,
     markAsRead,
+    pinMessage,
+    unpinMessage,
+    pinnedMessage,
   };
 }

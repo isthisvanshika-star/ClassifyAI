@@ -64,4 +64,5 @@ export const Events = {
   TYPING_STOP: "typing-stop",
   READ_RECEIPT: "read-receipt",
   NEW_NOTIFICATION: "new-notification",
+  PINNED_MESSAGE_UPDATED: "pinned-message-updated",
 };

@@ -8,7 +8,7 @@ import { generateKeyPair } from "@/lib/crypto";
 import { formatDistanceToNow } from "date-fns";
 import { secureGet, secureSet } from "@/lib/tauri-store";
 import { AnimatePresence, motion } from "framer-motion";
-import { X } from "lucide-react";
+import { Pin, X } from "lucide-react";
 
 interface MessageThreadProps {
   userId: string;
@@ -36,6 +36,9 @@ export default function MessageThread({
     sendTypingStart,
     sendTypingStop,
     markAsRead,
+    pinMessage,
+    pinnedMessage,
+    unpinMessage,
   } = useChat({ userId, conversationId, privateKey });
 
   useEffect(() => {
@@ -87,7 +90,39 @@ export default function MessageThread({
           </button>
         </div>
       )}
+      {pinnedMessage && (
+        <motion.div
+          initial={{ y: -12, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -12, opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="mx-4 mt-3 flex items-center gap-3 rounded-2xl border border-yellow-500/20 bg-gradient-to-r from-yellow-500/10 to-amber-500/5 px-4 py-3 backdrop-blur-xl shadow-lg"
+        >
+          {/* Pin Icon */}
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-yellow-500/15 text-yellow-400">
+            <Pin size={18} />
+          </div>
 
+          {/* Content */}
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-yellow-300/80">
+              Pinned Message
+            </p>
+
+            <p className="mt-0.5 truncate text-sm text-white/90">
+              {pinnedMessage.decryptedContent}
+            </p>
+          </div>
+
+          {/* Close */}
+          <button
+            onClick={unpinMessage}
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-gray-400 transition hover:bg-red-500/10 hover:text-red-400"
+          >
+            <X size={15} />
+          </button>
+        </motion.div>
+      )}
       {/* Messages */}
       <div className="flex-1 overflow-y-auto overscroll-contain scrollbar-hide px-6 py-4 space-y-4">
         <AnimatePresence initial={false}>
@@ -101,7 +136,7 @@ export default function MessageThread({
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className={`flex flex-col gap-1 ${
+                className={` flex flex-col gap-1 ${
                   isOwn ? "items-end" : "items-start"
                 }`}
               >
@@ -111,22 +146,29 @@ export default function MessageThread({
                     {msg.sender.name}
                   </span>
                 )}
-
-                {/* Bubble */}
-                <motion.div
-                  whileHover={{ scale: 1.01 }}
-                  className={`max-w-[70%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed shadow-md ${
-                    isOwn
-                      ? "bg-gradient-to-br from-indigo-500 to-violet-600 text-white rounded-br-sm"
-                      : "bg-white/10 text-gray-100 rounded-bl-sm backdrop-blur-md"
-                  }`}
-                >
-                  {msg.decryptedContent ?? (
-                    <span className="text-gray-400 italic text-xs">
-                      🔒 Encrypted
-                    </span>
-                  )}
-                </motion.div>
+                <div className="group relative flex max-w-[85%] items-center">
+                  {/* Bubble */}
+                  <motion.div
+                    whileHover={{ scale: 1.01 }}
+                    className={` w-fit max-w-full break-words px-4 py-2.5 rounded-2xl text-sm leading-relaxed shadow-md ${
+                      isOwn
+                        ? "bg-gradient-to-br from-indigo-500 to-violet-600 text-white rounded-br-sm"
+                        : "bg-white/10 text-gray-100 rounded-bl-sm backdrop-blur-md"
+                    }`}
+                  >
+                    {msg.decryptedContent ?? (
+                      <span className="text-gray-400 italic text-xs">
+                        Encrypted message
+                      </span>
+                    )}
+                  </motion.div>
+                  <button
+                    onClick={() => pinMessage(msg.id)}
+                    className={`cursor-pointer absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200 text-gray-500 hover:text-yellow-400 ${isOwn ? "-left-7" : "-right-7"}`}
+                  >
+                    <Pin size={14} />
+                  </button>
+                </div>
 
                 {/* Attachments */}
                 {msg.attachments?.length > 0 && (

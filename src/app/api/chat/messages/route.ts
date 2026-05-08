@@ -174,6 +174,19 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
+    const conversation = await prisma.conversation.findUnique({
+      where: { id: conversationId },
+      include: {
+        pinnedMessage: {
+          include: {
+            sender: true,
+            attachments: true,
+            encryptedKeys: true,
+          },
+        },
+      },
+    });
+
     const messages = await prisma.message.findMany({
       where: {
         conversationId,
@@ -202,6 +215,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       messages: messages.reverse(),
       nextCursor,
+      pinnedMessage: conversation?.pinnedMessage || null
     });
   } catch (err) {
     console.error("Get messages error:", err);

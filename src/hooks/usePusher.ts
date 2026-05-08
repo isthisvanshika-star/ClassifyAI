@@ -9,6 +9,7 @@ interface UsePusherOptions {
   onTypingStart?: (data: { userId: string }) => void;
   onTypingStop?: (data: { userId: string }) => void;
   onReadReceipt?: (data: { userId: string; readAt: string }) => void;
+  onPinnedMessageUpdated?: (data: { pinnedMessage: any | null }) => void;
 }
 
 export function usePusher({
@@ -18,6 +19,7 @@ export function usePusher({
   onTypingStart,
   onTypingStop,
   onReadReceipt,
+  onPinnedMessageUpdated
 }: UsePusherOptions) {
   const channelRef = useRef<Channel | null>(null);
 
@@ -29,7 +31,6 @@ export function usePusher({
     const channel = pusher.subscribe(channelName);
     channelRef.current = channel;
 
-
     channel.bind("pusher:subscription_error", (err: any) => {
       console.error("Subscription error:", err); // ← add
     });
@@ -38,6 +39,7 @@ export function usePusher({
     if (onTypingStart) channel.bind(Events.TYPING_START, onTypingStart);
     if (onTypingStop) channel.bind(Events.TYPING_STOP, onTypingStop);
     if (onReadReceipt) channel.bind(Events.READ_RECEIPT, onReadReceipt);
+    if(onPinnedMessageUpdated) channel.bind(Events.PINNED_MESSAGE_UPDATED, onPinnedMessageUpdated)
 
     return () => {
       channel.unbind_all();
