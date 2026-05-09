@@ -19,6 +19,19 @@ const sendMessageSchema = z.object({
   attachmentIds: z.array(z.string()).optional(),
 });
 
+const editMessageSchema = z.object({
+  messageId: z.string(),
+  conversationId: z.string(),
+  userId: z.string(),
+  encryptedContent: z.string(),
+  encryptedKeys: z.array(
+    z.object({
+      recipientId: z.string(),
+      encryptedKey: z.string(),
+    }),
+  ),
+});
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -99,6 +112,7 @@ export async function POST(req: NextRequest) {
                   avatarUrl: true,
                 },
               },
+              encryptedKeys: true,
             },
           },
         },
@@ -157,6 +171,79 @@ export async function POST(req: NextRequest) {
     console.error("Send message error:", err);
     return NextResponse.json(
       { error: "Internal Server Error" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function PATCH(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const data = editMessageSchema.parse(body);
+    const existing = await prisma.message.findUnique({
+      where: { id: data.messageId },
+      select: { senderId: true },
+    });
+    if (!existing) {
+      return NextResponse.json({ error: "Message not found" }, { status: 404 });
+    }
+    if (existing.senderId !== data.userId) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+    //? removing old encrypted keys
+    await prisma.messageKey.deleteMany({
+      where: {
+        messageId: data.messageId,
+      },
+    });
+
+    const updated = await prisma.message.update({
+      where: {
+        id: data.messageId,
+      },
+      data: {
+        encryptedContent: data.encryptedContent,
+        editedAt: new Date(),
+
+        encryptedKeys: {
+          create: data.encryptedKeys.map((k) => ({
+            recipientId: k.recipientId,
+            encryptedKey: k.encryptedKey,
+          })),
+        },
+      },
+
+      include: {
+        sender: {
+          select: {
+            id: true,
+            name: true,
+            avatarUrl: true,
+          },
+        },
+
+        encryptedKeys: true,
+        attachments: true,
+
+        replyTo: {
+          include: {
+            sender: true,
+            encryptedKeys: true,
+          },
+        },
+      },
+    });
+
+    await pusherServer.trigger(
+      Channels.conversation(data.conversationId),
+      Events.MESSAGE_UPDATED,
+      updated,
+    );
+    return NextResponse.json(updated);
+  } catch (error) {
+    console.error("Edit Message error", error);
+    return NextResponse.json(
+      { error: "Internal Server error" },
       { status: 500 },
     );
   }
@@ -283,14 +370,36 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    await prisma.message.update({
-      where: { id: messageId },
-      data: { deletedAt: new Date() },
+    await prisma.$transaction(async (tx) => {
+      //? delete message....
+      await tx.message.update({
+        where: { id: messageId },
+        data: { deletedAt: new Date() },
+      });
+      //? remove pin if pinned message delete....
+      const conversation = await tx.conversation.findUnique({
+        where: { id: conversationId },
+        select: { pinnedMessageId: true },
+      });
+      if (conversation?.pinnedMessageId === messageId) {
+        await tx.conversation.update({
+          where: { id: conversationId },
+          data: { pinnedMessageId: null },
+        });
+      }
+      //? realtime unpin event....
+      await pusherServer.trigger(
+        Channels.conversation(conversationId),
+        Events.PINNED_MESSAGE_UPDATED,
+        {
+          pinnedMessage: null,
+        },
+      );
     });
 
     await pusherServer.trigger(
       Channels.conversation(conversationId),
-      "message-deleted",
+      Events.MESSAGE_DELETED,
       { messageId },
     );
 

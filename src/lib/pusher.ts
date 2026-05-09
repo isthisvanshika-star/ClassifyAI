@@ -65,4 +65,6 @@ export const Events = {
   READ_RECEIPT: "read-receipt",
   NEW_NOTIFICATION: "new-notification",
   PINNED_MESSAGE_UPDATED: "pinned-message-updated",
+  MESSAGE_DELETED:"message-deleted",
+  MESSAGE_UPDATED:"message-updated"
 };

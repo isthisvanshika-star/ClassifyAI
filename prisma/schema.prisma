@@ -527,6 +527,7 @@ model Message {
   encryptedContent String
   attachments      Resource[]     @relation("MessageAttachments")
   encryptedKeys    MessageKey[]
+  editedAt         DateTime?
   deletedAt        DateTime?
   createdAt        DateTime       @default(now())
   pinnedIn         Conversation[] @relation("PinnedMessage")

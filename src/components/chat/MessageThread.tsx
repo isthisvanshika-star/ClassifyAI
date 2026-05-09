@@ -8,7 +8,7 @@ import { generateKeyPair } from "@/lib/crypto";
 import { formatDistanceToNow } from "date-fns";
 import { secureGet, secureSet } from "@/lib/tauri-store";
 import { AnimatePresence, motion } from "framer-motion";
-import { Pin, X } from "lucide-react";
+import { Pin, X, Reply, Trash2 } from "lucide-react";
 
 interface MessageThreadProps {
   userId: string;
@@ -39,6 +39,9 @@ export default function MessageThread({
     pinMessage,
     pinnedMessage,
     unpinMessage,
+    replyingTo,
+    setReplyingTo,
+    deleteMessage,
   } = useChat({ userId, conversationId, privateKey });
 
   useEffect(() => {
@@ -156,6 +159,23 @@ export default function MessageThread({
                         : "bg-white/10 text-gray-100 rounded-bl-sm backdrop-blur-md"
                     }`}
                   >
+                    {msg.replyTo && (
+                      <div
+                        className={`mb-2 rounded-xl border-l-2 px-3 py-2 text-xs ${
+                          isOwn
+                            ? "border-white/40 bg-white/10"
+                            : "border-cyan-400/50 bg-black/20"
+                        }`}
+                      >
+                        <p className="font-semibold text-cyan-300">
+                          {msg.replyTo.sender?.name}
+                        </p>
+
+                        <p className="truncate text-white/70">
+                          {msg.replyTo.decryptedContent}
+                        </p>
+                      </div>
+                    )}
                     {msg.decryptedContent ?? (
                       <span className="text-gray-400 italic text-xs">
                         Encrypted message
@@ -163,11 +183,27 @@ export default function MessageThread({
                     )}
                   </motion.div>
                   <button
+                    onClick={() => setReplyingTo(msg)}
+                    className={`cursor-pointer absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200 text-gray-500 hover:text-cyan-400 ${
+                      isOwn ? "-left-14" : "-right-14"
+                    }`}
+                  >
+                    <Reply size={14} />
+                  </button>
+                  <button
                     onClick={() => pinMessage(msg.id)}
                     className={`cursor-pointer absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200 text-gray-500 hover:text-yellow-400 ${isOwn ? "-left-7" : "-right-7"}`}
                   >
                     <Pin size={14} />
                   </button>
+                  {isOwn && (
+                    <button
+                      onClick={() => deleteMessage(msg.id)}
+                      className={`cursor-pointer absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200 text-gray-500 hover:text-red-400 ${isOwn ? "-left-21" : "-right-21"}`}
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  )}
                 </div>
 
                 {/* Attachments */}
@@ -256,9 +292,38 @@ export default function MessageThread({
         )}
       </AnimatePresence>
 
+      {replyingTo && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 10 }}
+          className="mx-4 mb-2 flex items-start gap-3 rounded-2xl border border-cyan-500/20 bg-cyan-500/10 px-4 py-3 backdrop-blur-xl"
+        >
+          <div className="mt-1 h-10 w-1 rounded-full bg-cyan-400" />
+
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-semibold text-cyan-300">
+              Replying to {replyingTo.sender?.name || "message"}
+            </p>
+
+            <p className="truncate text-sm text-white/80">
+              {replyingTo.decryptedContent}
+            </p>
+          </div>
+
+          <button
+            onClick={() => setReplyingTo(null)}
+            className="text-gray-400 hover:text-red-400 transition"
+          >
+            <X size={16} />
+          </button>
+        </motion.div>
+      )}
       {/* Input */}
       <MessageInput
-        onSend={sendMessage}
+        onSend={(text, attachments) =>
+          sendMessage(text, attachments, replyingTo?.id)
+        }
         onTypingStart={sendTypingStart}
         onTypingStop={sendTypingStop}
         userId={userId}

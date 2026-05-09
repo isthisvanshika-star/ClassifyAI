@@ -10,6 +10,7 @@ interface UsePusherOptions {
   onTypingStop?: (data: { userId: string }) => void;
   onReadReceipt?: (data: { userId: string; readAt: string }) => void;
   onPinnedMessageUpdated?: (data: { pinnedMessage: any | null }) => void;
+  onMessageDeleted?: (data: { messageId: string }) => void;
 }
 
 export function usePusher({
@@ -19,7 +20,8 @@ export function usePusher({
   onTypingStart,
   onTypingStop,
   onReadReceipt,
-  onPinnedMessageUpdated
+  onPinnedMessageUpdated,
+  onMessageDeleted,
 }: UsePusherOptions) {
   const channelRef = useRef<Channel | null>(null);
 
@@ -39,7 +41,10 @@ export function usePusher({
     if (onTypingStart) channel.bind(Events.TYPING_START, onTypingStart);
     if (onTypingStop) channel.bind(Events.TYPING_STOP, onTypingStop);
     if (onReadReceipt) channel.bind(Events.READ_RECEIPT, onReadReceipt);
-    if(onPinnedMessageUpdated) channel.bind(Events.PINNED_MESSAGE_UPDATED, onPinnedMessageUpdated)
+    if (onPinnedMessageUpdated)
+      channel.bind(Events.PINNED_MESSAGE_UPDATED, onPinnedMessageUpdated);
+    if (onMessageDeleted)
+      channel.bind(Events.MESSAGE_DELETED, onMessageDeleted);
 
     return () => {
       channel.unbind_all();

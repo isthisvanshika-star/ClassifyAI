@@ -57,6 +57,11 @@ export function useChat({
                 ...msg.replyTo,
                 decryptedContent: replyContent,
               };
+            } else {
+              decryptedReply = {
+                ...msg.replyTo,
+                decryptedContent: "[encrypted]",
+              };
             }
           } catch (error) {
             decryptedReply = {
@@ -164,7 +169,7 @@ export function useChat({
     [userId, conversationId],
   );
 
-  //?
+  //? pin message....
   const pinMessage = useCallback(
     async (messageId: string) => {
       const res = await fetch("/api/chat/pin", {
@@ -184,6 +189,7 @@ export function useChat({
     [conversationId, decrypt],
   );
 
+  //? unpin the pinned message....
   const unpinMessage = useCallback(async () => {
     const res = await fetch("/api/chat/pin", {
       method: "PATCH",
@@ -200,6 +206,19 @@ export function useChat({
     }
     setPinnedMessage(null);
   }, [conversationId]);
+
+  //? delete message....
+  const deleteMessage = useCallback(
+    async (messageId: string) => {
+      await fetch(
+        `/api/chat/messages?messageId=${messageId}&userId=${userId}&conversationId=${conversationId}`,
+        {
+          method: "DELETE",
+        },
+      );
+    },
+    [conversationId, userId],
+  );
 
   //? mark conversation as read....
   const markAsRead = useCallback(async () => {
@@ -248,6 +267,10 @@ export function useChat({
       const decrypted = await decrypt(pinnedMessage);
       setPinnedMessage(decrypted);
     },
+
+    onMessageDeleted: ({ messageId }) => {
+      setMessages((prev) => prev.filter((msg) => msg.id !== messageId));
+    },
   });
 
   useEffect(() => {
@@ -272,6 +295,7 @@ export function useChat({
     unpinMessage,
     pinnedMessage,
     replyingTo,
+    deleteMessage,
     setReplyingTo,
   };
 }

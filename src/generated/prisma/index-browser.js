@@ -455,6 +455,7 @@ exports.Prisma.MessageScalarFieldEnum = {
   conversationId: 'conversationId',
   senderId: 'senderId',
   encryptedContent: 'encryptedContent',
+  editedAt: 'editedAt',
   deletedAt: 'deletedAt',
   createdAt: 'createdAt'
 };
