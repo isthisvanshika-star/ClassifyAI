@@ -38,6 +38,7 @@
     "cloudinary": "^2.9.0",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
+    "emoji-picker-react": "^4.19.1",
     "face-api.js": "^0.22.2",
     "firebase": "^12.10.0",
     "firebase-admin": "^13.5.0",

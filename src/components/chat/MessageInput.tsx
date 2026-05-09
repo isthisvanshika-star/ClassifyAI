@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import { Send, Paperclip, X } from "lucide-react";
+import { Send, Paperclip, X, Smile } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import EmojiPicker, { Theme } from "emoji-picker-react";
 
 interface MessageInputProps {
   onSend: (text: string, attachmentIds?: string[]) => Promise<void>;
@@ -22,6 +23,7 @@ export default function MessageInput({
   const [attachments, setAttachments] = useState<
     { id: string; name: string }[]
   >([]);
+  const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isTypingRef = useRef(false);
 
@@ -42,6 +44,10 @@ export default function MessageInput({
     },
     [onTypingStart, onTypingStop],
   );
+
+  const handleEmojiClick = (emojiData: any) => {
+    setText((prev) => prev + emojiData.emoji);
+  };
 
   const handleSend = async () => {
     const trimmed = text.trim();
@@ -185,7 +191,32 @@ export default function MessageInput({
           {/* subtle glow on focus */}
           <div className="pointer-events-none absolute inset-0 rounded-xl border border-transparent focus-within:border-indigo-500/30" />
         </div>
-
+        <div className="relative shrink-0">
+          <motion.div
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setShowEmojiPicker((prev) => !prev)}
+            className="p-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-yellow-400 transition"
+          >
+            <Smile size={18} />
+          </motion.div>
+          <AnimatePresence>
+            {showEmojiPicker && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                transition={{ duration: 0.15 }}
+                className="absolute bottom-14 right-0 z-50"
+              >
+                <EmojiPicker
+                  onEmojiClick={handleEmojiClick}
+                  theme={Theme.DARK}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
         {/* Send */}
         <motion.button
           whileHover={{ scale: 1.08 }}
