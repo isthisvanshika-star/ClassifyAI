@@ -377,6 +377,15 @@ export interface Message {
   replyToId?: string | null;
   replyTo?: Message | null;
   editedAt?: string | Date | null;
+  reactions?: {
+    id: string;
+    emoji: string;
+    userId: string;
+    user?: {
+      id: string;
+      name: string;
+    };
+  }[];
 }
 
 export interface UseChatOptions {

@@ -467,6 +467,14 @@ exports.Prisma.MessageKeyScalarFieldEnum = {
   encryptedKey: 'encryptedKey'
 };
 
+exports.Prisma.MessageReactionScalarFieldEnum = {
+  id: 'id',
+  emoji: 'emoji',
+  messageId: 'messageId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -582,7 +590,8 @@ exports.Prisma.ModelName = {
   Conversation: 'Conversation',
   ConversationParticipant: 'ConversationParticipant',
   Message: 'Message',
-  MessageKey: 'MessageKey'
+  MessageKey: 'MessageKey',
+  MessageReaction: 'MessageReaction'
 };
 
 /**

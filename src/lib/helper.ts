@@ -637,3 +637,29 @@ export function base64ToBuffer(base64: string): ArrayBuffer {
   }
   return buffer.buffer;
 }
+
+export const EMOJI_SHORTCUTS: Record<string, string> = {
+  laugh: "😂",
+  lol: "😂",
+  rofl: "🤣",
+  smile: "😊",
+  happy: "😄",
+  sad: "😢",
+  cry: "😭",
+  heart: "❤️",
+  love: "❤️",
+  fire: "🔥",
+  angry: "😡",
+  ok: "👌",
+  thumbs: "👍",
+  like: "👍",
+  dislike: "👎",
+  clap: "👏",
+  pray: "🙏",
+  cool: "😎",
+  shock: "😮",
+  wow: "😮",
+  star: "⭐",
+  check: "✅",
+  cross: "❌",
+};

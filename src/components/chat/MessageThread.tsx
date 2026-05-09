@@ -4,11 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import { useChat } from "@/hooks/useChat";
 import MessageInput from "./MessageInput";
 import TypingIndicator from "./TypingIndicator";
-import { generateKeyPair } from "@/lib/crypto";
+import EmojiPicker, { Theme } from "emoji-picker-react";
 import { formatDistanceToNow } from "date-fns";
-import { secureGet, secureSet } from "@/lib/tauri-store";
+import { secureGet } from "@/lib/tauri-store";
 import { AnimatePresence, motion } from "framer-motion";
-import { Pin, X, Reply, Trash2, Check, Pencil } from "lucide-react";
+import { Pin, X, Reply, Trash2, Check, Pencil, Smile } from "lucide-react";
 
 interface MessageThreadProps {
   userId: string;
@@ -22,8 +22,12 @@ export default function MessageThread({
   privateKey,
 }: MessageThreadProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
+  const reactionPickerRef = useRef<HTMLDivElement | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
+  const [reactionPickerFor, setReactionPickerFor] = useState<string | null>(
+    null,
+  );
   const {
     messages,
     isLoading,
@@ -44,6 +48,7 @@ export default function MessageThread({
     setReplyingTo,
     deleteMessage,
     editMessage,
+    reactToMessage,
   } = useChat({ userId, conversationId, privateKey });
 
   useEffect(() => {
@@ -69,6 +74,23 @@ export default function MessageThread({
       behavior: messages.length < 5 ? "smooth" : "auto",
     });
   }, [messages]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        reactionPickerRef.current &&
+        !reactionPickerRef.current.contains(event.target as Node)
+      ) {
+        setReactionPickerFor(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     markAsRead();
@@ -169,7 +191,7 @@ export default function MessageThread({
                     {msg.sender.name}
                   </span>
                 )}
-                <div className="group relative flex max-w-[85%] items-center">
+                <div className="group relative flex max-w-[85%] items-center overflow-visible">
                   {/* Bubble */}
                   <motion.div
                     whileHover={{ scale: 1.01 }}
@@ -232,37 +254,92 @@ export default function MessageThread({
                       </>
                     )}
                   </motion.div>
-                  <button
-                    onClick={() => setReplyingTo(msg)}
-                    className={`cursor-pointer absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200 text-gray-500 hover:text-cyan-400 ${
-                      isOwn ? "-left-14" : "-right-14"
+                  <div
+                    className={`absolute top-1/2 z-30 flex -translate-y-1/2 items-center gap-1 rounded-full border border-white/10 bg-black/70 px-2 py-1 shadow-xl backdrop-blur-xl opacity-0 scale-95 transition-all duration-200 group-hover:opacity-100 group-hover:scale-100 ${
+                      isOwn
+                        ? "-left-3 -translate-x-full"
+                        : "-right-3 translate-x-full"
                     }`}
                   >
-                    <Reply size={14} />
-                  </button>
-                  {isOwn && (
+                    {/* React */}
                     <button
-                      onClick={() => startEditing(msg)}
-                      className={`cursor-pointer absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200 text-gray-500 hover:text-cyan-400 ${
-                        isOwn ? "-left-21" : "-right-21"
+                      type="button"
+                      title="React"
+                      onClick={() =>
+                        setReactionPickerFor((prev) =>
+                          prev === msg.id ? null : msg.id,
+                        )
+                      }
+                      className="flex h-7 w-7 items-center justify-center rounded-full text-gray-400 transition hover:bg-orange-500/15 hover:text-orange-300"
+                    >
+                      <Smile size={14} />
+                    </button>
+
+                    {/* Reply */}
+                    <button
+                      type="button"
+                      title="Reply"
+                      onClick={() => setReplyingTo(msg)}
+                      className="flex h-7 w-7 items-center justify-center rounded-full text-gray-400 transition hover:bg-cyan-500/15 hover:text-cyan-300"
+                    >
+                      <Reply size={14} />
+                    </button>
+
+                    {/* Pin */}
+                    <button
+                      type="button"
+                      title="Pin"
+                      onClick={() => pinMessage(msg.id)}
+                      className="flex h-7 w-7 items-center justify-center rounded-full text-gray-400 transition hover:bg-yellow-500/15 hover:text-yellow-300"
+                    >
+                      <Pin size={14} />
+                    </button>
+
+                    {/* Edit + Delete only for own messages */}
+                    {isOwn && (
+                      <>
+                        <button
+                          type="button"
+                          title="Edit"
+                          onClick={() => startEditing(msg)}
+                          className="flex h-7 w-7 items-center justify-center rounded-full text-gray-400 transition hover:bg-pink-500/15 hover:text-pink-300"
+                        >
+                          <Pencil size={14} />
+                        </button>
+
+                        <button
+                          type="button"
+                          title="Delete"
+                          onClick={() => deleteMessage(msg.id)}
+                          className="flex h-7 w-7 items-center justify-center rounded-full text-gray-400 transition hover:bg-red-500/15 hover:text-red-300"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Reaction Picker */}
+                  {reactionPickerFor === msg.id && (
+                    <div
+                      ref={reactionPickerRef}
+                      className={`absolute bottom-12 z-50 ${
+                        isOwn ? "right-full mr-3" : "left-full ml-3"
                       }`}
                     >
-                      <Pencil size={14} />
-                    </button>
-                  )}
-                  <button
-                    onClick={() => pinMessage(msg.id)}
-                    className={`cursor-pointer absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200 text-gray-500 hover:text-yellow-400 ${isOwn ? "-left-7" : "-right-7"}`}
-                  >
-                    <Pin size={14} />
-                  </button>
-                  {isOwn && (
-                    <button
-                      onClick={() => deleteMessage(msg.id)}
-                      className={`cursor-pointer absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200 text-gray-500 hover:text-red-400 ${isOwn ? "-left-28" : "-right-28"}`}
-                    >
-                      <Trash2 size={14} />
-                    </button>
+                      <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/80 shadow-2xl backdrop-blur-xl">
+                        <EmojiPicker
+                          onEmojiClick={(emojiData) => {
+                            reactToMessage(msg.id, emojiData.emoji);
+                            setReactionPickerFor(null);
+                          }}
+                          theme={Theme.DARK}
+                          width={280}
+                          height={350}
+                          autoFocusSearch={false}
+                        />
+                      </div>
+                    </div>
                   )}
                 </div>
 
@@ -280,6 +357,41 @@ export default function MessageThread({
                       >
                         📎 {att.title}
                       </motion.a>
+                    ))}
+                  </div>
+                )}
+
+                {msg.reactions && msg.reactions.length > 0 && (
+                  <div className="mt-1 flex flex-wrap gap-1">
+                    {Object.entries(
+                      msg.reactions.reduce((acc: any, reaction: any) => {
+                        if (!reaction?.emoji) return acc;
+                        if (!acc[reaction.emoji]) {
+                          acc[reaction.emoji] = {
+                            count: 0,
+                            reacted: false,
+                          };
+                        }
+
+                        acc[reaction.emoji].count++;
+                        if (reaction.userId === userId) {
+                          acc[reaction.emoji].reacted = true;
+                        }
+                        return acc;
+                      }, {}),
+                    ).map(([emoji, data]: any) => (
+                      <button
+                        key={emoji}
+                        onClick={() => reactToMessage(msg.id, emoji)}
+                        className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-xs border transition ${
+                          data.reacted
+                            ? "bg-cyan-500/20 border-cyan-400/40 text-cyan-200"
+                            : "bg-white/10 border-white/10 text-white hover:bg-white/20"
+                        }`}
+                      >
+                        <span>{emoji}</span>
+                        <span>{data.count}</span>
+                      </button>
                     ))}
                   </div>
                 )}

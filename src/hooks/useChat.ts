@@ -259,6 +259,43 @@ export function useChat({
     [conversationId, userId],
   );
 
+  const reactToMessage = useCallback(
+    async (messageId: string, emoji: string) => {
+      const res = await fetch("/api/chat/reactions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messageId,
+          userId,
+          emoji,
+          conversationId,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to react");
+      }
+
+      const data = await res.json();
+
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === messageId
+            ? {
+                ...msg,
+                reactions: Array.isArray(data.reactions)
+                  ? data.reactions.filter(Boolean)
+                  : [],
+              }
+            : msg,
+        ),
+      );
+    },
+    [conversationId, userId],
+  );
+
   //? mark conversation as read....
   const markAsRead = useCallback(async () => {
     await fetch(`/api/chat/read`, {
@@ -307,6 +344,21 @@ export function useChat({
       setPinnedMessage(decrypted);
     },
 
+    onReactionUpdated: ({ messageId, reactions }) => {
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === messageId
+            ? {
+                ...msg,
+                reactions: Array.isArray(reactions)
+                  ? reactions.filter(Boolean)
+                  : [],
+              }
+            : msg,
+        ),
+      );
+    },
+
     onMessageDeleted: ({ messageId }) => {
       setMessages((prev) => prev.filter((msg) => msg.id !== messageId));
     },
@@ -348,6 +400,7 @@ export function useChat({
     replyingTo,
     deleteMessage,
     setReplyingTo,
-    editMessage
+    editMessage,
+    reactToMessage
   };
 }

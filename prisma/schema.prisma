@@ -50,6 +50,7 @@ model User {
   conversations    ConversationParticipant[] @relation("UserConversations")
   chatMessagesSent Message[]                 @relation("ChatMessageSender")
   messageKeys      MessageKey[]              @relation("UserMessageKeys")
+  MessageReaction  MessageReaction[]
 }
 
 model Teacher {
@@ -516,22 +517,23 @@ model ConversationParticipant {
 }
 
 model Message {
-  id               String         @id @default(cuid())
+  id               String            @id @default(cuid())
   replyToId        String?
-  replyTo          Message?       @relation("MessageReplies", fields: [replyToId], references: [id])
-  replies          Message[]      @relation("MessageReplies")
+  replyTo          Message?          @relation("MessageReplies", fields: [replyToId], references: [id])
+  replies          Message[]         @relation("MessageReplies")
   conversationId   String
-  conversation     Conversation   @relation("ConversationMessages", fields: [conversationId], references: [id], onDelete: Cascade)
+  conversation     Conversation      @relation("ConversationMessages", fields: [conversationId], references: [id], onDelete: Cascade)
   senderId         String
-  sender           User           @relation("ChatMessageSender", fields: [senderId], references: [id])
+  sender           User              @relation("ChatMessageSender", fields: [senderId], references: [id])
   encryptedContent String
-  attachments      Resource[]     @relation("MessageAttachments")
+  attachments      Resource[]        @relation("MessageAttachments")
   encryptedKeys    MessageKey[]
   editedAt         DateTime?
   deletedAt        DateTime?
-  createdAt        DateTime       @default(now())
-  pinnedIn         Conversation[] @relation("PinnedMessage")
+  createdAt        DateTime          @default(now())
+  pinnedIn         Conversation[]    @relation("PinnedMessage")
   resources        Resource[]
+  reactions        MessageReaction[]
 
   @@index([conversationId, createdAt])
 }
@@ -545,6 +547,21 @@ model MessageKey {
   encryptedKey String
 
   @@unique([messageId, recipientId])
+}
+
+model MessageReaction {
+  id    String @id @default(cuid())
+  emoji String
+
+  messageId String
+  message   Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([messageId, userId, emoji])
 }
 
 /// ---------------------

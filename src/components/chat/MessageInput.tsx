@@ -4,12 +4,20 @@ import { useState, useRef, useCallback } from "react";
 import { Send, Paperclip, X, Smile } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import EmojiPicker, { Theme } from "emoji-picker-react";
+import { EMOJI_SHORTCUTS } from "@/lib/helper";
 
 interface MessageInputProps {
   onSend: (text: string, attachmentIds?: string[]) => Promise<void>;
   onTypingStart: () => void;
   onTypingStop: () => void;
   userId: string;
+}
+
+function replaceEmojiShortcuts(value: string) {
+  return value.replace(/:([a-zA-Z0-9_+-]+):/g, (match, shortcut) => {
+    const emoji = EMOJI_SHORTCUTS[shortcut.toLowerCase()];
+    return emoji ?? match;
+  });
 }
 
 export default function MessageInput({
@@ -29,7 +37,8 @@ export default function MessageInput({
 
   const handleTyping = useCallback(
     (value: string) => {
-      setText(value);
+      const parsedValue = replaceEmojiShortcuts(value);
+      setText(parsedValue);
 
       if (!isTypingRef.current) {
         isTypingRef.current = true;
@@ -47,6 +56,7 @@ export default function MessageInput({
 
   const handleEmojiClick = (emojiData: any) => {
     setText((prev) => prev + emojiData.emoji);
+    setShowEmojiPicker(false);
   };
 
   const handleSend = async () => {

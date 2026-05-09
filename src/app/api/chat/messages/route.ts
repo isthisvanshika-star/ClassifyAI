@@ -103,6 +103,16 @@ export async function POST(req: NextRequest) {
           },
           encryptedKeys: true,
           attachments: true,
+          reactions: {
+            include: {
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
           replyTo: {
             include: {
               sender: {
@@ -310,6 +320,16 @@ export async function GET(req: NextRequest) {
           select: { encryptedKey: true, recipientId: true },
         },
         attachments: true,
+        reactions: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
         replyTo: {
           include: {
             sender: {
