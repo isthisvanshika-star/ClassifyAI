@@ -376,6 +376,7 @@ export interface Message {
   decryptedContent?: string;
   replyToId?: string | null;
   replyTo?: Message | null;
+  editedAt?: string | Date | null;
 }
 
 export interface UseChatOptions {

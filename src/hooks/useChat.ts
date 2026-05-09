@@ -220,6 +220,45 @@ export function useChat({
     [conversationId, userId],
   );
 
+  //? edit message....
+  const editMessage = useCallback(
+    async (messageId: string, plainText: string) => {
+      //? get participants....
+      const convRes = await fetch(`/api/chat/conversations?userId=${userId}`);
+      const conversations = await convRes.json();
+      const conversation = conversations.find(
+        (c: any) => c.id === conversationId,
+      );
+      const recipientPublicKeys = conversation.participants
+        .filter((p: any) => p.publicKey)
+        .map((p: any) => ({
+          userId: p.userId,
+          publicKey: p.publicKey,
+        }));
+
+      const { encryptedContent, encryptedKeys } = await encryptMessage(
+        plainText,
+        recipientPublicKeys,
+      );
+      await fetch("/api/chat/messages", {
+        method: "PATCH",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          messageId,
+          conversationId,
+          userId,
+          encryptedContent,
+          encryptedKeys,
+        }),
+      });
+    },
+    [conversationId, userId],
+  );
+
   //? mark conversation as read....
   const markAsRead = useCallback(async () => {
     await fetch(`/api/chat/read`, {
@@ -271,6 +310,18 @@ export function useChat({
     onMessageDeleted: ({ messageId }) => {
       setMessages((prev) => prev.filter((msg) => msg.id !== messageId));
     },
+    onMessageUpdated: async (msg: Message) => {
+      const decrypted = await decrypt(msg);
+
+      setMessages((prev) =>
+        prev.map((m) => (m.id === decrypted.id ? decrypted : m)),
+      );
+
+      //? also update pinned message if edited....
+      setPinnedMessage((prev) =>
+        prev?.id === decrypted.id ? decrypted : prev,
+      );
+    },
   });
 
   useEffect(() => {
@@ -297,5 +348,6 @@ export function useChat({
     replyingTo,
     deleteMessage,
     setReplyingTo,
+    editMessage
   };
 }

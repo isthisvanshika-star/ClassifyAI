@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useChat } from "@/hooks/useChat";
 import MessageInput from "./MessageInput";
 import TypingIndicator from "./TypingIndicator";
@@ -8,7 +8,7 @@ import { generateKeyPair } from "@/lib/crypto";
 import { formatDistanceToNow } from "date-fns";
 import { secureGet, secureSet } from "@/lib/tauri-store";
 import { AnimatePresence, motion } from "framer-motion";
-import { Pin, X, Reply, Trash2 } from "lucide-react";
+import { Pin, X, Reply, Trash2, Check, Pencil } from "lucide-react";
 
 interface MessageThreadProps {
   userId: string;
@@ -22,7 +22,8 @@ export default function MessageThread({
   privateKey,
 }: MessageThreadProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
-
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editText, setEditText] = useState("");
   const {
     messages,
     isLoading,
@@ -42,6 +43,7 @@ export default function MessageThread({
     replyingTo,
     setReplyingTo,
     deleteMessage,
+    editMessage,
   } = useChat({ userId, conversationId, privateKey });
 
   useEffect(() => {
@@ -71,6 +73,24 @@ export default function MessageThread({
   useEffect(() => {
     markAsRead();
   }, [conversationId]);
+
+  const startEditing = (msg: any) => {
+    setEditingId(msg.id);
+    setEditText(msg.decryptedContent || "");
+  };
+
+  const cancelEditing = () => {
+    setEditingId(null);
+    setEditText("");
+  };
+
+  const saveEdit = async () => {
+    if (!editingId || !editText.trim()) return;
+
+    await editMessage(editingId, editText);
+
+    cancelEditing();
+  };
 
   if (isLoading && messages.length === 0) {
     return (
@@ -176,10 +196,40 @@ export default function MessageThread({
                         </p>
                       </div>
                     )}
-                    {msg.decryptedContent ?? (
-                      <span className="text-gray-400 italic text-xs">
-                        Encrypted message
-                      </span>
+                    {editingId === msg.id ? (
+                      <div className="flex flex-col gap-2 min-w-[220px]">
+                        {" "}
+                        <textarea
+                          value={editText}
+                          onChange={(e) => setEditText(e.target.value)}
+                          className="resize-none rounded-xl bg-black/20 px-3 py-2 text-sm outline-none border border-white/10"
+                          rows={3}
+                          autoFocus
+                        />
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            onClick={cancelEditing}
+                            className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 hover:bg-red-500/20 transition"
+                          >
+                            <X size={14} />
+                          </button>
+
+                          <button
+                            onClick={saveEdit}
+                            className="flex h-7 w-7 items-center justify-center rounded-full bg-cyan-500/20 hover:bg-cyan-500/30 transition"
+                          >
+                            <Check size={14} />
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        {msg.decryptedContent ?? (
+                          <span className="text-gray-400 italic text-xs">
+                            Encrypted message
+                          </span>
+                        )}
+                      </>
                     )}
                   </motion.div>
                   <button
@@ -190,6 +240,16 @@ export default function MessageThread({
                   >
                     <Reply size={14} />
                   </button>
+                  {isOwn && (
+                    <button
+                      onClick={() => startEditing(msg)}
+                      className={`cursor-pointer absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200 text-gray-500 hover:text-cyan-400 ${
+                        isOwn ? "-left-21" : "-right-21"
+                      }`}
+                    >
+                      <Pencil size={14} />
+                    </button>
+                  )}
                   <button
                     onClick={() => pinMessage(msg.id)}
                     className={`cursor-pointer absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200 text-gray-500 hover:text-yellow-400 ${isOwn ? "-left-7" : "-right-7"}`}
@@ -199,7 +259,7 @@ export default function MessageThread({
                   {isOwn && (
                     <button
                       onClick={() => deleteMessage(msg.id)}
-                      className={`cursor-pointer absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200 text-gray-500 hover:text-red-400 ${isOwn ? "-left-21" : "-right-21"}`}
+                      className={`cursor-pointer absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200 text-gray-500 hover:text-red-400 ${isOwn ? "-left-28" : "-right-28"}`}
                     >
                       <Trash2 size={14} />
                     </button>
@@ -231,7 +291,11 @@ export default function MessageThread({
                       addSuffix: true,
                     })}
                   </span>
-
+                  {msg.editedAt && (
+                    <span className="text-[10px] italic text-gray-500">
+                      edited
+                    </span>
+                  )}
                   {isOwn && (
                     <span className="text-[10px]">
                       {Object.entries(readByUsers).some(

@@ -11,6 +11,7 @@ interface UsePusherOptions {
   onReadReceipt?: (data: { userId: string; readAt: string }) => void;
   onPinnedMessageUpdated?: (data: { pinnedMessage: any | null }) => void;
   onMessageDeleted?: (data: { messageId: string }) => void;
+  onMessageUpdated?: (message: any) => void;
 }
 
 export function usePusher({
@@ -22,6 +23,7 @@ export function usePusher({
   onReadReceipt,
   onPinnedMessageUpdated,
   onMessageDeleted,
+  onMessageUpdated,
 }: UsePusherOptions) {
   const channelRef = useRef<Channel | null>(null);
 
@@ -45,6 +47,8 @@ export function usePusher({
       channel.bind(Events.PINNED_MESSAGE_UPDATED, onPinnedMessageUpdated);
     if (onMessageDeleted)
       channel.bind(Events.MESSAGE_DELETED, onMessageDeleted);
+    if (onMessageUpdated)
+      channel.bind(Events.MESSAGE_UPDATED, onMessageUpdated);
 
     return () => {
       channel.unbind_all();
