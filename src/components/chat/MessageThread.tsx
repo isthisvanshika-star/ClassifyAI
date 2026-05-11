@@ -8,7 +8,16 @@ import EmojiPicker, { Theme } from "emoji-picker-react";
 import { formatDistanceToNow } from "date-fns";
 import { secureGet } from "@/lib/tauri-store";
 import { AnimatePresence, motion } from "framer-motion";
-import { Pin, X, Reply, Trash2, Check, Pencil, Smile } from "lucide-react";
+import {
+  Pin,
+  X,
+  Reply,
+  Trash2,
+  Check,
+  Pencil,
+  Smile,
+  Sparkles,
+} from "lucide-react";
 
 interface MessageThreadProps {
   userId: string;
@@ -49,6 +58,10 @@ export default function MessageThread({
     deleteMessage,
     editMessage,
     reactToMessage,
+    missedSummary,
+    setMissedSummary,
+    isSummarizing,
+    summarizeMissedMessage,
   } = useChat({ userId, conversationId, privateKey });
 
   useEffect(() => {
@@ -168,6 +181,51 @@ export default function MessageThread({
           </button>
         </motion.div>
       )}
+      {/*AI Missed  Summary Button*/}
+      <div className="flex items-center justify-center border-b border-white/10 px-4 py-2">
+        <button
+          onClick={summarizeMissedMessage}
+          disabled={isSummarizing || messages.length === 0}
+          className="flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-medium text-cyan-300 transition hover:bg-cyan-500/20 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          {isSummarizing ? (
+            <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-cyan-300 border-t-transparent" />
+          ) : (
+            <Sparkles size={14} />
+          )}
+          {isSummarizing ? "Summarizing..." : "What did I miss?"}
+        </button>
+      </div>
+      <AnimatePresence>
+        {missedSummary && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="mx-4 mt-3 rounded-2xl border border-cyan-500/20 bg-gradient-to-r from-cyan-500/10 to-indigo-500/10 p-4 shadow-lg backdrop-blur-xl"
+          >
+            <div className="mb-2 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 text-cyan-300">
+                <Sparkles size={16} />
+                <p className="text-xs font-semibold uppercase tracking-[0.18em]">
+                  AI Summary
+                </p>
+              </div>
+
+              <button
+                onClick={() => setMissedSummary(null)}
+                className="flex h-7 w-7 items-center justify-center rounded-full text-gray-400 transition hover:bg-red-500/10 hover:text-red-400"
+              >
+                <X size={14} />
+              </button>
+            </div>
+
+            <p className="whitespace-pre-line text-sm leading-relaxed text-white/85">
+              {missedSummary}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
       {/* Messages */}
       <div className="flex-1 overflow-y-auto overscroll-contain scrollbar-hide px-6 py-4 space-y-4">
         <AnimatePresence initial={false}>

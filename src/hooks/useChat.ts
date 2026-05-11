@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback, use, useRef } from "react";
 import { usePusher } from "./usePusher";
 import { encryptMessage, decryptMessage } from "@/lib/crypto";
 import { Message, UseChatOptions, ReadReceipt } from "@/lib/types";
-import { set } from "date-fns";
 
 export function useChat({
   userId,
@@ -21,6 +20,8 @@ export function useChat({
   const [readByUsers, setReadByUsers] = useState<Record<string, string>>({});
   const [pinnedMessage, setPinnedMessage] = useState<Message | null>(null);
   const [replyingTo, setReplyingTo] = useState<Message | null>(null);
+  const [missedSummary, setMissedSummary] = useState<string | null>(null);
+  const [isSummarizing, setIsSummarizing] = useState<boolean>(false);
 
   const participantNamesRef = useRef<Record<string, string>>({});
 
@@ -296,6 +297,50 @@ export function useChat({
     [conversationId, userId],
   );
 
+  //? ....
+  const summarizeMissedMessage = useCallback(async () => {
+    if (isSummarizing) return;
+    const readableMessages = messages
+      .filter((msg) => {
+        const text = msg.decryptedContent?.trim();
+        return text && text !== "[encrypted]" && text !== "[could not decrypt]";
+      })
+      .slice(-30)
+      .map((msg) => ({
+        senderName: msg.sender.name || "Someone",
+        content: msg.decryptedContent,
+        createdAt: msg.createdAt,
+      }));
+    if (readableMessages.length === 0) {
+      setMissedSummary("No readable recent messages found to summarize.");
+      return;
+    }
+    setIsSummarizing(true);
+    try {
+      const res = await fetch("/api/chat/ai/missed-summary", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: readableMessages,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.error("Missed summary failed", data.error);
+        setMissedSummary("Could not generate summary right now.");
+        return;
+      }
+      setMissedSummary(data.summary || "No important updates found.");
+    } catch (error) {
+      console.error("Missed summary error:", error);
+      setMissedSummary("Could not generate summary right now.");
+    } finally {
+      setIsSummarizing(false);
+    }
+  }, [messages, isSummarizing]);
+
   //? mark conversation as read....
   const markAsRead = useCallback(async () => {
     await fetch(`/api/chat/read`, {
@@ -377,6 +422,7 @@ export function useChat({
   });
 
   useEffect(() => {
+    setMissedSummary(null);
     loadMessages();
     markAsRead();
   }, [conversationId]);
@@ -401,6 +447,10 @@ export function useChat({
     deleteMessage,
     setReplyingTo,
     editMessage,
-    reactToMessage
+    reactToMessage,
+    missedSummary,
+    setMissedSummary,
+    isSummarizing,
+    summarizeMissedMessage,
   };
 }

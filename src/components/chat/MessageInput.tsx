@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import { Send, Paperclip, X, Smile } from "lucide-react";
+import { Send, Paperclip, X, Smile, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import EmojiPicker, { Theme } from "emoji-picker-react";
 import { EMOJI_SHORTCUTS } from "@/lib/helper";
@@ -32,6 +32,7 @@ export default function MessageInput({
     { id: string; name: string }[]
   >([]);
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
+  const [isImproving, setIsImproving] = useState<boolean>(false);
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isTypingRef = useRef(false);
 
@@ -57,6 +58,41 @@ export default function MessageInput({
   const handleEmojiClick = (emojiData: any) => {
     setText((prev) => prev + emojiData.emoji);
     setShowEmojiPicker(false);
+  };
+
+  const handleImproveWithAI = async () => {
+    const trimmed = text.trim();
+
+    if (!trimmed || isImproving) return;
+
+    setIsImproving(true);
+
+    try {
+      const res = await fetch("/api/chat/ai/improve-message", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          text: trimmed,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.error("Improve failed:", data.error);
+        return;
+      }
+
+      if (data.improved) {
+        setText(data.improved);
+      }
+    } catch (error) {
+      console.error("Improve with AI error:", error);
+    } finally {
+      setIsImproving(false);
+    }
   };
 
   const handleSend = async () => {
@@ -227,6 +263,28 @@ export default function MessageInput({
             )}
           </AnimatePresence>
         </div>
+        {/* Improve with AI */}
+        <motion.button
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.9 }}
+          type="button"
+          onClick={handleImproveWithAI}
+          disabled={isImproving || !text.trim()}
+          title="Improve with AI"
+          className="shrink-0 p-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-cyan-400 disabled:opacity-40 disabled:cursor-not-allowed transition"
+        >
+          {isImproving ? (
+            <motion.span
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+              className="block h-[18px] w-[18px] border-2 border-cyan-400 border-t-transparent rounded-full"
+            />
+          ) : (
+            <>
+            <Sparkles size={18} />
+            </>
+          )}
+        </motion.button>
         {/* Send */}
         <motion.button
           whileHover={{ scale: 1.08 }}
